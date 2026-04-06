@@ -1345,6 +1345,333 @@ fn test_scenario8_http_server_content_on_port() {
 }
 
 // ============================================================================
+// Scenario 10: Responsive UI Design Tests
+// NFR-3: UI must be responsive and work on common modern browsers
+// ============================================================================
+
+/// Test Case 1: Desktop viewport (1920x1080) - All elements visible, card layout correct
+/// Verifies CSS contains desktop-appropriate styles and grid layout for stats cards
+#[test]
+fn test_scenario10_desktop_viewport_layout() {
+    let port = 18401;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Get CSS file
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Verify CSS contains desktop layout styles
+    assert!(
+        css.contains("@media (min-width: 1200px)"),
+        "Expected desktop media query for large screens"
+    );
+
+    // Verify stats cards use grid layout
+    assert!(
+        css.contains(".stats-cards") && css.contains("display: grid"),
+        "Expected stats-cards to use CSS grid layout"
+    );
+
+    // Verify grid uses auto-fit for responsive columns
+    assert!(
+        css.contains("grid-template-columns") && css.contains("repeat"),
+        "Expected responsive grid-template-columns"
+    );
+
+    // Verify large screen grid shows 4 columns
+    assert!(
+        css.contains("repeat(4, 1fr)"),
+        "Expected 4-column grid layout for large screens"
+    );
+
+    // Get HTML and verify card structure exists
+    let html = http_get(&server_addr, "/").expect("Failed to get HTML");
+    assert!(
+        html.contains("stats-cards") && html.contains("stats-card"),
+        "Expected stats-cards container with stats-card elements"
+    );
+
+    // Verify all 4 stat cards are present
+    assert!(
+        html.contains("stat-total-keys") &&
+        html.contains("stat-memory") &&
+        html.contains("stat-storage") &&
+        html.contains("stat-version"),
+        "Expected all 4 stats card elements for desktop layout"
+    );
+}
+
+/// Test Case 2: Tablet viewport (768x1024) - Layout adjusts, no horizontal scroll
+/// Verifies CSS contains tablet-specific media queries
+#[test]
+fn test_scenario10_tablet_viewport_layout() {
+    let port = 18402;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Verify tablet media query exists (768px - 1023px)
+    assert!(
+        css.contains("@media (max-width: 1023px) and (min-width: 768px)"),
+        "Expected tablet media query for 768px-1023px range"
+    );
+
+    // Verify tablet gets 2-column grid for stats
+    assert!(
+        css.contains("repeat(2, 1fr)"),
+        "Expected 2-column grid for tablet viewport"
+    );
+
+    // Verify no horizontal scroll is enforced
+    assert!(
+        css.contains("overflow-x: hidden"),
+        "Expected overflow-x: hidden to prevent horizontal scroll"
+    );
+
+    // Verify max-width constraint on containers
+    assert!(
+        css.contains("max-width: 100%") || css.contains("max-width: 100vw"),
+        "Expected max-width constraints to prevent horizontal overflow"
+    );
+}
+
+/// Test Case 3: Mobile viewport (375x667) - Navigation collapses, content readable
+/// Verifies CSS contains mobile-specific styles and hamburger menu support
+#[test]
+fn test_scenario10_mobile_viewport_navigation() {
+    let port = 18403;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Verify mobile media query exists (< 768px)
+    assert!(
+        css.contains("@media (max-width: 767px)"),
+        "Expected mobile media query for screens < 768px"
+    );
+
+    // Verify hamburger menu toggle styling exists
+    assert!(
+        css.contains(".nav__toggle"),
+        "Expected .nav__toggle class for hamburger menu"
+    );
+
+    // Verify nav__toggle is hidden on desktop and shown on mobile
+    assert!(
+        css.contains(".nav__toggle") && css.contains("display: none"),
+        "Expected nav toggle to be hidden by default"
+    );
+    assert!(
+        css.contains(".nav__toggle") && css.contains("display: flex"),
+        "Expected nav toggle to display as flex on mobile"
+    );
+
+    // Verify mobile nav links are hidden and can be toggled
+    assert!(
+        css.contains(".nav__links--open"),
+        "Expected .nav__links--open class for mobile menu toggle"
+    );
+
+    // Verify stats cards use single column on mobile
+    assert!(
+        css.contains("grid-template-columns: 1fr"),
+        "Expected single-column layout for mobile stats cards"
+    );
+
+    // Get HTML to verify hamburger menu element exists
+    let html = http_get(&server_addr, "/").expect("Failed to get HTML");
+    assert!(
+        html.contains("nav__toggle") && html.contains("nav-toggle"),
+        "Expected hamburger menu toggle button in HTML"
+    );
+
+    // Verify toggle has aria attributes for accessibility
+    assert!(
+        html.contains("aria-expanded") && html.contains("aria-controls"),
+        "Expected aria attributes on nav toggle for accessibility"
+    );
+
+    // Verify hamburger bars exist
+    assert!(
+        html.contains("nav__toggle-bar"),
+        "Expected nav__toggle-bar elements for hamburger icon"
+    );
+}
+
+/// Test Case 4: Cross-browser compatibility (Chrome, Firefox, Safari)
+/// Verifies CSS contains browser-specific prefixes and compatibility styles
+#[test]
+fn test_scenario10_cross_browser_compatibility() {
+    let port = 18404;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Verify webkit scrollbar styling for Chrome/Safari
+    assert!(
+        css.contains("::-webkit-scrollbar"),
+        "Expected webkit scrollbar styling for Chrome/Safari"
+    );
+
+    // Verify Firefox scrollbar styling
+    assert!(
+        css.contains("scrollbar-width") && css.contains("scrollbar-color"),
+        "Expected Firefox scrollbar styling"
+    );
+
+    // Verify Safari-specific @supports rule
+    assert!(
+        css.contains("@supports (-webkit-touch-callout: none)"),
+        "Expected Safari-specific @supports rule"
+    );
+
+    // Verify prefers-reduced-motion for accessibility
+    assert!(
+        css.contains("@media (prefers-reduced-motion: reduce)"),
+        "Expected prefers-reduced-motion media query"
+    );
+
+    // Verify box-sizing reset (cross-browser consistency)
+    assert!(
+        css.contains("box-sizing: border-box"),
+        "Expected box-sizing: border-box for cross-browser consistency"
+    );
+
+    // Verify system fonts stack (works across all browsers)
+    assert!(
+        css.contains("-apple-system") && css.contains("BlinkMacSystemFont") && css.contains("Segoe UI"),
+        "Expected cross-browser system font stack"
+    );
+}
+
+/// Additional test: Verify responsive CSS contains all required breakpoints
+#[test]
+fn test_scenario10_all_breakpoints_present() {
+    let port = 18405;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Count media queries to verify comprehensive responsive coverage
+    let media_query_count = css.matches("@media").count();
+    assert!(
+        media_query_count >= 5,
+        "Expected at least 5 media queries for comprehensive responsive design, found {}",
+        media_query_count
+    );
+
+    // Verify extra small breakpoint exists (< 375px)
+    assert!(
+        css.contains("@media (max-width: 374px)"),
+        "Expected extra-small screen breakpoint for very small devices"
+    );
+
+    // Verify print styles exist
+    assert!(
+        css.contains("@media print"),
+        "Expected print media query for printable pages"
+    );
+
+    // Verify high contrast support
+    assert!(
+        css.contains("@media (prefers-contrast: high)"),
+        "Expected high contrast media query for accessibility"
+    );
+}
+
+/// Test: Verify JavaScript handles mobile navigation toggle
+#[test]
+fn test_scenario10_mobile_navigation_javascript() {
+    let port = 18406;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let js = http_get(&server_addr, "/static/js/app.js").expect("Failed to get JavaScript");
+
+    // Verify navToggle element reference exists
+    assert!(
+        js.contains("navToggle") && js.contains("nav-toggle"),
+        "Expected navToggle element reference in JavaScript"
+    );
+
+    // Verify navLinks element reference exists
+    assert!(
+        js.contains("navLinks") && js.contains("nav-links"),
+        "Expected navLinks element reference in JavaScript"
+    );
+
+    // Verify click event handler for toggle
+    assert!(
+        js.contains("navToggle") && js.contains("addEventListener") && js.contains("click"),
+        "Expected click event listener for nav toggle"
+    );
+
+    // Verify aria-expanded toggle logic
+    assert!(
+        js.contains("aria-expanded"),
+        "Expected aria-expanded attribute handling"
+    );
+
+    // Verify nav__links--open class toggle
+    assert!(
+        js.contains("nav__links--open"),
+        "Expected nav__links--open class toggle"
+    );
+
+    // Verify resize handler for responsive behavior
+    assert!(
+        js.contains("resize") && js.contains("innerWidth"),
+        "Expected resize event handler for responsive navigation"
+    );
+}
+
+/// Test: Verify HTML viewport meta tag for mobile responsiveness
+#[test]
+fn test_scenario10_viewport_meta_tag() {
+    let port = 18407;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get HTML");
+
+    // Verify viewport meta tag exists with correct attributes
+    assert!(
+        html.contains("name=\"viewport\""),
+        "Expected viewport meta tag"
+    );
+
+    // Verify width=device-width for proper mobile scaling
+    assert!(
+        html.contains("width=device-width"),
+        "Expected width=device-width in viewport meta"
+    );
+
+    // Verify initial-scale=1.0 for proper zoom level
+    assert!(
+        html.contains("initial-scale=1.0") || html.contains("initial-scale=1"),
+        "Expected initial-scale=1.0 in viewport meta"
+    );
+}
+
+// ============================================================================
 // Scenario 11: Accessibility Compliance Tests
 // Tests for semantic HTML, keyboard navigation, WCAG AA color contrast, and alt text
 // ============================================================================
@@ -1354,7 +1681,7 @@ fn test_scenario8_http_server_content_on_port() {
 /// Expected: Uses header, nav, main, footer elements appropriately
 #[test]
 fn test_scenario11_semantic_html_structure() {
-    let port = 18401;
+    let port = 18501;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
@@ -1424,7 +1751,7 @@ fn test_scenario11_semantic_html_structure() {
 /// Expected: All links, buttons, and inputs are keyboard accessible with visible focus
 #[test]
 fn test_scenario11_keyboard_navigation_support() {
-    let port = 18402;
+    let port = 18502;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
@@ -1444,7 +1771,6 @@ fn test_scenario11_keyboard_navigation_support() {
     );
 
     // Verify all interactive elements have aria-labels where appropriate
-    // Links with non-descriptive text should have aria-label
     assert!(
         html.contains("aria-label=\"MirDB Home\"") || html.contains("aria-label='MirDB Home'"),
         "Expected aria-label on logo link"
@@ -1530,7 +1856,7 @@ fn test_scenario11_keyboard_navigation_support() {
 /// Expected: All text meets 4.5:1 contrast ratio minimum
 #[test]
 fn test_scenario11_wcag_aa_color_contrast() {
-    let port = 18403;
+    let port = 18503;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
@@ -1597,7 +1923,7 @@ fn test_scenario11_wcag_aa_color_contrast() {
 /// Expected: All meaningful images have appropriate alt text
 #[test]
 fn test_scenario11_alt_text_on_images() {
-    let port = 18404;
+    let port = 18504;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
@@ -1610,10 +1936,7 @@ fn test_scenario11_alt_text_on_images() {
 
     // If there are images, verify they have alt attributes
     if img_count > 0 {
-        // Count img tags with alt attribute
-        let img_with_alt = html.matches("<img").count();
         let alt_count = html.matches("alt=\"").count() + html.matches("alt='").count();
-
         assert!(
             alt_count >= img_count,
             "All <img> tags should have alt attributes. Found {} images but {} alt attributes",
@@ -1623,13 +1946,10 @@ fn test_scenario11_alt_text_on_images() {
     }
 
     // Verify decorative icons/buttons have aria-label or aria-hidden
-    // The close button uses × character and needs aria-label
     assert!(
         html.contains("aria-label=\"Close modal\""),
         "Expected aria-label on close button icon"
     );
-
-    // The search clear button uses × character and needs aria-label
     assert!(
         html.contains("aria-label=\"Clear search\""),
         "Expected aria-label on search clear button icon"
@@ -1661,7 +1981,7 @@ fn test_scenario11_alt_text_on_images() {
 /// Additional test: Verify skip link functionality
 #[test]
 fn test_scenario11_skip_link_target_exists() {
-    let port = 18405;
+    let port = 18505;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
@@ -1676,8 +1996,7 @@ fn test_scenario11_skip_link_target_exists() {
         "Expected skip-link class"
     );
 
-    // Verify skip link target (href) points to valid section
-    // The skip link should point to #dashboard which exists
+    // Verify skip link target points to valid section
     assert!(
         html.contains("href=\"#dashboard\"") || html.contains("href=\"#main\""),
         "Expected skip link to point to main content"
@@ -1703,7 +2022,7 @@ fn test_scenario11_skip_link_target_exists() {
 /// Additional test: Verify table header accessibility
 #[test]
 fn test_scenario11_table_accessibility() {
-    let port = 18406;
+    let port = 18506;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
@@ -1731,7 +2050,7 @@ fn test_scenario11_table_accessibility() {
 /// Additional test: Verify form element accessibility
 #[test]
 fn test_scenario11_form_accessibility() {
-    let port = 18407;
+    let port = 18507;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
