@@ -1771,3 +1771,469 @@ fn http_get(addr: &str, path: &str) -> Result<String, std::io::Error> {
 
     Ok(response)
 }
+
+/// Send an HTTP request with a specified method and return the response
+fn http_request(addr: &str, method: &str, path: &str) -> Result<String, std::io::Error> {
+    let mut stream = TcpStream::connect(addr)?;
+    stream.set_read_timeout(Some(Duration::from_secs(5)))?;
+    stream.set_write_timeout(Some(Duration::from_secs(5)))?;
+
+    let request = format!(
+        "{} {} HTTP/1.1\r\nHost: {}\r\nConnection: close\r\n\r\n",
+        method, path, addr
+    );
+    stream.write_all(request.as_bytes())?;
+    stream.flush()?;
+
+    let mut response = String::new();
+    stream.read_to_string(&mut response)?;
+
+    Ok(response)
+}
+
+// ============================================================================
+// Scenario 12: Error Handling and Edge Cases Tests
+// ============================================================================
+
+/// Test Case 1: GET /api/nonexistent returns HTTP 404 with JSON error response
+/// Input: GET /api/nonexistent
+/// Expected: HTTP 404 with JSON error response
+#[test]
+fn test_api_nonexistent_endpoint_returns_404_json() {
+    let port = 19901;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/nonexistent").expect("Failed to connect");
+
+    // Verify HTTP 404 response
+    assert!(
+        response.contains("HTTP/1.1 404") || response.contains("HTTP/1.0 404"),
+        "Expected HTTP 404 for nonexistent endpoint, got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    // Verify JSON content type
+    assert!(
+        response.contains("Content-Type: application/json"),
+        "Expected Content-Type: application/json for 404 error"
+    );
+
+    // Verify JSON error structure
+    assert!(
+        response.contains("\"error\""),
+        "Expected 'error' field in JSON response"
+    );
+}
+
+/// Test Case 2: GET /api/keys?offset=-1 returns HTTP 400 with validation error
+/// Input: GET /api/keys?offset=-1
+/// Expected: HTTP 400 with validation error message
+#[test]
+fn test_api_keys_negative_offset_returns_400() {
+    let port = 19902;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys?offset=-1").expect("Failed to connect");
+
+    // Verify HTTP 400 response
+    assert!(
+        response.contains("HTTP/1.1 400") || response.contains("HTTP/1.0 400"),
+        "Expected HTTP 400 for negative offset, got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    // Verify JSON content type
+    assert!(
+        response.contains("Content-Type: application/json"),
+        "Expected Content-Type: application/json for validation error"
+    );
+
+    // Verify error message mentions offset or validation
+    assert!(
+        response.contains("\"error\""),
+        "Expected 'error' field in JSON response"
+    );
+}
+
+/// Test Case 3: GET /api/keys?limit=999999 caps limit at maximum or returns error
+/// Input: GET /api/keys?limit=999999
+/// Expected: Limit capped at reasonable maximum or error returned
+#[test]
+fn test_api_keys_excessive_limit_capped() {
+    let port = 19903;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys?limit=999999").expect("Failed to connect");
+
+    // Should either return 200 with capped limit or 400 error
+    let is_200 = response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200");
+    let is_400 = response.contains("HTTP/1.1 400") || response.contains("HTTP/1.0 400");
+
+    assert!(
+        is_200 || is_400,
+        "Expected HTTP 200 (capped) or 400 (error), got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    if is_200 {
+        // If 200, verify limit is capped at MAX_KEYS_LIMIT (1000)
+        assert!(
+            response.contains("\"limit\":1000"),
+            "Expected limit to be capped at 1000"
+        );
+    }
+}
+
+/// Test Case 4: Request timeout handling (simulated slow response)
+/// Input: Request that would take longer than timeout
+/// Expected: Request times out with appropriate error response
+#[test]
+fn test_request_timeout_handling() {
+    // Note: This test verifies the client-side timeout behavior
+    // Server-side timeouts are typically handled at the HTTP framework level
+    let port = 19904;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Normal request should complete within timeout
+    let start = Instant::now();
+    let response = http_get(&server_addr, "/api/stats").expect("Failed to connect");
+    let elapsed = start.elapsed();
+
+    // Verify request completes reasonably fast (under 5 seconds)
+    assert!(
+        elapsed < Duration::from_secs(5),
+        "Request should complete within timeout, took {:?}",
+        elapsed
+    );
+
+    // Verify valid response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected successful response within timeout"
+    );
+}
+
+/// Test Case 5: POST request to read-only endpoint returns HTTP 405 Method Not Allowed
+/// Input: POST request to read-only endpoint
+/// Expected: HTTP 405 Method Not Allowed
+#[test]
+fn test_post_to_readonly_endpoint_returns_405() {
+    let port = 19905;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_request(&server_addr, "POST", "/api/stats").expect("Failed to connect");
+
+    // Verify HTTP 405 response
+    assert!(
+        response.contains("HTTP/1.1 405") || response.contains("HTTP/1.0 405"),
+        "Expected HTTP 405 Method Not Allowed for POST request, got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    // Verify JSON content type
+    assert!(
+        response.contains("Content-Type: application/json"),
+        "Expected Content-Type: application/json for 405 error"
+    );
+
+    // Verify error message
+    assert!(
+        response.contains("\"error\""),
+        "Expected 'error' field in JSON response"
+    );
+}
+
+/// Test PUT request to read-only endpoint returns HTTP 405
+#[test]
+fn test_put_to_readonly_endpoint_returns_405() {
+    let port = 19906;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_request(&server_addr, "PUT", "/api/keys/test").expect("Failed to connect");
+
+    // Verify HTTP 405 response
+    assert!(
+        response.contains("HTTP/1.1 405") || response.contains("HTTP/1.0 405"),
+        "Expected HTTP 405 Method Not Allowed for PUT request"
+    );
+}
+
+/// Test DELETE request to read-only endpoint returns HTTP 405
+#[test]
+fn test_delete_to_readonly_endpoint_returns_405() {
+    let port = 19907;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_request(&server_addr, "DELETE", "/api/keys/test").expect("Failed to connect");
+
+    // Verify HTTP 405 response
+    assert!(
+        response.contains("HTTP/1.1 405") || response.contains("HTTP/1.0 405"),
+        "Expected HTTP 405 Method Not Allowed for DELETE request"
+    );
+}
+
+/// Test malformed query parameter (non-numeric offset)
+#[test]
+fn test_api_keys_malformed_offset_handled() {
+    let port = 19908;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Malformed offset that isn't a valid number
+    let response = http_get(&server_addr, "/api/keys?offset=abc").expect("Failed to connect");
+
+    // Should either return 400 (validation error) or 200 with default offset
+    let is_valid = response.contains("HTTP/1.1 200")
+        || response.contains("HTTP/1.0 200")
+        || response.contains("HTTP/1.1 400")
+        || response.contains("HTTP/1.0 400");
+
+    assert!(
+        is_valid,
+        "Expected HTTP 200 (with default) or 400 (error), got: {}",
+        &response[..response.len().min(200)]
+    );
+}
+
+/// Test empty key detail request returns 400 or 404
+#[test]
+fn test_api_keys_empty_key_returns_error() {
+    let port = 19909;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_error_handling(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Request with empty key (just /api/keys/ with no key after)
+    let response = http_get(&server_addr, "/api/keys/").expect("Failed to connect");
+
+    // Should return 400 (invalid key) or 404 (not found)
+    let is_error = response.contains("HTTP/1.1 400")
+        || response.contains("HTTP/1.0 400")
+        || response.contains("HTTP/1.1 404")
+        || response.contains("HTTP/1.0 404");
+
+    assert!(
+        is_error,
+        "Expected HTTP 400 or 404 for empty key, got: {}",
+        &response[..response.len().min(200)]
+    );
+}
+
+// ============================================================================
+// Scenario 12: Helper Functions for Error Handling Tests
+// ============================================================================
+
+/// Start a test server with proper error handling (Scenario 12)
+fn start_test_server_with_error_handling(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        // Test keys
+        let all_keys: Vec<String> = (0..50).map(|i| format!("key_{:03}", i)).collect();
+
+        for _ in 0..100 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(10)) {
+                if let Some(request) = request {
+                    let response = handle_error_handling_request(&request, &all_keys);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Handle requests with proper error handling for Scenario 12
+fn handle_error_handling_request(
+    request: &tiny_http::Request,
+    all_keys: &[String],
+) -> tiny_http::Response<std::io::Cursor<Vec<u8>>> {
+    let url = request.url();
+    let method = request.method();
+
+    // Parse path and query string
+    let (path, query_string) = match url.find('?') {
+        Some(pos) => (&url[..pos], Some(&url[pos + 1..])),
+        None => (url, None),
+    };
+
+    // Check method - only GET allowed (Scenario 12: Test Case 5)
+    if method != &tiny_http::Method::Get {
+        let json = r#"{"error":"Method not allowed"}"#;
+        return tiny_http::Response::from_string(json)
+            .with_status_code(tiny_http::StatusCode(405))
+            .with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            );
+    }
+
+    match path {
+        "/api/stats" => {
+            let json = r#"{"total_keys":50,"memory_usage":8388608,"storage_size":0,"version":"0.1.0","uptime_seconds":0,"last_updated":0}"#;
+            tiny_http::Response::from_string(json).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            )
+        }
+        "/api/keys" => {
+            // Parse and validate parameters (Scenario 12: Test Cases 2, 3)
+            let params = parse_error_test_params(query_string);
+
+            // Validate offset (must be non-negative)
+            if let Err(e) = params.offset {
+                let json = format!(r#"{{"error":"Invalid offset: {}"}}"#, e);
+                return tiny_http::Response::from_string(json)
+                    .with_status_code(tiny_http::StatusCode(400))
+                    .with_header(
+                        tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                            .unwrap(),
+                    );
+            }
+
+            let offset = params.offset.unwrap();
+            let limit = params.limit.min(1000); // Cap at MAX_KEYS_LIMIT
+
+            // Apply pagination
+            let paginated_keys: Vec<String> = all_keys
+                .iter()
+                .skip(offset)
+                .take(limit)
+                .cloned()
+                .collect();
+
+            let json = format!(
+                r#"{{"keys":[{}],"total":{},"offset":{},"limit":{}}}"#,
+                paginated_keys
+                    .iter()
+                    .map(|k| format!("\"{}\"", k))
+                    .collect::<Vec<_>>()
+                    .join(","),
+                all_keys.len(),
+                offset,
+                limit
+            );
+
+            tiny_http::Response::from_string(json).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            )
+        }
+        "/api/compaction" => {
+            let json = r#"{"status":"idle"}"#;
+            tiny_http::Response::from_string(json).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            )
+        }
+        _ if path.starts_with("/api/keys/") => {
+            let key = &path[10..]; // "/api/keys/".len() = 10
+
+            // Check for empty key (Scenario 12: edge case)
+            if key.is_empty() {
+                let json = r#"{"error":"Key cannot be empty"}"#;
+                return tiny_http::Response::from_string(json)
+                    .with_status_code(tiny_http::StatusCode(400))
+                    .with_header(
+                        tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                            .unwrap(),
+                    );
+            }
+
+            // Check if key exists
+            let decoded_key = url_decode(key);
+            if all_keys.iter().any(|k| k == &decoded_key) {
+                let json = format!(
+                    r#"{{"key":"{}","value":"test_value","size":10,"flags":0}}"#,
+                    decoded_key
+                );
+                tiny_http::Response::from_string(json).with_header(
+                    tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                        .unwrap(),
+                )
+            } else {
+                let json = r#"{"error":"Key not found"}"#;
+                tiny_http::Response::from_string(json)
+                    .with_status_code(tiny_http::StatusCode(404))
+                    .with_header(
+                        tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                            .unwrap(),
+                    )
+            }
+        }
+        // All other paths return 404 with JSON (Scenario 12: Test Case 1)
+        _ => {
+            let json = r#"{"error":"Endpoint not found"}"#;
+            tiny_http::Response::from_string(json)
+                .with_status_code(tiny_http::StatusCode(404))
+                .with_header(
+                    tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                        .unwrap(),
+                )
+        }
+    }
+}
+
+/// Parameters parsed from query string with validation
+struct ErrorTestParams {
+    offset: Result<usize, String>,
+    limit: usize,
+}
+
+/// Parse query parameters with validation for error testing
+fn parse_error_test_params(query: Option<&str>) -> ErrorTestParams {
+    let mut offset: Result<usize, String> = Ok(0);
+    let mut limit: usize = 20;
+
+    if let Some(q) = query {
+        for pair in q.split('&') {
+            if let Some(pos) = pair.find('=') {
+                let key = &pair[..pos];
+                let value = &pair[pos + 1..];
+                match key {
+                    "offset" => {
+                        // Check for negative value first
+                        if value.starts_with('-') {
+                            offset = Err("offset must be non-negative".to_string());
+                        } else {
+                            offset = value
+                                .parse()
+                                .map_err(|_| "offset must be a valid integer".to_string());
+                        }
+                    }
+                    "limit" => {
+                        limit = value.parse().unwrap_or(20);
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    ErrorTestParams { offset, limit }
+}

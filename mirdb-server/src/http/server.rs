@@ -79,12 +79,13 @@ fn handle_request(
         None => (url, None),
     };
 
-    // Only handle GET requests
+    // Only handle GET requests (Scenario 12: Test Case 5 - Method Not Allowed)
     if *method != Method::Get {
-        return Response::from_string("Method Not Allowed")
+        let error_json = r#"{"error":"Method not allowed"}"#;
+        return Response::from_string(error_json)
             .with_status_code(StatusCode(405))
             .with_header(
-                Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..]).unwrap(),
+                Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
             );
     }
 
@@ -99,11 +100,15 @@ fn handle_request(
             let encoded_key = &path[10..]; // Extract key from /api/keys/{key} (10 = "/api/keys/".len())
             serve_api_key_detail(encoded_key, store)
         }
-        _ => Response::from_string("Not Found")
-            .with_status_code(StatusCode(404))
-            .with_header(
-                Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..]).unwrap(),
-            ),
+        // Scenario 12: Test Case 1 - Return JSON error for 404
+        _ => {
+            let error_json = r#"{"error":"Endpoint not found"}"#;
+            Response::from_string(error_json)
+                .with_status_code(StatusCode(404))
+                .with_header(
+                    Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
+                )
+        }
     }
 }
 
@@ -202,16 +207,40 @@ fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::
 
     let params = parse_query_string(query);
 
-    // Parse pagination parameters with defaults
-    let offset: usize = params
-        .get("offset")
-        .and_then(|v| v.parse().ok())
-        .unwrap_or(0);
+    // Parse and validate offset parameter (Scenario 12: Test Case 2 - negative offset validation)
+    let offset_result: Result<usize, &str> = if let Some(offset_str) = params.get("offset") {
+        // Check for negative values (strings starting with '-')
+        if offset_str.starts_with('-') {
+            Err("offset must be non-negative")
+        } else {
+            offset_str.parse().map_err(|_| "offset must be a valid integer")
+        }
+    } else {
+        Ok(0) // Default to 0
+    };
+
+    // Return 400 error for invalid offset (Scenario 12: Test Case 2)
+    let offset = match offset_result {
+        Ok(v) => v,
+        Err(msg) => {
+            let error = ErrorResponse::new(msg);
+            let json = serde_json::to_string(&error).unwrap_or_else(|_| {
+                format!(r#"{{"error":"{}"}}"#, msg)
+            });
+            return Response::from_string(json)
+                .with_status_code(StatusCode(400))
+                .with_header(
+                    Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
+                );
+        }
+    };
+
+    // Parse limit parameter with defaults (Scenario 12: Test Case 3 - limit capping)
     let limit: usize = params
         .get("limit")
         .and_then(|v| v.parse().ok())
         .unwrap_or(DEFAULT_KEYS_LIMIT)
-        .min(MAX_KEYS_LIMIT); // Cap limit for safety
+        .min(MAX_KEYS_LIMIT); // Cap limit for safety (MAX_KEYS_LIMIT = 1000)
 
     // Parse search parameter (Scenario 4: Key Search and Filter)
     let search = params
