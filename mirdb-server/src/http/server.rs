@@ -91,8 +91,9 @@ fn handle_request(
 
     match path {
         "/" | "/index.html" => serve_index(),
-        "/static/css/style.css" => serve_css(),
-        "/static/js/app.js" => serve_js(),
+        // Scenario 13: Static File Serving - Support both full and simplified paths
+        "/static/css/style.css" | "/static/style.css" => serve_css(),
+        "/static/js/app.js" | "/static/app.js" => serve_js(),
         "/api/stats" => serve_api_stats(store),
         "/api/keys" => serve_api_keys(store, query_string),
         "/api/compaction" => serve_api_compaction(),

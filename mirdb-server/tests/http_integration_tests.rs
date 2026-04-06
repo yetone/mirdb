@@ -2210,3 +2210,216 @@ fn test_scenario11_form_accessibility() {
         "Expected type='button' on non-submit buttons"
     );
 }
+
+// ============================================================================
+// Scenario 13: Static File Serving Tests
+// Verify that static HTML, CSS, and JavaScript files are served correctly
+// ============================================================================
+
+/// Test Case 1: GET / (homepage) returns HTTP 200 with Content-Type: text/html
+#[test]
+fn test_scenario13_homepage_html_served() {
+    let port = 18601;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for homepage, got: {}",
+        &response[..response.len().min(100)]
+    );
+
+    // Verify Content-Type: text/html
+    assert!(
+        response.contains("Content-Type: text/html"),
+        "Expected Content-Type: text/html for homepage"
+    );
+
+    // Verify HTML content is served
+    assert!(
+        response.contains("<!DOCTYPE html>") || response.contains("<!doctype html>"),
+        "Expected HTML DOCTYPE in response"
+    );
+}
+
+/// Test Case 2: GET /static/style.css returns HTTP 200 with Content-Type: text/css
+#[test]
+fn test_scenario13_css_file_served() {
+    let port = 18602;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_scenario13(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/static/style.css").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /static/style.css, got: {}",
+        &response[..response.len().min(100)]
+    );
+
+    // Verify Content-Type: text/css
+    assert!(
+        response.contains("Content-Type: text/css"),
+        "Expected Content-Type: text/css for CSS file"
+    );
+
+    // Verify CSS content is served
+    assert!(
+        response.contains(":root") || response.contains("--color"),
+        "Expected CSS content in response"
+    );
+}
+
+/// Test Case 3: GET /static/app.js returns HTTP 200 with Content-Type: application/javascript
+#[test]
+fn test_scenario13_js_file_served() {
+    let port = 18603;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_scenario13(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/static/app.js").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /static/app.js, got: {}",
+        &response[..response.len().min(100)]
+    );
+
+    // Verify Content-Type: application/javascript
+    assert!(
+        response.contains("Content-Type: application/javascript"),
+        "Expected Content-Type: application/javascript for JS file"
+    );
+
+    // Verify JavaScript content is served
+    assert!(
+        response.contains("MirDB Dashboard") || response.contains("function"),
+        "Expected JavaScript content in response"
+    );
+}
+
+/// Test Case 4: GET /static/nonexistent.css returns HTTP 404
+#[test]
+fn test_scenario13_nonexistent_static_file_404() {
+    let port = 18604;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_scenario13(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/static/nonexistent.css").expect("Failed to connect");
+
+    // Verify HTTP 404 response
+    assert!(
+        response.contains("404"),
+        "Expected HTTP 404 for nonexistent static file, got: {}",
+        &response[..response.len().min(100)]
+    );
+}
+
+/// Additional test: Verify full paths also work (/static/css/style.css, /static/js/app.js)
+#[test]
+fn test_scenario13_full_static_paths_work() {
+    let port = 18605;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Test full CSS path
+    let css_response = http_get(&server_addr, "/static/css/style.css").expect("Failed to connect");
+    assert!(
+        css_response.contains("HTTP/1.1 200") || css_response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /static/css/style.css"
+    );
+    assert!(
+        css_response.contains("Content-Type: text/css"),
+        "Expected Content-Type: text/css"
+    );
+
+    // Test full JS path
+    let js_response = http_get(&server_addr, "/static/js/app.js").expect("Failed to connect");
+    assert!(
+        js_response.contains("HTTP/1.1 200") || js_response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /static/js/app.js"
+    );
+    assert!(
+        js_response.contains("Content-Type: application/javascript"),
+        "Expected Content-Type: application/javascript"
+    );
+}
+
+/// Test helper: Start server with Scenario 13 routes (simplified static paths)
+fn start_test_server_scenario13(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        for _ in 0..20 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_test_request_scenario13(&request);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Handle test requests with Scenario 13 simplified static routes
+fn handle_test_request_scenario13(
+    request: &tiny_http::Request,
+) -> tiny_http::Response<std::io::Cursor<Vec<u8>>> {
+    let path = request.url();
+
+    match path {
+        "/" | "/index.html" => {
+            let html = include_str!("../static/index.html");
+            tiny_http::Response::from_string(html).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/html; charset=utf-8"[..])
+                    .unwrap(),
+            )
+        }
+        // Scenario 13: Support both full and simplified static paths
+        "/static/css/style.css" | "/static/style.css" => {
+            let css = include_str!("../static/css/style.css");
+            tiny_http::Response::from_string(css).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/css; charset=utf-8"[..])
+                    .unwrap(),
+            )
+        }
+        "/static/js/app.js" | "/static/app.js" => {
+            let js = include_str!("../static/js/app.js");
+            tiny_http::Response::from_string(js).with_header(
+                tiny_http::Header::from_bytes(
+                    &b"Content-Type"[..],
+                    &b"application/javascript; charset=utf-8"[..],
+                )
+                .unwrap(),
+            )
+        }
+        "/api/stats" => {
+            let json = r#"{"total_keys":0,"version":"0.1.0","uptime_seconds":0}"#;
+            tiny_http::Response::from_string(json).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            )
+        }
+        _ => tiny_http::Response::from_string("Not Found")
+            .with_status_code(tiny_http::StatusCode(404))
+            .with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..]).unwrap(),
+            ),
+    }
+}

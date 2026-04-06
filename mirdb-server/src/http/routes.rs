@@ -15,11 +15,17 @@
 /// Root path - serves the homepage
 pub const ROUTE_INDEX: &str = "/";
 
-/// Static CSS path
+/// Static CSS path (primary)
 pub const ROUTE_CSS: &str = "/static/css/style.css";
 
-/// Static JS path
+/// Static CSS path (simplified alias for Scenario 13)
+pub const ROUTE_CSS_SIMPLE: &str = "/static/style.css";
+
+/// Static JS path (primary)
 pub const ROUTE_JS: &str = "/static/js/app.js";
+
+/// Static JS path (simplified alias for Scenario 13)
+pub const ROUTE_JS_SIMPLE: &str = "/static/app.js";
 
 /// API stats endpoint
 pub const ROUTE_API_STATS: &str = "/api/stats";
