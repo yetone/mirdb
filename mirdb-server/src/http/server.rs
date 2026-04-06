@@ -5,14 +5,16 @@
 //! conflict with the existing tokio 0.1 runtime used by the Memcached
 //! TCP server.
 
+use std::collections::HashMap;
 use std::sync::Arc;
 use std::thread;
 
 use tiny_http::{Header, Method, Response, Server, StatusCode};
 
-use crate::http::handlers::{ErrorResponse, KeyDetailResponse};
+use crate::http::handlers::{ErrorResponse, KeyDetailResponse, KeysResponse};
 use crate::slice::Slice;
 use crate::store::Store;
+use crate::utils::to_str;
 
 /// Maximum value size to return in full (1MB). Larger values are truncated.
 const MAX_VALUE_SIZE: usize = 1024 * 1024;
@@ -50,8 +52,14 @@ fn handle_request(
     request: &tiny_http::Request,
     store: &Arc<Store>,
 ) -> Response<std::io::Cursor<Vec<u8>>> {
-    let path = request.url();
+    let url = request.url();
     let method = request.method();
+
+    // Parse path and query string
+    let (path, query_string) = match url.find('?') {
+        Some(pos) => (&url[..pos], Some(&url[pos + 1..])),
+        None => (url, None),
+    };
 
     // Only handle GET requests
     if *method != Method::Get {
@@ -66,8 +74,8 @@ fn handle_request(
         "/" | "/index.html" => serve_index(),
         "/static/css/style.css" => serve_css(),
         "/static/js/app.js" => serve_js(),
-        "/api/stats" => serve_api_stats(),
-        "/api/keys" => serve_api_keys(),
+        "/api/stats" => serve_api_stats(store),
+        "/api/keys" => serve_api_keys(store, query_string),
         "/api/compaction" => serve_api_compaction(),
         _ if path.starts_with("/api/keys/") => {
             let encoded_key = &path[11..]; // Extract key from /api/keys/{key}
@@ -103,18 +111,85 @@ fn serve_js() -> Response<std::io::Cursor<Vec<u8>>> {
     )
 }
 
-fn serve_api_stats() -> Response<std::io::Cursor<Vec<u8>>> {
-    let json = r#"{"total_keys":0,"version":"0.1.0","uptime_seconds":0}"#;
+fn serve_api_stats(store: &Arc<Store>) -> Response<std::io::Cursor<Vec<u8>>> {
+    // Get total key count from store
+    let total_keys = store.count_keys().unwrap_or(0);
+    let json = format!(
+        r#"{{"total_keys":{},"version":"0.1.0","uptime_seconds":0}}"#,
+        total_keys
+    );
     Response::from_string(json).with_header(
         Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
     )
 }
 
-fn serve_api_keys() -> Response<std::io::Cursor<Vec<u8>>> {
-    let json = r#"{"keys":[],"total":0,"offset":0,"limit":20}"#;
-    Response::from_string(json).with_header(
-        Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
-    )
+/// Parse query string into a HashMap (Scenario 3: Key Browser with Pagination)
+fn parse_query_string(query: Option<&str>) -> HashMap<String, String> {
+    let mut params = HashMap::new();
+    if let Some(q) = query {
+        for pair in q.split('&') {
+            if let Some(pos) = pair.find('=') {
+                let key = &pair[..pos];
+                let value = &pair[pos + 1..];
+                params.insert(key.to_string(), value.to_string());
+            }
+        }
+    }
+    params
+}
+
+/// Serve keys list endpoint: GET /api/keys (Scenario 3: Key Browser with Pagination)
+/// Supports pagination via offset and limit query parameters
+fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::Cursor<Vec<u8>>> {
+    let params = parse_query_string(query);
+
+    // Parse pagination parameters with defaults
+    let offset: usize = params
+        .get("offset")
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(0);
+    let limit: usize = params
+        .get("limit")
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(20)
+        .min(100); // Cap limit at 100 for safety
+
+    // Get keys from store with pagination
+    match store.list_keys(offset, limit) {
+        Ok((keys, total)) => {
+            // Convert Slice keys to strings
+            let key_strings: Vec<String> = keys
+                .iter()
+                .map(|k| to_str(k).to_string())
+                .collect();
+
+            let response = KeysResponse {
+                keys: key_strings,
+                total: total as u64,
+                offset: offset as u64,
+                limit: limit as u64,
+            };
+
+            match serde_json::to_string(&response) {
+                Ok(json) => Response::from_string(json).with_header(
+                    Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
+                ),
+                Err(_) => Response::from_string(r#"{"error":"Serialization error"}"#)
+                    .with_status_code(StatusCode(500))
+                    .with_header(
+                        Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
+                    ),
+            }
+        }
+        Err(e) => {
+            let error_json = format!(r#"{{"error":"{}"}}"#, e);
+            Response::from_string(error_json)
+                .with_status_code(StatusCode(500))
+                .with_header(
+                    Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
+                )
+        }
+    }
 }
 
 fn serve_api_compaction() -> Response<std::io::Cursor<Vec<u8>>> {
@@ -124,7 +199,7 @@ fn serve_api_compaction() -> Response<std::io::Cursor<Vec<u8>>> {
     )
 }
 
-/// URL-decode a percent-encoded string
+/// URL-decode a percent-encoded string (Scenario 5: Key Detail View)
 fn url_decode(encoded: &str) -> Result<String, std::string::FromUtf8Error> {
     let mut result = Vec::with_capacity(encoded.len());
     let mut chars = encoded.bytes().peekable();
@@ -154,7 +229,7 @@ fn url_decode(encoded: &str) -> Result<String, std::string::FromUtf8Error> {
     String::from_utf8(result)
 }
 
-/// Serve key detail endpoint: GET /api/keys/{key}
+/// Serve key detail endpoint: GET /api/keys/{key} (Scenario 5: Key Detail View)
 /// Returns JSON with key, value, size, and flags
 /// Returns 404 if key not found
 /// Truncates values larger than MAX_VALUE_SIZE (1MB)
@@ -285,6 +360,10 @@ mod tests {
         assert_eq!(DEFAULT_HTTP_PORT, 8080);
     }
 
+    // =========================================================================
+    // Scenario 5: Key Detail View Tests
+    // =========================================================================
+
     #[test]
     fn test_url_decode_simple() {
         assert_eq!(url_decode("hello").unwrap(), "hello");
@@ -321,5 +400,36 @@ mod tests {
     #[test]
     fn test_max_value_size() {
         assert_eq!(MAX_VALUE_SIZE, 1024 * 1024);
+    }
+
+    // =========================================================================
+    // Scenario 3: Key Browser with Pagination Tests
+    // =========================================================================
+
+    #[test]
+    fn test_parse_query_string_empty() {
+        let params = parse_query_string(None);
+        assert!(params.is_empty());
+    }
+
+    #[test]
+    fn test_parse_query_string_single_param() {
+        let params = parse_query_string(Some("offset=10"));
+        assert_eq!(params.get("offset"), Some(&"10".to_string()));
+    }
+
+    #[test]
+    fn test_parse_query_string_multiple_params() {
+        let params = parse_query_string(Some("offset=10&limit=20"));
+        assert_eq!(params.get("offset"), Some(&"10".to_string()));
+        assert_eq!(params.get("limit"), Some(&"20".to_string()));
+    }
+
+    #[test]
+    fn test_parse_query_string_with_search() {
+        let params = parse_query_string(Some("offset=0&limit=20&search=test"));
+        assert_eq!(params.get("offset"), Some(&"0".to_string()));
+        assert_eq!(params.get("limit"), Some(&"20".to_string()));
+        assert_eq!(params.get("search"), Some(&"test".to_string()));
     }
 }

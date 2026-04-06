@@ -184,6 +184,16 @@ impl Store {
             }
         }
     }
+
+    /// List keys with pagination support (Scenario 3: Key Browser with Pagination)
+    pub fn list_keys(&self, offset: usize, limit: usize) -> MyResult<(Vec<Slice>, usize)> {
+        self.data.list_keys(offset, limit)
+    }
+
+    /// Count total number of valid keys
+    pub fn count_keys(&self) -> MyResult<usize> {
+        self.data.count_keys()
+    }
 }
 
 #[cfg(test)]
