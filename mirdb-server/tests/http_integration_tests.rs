@@ -992,3 +992,163 @@ fn http_get(addr: &str, path: &str) -> Result<String, std::io::Error> {
 
     Ok(response)
 }
+
+// ============================================================================
+// Scenario 7: Documentation and External Links Tests
+// REQ-7: Include a link to documentation and GitHub repository
+// Story 4: Access Documentation
+// ============================================================================
+
+/// Test Case 1: Parse homepage HTML for GitHub link
+/// Input: Parse homepage HTML for GitHub link
+/// Expected: Link to https://github.com/yetone/mirdb is present
+#[test]
+fn test_scenario7_github_link_present() {
+    let port = 18200;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify exact GitHub repository URL is present (REQ-7)
+    assert!(
+        html.contains("https://github.com/yetone/mirdb"),
+        "Expected GitHub link to https://github.com/yetone/mirdb"
+    );
+
+    // Verify it's an actual link (inside an <a> tag)
+    assert!(
+        html.contains("href=\"https://github.com/yetone/mirdb\""),
+        "Expected GitHub link in href attribute"
+    );
+
+    // Verify link opens in new tab with security attributes
+    assert!(
+        html.contains("target=\"_blank\"") && html.contains("rel=\"noopener noreferrer\""),
+        "Expected external links to have target=_blank and rel=noopener noreferrer"
+    );
+}
+
+/// Test Case 2: Parse homepage HTML for documentation link
+/// Input: Parse homepage HTML for documentation link
+/// Expected: Documentation link is present and valid
+#[test]
+fn test_scenario7_documentation_link_present() {
+    let port = 18201;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify documentation link is present (points to GitHub README)
+    assert!(
+        html.contains("https://github.com/yetone/mirdb#readme"),
+        "Expected documentation link to GitHub README"
+    );
+
+    // Verify Documentation text label exists
+    assert!(
+        html.contains("Documentation"),
+        "Expected 'Documentation' label for documentation link"
+    );
+
+    // Verify it's an actual link with proper attributes
+    assert!(
+        html.contains("href=\"https://github.com/yetone/mirdb#readme\""),
+        "Expected documentation link in href attribute"
+    );
+}
+
+/// Test documentation link is accessible from navigation (Story 4 acceptance criteria)
+#[test]
+fn test_scenario7_docs_in_navigation() {
+    let port = 18202;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify nav element contains documentation link
+    // The navigation should have Documentation link per Story 4
+    assert!(
+        html.contains("<nav") && html.contains("Documentation"),
+        "Expected Documentation link in navigation"
+    );
+
+    // Verify GitHub link is in navigation
+    assert!(
+        html.contains("<nav") && html.contains("GitHub"),
+        "Expected GitHub link in navigation"
+    );
+}
+
+/// Test documentation and GitHub links are in footer (Story 4 acceptance criteria)
+#[test]
+fn test_scenario7_docs_in_footer() {
+    let port = 18203;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify footer element exists
+    assert!(html.contains("<footer"), "Expected footer element");
+
+    // Verify footer contains documentation and GitHub links
+    // Extract footer section for checking
+    if let Some(footer_start) = html.find("<footer") {
+        let footer_section = &html[footer_start..];
+        if let Some(footer_end) = footer_section.find("</footer>") {
+            let footer = &footer_section[..footer_end];
+
+            assert!(
+                footer.contains("https://github.com/yetone/mirdb#readme"),
+                "Expected documentation link in footer"
+            );
+
+            assert!(
+                footer.contains("https://github.com/yetone/mirdb\""),
+                "Expected GitHub link in footer"
+            );
+        }
+    }
+}
+
+/// Test external links have proper security attributes
+#[test]
+fn test_scenario7_external_link_security() {
+    let port = 18204;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Count external links (github.com)
+    let github_links = html.matches("github.com/yetone/mirdb").count();
+
+    // Verify we have multiple external links (nav + footer)
+    assert!(
+        github_links >= 2,
+        "Expected at least 2 GitHub links (navigation and footer), found {}",
+        github_links
+    );
+
+    // All external links should open in new tab
+    let target_blank_count = html.matches("target=\"_blank\"").count();
+    let noopener_count = html.matches("rel=\"noopener noreferrer\"").count();
+
+    assert!(
+        target_blank_count >= github_links && noopener_count >= github_links,
+        "Expected all external links to have target=_blank and rel=noopener noreferrer"
+    );
+}
