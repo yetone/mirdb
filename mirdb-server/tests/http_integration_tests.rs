@@ -209,6 +209,140 @@ fn test_404_for_unknown_path() {
     );
 }
 
+// ============================================================================
+// Scenario 13: Static File Serving Tests
+// Verify that static HTML, CSS, and JavaScript files are served correctly
+// ============================================================================
+
+/// Test Case 4: GET /static/nonexistent.css returns HTTP 404
+/// Input: GET /static/nonexistent.css
+/// Expected: HTTP 404
+#[test]
+fn test_scenario13_nonexistent_static_file_returns_404() {
+    let port = 18600;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server in background thread
+    let _server_handle = start_test_server(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/static/nonexistent.css").expect("Failed to connect");
+
+    // Verify HTTP 404 response
+    assert!(
+        response.contains("404"),
+        "Expected HTTP 404 for nonexistent static file /static/nonexistent.css"
+    );
+}
+
+/// Test Case 1: GET / (homepage) returns HTTP 200 with text/html content type
+/// Input: GET / (homepage)
+/// Expected: Content-Type: text/html, HTTP 200
+#[test]
+fn test_scenario13_homepage_serves_html() {
+    let port = 18601;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server in background thread
+    let _server_handle = start_test_server(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for homepage, got: {}",
+        &response[..response.len().min(100)]
+    );
+
+    // Verify Content-Type: text/html
+    assert!(
+        response.contains("Content-Type: text/html"),
+        "Expected Content-Type: text/html for homepage"
+    );
+
+    // Verify HTML content is present
+    assert!(
+        response.contains("<!DOCTYPE html>") || response.contains("<html"),
+        "Expected valid HTML content"
+    );
+}
+
+/// Test Case 2: GET /static/css/style.css returns HTTP 200 with text/css content type
+/// Input: GET /static/css/style.css
+/// Expected: Content-Type: text/css, HTTP 200
+#[test]
+fn test_scenario13_css_file_serves_correctly() {
+    let port = 18602;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server in background thread
+    let _server_handle = start_test_server(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/static/css/style.css").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for CSS file"
+    );
+
+    // Verify Content-Type: text/css
+    assert!(
+        response.contains("Content-Type: text/css"),
+        "Expected Content-Type: text/css for CSS file"
+    );
+
+    // Verify CSS content is present (CSS variables)
+    assert!(
+        response.contains(":root"),
+        "Expected CSS content with :root selector"
+    );
+}
+
+/// Test Case 3: GET /static/js/app.js returns HTTP 200 with application/javascript content type
+/// Input: GET /static/js/app.js
+/// Expected: Content-Type: application/javascript, HTTP 200
+#[test]
+fn test_scenario13_js_file_serves_correctly() {
+    let port = 18603;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server in background thread
+    let _server_handle = start_test_server(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/static/js/app.js").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for JavaScript file"
+    );
+
+    // Verify Content-Type: application/javascript
+    assert!(
+        response.contains("Content-Type: application/javascript"),
+        "Expected Content-Type: application/javascript for JS file"
+    );
+
+    // Verify JavaScript content is present
+    assert!(
+        response.contains("MirDB Dashboard") || response.contains("function"),
+        "Expected JavaScript content"
+    );
+}
+
 /// Test API stats endpoint exists
 #[test]
 fn test_api_stats_endpoint() {
