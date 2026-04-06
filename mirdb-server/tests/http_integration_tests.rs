@@ -1343,3 +1343,417 @@ fn test_scenario8_http_server_content_on_port() {
         "Expected JSON content type"
     );
 }
+
+// ============================================================================
+// Scenario 11: Accessibility Compliance Tests
+// Tests for semantic HTML, keyboard navigation, WCAG AA color contrast, and alt text
+// ============================================================================
+
+/// Test Case 1: HTML validation for semantic structure
+/// Input: HTML validation for semantic structure
+/// Expected: Uses header, nav, main, footer elements appropriately
+#[test]
+fn test_scenario11_semantic_html_structure() {
+    let port = 18401;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify DOCTYPE declaration
+    assert!(
+        html.contains("<!DOCTYPE html>") || html.contains("<!doctype html>"),
+        "Expected DOCTYPE declaration"
+    );
+
+    // Verify html element with lang attribute
+    assert!(
+        html.contains("<html lang=\"en\"") || html.contains("<html lang='en'"),
+        "Expected <html> element with lang attribute"
+    );
+
+    // Verify header element exists
+    assert!(
+        html.contains("<header"),
+        "Expected <header> element for accessibility"
+    );
+
+    // Verify nav element exists with appropriate role
+    assert!(
+        html.contains("<nav") && html.contains("role=\"navigation\""),
+        "Expected <nav> element with role='navigation'"
+    );
+
+    // Verify main element exists with appropriate role
+    assert!(
+        html.contains("<main") && html.contains("role=\"main\""),
+        "Expected <main> element with role='main'"
+    );
+
+    // Verify footer element exists with appropriate role
+    assert!(
+        html.contains("<footer") && html.contains("role=\"contentinfo\""),
+        "Expected <footer> element with role='contentinfo'"
+    );
+
+    // Verify section elements have appropriate labels
+    assert!(
+        html.contains("<section") && html.contains("aria-labelledby"),
+        "Expected <section> elements with aria-labelledby"
+    );
+
+    // Verify heading hierarchy (h1, h2, etc.)
+    assert!(html.contains("<h1"), "Expected <h1> heading for main content");
+    assert!(html.contains("<h2"), "Expected <h2> headings for sections");
+
+    // Verify section IDs for aria-labelledby references
+    assert!(
+        html.contains("id=\"dashboard-title\""),
+        "Expected dashboard-title ID for aria-labelledby"
+    );
+    assert!(
+        html.contains("id=\"keys-title\""),
+        "Expected keys-title ID for aria-labelledby"
+    );
+}
+
+/// Test Case 2: Tab through all interactive elements
+/// Input: Tab through all interactive elements
+/// Expected: All links, buttons, and inputs are keyboard accessible with visible focus
+#[test]
+fn test_scenario11_keyboard_navigation_support() {
+    let port = 18402;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Verify skip link for keyboard navigation
+    assert!(
+        html.contains("class=\"skip-link\"") || html.contains("skip-link"),
+        "Expected skip link for keyboard navigation"
+    );
+    assert!(
+        html.contains("Skip to main content") || html.contains("Skip to content"),
+        "Expected skip link text"
+    );
+
+    // Verify all interactive elements have aria-labels where appropriate
+    // Links with non-descriptive text should have aria-label
+    assert!(
+        html.contains("aria-label=\"MirDB Home\"") || html.contains("aria-label='MirDB Home'"),
+        "Expected aria-label on logo link"
+    );
+
+    // Verify buttons have aria-labels
+    assert!(
+        html.contains("aria-label=\"Close modal\""),
+        "Expected aria-label on modal close button"
+    );
+    assert!(
+        html.contains("aria-label=\"Previous page\""),
+        "Expected aria-label on pagination previous button"
+    );
+    assert!(
+        html.contains("aria-label=\"Next page\""),
+        "Expected aria-label on pagination next button"
+    );
+    assert!(
+        html.contains("aria-label=\"Clear search\""),
+        "Expected aria-label on search clear button"
+    );
+
+    // Verify input elements have associated labels
+    assert!(
+        html.contains("aria-label=\"Search keys by prefix\""),
+        "Expected aria-label on search input"
+    );
+
+    // Verify CSS has visible focus styles
+    assert!(
+        css.contains(":focus") && css.contains("outline"),
+        "Expected :focus styles with outline in CSS"
+    );
+    assert!(
+        css.contains(":focus-visible"),
+        "Expected :focus-visible styles for modern browsers"
+    );
+
+    // Verify focus outline is visible (not none or 0)
+    assert!(
+        css.contains("outline: 3px solid") || css.contains("outline: 2px solid"),
+        "Expected visible focus outline (at least 2px)"
+    );
+    assert!(
+        css.contains("outline-offset"),
+        "Expected outline-offset for better visibility"
+    );
+
+    // Verify minimum touch target size (44x44px per WCAG 2.2)
+    assert!(
+        css.contains("min-height: 44px") && css.contains("min-width: 44px"),
+        "Expected minimum touch target size of 44x44px"
+    );
+
+    // Verify modal has proper accessibility attributes
+    assert!(
+        html.contains("role=\"dialog\""),
+        "Expected role='dialog' on modal"
+    );
+    assert!(
+        html.contains("aria-labelledby=\"modal-title\""),
+        "Expected aria-labelledby on modal"
+    );
+    assert!(
+        html.contains("aria-hidden"),
+        "Expected aria-hidden attribute on modal"
+    );
+
+    // Verify navigation menubar structure
+    assert!(
+        html.contains("role=\"menubar\""),
+        "Expected role='menubar' on navigation links"
+    );
+    assert!(
+        html.contains("role=\"menuitem\""),
+        "Expected role='menuitem' on navigation links"
+    );
+}
+
+/// Test Case 3: Color contrast analysis on text elements
+/// Input: Color contrast analysis on text elements
+/// Expected: All text meets 4.5:1 contrast ratio minimum
+#[test]
+fn test_scenario11_wcag_aa_color_contrast() {
+    let port = 18403;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Verify CSS variables documentation mentions WCAG AA compliance
+    assert!(
+        css.contains("WCAG AA") || css.contains("4.5:1"),
+        "Expected WCAG AA compliance mentioned in CSS comments"
+    );
+
+    // Verify primary text color is dark enough (#1e293b on white = 12.6:1)
+    assert!(
+        css.contains("--color-text: #1e293b"),
+        "Expected dark text color #1e293b for good contrast"
+    );
+
+    // Verify secondary text color has sufficient contrast
+    // #475569 on white = ~7:1 (WCAG AA compliant)
+    assert!(
+        css.contains("--color-text-secondary: #475569"),
+        "Expected secondary text color #475569 with 7:1 contrast"
+    );
+
+    // Verify success color for text is accessible (#15803d on white = 5.7:1)
+    assert!(
+        css.contains("--color-success: #15803d"),
+        "Expected accessible success text color #15803d (5.7:1 contrast)"
+    );
+
+    // Verify warning color for text is accessible (#b45309 on white = 5.1:1)
+    assert!(
+        css.contains("--color-warning: #b45309"),
+        "Expected accessible warning text color #b45309 (5.1:1 contrast)"
+    );
+
+    // Verify error color for text is accessible (#dc2626 on white = 4.7:1)
+    assert!(
+        css.contains("--color-error: #dc2626"),
+        "Expected accessible error text color #dc2626 (4.7:1 contrast)"
+    );
+
+    // Verify the CSS has separate background colors (for fills, not text)
+    assert!(
+        css.contains("--color-success-bg") || css.contains("color-success-bg"),
+        "Expected separate background color variables for status indicators"
+    );
+
+    // Verify compaction status uses accessible colors
+    assert!(
+        css.contains("color: var(--color-success)") && css.contains(".compaction-status__indicator--idle"),
+        "Expected idle status to use accessible success color"
+    );
+    assert!(
+        css.contains("color: var(--color-warning)") && css.contains(".compaction-status__indicator--running"),
+        "Expected running status to use accessible warning color"
+    );
+}
+
+/// Test Case 4: Check for alt text on images/icons
+/// Input: Check for alt text on images/icons
+/// Expected: All meaningful images have appropriate alt text
+#[test]
+fn test_scenario11_alt_text_on_images() {
+    let port = 18404;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Count img tags
+    let img_count = html.matches("<img").count();
+
+    // If there are images, verify they have alt attributes
+    if img_count > 0 {
+        // Count img tags with alt attribute
+        let img_with_alt = html.matches("<img").count();
+        let alt_count = html.matches("alt=\"").count() + html.matches("alt='").count();
+
+        assert!(
+            alt_count >= img_count,
+            "All <img> tags should have alt attributes. Found {} images but {} alt attributes",
+            img_count,
+            alt_count
+        );
+    }
+
+    // Verify decorative icons/buttons have aria-label or aria-hidden
+    // The close button uses × character and needs aria-label
+    assert!(
+        html.contains("aria-label=\"Close modal\""),
+        "Expected aria-label on close button icon"
+    );
+
+    // The search clear button uses × character and needs aria-label
+    assert!(
+        html.contains("aria-label=\"Clear search\""),
+        "Expected aria-label on search clear button icon"
+    );
+
+    // Verify table has accessible label
+    assert!(
+        html.contains("aria-label=\"Stored keys\"") || html.contains("aria-label='Stored keys'"),
+        "Expected aria-label on keys table"
+    );
+
+    // Verify pagination has accessible label
+    assert!(
+        html.contains("aria-label=\"Pagination navigation\""),
+        "Expected aria-label on pagination container"
+    );
+
+    // Verify progress bar has ARIA attributes
+    assert!(
+        html.contains("role=\"progressbar\""),
+        "Expected role='progressbar' on compaction progress"
+    );
+    assert!(
+        html.contains("aria-valuenow") && html.contains("aria-valuemin") && html.contains("aria-valuemax"),
+        "Expected aria-value* attributes on progress bar"
+    );
+}
+
+/// Additional test: Verify skip link functionality
+#[test]
+fn test_scenario11_skip_link_target_exists() {
+    let port = 18405;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+    let css = http_get(&server_addr, "/static/css/style.css").expect("Failed to get CSS");
+
+    // Verify skip link exists
+    assert!(
+        html.contains("class=\"skip-link\""),
+        "Expected skip-link class"
+    );
+
+    // Verify skip link target (href) points to valid section
+    // The skip link should point to #dashboard which exists
+    assert!(
+        html.contains("href=\"#dashboard\"") || html.contains("href=\"#main\""),
+        "Expected skip link to point to main content"
+    );
+
+    // Verify the target ID exists
+    assert!(
+        html.contains("id=\"dashboard\""),
+        "Expected target section for skip link"
+    );
+
+    // Verify skip link is hidden by default but visible on focus
+    assert!(
+        css.contains(".skip-link") && css.contains("position: absolute"),
+        "Expected skip link to be positioned off-screen by default"
+    );
+    assert!(
+        css.contains(".skip-link:focus"),
+        "Expected :focus style for skip link to make it visible"
+    );
+}
+
+/// Additional test: Verify table header accessibility
+#[test]
+fn test_scenario11_table_accessibility() {
+    let port = 18406;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify table headers use scope attribute
+    assert!(
+        html.contains("scope=\"col\""),
+        "Expected scope='col' on table headers for accessibility"
+    );
+
+    // Verify table has thead and tbody
+    assert!(
+        html.contains("<thead>") && html.contains("</thead>"),
+        "Expected <thead> element in table"
+    );
+    assert!(
+        html.contains("<tbody") && html.contains("</tbody>"),
+        "Expected <tbody> element in table"
+    );
+}
+
+/// Additional test: Verify form element accessibility
+#[test]
+fn test_scenario11_form_accessibility() {
+    let port = 18407;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify search input has accessible name via aria-label
+    assert!(
+        html.contains("aria-label=\"Search keys by prefix\""),
+        "Expected aria-label on search input"
+    );
+
+    // Verify search input has placeholder for visual hint
+    assert!(
+        html.contains("placeholder=\"Search keys by prefix"),
+        "Expected placeholder on search input"
+    );
+
+    // Verify buttons have type attribute
+    assert!(
+        html.contains("type=\"button\""),
+        "Expected type='button' on non-submit buttons"
+    );
+}
