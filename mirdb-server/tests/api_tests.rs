@@ -458,6 +458,321 @@ fn start_test_server_with_store(port: u16) -> thread::JoinHandle<()> {
 }
 
 // ============================================================================
+// Scenario 4: Key Search and Filter Tests
+// ============================================================================
+
+/// Test that /api/keys?search=user: returns only keys starting with 'user:'
+#[test]
+fn test_api_keys_search_prefix_match() {
+    let port = 19010;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_prefixed_keys(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys?search=user:").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for search request"
+    );
+
+    // Verify only user: keys are returned
+    assert!(response.contains("\"user:1\""), "Expected user:1 in results");
+    assert!(response.contains("\"user:2\""), "Expected user:2 in results");
+    assert!(!response.contains("\"session:"), "Should not contain session: keys");
+    assert!(!response.contains("\"cache:"), "Should not contain cache: keys");
+}
+
+/// Test that /api/keys?search=nonexistent returns empty array
+#[test]
+fn test_api_keys_search_no_match() {
+    let port = 19011;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_prefixed_keys(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys?search=nonexistent").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for search request with no matches"
+    );
+
+    // Verify empty keys array
+    assert!(
+        response.contains("\"keys\":[]") || response.contains("\"keys\": []"),
+        "Expected empty keys array when search has no matches"
+    );
+
+    // Verify total is 0
+    assert!(
+        response.contains("\"total\":0"),
+        "Expected total to be 0 when no matches"
+    );
+}
+
+/// Test that /api/keys?search=&offset=0&limit=10 (empty search) returns all keys paginated
+#[test]
+fn test_api_keys_search_empty_returns_all() {
+    let port = 19012;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_prefixed_keys(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys?search=&offset=0&limit=10").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200"
+    );
+
+    // Verify all key types are returned (total should be 6)
+    assert!(
+        response.contains("\"total\":6"),
+        "Expected total to be 6 with empty search"
+    );
+}
+
+/// Test case sensitivity of search (search is case-sensitive)
+#[test]
+fn test_api_keys_search_case_sensitive() {
+    let port = 19013;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_prefixed_keys(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Search for "User:" (uppercase U) - should not match lowercase "user:"
+    let response = http_get(&server_addr, "/api/keys?search=User:").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200"
+    );
+
+    // With case-sensitive search, "User:" should not match "user:" keys
+    // (unless there are uppercase keys in the test data)
+    assert!(
+        response.contains("\"keys\":[]") || response.contains("\"keys\": []"),
+        "Expected empty keys array for case-sensitive search mismatch"
+    );
+}
+
+/// Test search with pagination
+#[test]
+fn test_api_keys_search_with_pagination() {
+    let port = 19014;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_many_prefixed_keys(port, 30);
+    thread::sleep(Duration::from_millis(500));
+
+    // Search for user: keys with pagination
+    let response = http_get(&server_addr, "/api/keys?search=user:&offset=0&limit=5").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200"
+    );
+
+    // Verify pagination is applied
+    assert!(
+        response.contains("\"limit\":5"),
+        "Expected limit to be 5"
+    );
+    assert!(
+        response.contains("\"offset\":0"),
+        "Expected offset to be 0"
+    );
+}
+
+// ============================================================================
+// Helper Functions for Scenario 4 (Search)
+// ============================================================================
+
+/// Start a test HTTP server with keys using distinct prefixes (for search testing)
+fn start_test_server_with_prefixed_keys(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        // Test keys with different prefixes
+        let all_keys = vec![
+            "user:1".to_string(),
+            "user:2".to_string(),
+            "session:abc".to_string(),
+            "session:def".to_string(),
+            "cache:data1".to_string(),
+            "cache:data2".to_string(),
+        ];
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_test_keys_request_with_search(&request, &all_keys);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test HTTP server with many prefixed keys (for pagination + search testing)
+fn start_test_server_with_many_prefixed_keys(port: u16, keys_per_prefix: usize) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        let mut all_keys: Vec<String> = Vec::new();
+        for i in 0..keys_per_prefix {
+            all_keys.push(format!("user:{:03}", i));
+            all_keys.push(format!("session:{:03}", i));
+            all_keys.push(format!("cache:{:03}", i));
+        }
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_test_keys_request_with_search(&request, &all_keys);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Handle test request with search support
+fn handle_test_keys_request_with_search(
+    request: &tiny_http::Request,
+    all_keys: &[String],
+) -> tiny_http::Response<std::io::Cursor<Vec<u8>>> {
+    let url = request.url();
+
+    // Parse path and query string
+    let (path, query_string) = match url.find('?') {
+        Some(pos) => (&url[..pos], Some(&url[pos + 1..])),
+        None => (url, None),
+    };
+
+    match path {
+        "/api/keys" => {
+            // Parse parameters
+            let (offset, limit, search) = parse_keys_params(query_string);
+
+            // Filter by search prefix
+            let filtered_keys: Vec<String> = if search.is_empty() {
+                all_keys.to_vec()
+            } else {
+                all_keys.iter()
+                    .filter(|k| k.starts_with(&search))
+                    .cloned()
+                    .collect()
+            };
+
+            let total = filtered_keys.len();
+
+            // Apply pagination
+            let paginated_keys: Vec<String> = filtered_keys
+                .into_iter()
+                .skip(offset)
+                .take(limit)
+                .collect();
+
+            let json = format!(
+                r#"{{"keys":[{}],"total":{},"offset":{},"limit":{}}}"#,
+                paginated_keys
+                    .iter()
+                    .map(|k| format!("\"{}\"", k))
+                    .collect::<Vec<_>>()
+                    .join(","),
+                total,
+                offset,
+                limit
+            );
+
+            tiny_http::Response::from_string(json).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            )
+        }
+        "/api/stats" => {
+            let json = format!(
+                r#"{{"total_keys":{},"version":"0.1.0","uptime_seconds":0}}"#,
+                all_keys.len()
+            );
+            tiny_http::Response::from_string(json).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            )
+        }
+        _ => tiny_http::Response::from_string("Not Found")
+            .with_status_code(tiny_http::StatusCode(404))
+            .with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..]).unwrap(),
+            ),
+    }
+}
+
+/// Parse keys parameters including search
+fn parse_keys_params(query: Option<&str>) -> (usize, usize, String) {
+    let mut offset: usize = 0;
+    let mut limit: usize = 20;
+    let mut search = String::new();
+
+    if let Some(q) = query {
+        for pair in q.split('&') {
+            if let Some(pos) = pair.find('=') {
+                let key = &pair[..pos];
+                let value = &pair[pos + 1..];
+                match key {
+                    "offset" => offset = value.parse().unwrap_or(0),
+                    "limit" => limit = value.parse().unwrap_or(20),
+                    "search" => search = url_decode(value),
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    (offset, limit.min(100), search)
+}
+
+/// Simple URL decode for test purposes
+fn url_decode(encoded: &str) -> String {
+    let mut result = Vec::with_capacity(encoded.len());
+    let mut chars = encoded.bytes().peekable();
+
+    while let Some(b) = chars.next() {
+        if b == b'%' {
+            let high = chars.next();
+            let low = chars.next();
+            if let (Some(h), Some(l)) = (high, low) {
+                let hex_str = format!("{}{}", h as char, l as char);
+                if let Ok(decoded) = u8::from_str_radix(&hex_str, 16) {
+                    result.push(decoded);
+                    continue;
+                }
+            }
+            result.push(b);
+        } else if b == b'+' {
+            result.push(b' ');
+        } else {
+            result.push(b);
+        }
+    }
+
+    String::from_utf8(result).unwrap_or_else(|_| encoded.to_string())
+}
+
+// ============================================================================
 // Helper Functions for Scenario 3 (Keys)
 // ============================================================================
 

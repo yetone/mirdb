@@ -50,6 +50,7 @@
         // Keys elements
         keysTableBody: document.getElementById('keys-table-body'),
         searchInput: document.getElementById('search-input'),
+        searchClearBtn: document.getElementById('search-clear-btn'), // Scenario 4
         paginationPrev: document.querySelector('.pagination__btn--prev'),
         paginationNext: document.querySelector('.pagination__btn--next'),
         paginationInfo: document.querySelector('.pagination__info'),
@@ -240,6 +241,33 @@
         return div.innerHTML;
     }
 
+    // =========================================================================
+    // Scenario 4: Key Search and Filter Functions
+    // =========================================================================
+
+    /**
+     * Clear the search input and reset to showing all keys
+     */
+    function clearSearch() {
+        if (elements.searchInput) {
+            elements.searchInput.value = '';
+        }
+        state.searchQuery = '';
+        state.currentPage = 1;
+        updateClearButtonVisibility('');
+        fetchKeys(0, CONFIG.defaultPageLimit, '');
+    }
+
+    /**
+     * Update the visibility of the clear button based on search input value
+     * @param {string} value - Current search input value
+     */
+    function updateClearButtonVisibility(value) {
+        if (elements.searchClearBtn) {
+            elements.searchClearBtn.style.display = value.length > 0 ? 'flex' : 'none';
+        }
+    }
+
     // Event Handlers
     function setupEventListeners() {
         // Modal close
@@ -263,16 +291,26 @@
             }
         });
 
-        // Search input (Scenario 4 will enhance)
+        // Search input - Scenario 4: Key Search and Filter
         if (elements.searchInput) {
             let searchTimeout;
             elements.searchInput.addEventListener('input', function(e) {
                 clearTimeout(searchTimeout);
+                const searchValue = e.target.value;
+                // Show/hide clear button based on input
+                updateClearButtonVisibility(searchValue);
                 searchTimeout = setTimeout(() => {
-                    state.searchQuery = e.target.value;
+                    state.searchQuery = searchValue;
                     state.currentPage = 1;
                     fetchKeys(0, CONFIG.defaultPageLimit, state.searchQuery);
                 }, 300);
+            });
+        }
+
+        // Search clear button - Scenario 4: Key Search and Filter
+        if (elements.searchClearBtn) {
+            elements.searchClearBtn.addEventListener('click', function() {
+                clearSearch();
             });
         }
 

@@ -192,7 +192,10 @@ fn parse_query_string(query: Option<&str>) -> HashMap<String, String> {
 
 /// Serve keys list endpoint: GET /api/keys (Scenario 3: Key Browser with Pagination)
 /// Supports pagination via offset and limit query parameters
+/// Supports search via search query parameter (Scenario 4: Key Search and Filter)
 fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::Cursor<Vec<u8>>> {
+    use crate::http::handlers::{decode_search_param, filter_keys_by_search};
+
     let params = parse_query_string(query);
 
     // Parse pagination parameters with defaults
@@ -206,17 +209,35 @@ fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::
         .unwrap_or(DEFAULT_KEYS_LIMIT)
         .min(MAX_KEYS_LIMIT); // Cap limit for safety
 
-    // Get keys from store with pagination
-    match store.list_keys(offset, limit) {
-        Ok((keys, total)) => {
+    // Parse search parameter (Scenario 4: Key Search and Filter)
+    let search = params
+        .get("search")
+        .map(|s| decode_search_param(s))
+        .unwrap_or_default();
+
+    // Get all keys from store (we need to filter first, then paginate)
+    // For search, we need to get all keys first, filter, then apply pagination
+    match store.list_keys(0, usize::MAX) {
+        Ok((all_keys, _)) => {
             // Convert Slice keys to strings
-            let key_strings: Vec<String> = keys
+            let all_key_strings: Vec<String> = all_keys
                 .iter()
                 .map(|k| to_str(k).to_string())
                 .collect();
 
+            // Filter keys by search term (Scenario 4)
+            let filtered_keys = filter_keys_by_search(all_key_strings, &search);
+            let total = filtered_keys.len();
+
+            // Apply pagination to filtered results
+            let paginated_keys: Vec<String> = filtered_keys
+                .into_iter()
+                .skip(offset)
+                .take(limit)
+                .collect();
+
             let response = KeysResponse {
-                keys: key_strings,
+                keys: paginated_keys,
                 total: total as u64,
                 offset: offset as u64,
                 limit: limit as u64,
