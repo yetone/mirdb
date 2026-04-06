@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav__brand">
+                <a href="/" class="nav__logo" aria-label="MirDB Home">
+                    <span class="nav__logo-text">MirDB</span>
+                </a>
+            </div>
+            <ul class="nav__links" role="menubar">
+                <li class="nav__item" role="none">
+                    <a href="#dashboard" class="nav__link nav__link--active" role="menuitem" aria-current="page">Dashboard</a>
+                </li>
+                <li class="nav__item" role="none">
+                    <a href="#keys" class="nav__link" role="menuitem">Keys</a>
+                </li>
+                <li class="nav__item" role="none">
+                    <a href="https://github.com/yetone/mirdb#readme" class="nav__link" role="menuitem" target="_blank" rel="noopener noreferrer">Documentation</a>
+                </li>
+                <li class="nav__item" role="none">
+                    <a href="https://github.com/yetone/mirdb" class="nav__link" role="menuitem" target="_blank" rel="noopener noreferrer">GitHub</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main" role="main">
+        <!-- Dashboard Section - Scenario 2 will populate with stats -->
+        <section id="dashboard" class="section stats-section" aria-labelledby="dashboard-title">
+            <h1 id="dashboard-title" class="section__title">Dashboard</h1>
+            <div class="stats-cards" id="stats-cards">
+                <div class="stats-card">
+                    <span class="stats-card__label">Total Keys</span>
+                    <span class="stats-card__value" id="stat-total-keys">-</span>
+                </div>
+                <div class="stats-card">
+                    <span class="stats-card__label">Memory Usage</span>
+                    <span class="stats-card__value" id="stat-memory">-</span>
+                </div>
+                <div class="stats-card">
+                    <span class="stats-card__label">Storage Size</span>
+                    <span class="stats-card__value" id="stat-storage">-</span>
+                </div>
+                <div class="stats-card">
+                    <span class="stats-card__label">Version</span>
+                    <span class="stats-card__value" id="stat-version">0.1.0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keys Section - Scenario 3 will implement key browser -->
+        <section id="keys" class="section keys-section" aria-labelledby="keys-title">
+            <h2 id="keys-title" class="section__title">Key Browser</h2>
+            <!-- Scenario 4: Search input will go here -->
+            <div class="search-container" id="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Search keys..." aria-label="Search keys">
+            </div>
+            <!-- Scenario 3: Keys table will go here -->
+            <div class="keys-table-container" id="keys-table-container">
+                <table class="keys-table" aria-label="Stored keys">
+                    <thead>
+                        <tr>
+                            <th scope="col">Key</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="keys-table-body">
+                        <tr>
+                            <td colspan="3" class="keys-table__empty">No keys found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Scenario 3: Pagination controls will go here -->
+            <div class="pagination" id="pagination" aria-label="Pagination navigation">
+                <button class="pagination__btn pagination__btn--prev" disabled aria-label="Previous page">Previous</button>
+                <span class="pagination__info">Page 1 of 1</span>
+                <button class="pagination__btn pagination__btn--next" disabled aria-label="Next page">Next</button>
+            </div>
+        </section>
+
+        <!-- Compaction Section - Scenario 6 will implement status display -->
+        <section id="compaction" class="section compaction-section" aria-labelledby="compaction-title">
+            <h2 id="compaction-title" class="section__title">Compaction Status</h2>
+            <div class="compaction-status" id="compaction-status">
+                <span class="compaction-status__indicator compaction-status__indicator--idle" aria-label="Compaction status: Idle">Idle</span>
+                <div class="compaction-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="compaction-progress__bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scenario 5: Key detail modal will go here -->
+    <div id="key-detail-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 id="modal-title" class="modal__title">Key Details</h3>
+                <button class="modal__close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal__body" id="modal-body">
+                <!-- Key details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer" role="contentinfo">
+        <div class="footer__content">
+            <p class="footer__text">
+                MirDB - A persistent key-value store with Memcached protocol support
+            </p>
+            <nav class="footer__links" aria-label="Footer navigation">
+                <a href="https://github.com/yetone/mirdb#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
+                <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://github.com/yetone/mirdb/issues" target="_blank" rel="noopener noreferrer">Report Issue</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

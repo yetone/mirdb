@@ -53,6 +53,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod http;
 
 pub struct Server {
     store: Arc<Store>,
@@ -126,6 +127,10 @@ Welcome to MirDB!
 "#
         .trim_matches('\n')
     );
+
+    // Start the HTTP server in a background thread
+    let http_port = http::server::DEFAULT_HTTP_PORT;
+    http::server::start_http_server(http_port, store.clone());
 
     serve(addr, move || Ok(Server::new(store.clone())));
 
