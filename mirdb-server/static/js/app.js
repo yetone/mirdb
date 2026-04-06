@@ -41,6 +41,10 @@
 
     // DOM Elements
     const elements = {
+        // Navigation elements (Scenario 10: Responsive UI)
+        navToggle: document.getElementById('nav-toggle'),
+        navLinks: document.getElementById('nav-links'),
+
         // Stats elements
         statTotalKeys: document.getElementById('stat-total-keys'),
         statMemory: document.getElementById('stat-memory'),
@@ -356,6 +360,35 @@
 
     // Event Handlers
     function setupEventListeners() {
+        // =========================================================================
+        // Scenario 10: Responsive UI - Mobile navigation toggle
+        // =========================================================================
+        if (elements.navToggle && elements.navLinks) {
+            elements.navToggle.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                elements.navLinks.classList.toggle('nav__links--open');
+            });
+
+            // Close mobile nav when clicking a nav link
+            elements.navLinks.querySelectorAll('.nav__link').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 768) {
+                        elements.navToggle.setAttribute('aria-expanded', 'false');
+                        elements.navLinks.classList.remove('nav__links--open');
+                    }
+                });
+            });
+
+            // Close mobile nav on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    elements.navToggle.setAttribute('aria-expanded', 'false');
+                    elements.navLinks.classList.remove('nav__links--open');
+                }
+            });
+        }
+
         // Modal close
         if (elements.modalClose) {
             elements.modalClose.addEventListener('click', hideModal);

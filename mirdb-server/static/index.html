@@ -14,7 +14,12 @@
                     <span class="nav__logo-text">MirDB</span>
                 </a>
             </div>
-            <ul class="nav__links" role="menubar">
+            <button class="nav__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+                <span class="nav__toggle-bar"></span>
+                <span class="nav__toggle-bar"></span>
+                <span class="nav__toggle-bar"></span>
+            </button>
+            <ul class="nav__links" id="nav-links" role="menubar">
                 <li class="nav__item" role="none">
                     <a href="#dashboard" class="nav__link nav__link--active" role="menuitem" aria-current="page">Dashboard</a>
                 </li>
