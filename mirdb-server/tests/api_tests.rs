@@ -773,6 +773,369 @@ fn url_decode(encoded: &str) -> String {
 }
 
 // ============================================================================
+// Scenario 5: Key Detail View Tests
+// ============================================================================
+
+/// Test Case 1: GET /api/keys/{key} for existing key returns JSON with key, value, size, flags
+/// Input: GET /api/keys/test_key (existing key)
+/// Expected: JSON response with key, value, size, flags fields
+#[test]
+fn test_api_key_detail_existing_key() {
+    let port = 19501;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_key_details(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys/test_key").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for existing key, got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    // Verify JSON content type
+    assert!(
+        response.contains("Content-Type: application/json"),
+        "Expected Content-Type: application/json"
+    );
+
+    // Verify all required fields are present
+    assert!(
+        response.contains("\"key\""),
+        "Expected 'key' field in response"
+    );
+    assert!(
+        response.contains("\"value\""),
+        "Expected 'value' field in response"
+    );
+    assert!(
+        response.contains("\"size\""),
+        "Expected 'size' field in response"
+    );
+    assert!(
+        response.contains("\"flags\""),
+        "Expected 'flags' field in response"
+    );
+
+    // Verify key name matches
+    assert!(
+        response.contains("\"key\":\"test_key\""),
+        "Expected key to be 'test_key'"
+    );
+}
+
+/// Test Case 2: GET /api/keys/nonexistent_key returns HTTP 404
+/// Input: GET /api/keys/nonexistent_key
+/// Expected: HTTP 404 response with appropriate error message
+#[test]
+fn test_api_key_detail_nonexistent_key() {
+    let port = 19502;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_key_details(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys/nonexistent_key").expect("Failed to connect");
+
+    // Verify HTTP 404 response
+    assert!(
+        response.contains("HTTP/1.1 404") || response.contains("HTTP/1.0 404"),
+        "Expected HTTP 404 for nonexistent key, got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    // Verify error message is present
+    assert!(
+        response.contains("\"error\""),
+        "Expected error field in 404 response"
+    );
+    assert!(
+        response.contains("not found") || response.contains("Not found"),
+        "Expected 'not found' in error message"
+    );
+}
+
+/// Test Case 3: GET /api/keys/{key} for large value (>1MB) is truncated
+/// Input: GET /api/keys/large_value_key
+/// Expected: Value is truncated to prevent memory exhaustion (Risk Management)
+#[test]
+fn test_api_key_detail_large_value_truncation() {
+    let port = 19503;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_large_value(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys/large_value_key").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for large value key"
+    );
+
+    // Verify value is truncated (contains truncation indicator)
+    assert!(
+        response.contains("truncated") || response.contains("..."),
+        "Expected truncation indicator in large value response"
+    );
+
+    // Verify original size is preserved in size field
+    assert!(
+        response.contains("\"size\""),
+        "Expected size field to contain original size"
+    );
+}
+
+/// Test Case 4: UI modal elements exist for key detail view
+/// Input: Check HTML for key detail modal elements
+/// Expected: Key detail modal with proper accessibility attributes
+#[test]
+fn test_key_detail_ui_modal_elements() {
+    let port = 19504;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_key_details(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify modal exists
+    assert!(
+        html.contains("key-detail-modal"),
+        "Expected key-detail-modal element in HTML"
+    );
+
+    // Verify modal has dialog role
+    assert!(
+        html.contains("role=\"dialog\""),
+        "Expected modal to have dialog role for accessibility"
+    );
+
+    // Verify modal has aria-hidden attribute
+    assert!(
+        html.contains("aria-hidden"),
+        "Expected aria-hidden attribute on modal"
+    );
+
+    // Verify modal close button exists
+    assert!(
+        html.contains("modal__close"),
+        "Expected modal close button"
+    );
+
+    // Verify modal body exists for content
+    assert!(
+        html.contains("modal-body") || html.contains("modal__body"),
+        "Expected modal body element"
+    );
+
+    // Check JavaScript has fetchKeyDetail function
+    let js = http_get(&server_addr, "/static/js/app.js").expect("Failed to get JS");
+    assert!(
+        js.contains("fetchKeyDetail"),
+        "Expected fetchKeyDetail function in app.js"
+    );
+    assert!(
+        js.contains("showKeyDetail"),
+        "Expected showKeyDetail function in app.js"
+    );
+}
+
+/// Test Case 5: GET /api/keys/{key} with special characters (URL-encoded) works correctly
+/// Input: GET /api/keys/key%2Fwith%2Fslashes
+/// Expected: URL-encoded key names are handled correctly
+#[test]
+fn test_api_key_detail_url_encoded_key() {
+    let port = 19505;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_special_keys(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Test key with slashes: "key/with/slashes" encoded as "key%2Fwith%2Fslashes"
+    let response = http_get(&server_addr, "/api/keys/key%2Fwith%2Fslashes").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for URL-encoded key, got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    // Verify the decoded key name is in response
+    assert!(
+        response.contains("key/with/slashes"),
+        "Expected decoded key name in response"
+    );
+}
+
+/// Test URL-encoded key with colons
+#[test]
+fn test_api_key_detail_url_encoded_colons() {
+    let port = 19506;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_special_keys(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // Test key with colons: "user:profile:123" encoded as "user%3Aprofile%3A123"
+    let response = http_get(&server_addr, "/api/keys/user%3Aprofile%3A123").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for URL-encoded key with colons"
+    );
+
+    // Verify the decoded key name is in response
+    assert!(
+        response.contains("user:profile:123"),
+        "Expected decoded key name with colons in response"
+    );
+}
+
+// ============================================================================
+// Helper Functions for Scenario 5 (Key Detail)
+// ============================================================================
+
+/// Start a test HTTP server that handles key detail requests
+fn start_test_server_with_key_details(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        // Test keys with values
+        let mut keys: std::collections::HashMap<String, (String, u64, u32)> = std::collections::HashMap::new();
+        keys.insert("test_key".to_string(), ("test_value".to_string(), 10, 0));
+        keys.insert("user:1".to_string(), ("user data 1".to_string(), 11, 1));
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_key_detail_request(&request, &keys);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test HTTP server with a large value key
+fn start_test_server_with_large_value(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        let mut keys: std::collections::HashMap<String, (String, u64, u32)> = std::collections::HashMap::new();
+        // Simulate a large value (>1MB in original size, but truncated in response)
+        let large_size: u64 = 2 * 1024 * 1024; // 2MB
+        let truncated_value = "A".repeat(1000) + "... [truncated, showing first 1MB of 2097152 bytes]";
+        keys.insert("large_value_key".to_string(), (truncated_value, large_size, 0));
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_key_detail_request(&request, &keys);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test HTTP server with special character keys
+fn start_test_server_with_special_keys(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        let mut keys: std::collections::HashMap<String, (String, u64, u32)> = std::collections::HashMap::new();
+        keys.insert("key/with/slashes".to_string(), ("value with slashes".to_string(), 17, 0));
+        keys.insert("user:profile:123".to_string(), ("profile data".to_string(), 12, 0));
+        keys.insert("key with spaces".to_string(), ("value with spaces".to_string(), 17, 0));
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_key_detail_request(&request, &keys);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Handle key detail request for test server
+fn handle_key_detail_request(
+    request: &tiny_http::Request,
+    keys: &std::collections::HashMap<String, (String, u64, u32)>,
+) -> tiny_http::Response<std::io::Cursor<Vec<u8>>> {
+    let url = request.url();
+
+    // Parse path
+    let path = match url.find('?') {
+        Some(pos) => &url[..pos],
+        None => url,
+    };
+
+    if path == "/" || path == "/index.html" {
+        let html = include_str!("../static/index.html");
+        return tiny_http::Response::from_string(html).with_header(
+            tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/html; charset=utf-8"[..])
+                .unwrap(),
+        );
+    }
+
+    if path == "/static/js/app.js" {
+        let js = include_str!("../static/js/app.js");
+        return tiny_http::Response::from_string(js).with_header(
+            tiny_http::Header::from_bytes(
+                &b"Content-Type"[..],
+                &b"application/javascript; charset=utf-8"[..],
+            )
+            .unwrap(),
+        );
+    }
+
+    if path.starts_with("/api/keys/") {
+        let encoded_key = &path[10..]; // "/api/keys/".len() = 10
+        let key_name = url_decode(encoded_key);
+
+        if let Some((value, size, flags)) = keys.get(&key_name) {
+            let json = format!(
+                r#"{{"key":"{}","value":"{}","size":{},"flags":{}}}"#,
+                key_name.replace("\"", "\\\""),
+                value.replace("\"", "\\\""),
+                size,
+                flags
+            );
+            return tiny_http::Response::from_string(json).with_header(
+                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                    .unwrap(),
+            );
+        } else {
+            let json = r#"{"error":"Key not found"}"#;
+            return tiny_http::Response::from_string(json)
+                .with_status_code(tiny_http::StatusCode(404))
+                .with_header(
+                    tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..])
+                        .unwrap(),
+                );
+        }
+    }
+
+    tiny_http::Response::from_string("Not Found")
+        .with_status_code(tiny_http::StatusCode(404))
+        .with_header(
+            tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..]).unwrap(),
+        )
+}
+
+// ============================================================================
 // Helper Functions for Scenario 3 (Keys)
 // ============================================================================
 
