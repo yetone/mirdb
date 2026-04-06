@@ -338,7 +338,7 @@ fn serve_api_key_detail(
         }
         Err(e) => {
             // Store error
-            let error = ErrorResponse { error: format!("Store error: {}", e) };
+            let error = ErrorResponse { error: format!("Store error: {}", e.msg) };
             let json = serde_json::to_string(&error).unwrap_or_else(|_| {
                 r#"{"error":"Store error"}"#.to_string()
             });
