@@ -182,7 +182,7 @@ fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::
             }
         }
         Err(e) => {
-            let error_json = format!(r#"{{"error":"{}"}}"#, e);
+            let error_json = format!(r#"{{"error":"{}"}}"#, e.msg);
             Response::from_string(error_json)
                 .with_status_code(StatusCode(500))
                 .with_header(
