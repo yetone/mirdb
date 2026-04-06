@@ -16,6 +16,11 @@ use crate::slice::Slice;
 use crate::store::Store;
 use crate::utils::to_str;
 
+/// Default pagination limit for keys listing
+const DEFAULT_KEYS_LIMIT: usize = 20;
+/// Maximum pagination limit to prevent excessive memory usage
+const MAX_KEYS_LIMIT: usize = 1000;
+
 /// Maximum value size to return in full (1MB). Larger values are truncated.
 const MAX_VALUE_SIZE: usize = 1024 * 1024;
 
@@ -151,8 +156,8 @@ fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::
     let limit: usize = params
         .get("limit")
         .and_then(|v| v.parse().ok())
-        .unwrap_or(20)
-        .min(100); // Cap limit at 100 for safety
+        .unwrap_or(DEFAULT_KEYS_LIMIT)
+        .min(MAX_KEYS_LIMIT); // Cap limit for safety
 
     // Get keys from store with pagination
     match store.list_keys(offset, limit) {
@@ -182,7 +187,7 @@ fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::
             }
         }
         Err(e) => {
-            let error_json = format!(r#"{{"error":"{}"}}"#, e.msg);
+            let error_json = format!(r#"{{"error":"Failed to list keys: {}"}}"#, e.msg);
             Response::from_string(error_json)
                 .with_status_code(StatusCode(500))
                 .with_header(

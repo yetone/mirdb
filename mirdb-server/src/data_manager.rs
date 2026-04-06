@@ -1,5 +1,6 @@
 use log::info;
 use std::borrow::Borrow;
+use std::collections::BTreeSet;
 use std::fmt::Debug;
 use std::path::Path;
 use std::sync::atomic::AtomicUsize;
@@ -35,8 +36,6 @@ use crate::utils::read_lock;
 use crate::utils::to_str;
 use crate::utils::write_lock;
 use crate::wal::WAL;
-
-use std::collections::BTreeSet;
 
 pub struct DataManager {
     mut_: Arc<RwLock<Memtable<Slice, Slice>>>,

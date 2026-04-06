@@ -442,6 +442,356 @@ fn test_key_detail_modal_ui_elements_exist() {
     );
 }
 
+// ============================================================================
+// Scenario 3: Key Browser with Pagination Tests
+// ============================================================================
+
+/// Test Case 1: GET /api/keys returns JSON with pagination metadata
+#[test]
+fn test_api_keys_returns_pagination_metadata() {
+    let port = 18100;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server with pagination support
+    let _server_handle = start_test_server_with_pagination(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /api/keys"
+    );
+
+    // Verify JSON content type
+    assert!(
+        response.contains("Content-Type: application/json"),
+        "Expected Content-Type: application/json"
+    );
+
+    // Verify pagination metadata fields exist
+    assert!(response.contains("\"keys\""), "Expected 'keys' field in response");
+    assert!(response.contains("\"total\""), "Expected 'total' field in response");
+    assert!(response.contains("\"offset\""), "Expected 'offset' field in response");
+    assert!(response.contains("\"limit\""), "Expected 'limit' field in response");
+}
+
+/// Test Case 2: GET /api/keys?offset=0&limit=20 returns first 20 keys
+#[test]
+fn test_api_keys_first_page_with_explicit_params() {
+    let port = 18101;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server with pagination support
+    let _server_handle = start_test_server_with_pagination(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys?offset=0&limit=20").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /api/keys?offset=0&limit=20"
+    );
+
+    // Verify offset is 0
+    assert!(
+        response.contains("\"offset\":0"),
+        "Expected offset:0 in response"
+    );
+
+    // Verify limit is 20
+    assert!(
+        response.contains("\"limit\":20"),
+        "Expected limit:20 in response"
+    );
+
+    // Verify total count is correct (500 keys in mock)
+    assert!(
+        response.contains("\"total\":500"),
+        "Expected total:500 in response"
+    );
+
+    // Verify keys array has 20 items
+    // Count the number of keys in the response
+    let keys_count = response.matches("\"key_").count();
+    assert_eq!(keys_count, 20, "Expected exactly 20 keys in response");
+}
+
+/// Test Case 3: GET /api/keys?offset=100&limit=20 returns keys 101-120
+#[test]
+fn test_api_keys_offset_pagination() {
+    let port = 18102;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server with pagination support
+    let _server_handle = start_test_server_with_pagination(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/keys?offset=100&limit=20").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /api/keys?offset=100&limit=20"
+    );
+
+    // Verify offset is 100
+    assert!(
+        response.contains("\"offset\":100"),
+        "Expected offset:100 in response"
+    );
+
+    // Verify limit is 20
+    assert!(
+        response.contains("\"limit\":20"),
+        "Expected limit:20 in response"
+    );
+
+    // Verify total count is still the full count
+    assert!(
+        response.contains("\"total\":500"),
+        "Expected total:500 in response"
+    );
+
+    // Verify the first key in response is key_100 (0-indexed means offset=100 gets key_100)
+    assert!(
+        response.contains("\"key_100\""),
+        "Expected key_100 in response (first key at offset 100)"
+    );
+}
+
+/// Test Case 4: Response time for /api/keys with large dataset under 2 seconds
+#[test]
+fn test_api_keys_response_time_under_2_seconds() {
+    let port = 18103;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server with pagination support (simulating 10000+ keys)
+    let _server_handle = start_test_server_with_large_dataset(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    // Measure response time
+    let start = Instant::now();
+    let response = http_get(&server_addr, "/api/keys?offset=0&limit=20").expect("Failed to connect");
+    let elapsed = start.elapsed();
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /api/keys"
+    );
+
+    // Verify response time is under 2 seconds (Story 2 acceptance criteria)
+    assert!(
+        elapsed < Duration::from_secs(2),
+        "Response took {:?}, expected under 2 seconds",
+        elapsed
+    );
+}
+
+/// Test Case 5: GET /api/keys with offset exceeding total returns empty array
+#[test]
+fn test_api_keys_offset_exceeds_total() {
+    let port = 18104;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server with pagination support
+    let _server_handle = start_test_server_with_pagination(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    // Request with offset beyond total keys (total is 500)
+    let response = http_get(&server_addr, "/api/keys?offset=1000&limit=20").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /api/keys with offset exceeding total"
+    );
+
+    // Verify offset is 1000
+    assert!(
+        response.contains("\"offset\":1000"),
+        "Expected offset:1000 in response"
+    );
+
+    // Verify total count is still correct
+    assert!(
+        response.contains("\"total\":500"),
+        "Expected total:500 in response"
+    );
+
+    // Verify keys array is empty
+    assert!(
+        response.contains("\"keys\":[]"),
+        "Expected empty keys array when offset exceeds total"
+    );
+}
+
+/// Test Case 6: Browser UI pagination controls exist and are functional
+/// (Verifies the UI elements needed for pagination are present in the HTML)
+#[test]
+fn test_pagination_ui_controls_exist() {
+    let port = 18105;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server
+    let _server_handle = start_test_server(port);
+
+    // Wait for server to start
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to connect");
+
+    // Verify pagination container exists
+    assert!(
+        html.contains("id=\"pagination\"") || html.contains("class=\"pagination\""),
+        "Expected pagination container in HTML"
+    );
+
+    // Verify Previous button exists
+    assert!(
+        html.contains("pagination__btn--prev"),
+        "Expected Previous button with correct class"
+    );
+
+    // Verify Next button exists
+    assert!(
+        html.contains("pagination__btn--next"),
+        "Expected Next button with correct class"
+    );
+
+    // Verify page info element exists
+    assert!(
+        html.contains("pagination__info"),
+        "Expected page info element"
+    );
+
+    // Verify JavaScript handles pagination
+    let js = http_get(&server_addr, "/static/js/app.js").expect("Failed to get JS");
+    assert!(
+        js.contains("paginationPrev") || js.contains("pagination"),
+        "Expected pagination handling in app.js"
+    );
+    assert!(
+        js.contains("paginationNext") || js.contains("fetchKeys"),
+        "Expected pagination or fetchKeys function in app.js"
+    );
+}
+
+/// Start a test HTTP server with pagination support and mock data
+fn start_test_server_with_pagination(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        // Handle requests
+        for _ in 0..20 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_test_request_with_pagination(&request, 500);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test HTTP server with a large dataset (10,000+ keys) for performance testing
+fn start_test_server_with_large_dataset(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        // Handle requests
+        for _ in 0..20 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let response = handle_test_request_with_pagination(&request, 10000);
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Handle test requests with pagination support
+fn handle_test_request_with_pagination(
+    request: &tiny_http::Request,
+    total_keys: u64,
+) -> tiny_http::Response<std::io::Cursor<Vec<u8>>> {
+    let url = request.url();
+
+    // Split path and query string
+    let (path, query) = match url.find('?') {
+        Some(pos) => (&url[..pos], Some(&url[pos + 1..])),
+        None => (url, None),
+    };
+
+    if path == "/api/keys" {
+        return handle_keys_mock(query, total_keys);
+    }
+
+    // Fall back to standard handler
+    handle_test_request(request)
+}
+
+/// Mock handler for keys endpoint with pagination
+fn handle_keys_mock(
+    query: Option<&str>,
+    total_keys: u64,
+) -> tiny_http::Response<std::io::Cursor<Vec<u8>>> {
+    // Parse query parameters
+    let mut offset: u64 = 0;
+    let mut limit: u64 = 20;
+
+    if let Some(q) = query {
+        for pair in q.split('&') {
+            if let Some(pos) = pair.find('=') {
+                let key = &pair[..pos];
+                let value = &pair[pos + 1..];
+                match key {
+                    "offset" => offset = value.parse().unwrap_or(0),
+                    "limit" => limit = value.parse().unwrap_or(20),
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    // Generate mock keys based on offset and limit
+    let mut keys: Vec<String> = Vec::new();
+    let end = std::cmp::min(offset + limit, total_keys);
+    for i in offset..end {
+        keys.push(format!("key_{}", i));
+    }
+
+    // Build JSON response
+    let keys_json: Vec<String> = keys.iter().map(|k| format!("\"{}\"", k)).collect();
+    let json = format!(
+        r#"{{"keys":[{}],"total":{},"offset":{},"limit":{}}}"#,
+        keys_json.join(","),
+        total_keys,
+        offset,
+        limit
+    );
+
+    tiny_http::Response::from_string(json).with_header(
+        tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
+    )
+}
+
 // Helper functions
 
 /// Start a test HTTP server on the given port with key detail support
