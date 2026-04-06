@@ -13,20 +13,26 @@
 
 use serde::{Deserialize, Serialize};
 
-/// Stats response structure (Scenario 2 will fully implement)
+/// Stats response structure (Scenario 2 - Database Statistics Display)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StatsResponse {
     pub total_keys: u64,
+    pub memory_usage: u64,
+    pub storage_size: u64,
     pub version: String,
     pub uptime_seconds: u64,
+    pub last_updated: u64, // Unix timestamp for cache validation
 }
 
 impl Default for StatsResponse {
     fn default() -> Self {
         StatsResponse {
             total_keys: 0,
+            memory_usage: 0,
+            storage_size: 0,
             version: "0.1.0".to_string(),
             uptime_seconds: 0,
+            last_updated: 0,
         }
     }
 }
@@ -98,7 +104,11 @@ mod tests {
     fn test_stats_response_default() {
         let stats = StatsResponse::default();
         assert_eq!(stats.total_keys, 0);
+        assert_eq!(stats.memory_usage, 0);
+        assert_eq!(stats.storage_size, 0);
         assert_eq!(stats.version, "0.1.0");
+        assert_eq!(stats.uptime_seconds, 0);
+        assert_eq!(stats.last_updated, 0);
     }
 
     #[test]

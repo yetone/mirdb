@@ -110,6 +110,43 @@ impl DataManager {
         readers.manifest_builder().to_string()
     }
 
+    /// Get statistics about the database
+    /// Returns (total_keys, memory_usage, storage_size)
+    pub fn get_stats(&self) -> (u64, u64, u64) {
+        let mut total_keys: u64 = 0;
+        let mut storage_size: u64 = 0;
+
+        // Count keys in mutable memtable
+        {
+            let muttable = read_lock(&self.mut_);
+            total_keys += muttable.length() as u64;
+        }
+
+        // Count keys in immutable memtables
+        {
+            let immuttable = read_lock(&self.imm_);
+            total_keys += immuttable.total_keys() as u64;
+        }
+
+        // Get storage size from SST files
+        // Note: We can't easily count keys in SST files without iterating,
+        // so we only track in-memory keys. SST files are included in storage_size.
+        {
+            let readers = read_lock(&self.readers_);
+            for level in 0..self.opt_.max_level {
+                let level_readers = readers.get_readers(level);
+                for reader in level_readers {
+                    storage_size += reader.size() as u64;
+                }
+            }
+        }
+
+        // Estimate memory usage (memtable size * 2 for mutable + immutable)
+        let memory_usage = (self.opt_.mem_table_max_size * 2) as u64;
+
+        (total_keys, memory_usage, storage_size)
+    }
+
     pub fn redo(&mut self) -> MyResult<()> {
         {
             let mut wal = write_lock(&self.wal_);

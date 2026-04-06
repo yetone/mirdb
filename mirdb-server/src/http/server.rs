@@ -8,13 +8,22 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::thread;
+use std::time::{SystemTime, UNIX_EPOCH};
 
+use once_cell::sync::Lazy;
 use tiny_http::{Header, Method, Response, Server, StatusCode};
 
-use crate::http::handlers::{ErrorResponse, KeyDetailResponse, KeysResponse};
+use crate::http::handlers::{ErrorResponse, KeyDetailResponse, KeysResponse, StatsResponse};
+use crate::http::stats::StatsCache;
 use crate::slice::Slice;
 use crate::store::Store;
 use crate::utils::to_str;
+
+/// Global stats cache with 5-second TTL (NFR-4: ≤5 seconds update)
+static STATS_CACHE: Lazy<StatsCache> = Lazy::new(|| StatsCache::new(5));
+
+/// Server start time for uptime calculation
+static SERVER_START_TIME: Lazy<SystemTime> = Lazy::new(SystemTime::now);
 
 /// Default pagination limit for keys listing
 const DEFAULT_KEYS_LIMIT: usize = 20;
@@ -116,13 +125,51 @@ fn serve_js() -> Response<std::io::Cursor<Vec<u8>>> {
     )
 }
 
+/// Serve the /api/stats endpoint with cached statistics (Scenario 2)
+/// Statistics are cached with 5-second TTL per NFR-4 requirements
 fn serve_api_stats(store: &Arc<Store>) -> Response<std::io::Cursor<Vec<u8>>> {
-    // Get total key count from store
-    let total_keys = store.count_keys().unwrap_or(0);
-    let json = format!(
-        r#"{{"total_keys":{},"version":"0.1.0","uptime_seconds":0}}"#,
-        total_keys
-    );
+    use crate::http::stats::Stats;
+
+    let stats = STATS_CACHE.get_or_compute(|| {
+        // Get stats from the store
+        let (total_keys, memory_usage, storage_size) = store.get_stats();
+
+        // Calculate uptime
+        let uptime_seconds = SERVER_START_TIME
+            .elapsed()
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+
+        // Get current timestamp for cache tracking
+        let last_updated = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+
+        Stats {
+            total_keys,
+            memory_usage,
+            storage_size,
+            version: env!("CARGO_PKG_VERSION").to_string(),
+            uptime_seconds,
+            last_updated,
+        }
+    });
+
+    // Convert to StatsResponse format for JSON serialization
+    let response = StatsResponse {
+        total_keys: stats.total_keys,
+        memory_usage: stats.memory_usage,
+        storage_size: stats.storage_size,
+        version: stats.version,
+        uptime_seconds: stats.uptime_seconds,
+        last_updated: stats.last_updated,
+    };
+
+    let json = serde_json::to_string(&response).unwrap_or_else(|_| {
+        r#"{"error":"Failed to serialize stats"}"#.to_string()
+    });
+
     Response::from_string(json).with_header(
         Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
     )
@@ -187,7 +234,7 @@ fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::
             }
         }
         Err(e) => {
-            let error_json = format!(r#"{{"error":"Failed to list keys: {}"}}"#, e.msg);
+            let error_json = format!(r#"{{"error":"Failed to list keys: {:?}"}}"#, e);
             Response::from_string(error_json)
                 .with_status_code(StatusCode(500))
                 .with_header(
@@ -343,7 +390,7 @@ fn serve_api_key_detail(
         }
         Err(e) => {
             // Store error
-            let error = ErrorResponse { error: format!("Store error: {}", e.msg) };
+            let error = ErrorResponse { error: format!("Store error: {:?}", e) };
             let json = serde_json::to_string(&error).unwrap_or_else(|_| {
                 r#"{"error":"Store error"}"#.to_string()
             });

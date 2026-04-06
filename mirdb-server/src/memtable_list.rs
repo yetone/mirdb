@@ -48,6 +48,11 @@ impl<K: Ord + Clone, V: Clone> MemtableList<K, V> {
     pub fn table_count(&self) -> usize {
         self.tables_.len()
     }
+
+    /// Returns the total number of keys across all tables in the list
+    pub fn total_keys(&self) -> usize {
+        self.tables_.iter().map(|t| t.length()).sum()
+    }
 }
 
 impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {

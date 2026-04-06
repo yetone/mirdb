@@ -74,6 +74,11 @@ impl Store {
         Ok(Store { data: dm, opt })
     }
 
+    /// Get database statistics (total_keys, memory_usage, storage_size)
+    pub fn get_stats(&self) -> (u64, u64, u64) {
+        self.data.get_stats()
+    }
+
     pub fn apply(&self, request: Request) -> MyResult<Response> {
         match request {
             Request::Getter { getter, keys } => {
