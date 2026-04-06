@@ -92,7 +92,7 @@ fn handle_request(
         "/api/keys" => serve_api_keys(store, query_string),
         "/api/compaction" => serve_api_compaction(),
         _ if path.starts_with("/api/keys/") => {
-            let encoded_key = &path[11..]; // Extract key from /api/keys/{key}
+            let encoded_key = &path[10..]; // Extract key from /api/keys/{key} (10 = "/api/keys/".len())
             serve_api_key_detail(encoded_key, store)
         }
         _ => Response::from_string("Not Found")

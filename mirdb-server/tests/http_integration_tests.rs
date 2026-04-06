@@ -820,7 +820,7 @@ fn handle_test_request_with_key_detail(
 
     // Handle key detail endpoint
     if path.starts_with("/api/keys/") {
-        let encoded_key = &path[11..];
+        let encoded_key = &path[10..]; // 10 = "/api/keys/".len()
         return handle_key_detail_mock(encoded_key);
     }
 
