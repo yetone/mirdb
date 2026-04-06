@@ -2219,7 +2219,7 @@ fn test_scenario11_form_accessibility() {
 /// Test Case 1: GET / (homepage) returns HTTP 200 with Content-Type: text/html
 #[test]
 fn test_scenario13_homepage_html_served() {
-    let port = 18601;
+    let port = 18701;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
@@ -2250,7 +2250,7 @@ fn test_scenario13_homepage_html_served() {
 /// Test Case 2: GET /static/style.css returns HTTP 200 with Content-Type: text/css
 #[test]
 fn test_scenario13_css_file_served() {
-    let port = 18602;
+    let port = 18702;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server_scenario13(port);
@@ -2281,7 +2281,7 @@ fn test_scenario13_css_file_served() {
 /// Test Case 3: GET /static/app.js returns HTTP 200 with Content-Type: application/javascript
 #[test]
 fn test_scenario13_js_file_served() {
-    let port = 18603;
+    let port = 18703;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server_scenario13(port);
@@ -2312,7 +2312,7 @@ fn test_scenario13_js_file_served() {
 /// Test Case 4: GET /static/nonexistent.css returns HTTP 404
 #[test]
 fn test_scenario13_nonexistent_static_file_404() {
-    let port = 18604;
+    let port = 18704;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server_scenario13(port);
@@ -2331,7 +2331,7 @@ fn test_scenario13_nonexistent_static_file_404() {
 /// Additional test: Verify full paths also work (/static/css/style.css, /static/js/app.js)
 #[test]
 fn test_scenario13_full_static_paths_work() {
-    let port = 18605;
+    let port = 18705;
     let server_addr = format!("127.0.0.1:{}", port);
 
     let _server_handle = start_test_server(port);
