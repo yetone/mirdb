@@ -11,6 +11,9 @@
 //! - `KeyDetailResponse`: Key detail response (Scenario 5)
 //! - `CompactionResponse`: Compaction status response (Scenario 6)
 
+use std::sync::atomic::{AtomicBool, AtomicU64, AtomicU8, Ordering};
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use serde::{Deserialize, Serialize};
 
 /// Stats response structure (Scenario 2 - Database Statistics Display)
@@ -66,20 +69,162 @@ pub struct KeyDetailResponse {
     pub flags: u32,
 }
 
-/// Compaction status response (Scenario 6 will fully implement)
+/// Compaction status response (Scenario 6: Compaction Status Display)
+///
+/// Provides comprehensive compaction status information including:
+/// - Current status (idle/running)
+/// - Compaction type (minor/major) when running
+/// - Progress percentage when available
+/// - Last compaction timestamp
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CompactionResponse {
+    /// Current compaction status: "idle" or "running"
     pub status: String,
-    pub progress: u8,
+    /// Type of compaction when running: "minor", "major", or null when idle
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compaction_type: Option<String>,
+    /// Progress percentage (0-100) if available, null if not tracking
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress: Option<u8>,
+    /// Unix timestamp of last completed compaction, null if never compacted
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_compaction: Option<u64>,
 }
 
 impl Default for CompactionResponse {
     fn default() -> Self {
         CompactionResponse {
             status: "idle".to_string(),
-            progress: 0,
+            compaction_type: None,
+            progress: None,
+            last_compaction: None,
         }
     }
+}
+
+impl CompactionResponse {
+    /// Create an idle compaction status response
+    pub fn idle(last_compaction: Option<u64>) -> Self {
+        CompactionResponse {
+            status: "idle".to_string(),
+            compaction_type: None,
+            progress: None,
+            last_compaction,
+        }
+    }
+
+    /// Create a running compaction status response
+    pub fn running(compaction_type: &str, progress: Option<u8>, last_compaction: Option<u64>) -> Self {
+        CompactionResponse {
+            status: "running".to_string(),
+            compaction_type: Some(compaction_type.to_string()),
+            progress,
+            last_compaction,
+        }
+    }
+}
+
+// ============================================================================
+// Scenario 6: Compaction Status Tracking
+// ============================================================================
+
+/// Compaction type constants
+pub const COMPACTION_TYPE_MINOR: u8 = 1;
+pub const COMPACTION_TYPE_MAJOR: u8 = 2;
+
+/// Thread-safe compaction status tracker (Scenario 6: Compaction Status Display)
+///
+/// Tracks the current state of compaction operations without requiring
+/// locks, using atomic operations for thread-safety.
+pub struct CompactionTracker {
+    /// Whether compaction is currently running
+    is_running: AtomicBool,
+    /// Type of compaction (1=minor, 2=major, 0=none)
+    compaction_type: AtomicU8,
+    /// Progress percentage (0-100)
+    progress: AtomicU8,
+    /// Unix timestamp of last completed compaction
+    last_compaction: AtomicU64,
+}
+
+impl CompactionTracker {
+    /// Create a new compaction tracker
+    pub const fn new() -> Self {
+        CompactionTracker {
+            is_running: AtomicBool::new(false),
+            compaction_type: AtomicU8::new(0),
+            progress: AtomicU8::new(0),
+            last_compaction: AtomicU64::new(0),
+        }
+    }
+
+    /// Start a compaction operation
+    pub fn start(&self, compaction_type: u8) {
+        self.is_running.store(true, Ordering::SeqCst);
+        self.compaction_type.store(compaction_type, Ordering::SeqCst);
+        self.progress.store(0, Ordering::SeqCst);
+    }
+
+    /// Update compaction progress (0-100)
+    pub fn update_progress(&self, progress: u8) {
+        self.progress.store(progress.min(100), Ordering::SeqCst);
+    }
+
+    /// Complete a compaction operation
+    pub fn complete(&self) {
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        self.last_compaction.store(timestamp, Ordering::SeqCst);
+        self.is_running.store(false, Ordering::SeqCst);
+        self.progress.store(0, Ordering::SeqCst);
+        self.compaction_type.store(0, Ordering::SeqCst);
+    }
+
+    /// Get current compaction status as a response
+    pub fn get_status(&self) -> CompactionResponse {
+        let is_running = self.is_running.load(Ordering::SeqCst);
+        let last_compaction = self.last_compaction.load(Ordering::SeqCst);
+        let last_compaction_opt = if last_compaction > 0 {
+            Some(last_compaction)
+        } else {
+            None
+        };
+
+        if is_running {
+            let compaction_type = match self.compaction_type.load(Ordering::SeqCst) {
+                COMPACTION_TYPE_MINOR => "minor",
+                COMPACTION_TYPE_MAJOR => "major",
+                _ => "unknown",
+            };
+            let progress = self.progress.load(Ordering::SeqCst);
+            CompactionResponse::running(compaction_type, Some(progress), last_compaction_opt)
+        } else {
+            CompactionResponse::idle(last_compaction_opt)
+        }
+    }
+
+    /// Check if compaction is currently running
+    pub fn is_running(&self) -> bool {
+        self.is_running.load(Ordering::SeqCst)
+    }
+}
+
+impl Default for CompactionTracker {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Global compaction tracker instance (Scenario 6)
+/// This allows the HTTP server to report compaction status without
+/// needing direct access to internal DataManager state.
+static COMPACTION_TRACKER: CompactionTracker = CompactionTracker::new();
+
+/// Get a reference to the global compaction tracker
+pub fn get_compaction_tracker() -> &'static CompactionTracker {
+    &COMPACTION_TRACKER
 }
 
 /// Error response for API errors
@@ -259,5 +404,188 @@ mod tests {
     #[test]
     fn test_decode_search_param_plus_sign() {
         assert_eq!(decode_search_param("hello+world"), "hello world");
+    }
+
+    // =========================================================================
+    // Scenario 6: Compaction Status Display Tests
+    // =========================================================================
+
+    #[test]
+    fn test_compaction_response_default() {
+        let response = CompactionResponse::default();
+        assert_eq!(response.status, "idle");
+        assert!(response.compaction_type.is_none());
+        assert!(response.progress.is_none());
+        assert!(response.last_compaction.is_none());
+    }
+
+    #[test]
+    fn test_compaction_response_idle() {
+        let response = CompactionResponse::idle(Some(1234567890));
+        assert_eq!(response.status, "idle");
+        assert!(response.compaction_type.is_none());
+        assert!(response.progress.is_none());
+        assert_eq!(response.last_compaction, Some(1234567890));
+    }
+
+    #[test]
+    fn test_compaction_response_idle_no_timestamp() {
+        let response = CompactionResponse::idle(None);
+        assert_eq!(response.status, "idle");
+        assert!(response.last_compaction.is_none());
+    }
+
+    #[test]
+    fn test_compaction_response_running_minor() {
+        let response = CompactionResponse::running("minor", Some(50), Some(1234567890));
+        assert_eq!(response.status, "running");
+        assert_eq!(response.compaction_type, Some("minor".to_string()));
+        assert_eq!(response.progress, Some(50));
+        assert_eq!(response.last_compaction, Some(1234567890));
+    }
+
+    #[test]
+    fn test_compaction_response_running_major() {
+        let response = CompactionResponse::running("major", Some(75), None);
+        assert_eq!(response.status, "running");
+        assert_eq!(response.compaction_type, Some("major".to_string()));
+        assert_eq!(response.progress, Some(75));
+        assert!(response.last_compaction.is_none());
+    }
+
+    #[test]
+    fn test_compaction_response_serialization_idle() {
+        let response = CompactionResponse::idle(Some(1234567890));
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains(r#""status":"idle""#));
+        assert!(json.contains(r#""last_compaction":1234567890"#));
+        // Optional fields with None should not appear
+        assert!(!json.contains("compaction_type"));
+        assert!(!json.contains("progress"));
+    }
+
+    #[test]
+    fn test_compaction_response_serialization_running() {
+        let response = CompactionResponse::running("minor", Some(50), Some(1234567890));
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains(r#""status":"running""#));
+        assert!(json.contains(r#""compaction_type":"minor""#));
+        assert!(json.contains(r#""progress":50"#));
+        assert!(json.contains(r#""last_compaction":1234567890"#));
+    }
+
+    #[test]
+    fn test_compaction_tracker_initial_state() {
+        let tracker = CompactionTracker::new();
+        assert!(!tracker.is_running());
+        let status = tracker.get_status();
+        assert_eq!(status.status, "idle");
+        assert!(status.compaction_type.is_none());
+    }
+
+    #[test]
+    fn test_compaction_tracker_start_minor() {
+        let tracker = CompactionTracker::new();
+        tracker.start(COMPACTION_TYPE_MINOR);
+        assert!(tracker.is_running());
+        let status = tracker.get_status();
+        assert_eq!(status.status, "running");
+        assert_eq!(status.compaction_type, Some("minor".to_string()));
+        assert_eq!(status.progress, Some(0));
+    }
+
+    #[test]
+    fn test_compaction_tracker_start_major() {
+        let tracker = CompactionTracker::new();
+        tracker.start(COMPACTION_TYPE_MAJOR);
+        assert!(tracker.is_running());
+        let status = tracker.get_status();
+        assert_eq!(status.status, "running");
+        assert_eq!(status.compaction_type, Some("major".to_string()));
+    }
+
+    #[test]
+    fn test_compaction_tracker_update_progress() {
+        let tracker = CompactionTracker::new();
+        tracker.start(COMPACTION_TYPE_MINOR);
+        tracker.update_progress(50);
+        let status = tracker.get_status();
+        assert_eq!(status.progress, Some(50));
+
+        tracker.update_progress(75);
+        let status = tracker.get_status();
+        assert_eq!(status.progress, Some(75));
+    }
+
+    #[test]
+    fn test_compaction_tracker_progress_capped_at_100() {
+        let tracker = CompactionTracker::new();
+        tracker.start(COMPACTION_TYPE_MINOR);
+        tracker.update_progress(150); // Over 100
+        let status = tracker.get_status();
+        assert_eq!(status.progress, Some(100)); // Should be capped
+    }
+
+    #[test]
+    fn test_compaction_tracker_complete() {
+        let tracker = CompactionTracker::new();
+        tracker.start(COMPACTION_TYPE_MINOR);
+        tracker.update_progress(50);
+        tracker.complete();
+
+        assert!(!tracker.is_running());
+        let status = tracker.get_status();
+        assert_eq!(status.status, "idle");
+        assert!(status.compaction_type.is_none());
+        assert!(status.progress.is_none());
+        // last_compaction should be set to a timestamp
+        assert!(status.last_compaction.is_some());
+    }
+
+    #[test]
+    fn test_compaction_tracker_lifecycle() {
+        let tracker = CompactionTracker::new();
+
+        // Initial state - idle
+        let status = tracker.get_status();
+        assert_eq!(status.status, "idle");
+        assert!(status.last_compaction.is_none());
+
+        // Start minor compaction
+        tracker.start(COMPACTION_TYPE_MINOR);
+        let status = tracker.get_status();
+        assert_eq!(status.status, "running");
+        assert_eq!(status.compaction_type, Some("minor".to_string()));
+
+        // Update progress
+        tracker.update_progress(30);
+        tracker.update_progress(60);
+        tracker.update_progress(100);
+        let status = tracker.get_status();
+        assert_eq!(status.progress, Some(100));
+
+        // Complete compaction
+        tracker.complete();
+        let status = tracker.get_status();
+        assert_eq!(status.status, "idle");
+        assert!(status.last_compaction.is_some());
+
+        // Start another compaction (major)
+        let prev_timestamp = status.last_compaction;
+        tracker.start(COMPACTION_TYPE_MAJOR);
+        let status = tracker.get_status();
+        assert_eq!(status.status, "running");
+        assert_eq!(status.compaction_type, Some("major".to_string()));
+        // Last compaction should still be the previous one
+        assert_eq!(status.last_compaction, prev_timestamp);
+    }
+
+    #[test]
+    fn test_get_compaction_tracker() {
+        let tracker = get_compaction_tracker();
+        // Should return a valid tracker
+        let status = tracker.get_status();
+        // Status should be either idle or running
+        assert!(status.status == "idle" || status.status == "running");
     }
 }

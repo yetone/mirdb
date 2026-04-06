@@ -88,14 +88,18 @@
             </div>
         </section>
 
-        <!-- Compaction Section - Scenario 6 will implement status display -->
+        <!-- Compaction Section - Scenario 6: Compaction Status Display -->
         <section id="compaction" class="section compaction-section" aria-labelledby="compaction-title">
             <h2 id="compaction-title" class="section__title">Compaction Status</h2>
             <div class="compaction-status" id="compaction-status">
-                <span class="compaction-status__indicator compaction-status__indicator--idle" aria-label="Compaction status: Idle">Idle</span>
-                <div class="compaction-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="compaction-status__header">
+                    <span class="compaction-status__indicator compaction-status__indicator--idle" aria-label="Compaction status: Idle">Idle</span>
+                    <span class="compaction-status__type" id="compaction-type" style="display: none;" aria-label="Compaction type"></span>
+                </div>
+                <div class="compaction-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="display: none;">
                     <div class="compaction-progress__bar" style="width: 0%"></div>
                 </div>
+                <p class="compaction-status__last-run" id="compaction-last-run">No compactions yet</p>
             </div>
         </section>
     </main>

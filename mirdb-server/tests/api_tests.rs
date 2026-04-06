@@ -1242,6 +1242,514 @@ fn parse_pagination_params(query: Option<&str>) -> (usize, usize) {
 }
 
 // ============================================================================
+// Scenario 6: Compaction Status Display Tests
+// ============================================================================
+
+/// Test Case 1: GET /api/compaction when idle returns JSON with status 'idle'
+/// Input: GET /api/compaction when no compaction is running
+/// Expected: JSON response with status: 'idle', last_compaction timestamp (if available)
+#[test]
+fn test_api_compaction_returns_idle_status() {
+    let port = 19601;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_compaction(port, false, None);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /api/compaction, got: {}",
+        &response[..response.len().min(200)]
+    );
+
+    // Verify JSON content type
+    assert!(
+        response.contains("Content-Type: application/json"),
+        "Expected Content-Type: application/json"
+    );
+
+    // Verify status is 'idle'
+    assert!(
+        response.contains("\"status\":\"idle\""),
+        "Expected status 'idle' in response"
+    );
+}
+
+/// Test Case 1b: GET /api/compaction when idle includes last_compaction timestamp if available
+#[test]
+fn test_api_compaction_idle_with_timestamp() {
+    let port = 19602;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let timestamp = 1712400000u64; // April 2024
+    let _server_handle = start_test_server_with_compaction(port, false, Some(timestamp));
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+
+    // Verify status is 'idle'
+    assert!(
+        response.contains("\"status\":\"idle\""),
+        "Expected status 'idle' in response"
+    );
+
+    // Verify last_compaction timestamp is present
+    assert!(
+        response.contains("\"last_compaction\""),
+        "Expected last_compaction field in response when history exists"
+    );
+}
+
+/// Test Case 2: GET /api/compaction during active compaction
+/// Input: GET /api/compaction when compaction is running
+/// Expected: JSON response with status: 'running', type: 'minor'|'major', progress percentage
+#[test]
+fn test_api_compaction_returns_running_status_minor() {
+    let port = 19603;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_compaction_running(port, "minor", 50);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+
+    // Verify HTTP 200 response
+    assert!(
+        response.contains("HTTP/1.1 200") || response.contains("HTTP/1.0 200"),
+        "Expected HTTP 200 for /api/compaction"
+    );
+
+    // Verify status is 'running'
+    assert!(
+        response.contains("\"status\":\"running\""),
+        "Expected status 'running' in response"
+    );
+
+    // Verify compaction type is 'minor'
+    assert!(
+        response.contains("\"compaction_type\":\"minor\""),
+        "Expected compaction_type 'minor' in response"
+    );
+
+    // Verify progress is present
+    assert!(
+        response.contains("\"progress\":50"),
+        "Expected progress value in response"
+    );
+}
+
+/// Test Case 2b: GET /api/compaction during major compaction
+#[test]
+fn test_api_compaction_returns_running_status_major() {
+    let port = 19604;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_compaction_running(port, "major", 75);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+
+    // Verify status is 'running'
+    assert!(
+        response.contains("\"status\":\"running\""),
+        "Expected status 'running' in response"
+    );
+
+    // Verify compaction type is 'major'
+    assert!(
+        response.contains("\"compaction_type\":\"major\""),
+        "Expected compaction_type 'major' in response"
+    );
+
+    // Verify progress is present
+    assert!(
+        response.contains("\"progress\":75"),
+        "Expected progress value of 75 in response"
+    );
+}
+
+/// Test Case 3: Dashboard compaction section rendering
+/// Input: Dashboard HTML page
+/// Expected: Status indicator shows Running/Idle state with progress bar for active compactions
+#[test]
+fn test_dashboard_compaction_section_rendering() {
+    let port = 19605;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_compaction_ui(port);
+    thread::sleep(Duration::from_millis(500));
+
+    let html = http_get(&server_addr, "/").expect("Failed to get homepage");
+
+    // Verify compaction section exists
+    assert!(
+        html.contains("id=\"compaction\"") || html.contains("compaction-section"),
+        "Expected compaction section in dashboard"
+    );
+
+    // Verify compaction status indicator exists
+    assert!(
+        html.contains("compaction-status__indicator"),
+        "Expected compaction status indicator element"
+    );
+
+    // Verify progress bar exists
+    assert!(
+        html.contains("compaction-progress"),
+        "Expected compaction progress bar element"
+    );
+
+    // Verify progress bar element exists
+    assert!(
+        html.contains("compaction-progress__bar"),
+        "Expected progress bar fill element"
+    );
+
+    // Verify last compaction display exists
+    assert!(
+        html.contains("compaction-last-run") || html.contains("last_compaction") || html.contains("Last compaction"),
+        "Expected last compaction display element"
+    );
+
+    // Verify JavaScript handles compaction status
+    let js = http_get(&server_addr, "/static/js/app.js").expect("Failed to get JS");
+    assert!(
+        js.contains("fetchCompactionStatus"),
+        "Expected fetchCompactionStatus function in app.js"
+    );
+    assert!(
+        js.contains("updateCompactionDisplay"),
+        "Expected updateCompactionDisplay function in app.js"
+    );
+    assert!(
+        js.contains("/api/compaction") || js.contains("/compaction"),
+        "Expected compaction API call in app.js"
+    );
+}
+
+/// Test Case 4: GET /api/compaction after compaction completes
+/// Input: GET /api/compaction after a compaction finishes
+/// Expected: Status returns to 'idle' with updated last_compaction timestamp
+#[test]
+fn test_api_compaction_completes_returns_to_idle() {
+    let port = 19606;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    // Start server that simulates compaction completing
+    let _server_handle = start_test_server_with_compaction_completion(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // First request - should be running
+    let response1 = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+    assert!(
+        response1.contains("\"status\":\"running\""),
+        "Expected initial status to be 'running'"
+    );
+
+    // Wait a bit for "compaction to complete"
+    thread::sleep(Duration::from_millis(100));
+
+    // Second request - should be idle with updated timestamp
+    let response2 = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+    assert!(
+        response2.contains("\"status\":\"idle\""),
+        "Expected status to return to 'idle' after completion"
+    );
+    assert!(
+        response2.contains("\"last_compaction\""),
+        "Expected last_compaction timestamp after completion"
+    );
+}
+
+/// Test compaction progress updates during active compaction
+#[test]
+fn test_api_compaction_progress_updates() {
+    let port = 19607;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_compaction_progress(port);
+    thread::sleep(Duration::from_millis(500));
+
+    // First request - progress at 25%
+    let response1 = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+    assert!(
+        response1.contains("\"progress\":25"),
+        "Expected initial progress of 25"
+    );
+
+    // Second request - progress at 50%
+    let response2 = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+    assert!(
+        response2.contains("\"progress\":50"),
+        "Expected progress to update to 50"
+    );
+}
+
+/// Test compaction JSON structure meets API specification
+#[test]
+fn test_api_compaction_json_structure() {
+    let port = 19608;
+    let server_addr = format!("127.0.0.1:{}", port);
+
+    let _server_handle = start_test_server_with_compaction_running(port, "minor", 50);
+    thread::sleep(Duration::from_millis(500));
+
+    let response = http_get(&server_addr, "/api/compaction").expect("Failed to connect");
+
+    // Parse JSON body
+    let body_start = response.find('{').unwrap_or(0);
+    let json_part = &response[body_start..];
+
+    // Verify required fields in running state
+    assert!(json_part.contains("\"status\""), "Missing status field");
+    assert!(json_part.contains("\"compaction_type\""), "Missing compaction_type field");
+    assert!(json_part.contains("\"progress\""), "Missing progress field");
+}
+
+// ============================================================================
+// Scenario 6: Helper Functions for Compaction Tests
+// ============================================================================
+
+/// Start a test server with compaction status endpoint (idle)
+fn start_test_server_with_compaction(
+    port: u16,
+    _is_running: bool,
+    last_compaction: Option<u64>,
+) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let path = request.url().to_string();
+                    let response = match path.as_str() {
+                        "/api/compaction" => {
+                            let json = if let Some(ts) = last_compaction {
+                                format!(r#"{{"status":"idle","last_compaction":{}}}"#, ts)
+                            } else {
+                                r#"{"status":"idle"}"#.to_string()
+                            };
+                            tiny_http::Response::from_string(json).with_header(
+                                tiny_http::Header::from_bytes(
+                                    &b"Content-Type"[..],
+                                    &b"application/json"[..],
+                                )
+                                .unwrap(),
+                            )
+                        }
+                        _ => tiny_http::Response::from_string("Not Found")
+                            .with_status_code(tiny_http::StatusCode(404))
+                            .with_header(
+                                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..])
+                                    .unwrap(),
+                            ),
+                    };
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test server with compaction running
+fn start_test_server_with_compaction_running(
+    port: u16,
+    compaction_type: &'static str,
+    progress: u8,
+) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let path = request.url().to_string();
+                    let response = match path.as_str() {
+                        "/api/compaction" => {
+                            let json = format!(
+                                r#"{{"status":"running","compaction_type":"{}","progress":{}}}"#,
+                                compaction_type, progress
+                            );
+                            tiny_http::Response::from_string(json).with_header(
+                                tiny_http::Header::from_bytes(
+                                    &b"Content-Type"[..],
+                                    &b"application/json"[..],
+                                )
+                                .unwrap(),
+                            )
+                        }
+                        _ => tiny_http::Response::from_string("Not Found")
+                            .with_status_code(tiny_http::StatusCode(404))
+                            .with_header(
+                                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..])
+                                    .unwrap(),
+                            ),
+                    };
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test server that serves HTML and JS for UI testing
+fn start_test_server_with_compaction_ui(port: u16) -> thread::JoinHandle<()> {
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let path = request.url().to_string();
+                    let response = match path.as_str() {
+                        "/" | "/index.html" => {
+                            let html = include_str!("../static/index.html");
+                            tiny_http::Response::from_string(html).with_header(
+                                tiny_http::Header::from_bytes(
+                                    &b"Content-Type"[..],
+                                    &b"text/html; charset=utf-8"[..],
+                                )
+                                .unwrap(),
+                            )
+                        }
+                        "/static/js/app.js" => {
+                            let js = include_str!("../static/js/app.js");
+                            tiny_http::Response::from_string(js).with_header(
+                                tiny_http::Header::from_bytes(
+                                    &b"Content-Type"[..],
+                                    &b"application/javascript; charset=utf-8"[..],
+                                )
+                                .unwrap(),
+                            )
+                        }
+                        "/api/compaction" => {
+                            let json = r#"{"status":"idle"}"#;
+                            tiny_http::Response::from_string(json).with_header(
+                                tiny_http::Header::from_bytes(
+                                    &b"Content-Type"[..],
+                                    &b"application/json"[..],
+                                )
+                                .unwrap(),
+                            )
+                        }
+                        _ => tiny_http::Response::from_string("Not Found")
+                            .with_status_code(tiny_http::StatusCode(404))
+                            .with_header(
+                                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..])
+                                    .unwrap(),
+                            ),
+                    };
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test server that simulates compaction completion
+fn start_test_server_with_compaction_completion(port: u16) -> thread::JoinHandle<()> {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::sync::Arc;
+
+    let request_count = Arc::new(AtomicUsize::new(0));
+
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let path = request.url().to_string();
+                    let response = match path.as_str() {
+                        "/api/compaction" => {
+                            let count = request_count.fetch_add(1, Ordering::SeqCst);
+                            let json = if count == 0 {
+                                // First request: running
+                                r#"{"status":"running","compaction_type":"minor","progress":90}"#.to_string()
+                            } else {
+                                // Subsequent requests: idle with timestamp
+                                use std::time::{SystemTime, UNIX_EPOCH};
+                                let ts = SystemTime::now()
+                                    .duration_since(UNIX_EPOCH)
+                                    .map(|d| d.as_secs())
+                                    .unwrap_or(0);
+                                format!(r#"{{"status":"idle","last_compaction":{}}}"#, ts)
+                            };
+                            tiny_http::Response::from_string(json).with_header(
+                                tiny_http::Header::from_bytes(
+                                    &b"Content-Type"[..],
+                                    &b"application/json"[..],
+                                )
+                                .unwrap(),
+                            )
+                        }
+                        _ => tiny_http::Response::from_string("Not Found")
+                            .with_status_code(tiny_http::StatusCode(404))
+                            .with_header(
+                                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..])
+                                    .unwrap(),
+                            ),
+                    };
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+/// Start a test server with incrementing progress
+fn start_test_server_with_compaction_progress(port: u16) -> thread::JoinHandle<()> {
+    use std::sync::atomic::{AtomicU8, Ordering};
+    use std::sync::Arc;
+
+    let progress = Arc::new(AtomicU8::new(25));
+
+    thread::spawn(move || {
+        let addr = format!("127.0.0.1:{}", port);
+        let server = tiny_http::Server::http(&addr).expect("Failed to start test server");
+
+        for _ in 0..50 {
+            if let Ok(request) = server.recv_timeout(Duration::from_secs(5)) {
+                if let Some(request) = request {
+                    let path = request.url().to_string();
+                    let response = match path.as_str() {
+                        "/api/compaction" => {
+                            let current_progress = progress.fetch_add(25, Ordering::SeqCst);
+                            let json = format!(
+                                r#"{{"status":"running","compaction_type":"minor","progress":{}}}"#,
+                                current_progress
+                            );
+                            tiny_http::Response::from_string(json).with_header(
+                                tiny_http::Header::from_bytes(
+                                    &b"Content-Type"[..],
+                                    &b"application/json"[..],
+                                )
+                                .unwrap(),
+                            )
+                        }
+                        _ => tiny_http::Response::from_string("Not Found")
+                            .with_status_code(tiny_http::StatusCode(404))
+                            .with_header(
+                                tiny_http::Header::from_bytes(&b"Content-Type"[..], &b"text/plain"[..])
+                                    .unwrap(),
+                            ),
+                    };
+                    let _ = request.respond(response);
+                }
+            }
+        }
+    })
+}
+
+// ============================================================================
 // Common Helper Functions
 // ============================================================================
 

@@ -13,7 +13,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use once_cell::sync::Lazy;
 use tiny_http::{Header, Method, Response, Server, StatusCode};
 
-use crate::http::handlers::{ErrorResponse, KeyDetailResponse, KeysResponse, StatsResponse};
+use crate::http::handlers::{
+    ErrorResponse, KeyDetailResponse, KeysResponse, StatsResponse,
+    // Scenario 6: Compaction Status Display
+    CompactionResponse, get_compaction_tracker,
+};
 use crate::http::stats::StatsCache;
 use crate::slice::Slice;
 use crate::store::Store;
@@ -265,8 +269,25 @@ fn serve_api_keys(store: &Arc<Store>, query: Option<&str>) -> Response<std::io::
     }
 }
 
+// ============================================================================
+// Scenario 6: Compaction Status Display
+// ============================================================================
+
+/// Serve the /api/compaction endpoint (Scenario 6: Compaction Status Display)
+///
+/// Returns JSON with:
+/// - status: "idle" or "running"
+/// - compaction_type: "minor" or "major" (only when running)
+/// - progress: 0-100 percentage (only when running)
+/// - last_compaction: Unix timestamp of last completed compaction
 fn serve_api_compaction() -> Response<std::io::Cursor<Vec<u8>>> {
-    let json = r#"{"status":"idle","progress":0}"#;
+    let tracker = get_compaction_tracker();
+    let response = tracker.get_status();
+
+    let json = serde_json::to_string(&response).unwrap_or_else(|_| {
+        r#"{"status":"idle"}"#.to_string()
+    });
+
     Response::from_string(json).with_header(
         Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap(),
     )

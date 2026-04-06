@@ -55,10 +55,12 @@
         paginationNext: document.querySelector('.pagination__btn--next'),
         paginationInfo: document.querySelector('.pagination__info'),
 
-        // Compaction elements
+        // Compaction elements (Scenario 6: Compaction Status Display)
         compactionIndicator: document.querySelector('.compaction-status__indicator'),
         compactionProgressBar: document.querySelector('.compaction-progress__bar'),
         compactionProgress: document.querySelector('.compaction-progress'),
+        compactionType: document.getElementById('compaction-type'),
+        compactionLastRun: document.getElementById('compaction-last-run'),
 
         // Modal elements
         modal: document.getElementById('key-detail-modal'),
@@ -190,7 +192,14 @@
         }
     }
 
-    // Compaction Module (Scenario 6 will fully implement)
+    // =========================================================================
+    // Scenario 6: Compaction Status Display
+    // =========================================================================
+
+    /**
+     * Fetch compaction status from the API (Scenario 6)
+     * Called periodically to update the compaction section
+     */
     async function fetchCompactionStatus() {
         const data = await apiRequest('/compaction');
         if (data) {
@@ -198,21 +207,98 @@
         }
     }
 
+    /**
+     * Update the compaction display with current status (Scenario 6)
+     * Shows running/idle state, compaction type, progress, and last run time
+     * @param {Object} data - Compaction status from API
+     * @param {string} data.status - "idle" or "running"
+     * @param {string} [data.compaction_type] - "minor" or "major" when running
+     * @param {number} [data.progress] - Progress percentage (0-100) when running
+     * @param {number} [data.last_compaction] - Unix timestamp of last completed compaction
+     */
     function updateCompactionDisplay(data) {
         const isRunning = data.status === 'running';
         state.isCompactionActive = isRunning;
 
+        // Update status indicator
         if (elements.compactionIndicator) {
-            elements.compactionIndicator.textContent = data.status === 'running' ? 'Running' : 'Idle';
+            if (isRunning) {
+                const typeLabel = data.compaction_type ? ` (${capitalizeFirst(data.compaction_type)})` : '';
+                elements.compactionIndicator.textContent = `Running${typeLabel}`;
+            } else {
+                elements.compactionIndicator.textContent = 'Idle';
+            }
             elements.compactionIndicator.className = `compaction-status__indicator compaction-status__indicator--${data.status}`;
         }
 
-        if (elements.compactionProgressBar) {
-            elements.compactionProgressBar.style.width = `${data.progress || 0}%`;
+        // Update compaction type display
+        if (elements.compactionType) {
+            if (isRunning && data.compaction_type) {
+                elements.compactionType.textContent = capitalizeFirst(data.compaction_type) + ' Compaction';
+                elements.compactionType.style.display = 'inline';
+            } else {
+                elements.compactionType.style.display = 'none';
+            }
         }
 
+        // Update progress bar
+        const progress = isRunning && data.progress !== undefined ? data.progress : 0;
+        if (elements.compactionProgressBar) {
+            elements.compactionProgressBar.style.width = `${progress}%`;
+        }
         if (elements.compactionProgress) {
-            elements.compactionProgress.setAttribute('aria-valuenow', data.progress || 0);
+            elements.compactionProgress.setAttribute('aria-valuenow', progress);
+            // Show progress bar only when running
+            elements.compactionProgress.style.display = isRunning ? 'block' : 'none';
+        }
+
+        // Update last compaction timestamp
+        if (elements.compactionLastRun) {
+            if (data.last_compaction) {
+                const lastRunDate = new Date(data.last_compaction * 1000);
+                elements.compactionLastRun.textContent = 'Last compaction: ' + formatRelativeTime(lastRunDate);
+                elements.compactionLastRun.setAttribute('title', lastRunDate.toLocaleString());
+                elements.compactionLastRun.style.display = 'block';
+            } else {
+                elements.compactionLastRun.textContent = 'No compactions yet';
+                elements.compactionLastRun.style.display = 'block';
+            }
+        }
+    }
+
+    /**
+     * Capitalize the first letter of a string (Scenario 6)
+     * @param {string} str - String to capitalize
+     * @returns {string} Capitalized string
+     */
+    function capitalizeFirst(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    /**
+     * Format a date as relative time (e.g., "2 minutes ago") (Scenario 6)
+     * @param {Date} date - Date to format
+     * @returns {string} Relative time string
+     */
+    function formatRelativeTime(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+        const diffHour = Math.floor(diffMin / 60);
+        const diffDay = Math.floor(diffHour / 24);
+
+        if (diffSec < 60) {
+            return 'just now';
+        } else if (diffMin < 60) {
+            return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
+        } else if (diffHour < 24) {
+            return `${diffHour} hour${diffHour === 1 ? '' : 's'} ago`;
+        } else if (diffDay < 7) {
+            return `${diffDay} day${diffDay === 1 ? '' : 's'} ago`;
+        } else {
+            return date.toLocaleDateString();
         }
     }
 
