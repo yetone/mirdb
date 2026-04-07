@@ -1,16 +1,17 @@
-<!--
-  Header Partial
-  Owner: Scenario 15 - Navigation Header
--->
-<header>
-    <div class="container">
+<!-- Header Partial - Owner: Scenario 15 -->
+<header class="header">
+    <div class="container header-content">
         <a href="/" class="logo">MirDB</a>
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#quick-start">Quick Start</a>
-            <a href="#performance">Performance</a>
-            <a href="https://github.com/penberg/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <nav class="nav" aria-label="Main navigation">
+            <ul class="nav-list">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
         </nav>
+        <button class="theme-toggle" aria-label="Toggle theme" id="theme-toggle">
+            <span class="theme-icon">🌙</span>
+        </button>
     </div>
 </header>

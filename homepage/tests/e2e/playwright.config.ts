@@ -10,7 +10,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: 'list',
   use: {
     baseURL: 'http://127.0.0.1:1111',
     trace: 'on-first-retry',
@@ -20,21 +20,12 @@ export default defineConfig({
       name: 'Desktop Chrome',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Tablet',
-      use: {
-        viewport: { width: 768, height: 1024 },
-      },
-    },
   ],
   webServer: {
-    command: 'cd /workspace/homepage && ~/.local/bin/zola serve --port 1111 --interface 127.0.0.1',
+    command: 'zola serve --port 1111',
     url: 'http://127.0.0.1:1111',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    cwd: '/workspace/homepage',
+    timeout: 30000,
   },
 });

@@ -1,5 +1,5 @@
 /**
- * Main JavaScript for MirDB Homepage
+ * Main JavaScript
  * Owner: Scenario 11 - Dark/Light Theme Toggle
  */
 
@@ -7,24 +7,29 @@
 function initTheme() {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-    updateThemeIcon(theme);
+
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+    } else if (prefersDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        updateThemeIcon('dark');
+    }
 }
 
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     updateThemeIcon(newTheme);
 }
 
 function updateThemeIcon(theme) {
-    const toggleBtn = document.querySelector('.theme-toggle');
-    if (toggleBtn) {
-        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        toggleBtn.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
+    const icon = document.querySelector('.theme-icon');
+    if (icon) {
+        icon.textContent = theme === 'dark' ? '☀️' : '🌙';
     }
 }
 
@@ -32,8 +37,7 @@ function updateThemeIcon(theme) {
 document.addEventListener('DOMContentLoaded', function() {
     initTheme();
 
-    // Add event listener for theme toggle
-    const themeToggle = document.querySelector('.theme-toggle');
+    const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
     }
