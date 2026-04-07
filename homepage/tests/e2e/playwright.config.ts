@@ -22,7 +22,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `${process.env.HOME}/.local/bin/zola serve --port 1111`,
+    command: 'zola serve --port 1111',
     url: 'http://127.0.0.1:1111',
     reuseExistingServer: true,
     cwd: '/workspace/homepage',
