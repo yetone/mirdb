@@ -1,0 +1,15 @@
+{
+  "name": "mirdb-homepage-tests",
+  "version": "1.0.0",
+  "description": "Test suite for MirDB Homepage",
+  "type": "module",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:e2e": "npx playwright test tests/e2e/",
+    "test:headed": "npx playwright test --headed",
+    "test:features": "npx playwright test tests/e2e/features.spec.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

@@ -1,0 +1,14 @@
+# Zola Configuration for MirDB Homepage
+# Owner: Scenario 12 - Static Site Build
+
+base_url = "https://mirdb.github.io"
+title = "MirDB"
+description = "A persistent key-value store with Memcached protocol"
+compile_sass = false
+build_search_index = false
+
+[markdown]
+highlight_code = true
+highlight_theme = "base16-ocean-dark"
+
+[extra]

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ config.title }}{% endblock %}</title>
+    <meta name="description" content="{{ config.description }}">
+    <link rel="stylesheet" href="{{ get_url(path='css/main.css') }}">
+    <link rel="icon" href="{{ get_url(path='images/favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    {% include "partials/header.html" %}
+
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "partials/footer.html" %}
+
+    <script src="{{ get_url(path='js/main.js') }}"></script>
+</body>
+</html>

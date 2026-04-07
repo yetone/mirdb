@@ -1,0 +1,12 @@
+# Build output
+public/
+
+# Dependencies
+node_modules/
+
+# Playwright
+test-results/
+playwright-report/
+
+# Zola cache
+.zola-cache/

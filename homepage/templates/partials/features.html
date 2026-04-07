@@ -1,0 +1,48 @@
+<!--
+  Features Section Partial
+  Owner: Scenario 2 - Core Features Section Display
+
+  Structure:
+  - Section with id="features"
+  - Grid of feature cards with icons and descriptions
+  - Features: Memcached protocol, Disk persistence, LSM-tree architecture
+-->
+<section id="features" class="features" aria-labelledby="features-heading">
+    <div class="container">
+        <h2 id="features-heading">Core Features</h2>
+        <div class="features-grid">
+            <!-- Memcached Protocol Compatibility -->
+            <article class="feature-card" data-feature="memcached-protocol">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 4C16.536 4 4 16.536 4 32s12.536 28 28 28 28-12.536 28-28S47.464 4 32 4zm0 4c13.255 0 24 10.745 24 24S45.255 56 32 56 8 45.255 8 32 18.745 8 32 8zm-8 12v24h4V36h8v12h4V20h-4v12h-8V20h-4z"/>
+                    </svg>
+                </div>
+                <h3>Memcached Protocol</h3>
+                <p>Full compatibility with the Memcached protocol. Use your existing Memcached clients and libraries without any code changes. Drop-in replacement for seamless migration.</p>
+            </article>
+
+            <!-- Disk Persistence -->
+            <article class="feature-card" data-feature="disk-persistence">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 8c-2.2 0-4 1.8-4 4v40c0 2.2 1.8 4 4 4h40c2.2 0 4-1.8 4-4V12c0-2.2-1.8-4-4-4H12zm4 4h32v8H16v-8zm0 12h32v28H16V24zm4 4v4h24v-4H20zm0 8v4h24v-4H20zm0 8v4h24v-4H20z"/>
+                    </svg>
+                </div>
+                <h3>Disk Persistence</h3>
+                <p>Unlike traditional Memcached, MirDB persists your data to disk. Your data survives restarts and crashes, combining in-memory speed with the durability of persistent storage.</p>
+            </article>
+
+            <!-- LSM-tree Architecture -->
+            <article class="feature-card" data-feature="lsm-tree">
+                <div class="feature-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 4L8 16v4l24 12 24-12v-4L32 4zm0 6.47L48.53 18 32 25.53 15.47 18 32 10.47zM8 24v4l24 12 24-12v-4L32 36 8 24zm0 12v4l24 12 24-12v-4L32 48 8 36zm0 12v4l24 12 24-12v-4L32 60 8 48z"/>
+                    </svg>
+                </div>
+                <h3>LSM-tree Architecture</h3>
+                <p>Built on Log-Structured Merge-tree (LSM-tree) storage for optimal write performance. Efficient compaction and tiered storage deliver consistent throughput at scale.</p>
+            </article>
+        </div>
+    </div>
+</section>

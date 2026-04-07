@@ -1,0 +1,69 @@
+<!-- Quick Start Section - Owner: Scenario 3 -->
+<section id="quick-start" class="quickstart">
+    <div class="container">
+        <h2>Quick Start</h2>
+
+        <!-- Installation Section -->
+        <div class="code-section">
+            <h3>Installation</h3>
+            <p>Install MirDB using Cargo:</p>
+            <div class="code-block" data-language="bash">
+                <div class="code-header">
+                    <span class="code-lang">bash</span>
+                    <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="install-cargo">
+                        <span class="copy-icon">Copy</span>
+                        <span class="copied-icon" hidden>Copied!</span>
+                    </button>
+                </div>
+                <pre><code id="install-cargo" class="language-bash"># Install from crates.io
+cargo install mirdb
+
+# Or build from source
+git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
+            </div>
+        </div>
+
+        <!-- Usage Section -->
+        <div class="code-section">
+            <h3>Basic Usage</h3>
+            <p>Start the MirDB server:</p>
+            <div class="code-block" data-language="bash">
+                <div class="code-header">
+                    <span class="code-lang">bash</span>
+                    <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="start-server">
+                        <span class="copy-icon">Copy</span>
+                        <span class="copied-icon" hidden>Copied!</span>
+                    </button>
+                </div>
+                <pre><code id="start-server" class="language-bash"># Start MirDB server (default port: 12333)
+mirdb</code></pre>
+            </div>
+
+            <p>Connect using any memcached client or netcat:</p>
+            <div class="code-block" data-language="bash">
+                <div class="code-header">
+                    <span class="code-lang">bash</span>
+                    <button class="copy-button" aria-label="Copy code to clipboard" data-copy-target="memcached-example">
+                        <span class="copy-icon">Copy</span>
+                        <span class="copied-icon" hidden>Copied!</span>
+                    </button>
+                </div>
+                <pre><code id="memcached-example" class="language-bash"># Connect with netcat
+nc localhost 12333
+
+# Set a key-value pair (memcached protocol)
+set mykey 0 0 5
+hello
+# Response: STORED
+
+# Get the value back
+get mykey
+# Response: VALUE mykey 0 5
+#           hello
+#           END</code></pre>
+            </div>
+        </div>
+    </div>
+</section>

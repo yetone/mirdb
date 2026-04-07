@@ -1,0 +1,65 @@
+<!-- Performance Section - Owner: Scenario 4 -->
+<section id="performance" class="performance" data-testid="performance-section">
+    <div class="container">
+        <h2>Performance & Configuration</h2>
+
+        <!-- Performance Metrics Subsection -->
+        <div class="performance-metrics" data-testid="performance-metrics">
+            <h3>Performance Characteristics</h3>
+            <p>MirDB is optimized for write-heavy workloads using an LSM-tree architecture that provides:</p>
+            <ul class="metrics-list">
+                <li><strong>High Write Throughput:</strong> Sequential writes to memory tables with background compaction</li>
+                <li><strong>Efficient Reads:</strong> Bloom filters and block indexes minimize disk I/O</li>
+                <li><strong>Configurable Memory:</strong> Tunable memtable sizes for memory vs. durability tradeoffs</li>
+                <li><strong>Background Compaction:</strong> Automatic level-based compaction maintains read performance</li>
+            </ul>
+        </div>
+
+        <!-- Configuration Options Subsection -->
+        <div class="config-options" data-testid="config-options">
+            <h3>Configuration Options</h3>
+            <p>Configure MirDB via TOML configuration file (<code>-c /path/to/config.toml</code>):</p>
+            <table class="config-table" data-testid="config-table">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-testid="config-listen-address">
+                        <td><code>addr</code></td>
+                        <td><code>0.0.0.0:12333</code></td>
+                        <td>Server bind address and port</td>
+                    </tr>
+                    <tr data-testid="config-max-level">
+                        <td><code>max_level</code></td>
+                        <td><code>7</code></td>
+                        <td>Maximum number of LSM-tree levels</td>
+                    </tr>
+                    <tr data-testid="config-work-dir">
+                        <td><code>work_dir</code></td>
+                        <td><code>/tmp/mirdb</code></td>
+                        <td>Data directory path for persistent storage</td>
+                    </tr>
+                    <tr data-testid="config-sst-size">
+                        <td><code>sst_max_size</code></td>
+                        <td><code>100MB</code></td>
+                        <td>Maximum SSTable file size before splitting</td>
+                    </tr>
+                    <tr data-testid="config-memtable-size">
+                        <td><code>mem_table_max_size</code></td>
+                        <td><code>4MB</code></td>
+                        <td>Maximum memtable size before flush to disk</td>
+                    </tr>
+                    <tr data-testid="config-block-size">
+                        <td><code>block_size</code></td>
+                        <td><code>4KB</code></td>
+                        <td>Data block size for SSTable storage</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
