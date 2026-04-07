@@ -337,7 +337,7 @@ code {
     color: #a5d6ff;
 }
 
-/* Performance Section */
+/* Performance Section - Scenario 4 */
 .performance {
     padding: var(--spacing-xl) 0;
 }
@@ -346,6 +346,48 @@ code {
     text-align: center;
     margin-bottom: var(--spacing-lg);
     font-size: 2.5rem;
+}
+
+.performance-metrics {
+    margin-bottom: var(--spacing-lg);
+}
+
+.performance-metrics h3,
+.config-options h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.performance-metrics p,
+.config-options p {
+    color: var(--color-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.metrics-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-sm) 0;
+}
+
+.metrics-list li {
+    padding: var(--spacing-xs) 0;
+    padding-left: var(--spacing-md);
+    position: relative;
+    color: var(--color-text);
+}
+
+.metrics-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.config-options {
+    margin-top: var(--spacing-md);
 }
 
 .config-table {
@@ -364,6 +406,13 @@ code {
 .config-table th {
     background: var(--color-card-bg);
     font-weight: 600;
+}
+
+.config-table code {
+    background: var(--color-code-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
 }
 
 /* Footer */
