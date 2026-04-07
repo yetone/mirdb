@@ -1,0 +1,130 @@
+<!--
+  API Documentation Section Partial
+  Owner: Scenario 6 - API Documentation Links
+
+  Structure:
+  - Section with id="api"
+  - Protocol reference documentation
+  - Memcached commands: GET, SET, DELETE
+  - Command syntax and response codes
+-->
+<section id="api" class="api-docs" aria-labelledby="api-heading">
+    <div class="container">
+        <h2 id="api-heading">API Reference</h2>
+        <p class="api-intro">MirDB implements the <strong>Memcached text protocol</strong>, enabling compatibility with existing Memcached clients. Below are the supported commands.</p>
+
+        <!-- Storage Commands -->
+        <div class="api-section">
+            <h3>Storage Commands</h3>
+
+            <article class="api-command" data-command="set">
+                <h4>SET</h4>
+                <p>Store a key-value pair in the database.</p>
+                <div class="code-block" data-language="text">
+                    <pre><code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt; [noreply]\r\n
+&lt;data&gt;\r\n</code></pre>
+                </div>
+                <ul class="api-params">
+                    <li><code>key</code> - The key to store (max 250 characters)</li>
+                    <li><code>flags</code> - 32-bit unsigned integer for client use</li>
+                    <li><code>ttl</code> - Time-to-live in seconds (0 = no expiration)</li>
+                    <li><code>bytes</code> - Size of the data block</li>
+                </ul>
+                <p><strong>Response:</strong> <code>STORED</code> on success, <code>NOT_STORED</code> on failure</p>
+            </article>
+
+            <article class="api-command" data-command="add">
+                <h4>ADD</h4>
+                <p>Store a key-value pair only if the key does not already exist.</p>
+                <p><strong>Response:</strong> <code>STORED</code> on success, <code>NOT_STORED</code> if key exists</p>
+            </article>
+
+            <article class="api-command" data-command="replace">
+                <h4>REPLACE</h4>
+                <p>Store a key-value pair only if the key already exists.</p>
+                <p><strong>Response:</strong> <code>STORED</code> on success, <code>NOT_STORED</code> if key doesn't exist</p>
+            </article>
+        </div>
+
+        <!-- Retrieval Commands -->
+        <div class="api-section">
+            <h3>Retrieval Commands</h3>
+
+            <article class="api-command" data-command="get">
+                <h4>GET</h4>
+                <p>Retrieve one or more values by key.</p>
+                <div class="code-block" data-language="text">
+                    <pre><code>get &lt;key1&gt; [&lt;key2&gt; ...]\r\n</code></pre>
+                </div>
+                <p><strong>Response:</strong></p>
+                <div class="code-block" data-language="text">
+                    <pre><code>VALUE &lt;key&gt; &lt;flags&gt; &lt;bytes&gt;\r\n
+&lt;data&gt;\r\n
+END\r\n</code></pre>
+                </div>
+            </article>
+
+            <article class="api-command" data-command="gets">
+                <h4>GETS</h4>
+                <p>Retrieve values with CAS (Check-And-Set) token.</p>
+            </article>
+        </div>
+
+        <!-- Deletion Commands -->
+        <div class="api-section">
+            <h3>Deletion Commands</h3>
+
+            <article class="api-command" data-command="delete">
+                <h4>DELETE</h4>
+                <p>Remove a key from the database.</p>
+                <div class="code-block" data-language="text">
+                    <pre><code>delete &lt;key&gt; [noreply]\r\n</code></pre>
+                </div>
+                <p><strong>Response:</strong> <code>DELETED</code> on success, <code>NOT_FOUND</code> if key doesn't exist</p>
+            </article>
+        </div>
+
+        <!-- MirDB-Specific Commands -->
+        <div class="api-section">
+            <h3>MirDB-Specific Commands</h3>
+
+            <article class="api-command" data-command="info">
+                <h4>INFO</h4>
+                <p>Display database status and level information.</p>
+                <div class="code-block" data-language="text">
+                    <pre><code>info\r\n</code></pre>
+                </div>
+            </article>
+
+            <article class="api-command" data-command="major_compaction">
+                <h4>MAJOR_COMPACTION</h4>
+                <p>Trigger manual compaction of the LSM-tree storage.</p>
+                <div class="code-block" data-language="text">
+                    <pre><code>major_compaction\r\n</code></pre>
+                </div>
+            </article>
+        </div>
+
+        <!-- Response Codes -->
+        <div class="api-section">
+            <h3>Response Codes</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>STORED</code></td><td>Data stored successfully</td></tr>
+                    <tr><td><code>NOT_STORED</code></td><td>Data not stored (condition not met)</td></tr>
+                    <tr><td><code>DELETED</code></td><td>Key deleted successfully</td></tr>
+                    <tr><td><code>NOT_FOUND</code></td><td>Key not found</td></tr>
+                    <tr><td><code>ERROR</code></td><td>Unknown command</td></tr>
+                    <tr><td><code>CLIENT_ERROR &lt;msg&gt;</code></td><td>Client input error</td></tr>
+                    <tr><td><code>SERVER_ERROR &lt;msg&gt;</code></td><td>Server error</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
