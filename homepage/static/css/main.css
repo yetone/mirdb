@@ -220,7 +220,7 @@ body {
     line-height: 1.5;
 }
 
-/* Quick Start Section */
+/* Quick Start Section - Scenario 3 */
 .quickstart {
     padding: var(--spacing-xl) 0;
     background: var(--color-card-bg);
@@ -240,6 +240,65 @@ body {
     margin-bottom: var(--spacing-sm);
 }
 
+.code-section p {
+    color: var(--color-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Code Blocks with Copy Functionality */
+.code-block {
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.code-lang {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-muted);
+    text-transform: uppercase;
+}
+
+.copy-button {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: var(--color-text);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.copy-button:hover {
+    background: var(--color-card-bg);
+    border-color: var(--color-primary);
+}
+
+.copy-button.copied {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.code-block pre {
+    margin: 0;
+    padding: var(--spacing-sm);
+    background: transparent;
+    border-radius: 0;
+}
+
 pre {
     background: var(--color-code-bg);
     padding: var(--spacing-sm);
@@ -250,6 +309,32 @@ pre {
 code {
     font-family: var(--font-mono);
     font-size: 0.9rem;
+}
+
+/* Syntax Highlighting Classes */
+.code-block code .comment {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.code-block code .keyword {
+    color: #d73a49;
+}
+
+.code-block code .string {
+    color: #032f62;
+}
+
+[data-theme="dark"] .code-block code .comment {
+    color: #8b949e;
+}
+
+[data-theme="dark"] .code-block code .keyword {
+    color: #ff7b72;
+}
+
+[data-theme="dark"] .code-block code .string {
+    color: #a5d6ff;
 }
 
 /* Performance Section */
