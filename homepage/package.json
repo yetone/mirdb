@@ -5,7 +5,7 @@
   "scripts": {
     "test": "npx playwright test",
     "test:e2e": "npx playwright test tests/e2e/",
-    "test:unit": "node --test tests/unit/",
+    "test:unit": "node --test 'tests/unit/*.test.js'",
     "serve": "npx serve . -l 3000",
     "dev": "npx serve . -l 3000"
   },
