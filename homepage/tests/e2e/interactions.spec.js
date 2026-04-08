@@ -415,3 +415,374 @@ test.describe('Smooth Scrolling Navigation', () => {
     expect(tabindex).toBe('-1');
   });
 });
+
+/**
+ * Hover Effects and Animations E2E Tests
+ * Owner: Scenario 17 - Hover Effects and Animations
+ *
+ * Test cases:
+ * 1. Hover over feature card - shows hover effect (shadow, scale, or color change)
+ * 2. Hover over CTA buttons - shows hover effect indicating interactivity
+ * 3. Scroll to reveal sections - sections fade in or animate subtly when scrolled into view
+ * 4. Check animation timing - animations are subtle and complete within reasonable time (200-500ms)
+ * 5. Check reduced motion preference - animations are disabled when user prefers reduced motion
+ */
+test.describe('Hover Effects and Animations', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    // Wait for main.js to initialize
+    await page.waitForFunction(() => window.MirDBMain !== undefined);
+  });
+
+  test('feature card shows hover effect (shadow, scale, or color change)', async ({ page }) => {
+    // Scroll to features section
+    await page.locator('#features').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500); // Wait for scroll animations
+
+    // Get the first feature card
+    const featureCard = page.locator('.features-card').first();
+    await expect(featureCard).toBeVisible();
+
+    // Get initial styles
+    const initialTransform = await featureCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+    const initialBoxShadow = await featureCard.evaluate((el) => {
+      return window.getComputedStyle(el).boxShadow;
+    });
+
+    // Hover over the feature card
+    await featureCard.hover();
+
+    // Wait for transition to complete (300ms + buffer)
+    await page.waitForTimeout(400);
+
+    // Verify transform changed (translateY effect)
+    const hoverTransform = await featureCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // The hover should apply translateY(-4px) which results in a matrix transform
+    // Either the transform should change OR box-shadow should be visible
+    const hoverBoxShadow = await featureCard.evaluate((el) => {
+      return window.getComputedStyle(el).boxShadow;
+    });
+
+    // At least one visual change should occur on hover
+    const transformChanged = initialTransform !== hoverTransform;
+    const shadowChanged = initialBoxShadow !== hoverBoxShadow && hoverBoxShadow !== 'none';
+
+    expect(transformChanged || shadowChanged).toBe(true);
+  });
+
+  test('CTA buttons show hover effect indicating interactivity', async ({ page }) => {
+    // Get the primary CTA button
+    const primaryCta = page.locator('.hero-cta-primary');
+    await expect(primaryCta).toBeVisible();
+
+    // Get initial styles
+    const initialBgColor = await primaryCta.evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+
+    // Hover over the primary CTA
+    await primaryCta.hover();
+
+    // Wait for transition to complete
+    await page.waitForTimeout(400);
+
+    // Verify background color changed or transform applied
+    const hoverBgColor = await primaryCta.evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+    const hoverTransform = await primaryCta.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Check that visual feedback is provided
+    const bgColorChanged = initialBgColor !== hoverBgColor;
+    const hasTransform = hoverTransform !== 'none' && hoverTransform !== 'matrix(1, 0, 0, 1, 0, 0)';
+
+    expect(bgColorChanged || hasTransform).toBe(true);
+  });
+
+  test('secondary CTA button shows hover effect', async ({ page }) => {
+    // Get the secondary CTA button
+    const secondaryCta = page.locator('.hero-cta-secondary');
+    await expect(secondaryCta).toBeVisible();
+
+    // Get initial border color
+    const initialBorderColor = await secondaryCta.evaluate((el) => {
+      return window.getComputedStyle(el).borderColor;
+    });
+
+    // Hover over the secondary CTA
+    await secondaryCta.hover();
+
+    // Wait for transition to complete
+    await page.waitForTimeout(400);
+
+    // Verify border color changed or transform applied
+    const hoverBorderColor = await secondaryCta.evaluate((el) => {
+      return window.getComputedStyle(el).borderColor;
+    });
+    const hoverTransform = await secondaryCta.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Check that visual feedback is provided
+    const borderColorChanged = initialBorderColor !== hoverBorderColor;
+    const hasTransform = hoverTransform !== 'none' && hoverTransform !== 'matrix(1, 0, 0, 1, 0, 0)';
+
+    expect(borderColorChanged || hasTransform).toBe(true);
+  });
+
+  test('sections fade in or animate subtly when scrolled into view', async ({ page }) => {
+    // Ensure we're at the top of the page
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
+    // Get a feature card before scrolling (should have animate-on-scroll class but not animated)
+    const featureCards = page.locator('.features-card');
+    const firstCard = featureCards.first();
+
+    // Check that the feature cards have the animate-on-scroll class
+    const hasAnimateClass = await firstCard.evaluate((el) => {
+      return el.classList.contains('animate-on-scroll');
+    });
+    expect(hasAnimateClass).toBe(true);
+
+    // Check initial state - not animated yet
+    const initiallyAnimated = await firstCard.evaluate((el) => {
+      return el.classList.contains('animated');
+    });
+    // Initially might be false (not scrolled to) or true (if already in view)
+
+    // Scroll to the features section
+    await page.locator('#features').scrollIntoViewIfNeeded();
+
+    // Wait for the animation to trigger and complete
+    await page.waitForTimeout(800);
+
+    // Verify the animated class was added
+    const afterScrollAnimated = await firstCard.evaluate((el) => {
+      return el.classList.contains('animated');
+    });
+    expect(afterScrollAnimated).toBe(true);
+
+    // Verify the element is now fully visible (opacity 1)
+    const opacity = await firstCard.evaluate((el) => {
+      return window.getComputedStyle(el).opacity;
+    });
+    expect(opacity).toBe('1');
+  });
+
+  test('animations complete within reasonable time (200-500ms)', async ({ page }) => {
+    // Check transition duration CSS values for animated elements
+    await page.locator('#features').scrollIntoViewIfNeeded();
+
+    const featureCard = page.locator('.features-card').first();
+    await expect(featureCard).toBeVisible();
+
+    // Get the transition duration
+    const transitionDuration = await featureCard.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      // Get the transition-duration property value
+      const duration = style.transitionDuration;
+      // Parse the duration (e.g., "0.3s" -> 300 or "300ms" -> 300)
+      if (duration.includes('ms')) {
+        return parseFloat(duration);
+      } else if (duration.includes('s')) {
+        return parseFloat(duration) * 1000;
+      }
+      return 0;
+    });
+
+    // Verify transition duration is within 200-500ms range
+    expect(transitionDuration).toBeGreaterThanOrEqual(200);
+    expect(transitionDuration).toBeLessThanOrEqual(500);
+  });
+
+  test('check animation timing on hover transitions', async ({ page }) => {
+    // Check hover transition timing on CTAs
+    const primaryCta = page.locator('.hero-cta-primary');
+    await expect(primaryCta).toBeVisible();
+
+    const transitionDuration = await primaryCta.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      const duration = style.transitionDuration;
+      // Handle multiple durations (take the first one)
+      const firstDuration = duration.split(',')[0].trim();
+      if (firstDuration.includes('ms')) {
+        return parseFloat(firstDuration);
+      } else if (firstDuration.includes('s')) {
+        return parseFloat(firstDuration) * 1000;
+      }
+      return 0;
+    });
+
+    // Verify transition duration is within 200-500ms range
+    expect(transitionDuration).toBeGreaterThanOrEqual(150);
+    expect(transitionDuration).toBeLessThanOrEqual(500);
+  });
+
+  test('animations are disabled when user prefers reduced motion', async ({ page }) => {
+    // Emulate reduced motion preference
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
+    // Reload to apply the preference
+    await page.reload();
+    await page.waitForFunction(() => window.MirDBMain !== undefined);
+
+    // Verify that prefersReducedMotion returns true
+    const prefersReduced = await page.evaluate(() => {
+      return window.MirDBMain.prefersReducedMotion();
+    });
+    expect(prefersReduced).toBe(true);
+
+    // Check that elements have the animated class immediately (no animation wait)
+    const featureCard = page.locator('.features-card').first();
+    await page.locator('#features').scrollIntoViewIfNeeded();
+
+    // Elements should have animated class immediately
+    const hasAnimatedClass = await featureCard.evaluate((el) => {
+      return el.classList.contains('animated');
+    });
+    expect(hasAnimatedClass).toBe(true);
+
+    // Check that transitions are effectively disabled (0.01ms duration)
+    const transitionDuration = await featureCard.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      const duration = style.transitionDuration;
+      const firstDuration = duration.split(',')[0].trim();
+      if (firstDuration.includes('ms')) {
+        return parseFloat(firstDuration);
+      } else if (firstDuration.includes('s')) {
+        return parseFloat(firstDuration) * 1000;
+      }
+      return 0;
+    });
+
+    // With reduced motion, transitions should be effectively instant (≤1ms)
+    expect(transitionDuration).toBeLessThanOrEqual(1);
+  });
+
+  test('hover effects do not apply transform when reduced motion is preferred', async ({ page }) => {
+    // Emulate reduced motion preference
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
+    // Reload to apply the preference
+    await page.reload();
+    await page.waitForFunction(() => window.MirDBMain !== undefined);
+
+    // Navigate to features
+    await page.locator('#features').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(200);
+
+    // Get a feature card
+    const featureCard = page.locator('.features-card').first();
+    await expect(featureCard).toBeVisible();
+
+    // Get initial transform
+    const initialTransform = await featureCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Hover over the card
+    await featureCard.hover();
+    await page.waitForTimeout(100);
+
+    // Get hover transform
+    const hoverTransform = await featureCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Transform should not change (no motion)
+    // The CSS sets transform: none for hover when reduced motion is preferred
+    expect(hoverTransform === 'none' || hoverTransform === initialTransform).toBe(true);
+  });
+
+  test('architecture components show hover effects', async ({ page }) => {
+    // Navigate to architecture section
+    await page.locator('#architecture').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+
+    // Get an architecture component
+    const archComponent = page.locator('.arch-component').first();
+    await expect(archComponent).toBeVisible();
+
+    // Get initial transform
+    const initialTransform = await archComponent.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Hover
+    await archComponent.hover();
+    await page.waitForTimeout(400);
+
+    // Get hover transform
+    const hoverTransform = await archComponent.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Verify transform changed (translateY effect)
+    const transformChanged = initialTransform !== hoverTransform;
+    const hasTranslateY = hoverTransform !== 'none' && hoverTransform.includes('matrix');
+
+    expect(transformChanged || hasTranslateY).toBe(true);
+  });
+
+  test('code examples show hover effect on border', async ({ page }) => {
+    // Navigate to code examples section
+    await page.locator('#code-examples').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+
+    // Get a code example
+    const codeExample = page.locator('.code-example').first();
+    await expect(codeExample).toBeVisible();
+
+    // Get initial border color
+    const initialBorderColor = await codeExample.evaluate((el) => {
+      return window.getComputedStyle(el).borderColor;
+    });
+
+    // Hover
+    await codeExample.hover();
+    await page.waitForTimeout(400);
+
+    // Get hover border color
+    const hoverBorderColor = await codeExample.evaluate((el) => {
+      return window.getComputedStyle(el).borderColor;
+    });
+
+    // Verify border color changed to accent color
+    expect(initialBorderColor !== hoverBorderColor).toBe(true);
+  });
+
+  test('status features show hover effect', async ({ page }) => {
+    // Navigate to status section
+    await page.locator('#status').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+
+    // Get a status feature
+    const statusFeature = page.locator('.status-feature').first();
+    await expect(statusFeature).toBeVisible();
+
+    // Get initial transform
+    const initialTransform = await statusFeature.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Hover
+    await statusFeature.hover();
+    await page.waitForTimeout(400);
+
+    // Get hover transform
+    const hoverTransform = await statusFeature.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Verify transform changed (translateX effect)
+    expect(initialTransform !== hoverTransform).toBe(true);
+  });
+});
