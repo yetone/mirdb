@@ -302,8 +302,147 @@ client.<span class="code-function">delete</span>(<span class="code-string">'user
     <!-- BEGIN: architecture -->
     <section id="architecture" class="arch-section" aria-labelledby="architecture-title">
       <div class="container">
-        <!-- Architecture content - Owner: Scenario 5 -->
         <h2 id="architecture-title" class="section-title">Architecture</h2>
+        <p class="arch-subtitle">MirDB uses an LSM (Log-Structured Merge) tree architecture for optimal write performance with efficient reads.</p>
+
+        <!-- LSM Tree Diagram -->
+        <div class="arch-diagram-wrapper">
+          <img src="assets/images/architecture.svg" alt="MirDB LSM Tree Architecture showing data flow from write requests through memtable to SSTable levels" class="arch-diagram" loading="lazy">
+        </div>
+
+        <!-- Architecture Components Grid -->
+        <div class="arch-components-grid" role="list">
+
+          <!-- Memtable Component -->
+          <article class="arch-component" role="listitem" data-component="memtable">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-memtable" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                  <line x1="8" y1="18" x2="40" y2="18" stroke="currentColor" stroke-width="2"/>
+                  <line x1="8" y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="16" cy="13" r="2" fill="currentColor"/>
+                  <circle cx="24" cy="23" r="2" fill="currentColor"/>
+                  <circle cx="32" cy="33" r="2" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">Memtable</h3>
+            </div>
+            <p class="arch-component-description">In-memory write buffer implemented as a <strong>skip list</strong> data structure. All writes go here first, providing O(log n) insert and lookup performance. The skip list maintains sorted order for efficient sequential access.</p>
+            <ul class="arch-component-details">
+              <li>Skip list with configurable max height (default 32)</li>
+              <li>Thread-safe with RwLock synchronization</li>
+              <li>Flushes to disk when reaching 4MB threshold</li>
+            </ul>
+          </article>
+
+          <!-- SSTable Component -->
+          <article class="arch-component" role="listitem" data-component="sstable">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-sstable" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="6" y="6" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="6" y="18" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="6" y="30" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <path d="M14 10H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M14 22H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M14 34H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">SSTable</h3>
+            </div>
+            <p class="arch-component-description">Sorted String Tables provide <strong>persistent storage</strong> on disk. Data is organized into blocks with prefix compression, checksums, and optional Snappy compression for space efficiency.</p>
+            <ul class="arch-component-details">
+              <li>Block-based format with 4KB default block size</li>
+              <li>Cuckoo filter for fast negative lookups</li>
+              <li>LRU block cache for repeated reads</li>
+            </ul>
+          </article>
+
+          <!-- Compaction Component -->
+          <article class="arch-component" role="listitem" data-component="compaction">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-compaction" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="6" y="4" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="10" y="16" width="28" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="14" y="28" width="20" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="18" y="40" width="12" height="6" rx="2" fill="currentColor"/>
+                  <path d="M24 12V16M24 24V28M24 36V40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">Multi-Level Compaction</h3>
+            </div>
+            <p class="arch-component-description">Background compaction merges and compacts data across levels. <strong>Minor compaction</strong> flushes memtables to Level 0, while <strong>major compaction</strong> merges SSTables between levels.</p>
+            <ul class="arch-component-details">
+              <li>Level 0 triggers at 4 files (may overlap)</li>
+              <li>Higher levels: sorted, non-overlapping within level</li>
+              <li>Size ratio: 10MB * 10^level threshold</li>
+            </ul>
+          </article>
+
+          <!-- WAL Component -->
+          <article class="arch-component" role="listitem" data-component="wal">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-wal" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 8H36L40 16V40C40 41.1 39.1 42 38 42H10C8.9 42 8 41.1 8 40V10C8 8.9 8.9 8 10 8H12Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M36 8V16H40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="14" y1="24" x2="34" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="14" y1="30" x2="34" y2="30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="14" y1="36" x2="26" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">Write-Ahead Log</h3>
+            </div>
+            <p class="arch-component-description">Every write is first appended to the <strong>WAL</strong> before being applied to the memtable. This ensures durability and enables crash recovery by replaying uncommitted writes.</p>
+            <ul class="arch-component-details">
+              <li>Sequential append-only writes for durability</li>
+              <li>Enables crash recovery and data integrity</li>
+              <li>Cleaned up after successful memtable flush</li>
+            </ul>
+          </article>
+
+        </div>
+
+        <!-- Data Flow Summary -->
+        <div class="arch-data-flow">
+          <h3 class="arch-data-flow-title">Data Flow</h3>
+          <div class="arch-flow-steps">
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">1</span>
+              <div class="arch-flow-content">
+                <strong>Write</strong>
+                <p>Data appended to WAL, then inserted into memtable</p>
+              </div>
+            </div>
+            <div class="arch-flow-arrow" aria-hidden="true"></div>
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">2</span>
+              <div class="arch-flow-content">
+                <strong>Flush</strong>
+                <p>Full memtable becomes immutable and flushes to Level 0</p>
+              </div>
+            </div>
+            <div class="arch-flow-arrow" aria-hidden="true"></div>
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">3</span>
+              <div class="arch-flow-content">
+                <strong>Compact</strong>
+                <p>Background threads merge SSTables down through levels</p>
+              </div>
+            </div>
+            <div class="arch-flow-arrow" aria-hidden="true"></div>
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">4</span>
+              <div class="arch-flow-content">
+                <strong>Read</strong>
+                <p>Search memtable, then Level 0, then lower levels</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
     <!-- END: architecture -->

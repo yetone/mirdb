@@ -695,10 +695,233 @@ img {
   margin-top: var(--space-md);
 }
 
-/* Architecture Section placeholder */
+/* ============================================
+   Architecture Section - Owner: Scenario 5
+   ============================================ */
 .arch-section {
   padding: var(--space-xl) 0;
   background: var(--color-bg-primary);
+}
+
+.arch-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+  max-width: 700px;
+}
+
+/* Architecture Diagram */
+.arch-diagram-wrapper {
+  margin: var(--space-lg) 0 var(--space-xl);
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.arch-diagram {
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Architecture Components Grid */
+.arch-components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.arch-component {
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.arch-component:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.arch-component-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.arch-component-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.arch-component-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.arch-icon-memtable {
+  color: var(--color-success);
+}
+
+.arch-icon-sstable {
+  color: #60a5fa;
+}
+
+.arch-icon-compaction {
+  color: var(--color-rust);
+}
+
+.arch-icon-wal {
+  color: #f59e0b;
+}
+
+.arch-component-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.arch-component-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+  line-height: 1.7;
+}
+
+.arch-component-description strong {
+  color: var(--color-text-primary);
+}
+
+.arch-component-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.arch-component-details li {
+  position: relative;
+  padding-left: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.arch-component-details li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+/* Data Flow Section */
+.arch-data-flow {
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+}
+
+.arch-data-flow-title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.arch-flow-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.arch-flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 180px;
+}
+
+.arch-flow-number {
+  width: 40px;
+  height: 40px;
+  background: var(--color-accent);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.arch-flow-content strong {
+  display: block;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.arch-flow-content p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.arch-flow-arrow {
+  width: 30px;
+  height: 2px;
+  background: var(--color-accent);
+  margin-top: 20px;
+  position: relative;
+}
+
+.arch-flow-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -4px;
+  border: 5px solid transparent;
+  border-left-color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .arch-flow-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .arch-flow-step {
+    max-width: 100%;
+  }
+
+  .arch-flow-arrow {
+    width: 2px;
+    height: 30px;
+    margin: var(--space-sm) 0;
+  }
+
+  .arch-flow-arrow::after {
+    right: -4px;
+    top: auto;
+    bottom: 0;
+    border: 5px solid transparent;
+    border-top-color: var(--color-accent);
+    border-left-color: transparent;
+  }
 }
 
 /* Status Section placeholder */
