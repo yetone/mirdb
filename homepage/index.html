@@ -1,75 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, built in Rust for performance and reliability.">
-    <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, built in Rust with LSM tree architecture.">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- BEGIN: nav -->
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="/" class="nav-logo">MirDB</a>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#architecture">Architecture</a>
-                <a href="#installation">Installation</a>
-            </div>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- BEGIN: nav -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="container">
+      <!-- Navigation content - Owner: Scenario 6 -->
+    </div>
+  </nav>
+  <!-- END: nav -->
+
+  <main id="main-content">
+    <!-- BEGIN: hero -->
+    <section id="hero" class="hero-section" aria-labelledby="hero-title">
+      <div class="hero-container">
+        <h1 id="hero-title" class="hero-title">Persistent Key-Value Store with Memcached Protocol</h1>
+        <p class="hero-tagline">A fast, reliable key-value database built in <span class="hero-rust-highlight">Rust</span> with full Memcached protocol compatibility. Drop-in replacement for your caching layer with data persistence.</p>
+        <div class="hero-ctas">
+          <a href="#installation" class="hero-cta hero-cta-primary">Get Started</a>
+          <a href="https://github.com/example/mirdb" class="hero-cta hero-cta-secondary" target="_blank" rel="noopener noreferrer">View Code</a>
         </div>
-    </nav>
-    <!-- END: nav -->
+      </div>
+    </section>
+    <!-- END: hero -->
 
-    <main>
-        <!-- BEGIN: hero -->
-        <section id="hero" class="hero-section">
-            <div class="hero-container">
-                <h1 class="hero-title">Persistent Key-Value Store with Memcached Protocol</h1>
-                <p class="hero-tagline">A fast, reliable key-value database built in <span class="hero-rust-highlight">Rust</span> with full Memcached protocol compatibility. Drop-in replacement for your caching layer with data persistence.</p>
-                <div class="hero-ctas">
-                    <a href="#installation" class="hero-cta hero-cta-primary">Get Started</a>
-                    <a href="https://github.com/example/mirdb" class="hero-cta hero-cta-secondary" target="_blank" rel="noopener noreferrer">View Code</a>
-                </div>
+    <!-- BEGIN: features -->
+    <section id="features" class="features-section" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title" class="section-title">Key Features</h2>
+        <div class="features-grid" role="list">
+
+          <!-- Feature 1: Memcached Protocol -->
+          <article class="features-card" role="listitem" data-feature="memcached">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="8" width="40" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                <line x1="4" y1="20" x2="44" y2="20" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="14" r="2" fill="currentColor"/>
+                <circle cx="20" cy="14" r="2" fill="currentColor"/>
+                <line x1="12" y1="28" x2="36" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="34" x2="28" y2="34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
             </div>
-        </section>
-        <!-- END: hero -->
+            <h3 class="features-card-title">Memcached Protocol</h3>
+            <p class="features-card-description">Memcached protocol compatibility - drop-in replacement for your existing applications with full command support.</p>
+          </article>
 
-        <!-- BEGIN: features -->
-        <section id="features" class="features-section">
-            <!-- Features section content - owned by Scenario 2 -->
-        </section>
-        <!-- END: features -->
+          <!-- Feature 2: Persistent Storage -->
+          <article class="features-card" role="listitem" data-feature="persistence">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M14 6V2M24 6V2M34 6V2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="14" y1="16" x2="34" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="14" y1="24" x2="34" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="14" y1="32" x2="26" y2="32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Persistent Storage</h3>
+            <p class="features-card-description">Persistent storage using SSTables ensures your data survives restarts with efficient on-disk format.</p>
+          </article>
 
-        <!-- BEGIN: code-examples -->
-        <section id="code-examples" class="code-section">
-            <!-- Code examples section content - owned by Scenario 4 -->
-        </section>
-        <!-- END: code-examples -->
+          <!-- Feature 3: LSM Tree -->
+          <article class="features-card" role="listitem" data-feature="lsm-tree">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="24" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="36" cy="24" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="6" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="18" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="30" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="42" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <line x1="24" y1="12" x2="12" y2="20" stroke="currentColor" stroke-width="2"/>
+                <line x1="24" y1="12" x2="36" y2="20" stroke="currentColor" stroke-width="2"/>
+                <line x1="12" y1="28" x2="6" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="12" y1="28" x2="18" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="36" y1="28" x2="30" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="36" y1="28" x2="42" y2="36" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">LSM Tree Architecture</h3>
+            <p class="features-card-description">LSM tree architecture for performance with optimized write amplification and fast sequential reads.</p>
+          </article>
 
-        <!-- BEGIN: architecture -->
-        <section id="architecture" class="arch-section">
-            <!-- Architecture section content - owned by Scenario 5 -->
-        </section>
-        <!-- END: architecture -->
+          <!-- Feature 4: Rust Implementation -->
+          <article class="features-card" role="listitem" data-feature="rust">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/>
+                <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 6V12M24 36V42M42 24H36M12 24H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M36.7 11.3L32 16M16 32L11.3 36.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M11.3 11.3L16 16M32 32L36.7 36.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Built with Rust</h3>
+            <p class="features-card-description">Rust implementation for safety and speed with zero-cost abstractions and memory safety guarantees.</p>
+          </article>
 
-        <!-- BEGIN: installation -->
-        <section id="installation" class="install-section">
-            <!-- Installation section content - owned by Scenario 3 -->
-        </section>
-        <!-- END: installation -->
+          <!-- Feature 5: Tokio Async -->
+          <article class="features-card" role="listitem" data-feature="tokio">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 12L24 4L40 12V36L24 44L8 36V12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M24 4V24" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 24L8 12" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 24L40 12" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 24V44" stroke="currentColor" stroke-width="2"/>
+                <circle cx="24" cy="24" r="4" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Async Networking</h3>
+            <p class="features-card-description">Async networking with Tokio runtime enables high concurrency and efficient I/O operations.</p>
+          </article>
 
-        <!-- BEGIN: status -->
-        <section id="status" class="status-section">
-            <!-- Status section content - owned by Scenario 7 -->
-        </section>
-        <!-- END: status -->
-    </main>
+          <!-- Feature 6: Multi-level Compaction -->
+          <article class="features-card" role="listitem" data-feature="compaction">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="4" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                <rect x="10" y="18" width="28" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                <rect x="14" y="32" width="20" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 12V18M24 26V32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M20 14L24 18L28 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 28L24 32L28 28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Multi-level Compaction</h3>
+            <p class="features-card-description">Multi-level compaction strategy optimizes storage efficiency and maintains consistent read performance.</p>
+          </article>
 
-    <!-- BEGIN: footer -->
-    <footer class="footer">
-        <!-- Footer content - owned by Scenario 15 -->
-    </footer>
-    <!-- END: footer -->
+        </div>
+      </div>
+    </section>
+    <!-- END: features -->
+
+    <!-- BEGIN: code-examples -->
+    <section id="code-examples" class="code-section" aria-labelledby="code-title">
+      <div class="container">
+        <!-- Code examples content - Owner: Scenario 4 -->
+      </div>
+    </section>
+    <!-- END: code-examples -->
+
+    <!-- BEGIN: architecture -->
+    <section id="architecture" class="arch-section" aria-labelledby="architecture-title">
+      <div class="container">
+        <!-- Architecture content - Owner: Scenario 5 -->
+      </div>
+    </section>
+    <!-- END: architecture -->
+
+    <!-- BEGIN: installation -->
+    <section id="installation" class="install-section" aria-labelledby="installation-title">
+      <div class="container">
+        <!-- Installation content - Owner: Scenario 3 -->
+      </div>
+    </section>
+    <!-- END: installation -->
+
+    <!-- BEGIN: status -->
+    <section id="status" class="status-section" aria-labelledby="status-title">
+      <div class="container">
+        <!-- Status content - Owner: Scenario 7 -->
+      </div>
+    </section>
+    <!-- END: status -->
+  </main>
+
+  <!-- BEGIN: footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <!-- Footer content - Owner: Scenario 15 -->
+    </div>
+  </footer>
+  <!-- END: footer -->
+
+  <script src="js/main.js" defer></script>
 </body>
 </html>

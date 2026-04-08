@@ -4,14 +4,15 @@
   "description": "MirDB Homepage - Persistent Key-Value Store with Memcached Protocol",
   "scripts": {
     "test": "npx playwright test",
-    "test:e2e": "npx playwright test tests/e2e/",
+    "test:e2e": "npx playwright test",
     "test:unit": "node --test tests/unit/",
-    "serve": "npx http-server . -p 8080 -c-1"
+    "serve": "npx serve -l 3000 .",
+    "serve:bg": "npx serve -l 3000 . &"
   },
   "devDependencies": {
     "@playwright/test": "^1.42.0",
-    "http-server": "^14.1.1"
+    "serve": "^14.2.0"
   },
-  "keywords": ["mirdb", "memcached", "key-value-store", "rust"],
+  "keywords": ["mirdb", "key-value-store", "memcached", "rust"],
   "license": "MIT"
 }

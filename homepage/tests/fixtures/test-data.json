@@ -14,5 +14,48 @@
   "navigation": {
     "logo": "MirDB",
     "links": ["Features", "Architecture", "Installation"]
+  },
+  "features": [
+    {
+      "id": "memcached",
+      "title": "Memcached Protocol",
+      "description": "Memcached protocol compatibility - drop-in replacement for existing applications",
+      "icon": "memcached.svg"
+    },
+    {
+      "id": "persistence",
+      "title": "Persistent Storage",
+      "description": "Persistent storage using SSTables for durable data",
+      "icon": "persistence.svg"
+    },
+    {
+      "id": "lsm-tree",
+      "title": "LSM Tree",
+      "description": "LSM tree architecture for high-performance writes",
+      "icon": "lsm-tree.svg"
+    },
+    {
+      "id": "rust",
+      "title": "Rust Implementation",
+      "description": "Built with Rust for memory safety and performance",
+      "icon": "rust.svg"
+    },
+    {
+      "id": "tokio",
+      "title": "Async Networking",
+      "description": "Async networking with Tokio for high concurrency",
+      "icon": "tokio.svg"
+    },
+    {
+      "id": "compaction",
+      "title": "Multi-level Compaction",
+      "description": "Multi-level compaction for efficient storage management",
+      "icon": "compaction.svg"
+    }
+  ],
+  "breakpoints": {
+    "mobile": 320,
+    "tablet": 768,
+    "desktop": 1024
   }
 }
