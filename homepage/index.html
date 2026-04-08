@@ -156,8 +156,123 @@
     <!-- BEGIN: code-examples -->
     <section id="code-examples" class="code-section" aria-labelledby="code-title">
       <div class="container">
-        <!-- Code examples content - Owner: Scenario 4 -->
         <h2 id="code-title" class="section-title">Usage Examples</h2>
+        <p class="code-subtitle">MirDB uses the standard Memcached protocol. Use any Memcached client to interact with your data.</p>
+
+        <div class="code-examples-grid">
+          <!-- SET Operation -->
+          <article class="code-example" data-operation="set">
+            <h3 class="code-example-title">
+              <span class="code-example-badge code-badge-set">SET</span>
+              Store a Value
+            </h3>
+            <p class="code-example-description">Store a key-value pair with optional TTL (time-to-live) in seconds.</p>
+            <div class="code-block" data-language="memcached">
+              <div class="code-block-header">
+                <span class="code-block-language">Memcached Protocol</span>
+                <button class="code-copy-btn" type="button" aria-label="Copy SET command example" data-copy="set mykey 0 3600 11&#10;Hello World&#10;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <pre><code class="code-highlighted"><span class="code-keyword">set</span> <span class="code-key">mykey</span> <span class="code-number">0</span> <span class="code-number">3600</span> <span class="code-number">11</span>
+<span class="code-string">Hello World</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">STORED</span></code></pre>
+            </div>
+            <p class="code-example-syntax">Syntax: <code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</code></p>
+          </article>
+
+          <!-- GET Operation -->
+          <article class="code-example" data-operation="get">
+            <h3 class="code-example-title">
+              <span class="code-example-badge code-badge-get">GET</span>
+              Retrieve a Value
+            </h3>
+            <p class="code-example-description">Retrieve one or more values by their keys.</p>
+            <div class="code-block" data-language="memcached">
+              <div class="code-block-header">
+                <span class="code-block-language">Memcached Protocol</span>
+                <button class="code-copy-btn" type="button" aria-label="Copy GET command example" data-copy="get mykey&#10;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <pre><code class="code-highlighted"><span class="code-keyword">get</span> <span class="code-key">mykey</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">VALUE mykey 0 11</span>
+<span class="code-string">Hello World</span>
+<span class="code-response">END</span></code></pre>
+            </div>
+            <p class="code-example-syntax">Syntax: <code>get &lt;key1&gt; [&lt;key2&gt; ...]</code></p>
+          </article>
+
+          <!-- DELETE Operation -->
+          <article class="code-example" data-operation="delete">
+            <h3 class="code-example-title">
+              <span class="code-example-badge code-badge-delete">DELETE</span>
+              Remove a Key
+            </h3>
+            <p class="code-example-description">Delete a key and its associated value from the store.</p>
+            <div class="code-block" data-language="memcached">
+              <div class="code-block-header">
+                <span class="code-block-language">Memcached Protocol</span>
+                <button class="code-copy-btn" type="button" aria-label="Copy DELETE command example" data-copy="delete mykey&#10;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <pre><code class="code-highlighted"><span class="code-keyword">delete</span> <span class="code-key">mykey</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">DELETED</span></code></pre>
+            </div>
+            <p class="code-example-syntax">Syntax: <code>delete &lt;key&gt; [noreply]</code></p>
+          </article>
+        </div>
+
+        <!-- Python client example -->
+        <div class="code-client-example">
+          <h3 class="code-client-title">Using with Python</h3>
+          <p class="code-example-description">Use any standard Memcached client library to connect to MirDB.</p>
+          <div class="code-block" data-language="python">
+            <div class="code-block-header">
+              <span class="code-block-language">Python</span>
+              <button class="code-copy-btn" type="button" aria-label="Copy Python example" data-copy="from pymemcache.client import base&#10;&#10;# Connect to MirDB (default port 12333)&#10;client = base.Client(('localhost', 12333))&#10;&#10;# Store a value&#10;client.set('user:123', 'John Doe')&#10;&#10;# Retrieve a value&#10;name = client.get('user:123')&#10;print(name)  # b'John Doe'&#10;&#10;# Delete a key&#10;client.delete('user:123')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre><code class="code-highlighted"><span class="code-keyword">from</span> <span class="code-module">pymemcache.client</span> <span class="code-keyword">import</span> base
+
+<span class="code-comment"># Connect to MirDB (default port 12333)</span>
+client = base.Client((<span class="code-string">'localhost'</span>, <span class="code-number">12333</span>))
+
+<span class="code-comment"># Store a value</span>
+client.<span class="code-function">set</span>(<span class="code-string">'user:123'</span>, <span class="code-string">'John Doe'</span>)
+
+<span class="code-comment"># Retrieve a value</span>
+name = client.<span class="code-function">get</span>(<span class="code-string">'user:123'</span>)
+<span class="code-function">print</span>(name)  <span class="code-comment"># b'John Doe'</span>
+
+<span class="code-comment"># Delete a key</span>
+client.<span class="code-function">delete</span>(<span class="code-string">'user:123'</span>)</code></pre>
+          </div>
+        </div>
       </div>
     </section>
     <!-- END: code-examples -->
