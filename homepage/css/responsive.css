@@ -412,3 +412,196 @@
     display: none;
   }
 }
+
+/* ============================================
+   Tablet Breakpoint (768px - 1023px)
+   Owner: Scenario 9
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Container adjustments */
+  .container {
+    padding: 0 var(--space-lg);
+  }
+
+  /* Navigation - tablet: full nav visible */
+  .nav .nav-container {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .nav-links {
+    gap: var(--space-md);
+  }
+
+  .nav-link {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Hero Section - tablet */
+  .hero-section {
+    padding: var(--space-xl) 0;
+    min-height: 50vh;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+    max-width: 600px;
+  }
+
+  .hero-ctas {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* Features Section - 2 column grid on tablet */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .features-card {
+    padding: var(--space-md);
+  }
+
+  .features-card-title {
+    font-size: var(--font-size-base);
+  }
+
+  .features-card-description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Code Examples Section - tablet */
+  .code-examples-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .code-example {
+    padding: var(--space-md);
+  }
+
+  .code-client-example {
+    padding: var(--space-md);
+  }
+
+  /* Architecture Section - tablet */
+  .arch-components-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .arch-component {
+    padding: var(--space-md);
+  }
+
+  .arch-diagram-wrapper {
+    padding: var(--space-md);
+  }
+
+  /* Data Flow - horizontal on tablet */
+  .arch-flow-steps {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .arch-flow-step {
+    max-width: 150px;
+  }
+
+  .arch-flow-arrow {
+    width: 24px;
+    height: 2px;
+    margin-top: 20px;
+  }
+
+  .arch-flow-arrow::after {
+    right: 0;
+    top: -4px;
+    border: 5px solid transparent;
+    border-left-color: var(--color-accent);
+  }
+
+  /* Installation Section - tablet */
+  .install-section {
+    overflow-x: hidden;
+  }
+
+  .install-methods {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .install-method {
+    padding: var(--space-md);
+    min-width: 0;
+  }
+
+  .install-code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .install-code-block pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .install-code-block code {
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
+
+  .install-config {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .install-config-table {
+    min-width: auto;
+    max-width: 100%;
+    table-layout: fixed;
+  }
+
+  .install-config-table th,
+  .install-config-table td {
+    padding: var(--space-sm);
+    font-size: var(--font-size-sm);
+    word-break: break-word;
+  }
+
+  /* Status Section - tablet: stack categories */
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-category {
+    padding: var(--space-md);
+  }
+
+  /* Footer - tablet */
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .footer-brand {
+    max-width: 280px;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Code blocks - ensure no overflow */
+  .code-block pre,
+  .install-code-block pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
