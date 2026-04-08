@@ -14,6 +14,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
   <!-- Skip Link for Accessibility -->
@@ -34,7 +35,13 @@
         <span class="nav-logo-text">MirDB</span>
       </a>
 
-      <div class="nav-links">
+      <button class="nav-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="nav-links">
         <a href="#features" class="nav-link">Features</a>
         <a href="#architecture" class="nav-link">Architecture</a>
         <a href="#installation" class="nav-link">Docs</a>
@@ -774,5 +781,30 @@ client.<span class="code-function">delete</span>(<span class="code-string">'user
 
   <script src="js/clipboard.js"></script>
   <script src="js/main.js" defer></script>
+
+  <!-- Mobile Navigation Toggle - Owner: Scenario 8 (Responsive Mobile) -->
+  <script>
+    (function() {
+      'use strict';
+      var menuToggle = document.querySelector('.nav-menu-toggle');
+      var navLinks = document.querySelector('.nav-links');
+
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', function() {
+          var expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+          menuToggle.setAttribute('aria-expanded', !expanded);
+          navLinks.classList.toggle('nav-open');
+        });
+
+        // Close menu when clicking a nav link
+        navLinks.querySelectorAll('.nav-link').forEach(function(link) {
+          link.addEventListener('click', function() {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            navLinks.classList.remove('nav-open');
+          });
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
