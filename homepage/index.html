@@ -21,8 +21,30 @@
 
   <!-- BEGIN: nav -->
   <nav class="nav" aria-label="Main navigation">
-    <div class="container">
-      <!-- Navigation content - Owner: Scenario 6 -->
+    <div class="container nav-container">
+      <a href="#" class="nav-logo" aria-label="MirDB Home">
+        <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="6" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2"/>
+          <line x1="2" y1="12" x2="30" y2="12" stroke="currentColor" stroke-width="2"/>
+          <circle cx="7" cy="9" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="9" r="1.5" fill="currentColor"/>
+          <line x1="8" y1="18" x2="24" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="8" y1="22" x2="18" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="nav-logo-text">MirDB</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#installation" class="nav-link">Docs</a>
+        <a href="https://github.com/durbanlegend/mirdb" class="nav-link nav-link-github" target="_blank" rel="noopener noreferrer">
+          <svg class="nav-github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
     </div>
   </nav>
   <!-- END: nav -->
@@ -446,9 +468,24 @@ client.<span class="code-function">delete</span>(<span class="code-string">'user
 
   <!-- BEGIN: footer -->
   <footer class="footer" role="contentinfo">
-    <div class="container">
-      <!-- Footer content - Owner: Scenario 15 -->
-      <p>&copy; MirDB Project. Licensed under MIT.</p>
+    <div class="container footer-container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">MirDB</span>
+          <p class="footer-description">A persistent key-value store with Memcached protocol compatibility.</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/durbanlegend/mirdb" class="footer-link footer-github-link" target="_blank" rel="noopener noreferrer">
+            <svg class="footer-github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>GitHub Repository</span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; MirDB Project. Licensed under MIT.</p>
+      </div>
     </div>
   </footer>
   <!-- END: footer -->
