@@ -1,61 +1,21 @@
 {
-  "hero": {
-    "expectedTitle": "Persistent Key-Value Store with Memcached Protocol",
-    "expectedRustMention": "Rust",
-    "primaryCta": {
-      "text": "Get Started",
-      "href": "#installation"
-    },
-    "secondaryCta": {
-      "text": "View Code",
-      "hrefContains": "github.com"
-    }
-  },
-  "navigation": {
-    "logo": "MirDB",
-    "links": ["Features", "Architecture", "Installation"]
+  "mirdb": {
+    "defaultPort": 12333,
+    "defaultWorkDir": "/tmp/mirdb",
+    "githubUrl": "https://github.com/durbanlegend/mirdb",
+    "protocol": "memcached"
   },
   "features": [
-    {
-      "id": "memcached",
-      "title": "Memcached Protocol",
-      "description": "Memcached protocol compatibility - drop-in replacement for existing applications",
-      "icon": "memcached.svg"
-    },
-    {
-      "id": "persistence",
-      "title": "Persistent Storage",
-      "description": "Persistent storage using SSTables for durable data",
-      "icon": "persistence.svg"
-    },
-    {
-      "id": "lsm-tree",
-      "title": "LSM Tree",
-      "description": "LSM tree architecture for high-performance writes",
-      "icon": "lsm-tree.svg"
-    },
-    {
-      "id": "rust",
-      "title": "Rust Implementation",
-      "description": "Built with Rust for memory safety and performance",
-      "icon": "rust.svg"
-    },
-    {
-      "id": "tokio",
-      "title": "Async Networking",
-      "description": "Async networking with Tokio for high concurrency",
-      "icon": "tokio.svg"
-    },
-    {
-      "id": "compaction",
-      "title": "Multi-level Compaction",
-      "description": "Multi-level compaction for efficient storage management",
-      "icon": "compaction.svg"
-    }
+    "Memcached Protocol",
+    "SSTable Persistence",
+    "LSM Tree Architecture",
+    "Rust Implementation",
+    "Tokio Async",
+    "Multi-level Compaction"
   ],
-  "breakpoints": {
-    "mobile": 320,
-    "tablet": 768,
-    "desktop": 1024
+  "installation": {
+    "cargoCommand": "cargo install mirdb",
+    "gitCloneCommand": "git clone https://github.com/durbanlegend/mirdb.git",
+    "cargoBuildCommand": "cargo build --release"
   }
 }

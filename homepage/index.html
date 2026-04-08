@@ -4,7 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, built in Rust with LSM tree architecture.">
+  <meta name="keywords" content="MirDB, key-value store, Memcached, Rust, LSM tree, persistent storage">
   <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A persistent key-value store with Memcached protocol compatibility, built in Rust">
+  <meta property="og:type" content="website">
+
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -149,6 +157,7 @@
     <section id="code-examples" class="code-section" aria-labelledby="code-title">
       <div class="container">
         <!-- Code examples content - Owner: Scenario 4 -->
+        <h2 id="code-title" class="section-title">Usage Examples</h2>
       </div>
     </section>
     <!-- END: code-examples -->
@@ -157,14 +166,155 @@
     <section id="architecture" class="arch-section" aria-labelledby="architecture-title">
       <div class="container">
         <!-- Architecture content - Owner: Scenario 5 -->
+        <h2 id="architecture-title" class="section-title">Architecture</h2>
       </div>
     </section>
     <!-- END: architecture -->
 
     <!-- BEGIN: installation -->
-    <section id="installation" class="install-section" aria-labelledby="installation-title">
+    <section id="installation" class="install-section" aria-labelledby="install-title">
       <div class="container">
-        <!-- Installation content - Owner: Scenario 3 -->
+        <h2 id="install-title" class="install-title">Installation</h2>
+        <p class="install-subtitle">Get started with MirDB in minutes. Choose your preferred installation method.</p>
+
+        <div class="install-methods">
+          <!-- Method 1: Build from Source -->
+          <div class="install-method">
+            <h3 class="install-method-title">Build from Source</h3>
+            <ol class="install-steps">
+              <li class="install-step">
+                <p>Clone the repository</p>
+                <div class="install-code-block">
+                  <pre><code>git clone https://github.com/durbanlegend/mirdb.git</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy git clone command" data-copy="git clone https://github.com/durbanlegend/mirdb.git">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Navigate to the project directory</p>
+                <div class="install-code-block">
+                  <pre><code>cd mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cd command" data-copy="cd mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Build the release binary</p>
+                <div class="install-code-block">
+                  <pre><code>cargo build --release</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cargo build command" data-copy="cargo build --release">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Run MirDB</p>
+                <div class="install-code-block">
+                  <pre><code>./target/release/mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy run command" data-copy="./target/release/mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Method 2: Cargo Install -->
+          <div class="install-method">
+            <h3 class="install-method-title">Using Cargo Install</h3>
+            <ol class="install-steps">
+              <li class="install-step">
+                <p>Install directly from crates.io (when available)</p>
+                <div class="install-code-block">
+                  <pre><code>cargo install mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cargo install command" data-copy="cargo install mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Or install directly from GitHub</p>
+                <div class="install-code-block">
+                  <pre><code>cargo install --git https://github.com/durbanlegend/mirdb.git</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cargo install from git command" data-copy="cargo install --git https://github.com/durbanlegend/mirdb.git">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Run MirDB (binary added to PATH)</p>
+                <div class="install-code-block">
+                  <pre><code>mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy mirdb command" data-copy="mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Default Configuration -->
+        <div class="install-config">
+          <h3 class="install-config-title">Default Configuration</h3>
+          <p>MirDB runs with sensible defaults out of the box:</p>
+          <table class="install-config-table">
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Default Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Port</td>
+                <td><code>12333</code></td>
+                <td>The TCP port MirDB listens on (Memcached protocol)</td>
+              </tr>
+              <tr>
+                <td>Work Directory</td>
+                <td><code>/tmp/mirdb</code></td>
+                <td>Directory for SSTable files and write-ahead log</td>
+              </tr>
+              <tr>
+                <td>Bind Address</td>
+                <td><code>0.0.0.0</code></td>
+                <td>Network interface to bind to</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
     <!-- END: installation -->
@@ -173,6 +323,7 @@
     <section id="status" class="status-section" aria-labelledby="status-title">
       <div class="container">
         <!-- Status content - Owner: Scenario 7 -->
+        <h2 id="status-title" class="section-title">Project Status</h2>
       </div>
     </section>
     <!-- END: status -->
@@ -182,10 +333,12 @@
   <footer class="footer" role="contentinfo">
     <div class="container">
       <!-- Footer content - Owner: Scenario 15 -->
+      <p>&copy; MirDB Project. Licensed under MIT.</p>
     </div>
   </footer>
   <!-- END: footer -->
 
+  <script src="js/clipboard.js"></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

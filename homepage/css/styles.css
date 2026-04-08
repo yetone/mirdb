@@ -14,64 +14,51 @@
  * Note: Responsive overrides are in responsive.css
  */
 
-/* ==========================================================================
+/* ============================================
    1. CSS Custom Properties
-   ========================================================================== */
-
+   ============================================ */
 :root {
-  /* Colors - Default (Light Theme) */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-text-primary: #1a1a2e;
-  --color-text-secondary: #4a4a6a;
-  --color-accent: #e85d04;
-  --color-accent-hover: #d45400;
-  --color-border: #e0e0e0;
-  --color-card-bg: #ffffff;
-  --color-card-shadow: rgba(0, 0, 0, 0.1);
-
-  /* Typography */
-  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  --font-family-mono: 'SF Mono', 'Fira Code', 'Monaco', monospace;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 2rem;
-  --font-size-4xl: 2.5rem;
+  /* Colors */
+  --color-bg-primary: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-bg-tertiary: #0f3460;
+  --color-text-primary: #eaeaea;
+  --color-text-secondary: #b0b0b0;
+  --color-accent: #e94560;
+  --color-accent-hover: #ff6b6b;
+  --color-rust: #dea584;
+  --color-success: #4ade80;
+  --color-code-bg: #0d1117;
+  --color-border: #30363d;
 
   /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
 
-  /* Border radius */
-  --border-radius-sm: 4px;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
 
-  /* Transitions */
+  /* Layout */
+  --max-width: 1200px;
+  --border-radius: 8px;
   --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow: 350ms ease;
-
-  /* Container */
-  --container-max-width: 1200px;
+  --transition-normal: 300ms ease;
 }
 
-/* ==========================================================================
+/* ============================================
    2. Reset and Base Styles
-   ========================================================================== */
-
-*,
-*::before,
-*::after {
+   ============================================ */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -83,11 +70,11 @@ html {
 }
 
 body {
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-  color: var(--color-text-primary);
+  font-family: var(--font-family);
   background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
 a {
@@ -105,186 +92,256 @@ img {
   height: auto;
 }
 
-/* ==========================================================================
+/* ============================================
    3. Layout Utilities
-   ========================================================================== */
-
+   ============================================ */
 .container {
   width: 100%;
-  max-width: var(--container-max-width);
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-lg);
+  padding: 0 var(--space-lg);
 }
 
 .section {
-  padding: var(--spacing-3xl) 0;
+  padding: var(--space-xl) 0;
 }
 
 .section-title {
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-lg);
   color: var(--color-text-primary);
 }
 
-/* ==========================================================================
+/* ============================================
    4. Component Styles
-   ========================================================================== */
+   ============================================ */
 
-/* Navigation - Owner: Scenario 6 */
-.nav {
-  background-color: var(--color-bg-primary);
+/* Navigation placeholder */
+.nav-container {
+  padding: var(--space-md) 0;
+  background: var(--color-bg-secondary);
+}
+
+/* Hero Section placeholder */
+.hero-section {
+  padding: var(--space-xl) 0;
+  text-align: center;
+}
+
+/* Features Section placeholder */
+.features-section {
+  padding: var(--space-xl) 0;
+  background: var(--color-bg-secondary);
+}
+
+/* Installation Section */
+.install-section {
+  padding: var(--space-xl) 0;
+  background: var(--color-bg-primary);
+}
+
+.install-title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+}
+
+.install-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.install-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.install-method {
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+}
+
+.install-method-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-rust);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.install-method-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+.install-steps {
+  list-style: none;
+  counter-reset: step-counter;
+}
+
+.install-step {
+  counter-increment: step-counter;
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-lg);
+  position: relative;
+}
+
+.install-step::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  background: var(--color-accent);
+  color: white;
+  border-radius: 50%;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.install-code-block {
+  position: relative;
+  background: var(--color-code-bg);
+  border-radius: var(--border-radius);
+  margin: var(--space-sm) 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.install-code-block pre {
+  padding: var(--space-md);
+  padding-right: calc(var(--space-md) + 40px);
+  overflow-x: auto;
+  margin: 0;
+}
+
+.install-code-block code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  white-space: pre;
+}
+
+.install-copy-btn {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: var(--space-xs) var(--space-sm);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.install-copy-btn:hover {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+.install-copy-btn.copied {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.install-copy-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.install-config {
+  margin-top: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+}
+
+.install-config-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-rust);
+  margin-bottom: var(--space-md);
+}
+
+.install-config-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.install-config-table th,
+.install-config-table td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
   border-bottom: 1px solid var(--color-border);
 }
 
-/* Hero Section - Owner: Scenario 1 */
-.hero-section {
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-3xl) var(--spacing-lg);
-  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+.install-config-table th {
+  color: var(--color-text-secondary);
+  font-weight: 500;
 }
 
-.hero-container {
-  max-width: 800px;
+.install-config-table td code {
+  font-family: var(--font-mono);
+  background: var(--color-code-bg);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 4px;
+  font-size: var(--font-size-sm);
+}
+
+/* Code Examples Section placeholder */
+.code-section {
+  padding: var(--space-xl) 0;
+  background: var(--color-bg-secondary);
+}
+
+/* Architecture Section placeholder */
+.arch-section {
+  padding: var(--space-xl) 0;
+  background: var(--color-bg-primary);
+}
+
+/* Status Section placeholder */
+.status-section {
+  padding: var(--space-xl) 0;
+  background: var(--color-bg-secondary);
+}
+
+/* Footer placeholder */
+.footer-section {
+  padding: var(--space-lg) 0;
+  background: var(--color-bg-tertiary);
   text-align: center;
 }
 
-.hero-title {
-  font-size: var(--font-size-4xl);
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: var(--spacing-lg);
-  color: var(--color-text-primary);
-}
-
-.hero-tagline {
-  font-size: var(--font-size-lg);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-2xl);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.hero-rust-highlight {
-  color: var(--color-accent);
-  font-weight: 600;
-}
-
-.hero-ctas {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--spacing-md) var(--spacing-xl);
-  border-radius: var(--border-radius-md);
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  transition: all var(--transition-normal);
-}
-
-.hero-cta-primary {
-  background-color: var(--color-accent);
-  color: #ffffff;
-}
-
-.hero-cta-primary:hover {
-  background-color: var(--color-accent-hover);
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.hero-cta-secondary {
-  background-color: transparent;
-  color: var(--color-text-primary);
-  border: 2px solid var(--color-border);
-}
-
-.hero-cta-secondary:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
-/* Features Grid - Owner: Scenario 2 */
-.features-section {
-  background-color: var(--color-bg-secondary);
-  padding: var(--spacing-3xl) 0;
-}
-
-.features-section .section-title {
-  margin-bottom: var(--spacing-2xl);
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-xl);
-  max-width: var(--container-max-width);
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-}
-
-.features-card {
-  background-color: var(--color-card-bg);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-xl);
-  box-shadow: 0 4px 6px var(--color-card-shadow);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.features-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px var(--color-card-shadow);
-}
-
-.features-card-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: var(--spacing-md);
-  color: var(--color-accent);
-}
-
-.features-card-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.features-card-title {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-sm);
-}
-
-.features-card-description {
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-}
-
-/* ==========================================================================
+/* ============================================
    5. Accessibility Styles
-   ========================================================================== */
-
+   ============================================ */
 .skip-link {
   position: absolute;
   top: -40px;
   left: 0;
   background: var(--color-accent);
   color: white;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--space-sm) var(--space-md);
   z-index: 100;
   transition: top var(--transition-fast);
 }
@@ -293,44 +350,36 @@ img {
   top: 0;
 }
 
-:focus {
+*:focus {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-:focus:not(:focus-visible) {
+*:focus:not(:focus-visible) {
   outline: none;
 }
 
-:focus-visible {
+*:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-/* ==========================================================================
-   6. Responsive - Features Grid
-   ========================================================================== */
-
-@media (max-width: 1023px) {
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 767px) {
-  .features-grid {
-    grid-template-columns: 1fr;
+/* ============================================
+   6. Animation and Transition Styles
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
   }
 
-  .features-section {
-    padding: var(--spacing-2xl) 0;
-  }
-
-  .hero-title {
-    font-size: var(--font-size-3xl);
-  }
-
-  .hero-tagline {
-    font-size: var(--font-size-base);
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
