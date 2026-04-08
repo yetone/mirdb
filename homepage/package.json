@@ -10,10 +10,16 @@
     "dev": "npx serve . -l 3000"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.41.0",
     "axe-playwright": "^2.0.0",
     "serve": "^14.2.0"
   },
-  "keywords": ["mirdb", "key-value", "memcached", "rust"],
+  "keywords": [
+    "mirdb",
+    "key-value",
+    "memcached",
+    "rust"
+  ],
   "license": "MIT"
 }

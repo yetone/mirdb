@@ -29,11 +29,11 @@
   --theme-code-bg: #f6f8fa;
   --theme-border: #d0d7de;
 
-  /* Accent colors (consistent across themes) */
-  --theme-accent: #e94560;
-  --theme-accent-hover: #ff6b6b;
-  --theme-rust: #c96d4f;
-  --theme-success: #2da44e;
+  /* Accent colors (WCAG AA compliant - 4.5:1 contrast ratio with white) */
+  --theme-accent: #c4314b;
+  --theme-accent-hover: #a82a41;
+  --theme-rust: #9a4a2f;
+  --theme-success: #166534;
 
   /* Theme indicator */
   --theme-mode: light;
@@ -66,8 +66,9 @@
   --color-text-secondary: #b0b0b0;
   --color-code-bg: #0d1117;
   --color-border: #30363d;
-  --color-accent: #e94560;
-  --color-accent-hover: #ff6b6b;
+  /* WCAG AA compliant - 4.5:1 contrast ratio with white text */
+  --color-accent: #c4314b;
+  --color-accent-hover: #e94560;
   --color-rust: #dea584;
   --color-success: #4ade80;
   --theme-mode: dark;
@@ -85,8 +86,9 @@
     --color-text-secondary: #b0b0b0;
     --color-code-bg: #0d1117;
     --color-border: #30363d;
-    --color-accent: #e94560;
-    --color-accent-hover: #ff6b6b;
+    /* WCAG AA compliant - 4.5:1 contrast ratio with white text */
+    --color-accent: #c4314b;
+    --color-accent-hover: #e94560;
     --color-rust: #dea584;
     --color-success: #4ade80;
     --theme-mode: dark;

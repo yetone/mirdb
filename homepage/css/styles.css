@@ -546,8 +546,8 @@ img {
 }
 
 .code-badge-delete {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--color-accent);
+  background: rgba(196, 49, 75, 0.2);
+  color: #ff6b6b;
 }
 
 .code-example-description {
@@ -656,7 +656,7 @@ img {
 }
 
 .code-highlighted .code-comment {
-  color: #6272a4;
+  color: #8b949e;
   font-style: italic;
 }
 
@@ -671,6 +671,66 @@ img {
 
 .code-highlighted .code-module {
   color: #ffb86c;
+}
+
+/* Light Mode Syntax Highlighting - WCAG AA Compliant (4.5:1 contrast ratio) */
+[data-theme="light"] .code-highlighted .code-keyword,
+:root:not([data-theme="dark"]) .code-highlighted .code-keyword {
+  color: #a626a4;
+}
+
+[data-theme="light"] .code-highlighted .code-key,
+:root:not([data-theme="dark"]) .code-highlighted .code-key {
+  color: #0550ae;
+}
+
+[data-theme="light"] .code-highlighted .code-string,
+:root:not([data-theme="dark"]) .code-highlighted .code-string {
+  color: #166534;
+}
+
+[data-theme="light"] .code-highlighted .code-number,
+:root:not([data-theme="dark"]) .code-highlighted .code-number {
+  color: #986801;
+}
+
+[data-theme="light"] .code-highlighted .code-comment,
+:root:not([data-theme="dark"]) .code-highlighted .code-comment {
+  color: #696c77;
+}
+
+[data-theme="light"] .code-highlighted .code-response,
+:root:not([data-theme="dark"]) .code-highlighted .code-response {
+  color: #166534;
+}
+
+[data-theme="light"] .code-highlighted .code-function,
+:root:not([data-theme="dark"]) .code-highlighted .code-function {
+  color: #0550ae;
+}
+
+[data-theme="light"] .code-highlighted .code-module,
+:root:not([data-theme="dark"]) .code-highlighted .code-module {
+  color: #8b5a00;
+}
+
+/* Light Mode Code Badges - WCAG AA Compliant */
+[data-theme="light"] .code-badge-set,
+:root:not([data-theme="dark"]) .code-badge-set {
+  background: rgba(22, 101, 52, 0.15);
+  color: #166534;
+}
+
+[data-theme="light"] .code-badge-get,
+:root:not([data-theme="dark"]) .code-badge-get {
+  background: rgba(3, 72, 168, 0.15);
+  color: #0348a8;
+}
+
+[data-theme="light"] .code-badge-delete,
+:root:not([data-theme="dark"]) .code-badge-delete {
+  background: rgba(164, 33, 55, 0.15);
+  color: #a42137;
 }
 
 /* Python Client Example */
