@@ -598,8 +598,151 @@ client.<span class="code-function">delete</span>(<span class="code-string">'user
     <!-- BEGIN: status -->
     <section id="status" class="status-section" aria-labelledby="status-title">
       <div class="container">
-        <!-- Status content - Owner: Scenario 7 -->
         <h2 id="status-title" class="section-title">Project Status</h2>
+        <p class="status-subtitle">Track the implementation progress of MirDB features and upcoming enhancements.</p>
+
+        <div class="status-grid">
+          <!-- Implemented Features -->
+          <div class="status-category">
+            <h3 class="status-category-title status-category-implemented">
+              <svg class="status-category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Implemented
+            </h3>
+
+            <div class="status-features">
+              <!-- Memcached Protocol -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Memcached Protocol</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Full Memcached protocol compatibility with support for GET, SET, DELETE, and other standard commands.</p>
+              </article>
+
+              <!-- LSM Tree Architecture -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">LSM Tree Architecture</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Log-Structured Merge tree implementation with memtable, SSTables, and multi-level compaction.</p>
+              </article>
+
+              <!-- Persistent Storage -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Persistent Storage</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Durable persistence using SSTables and write-ahead logging for crash recovery.</p>
+              </article>
+
+              <!-- Async Runtime -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Tokio Async Runtime</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">High-performance async networking powered by Tokio for concurrent connections.</p>
+              </article>
+
+              <!-- Compaction -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Multi-level Compaction</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Background compaction process to optimize storage and maintain read performance.</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="status-category">
+            <h3 class="status-category-title status-category-planned">
+              <svg class="status-category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Planned
+            </h3>
+
+            <div class="status-features">
+              <!-- Raft Consensus -->
+              <article class="status-feature status-planned" data-status="planned">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Raft Consensus</h4>
+                  <span class="status-badge status-badge-planned">Planned</span>
+                </div>
+                <p class="status-feature-description">Distributed consensus using Raft protocol for high availability and data replication across nodes.</p>
+              </article>
+
+              <!-- Clustering -->
+              <article class="status-feature status-planned" data-status="planned">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Cluster Mode</h4>
+                  <span class="status-badge status-badge-planned">Planned</span>
+                </div>
+                <p class="status-feature-description">Multi-node clustering for horizontal scaling and automatic failover capabilities.</p>
+              </article>
+
+              <!-- Metrics -->
+              <article class="status-feature status-planned" data-status="planned">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Metrics & Monitoring</h4>
+                  <span class="status-badge status-badge-planned">Planned</span>
+                </div>
+                <p class="status-feature-description">Built-in metrics export for Prometheus and detailed performance monitoring dashboards.</p>
+              </article>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <!-- END: status -->

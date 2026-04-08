@@ -924,10 +924,146 @@ img {
   }
 }
 
-/* Status Section placeholder */
+/* ============================================
+   Status Section - Owner: Scenario 7
+   ============================================ */
 .status-section {
   padding: var(--space-xl) 0;
   background: var(--color-bg-secondary);
+}
+
+.status-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+  max-width: 600px;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-xl);
+}
+
+@media (max-width: 860px) {
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.status-category {
+  background: var(--color-bg-primary);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+}
+
+.status-category-title {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.status-category-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.status-category-implemented {
+  color: var(--color-success);
+}
+
+.status-category-planned {
+  color: var(--color-rust);
+}
+
+.status-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.status-feature {
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.status-feature:hover {
+  transform: translateX(4px);
+}
+
+.status-feature.status-implemented:hover {
+  border-color: var(--color-success);
+}
+
+.status-feature.status-planned:hover {
+  border-color: var(--color-rust);
+}
+
+.status-feature-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.status-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.status-implemented .status-icon {
+  color: var(--color-success);
+}
+
+.status-planned .status-icon {
+  color: var(--color-rust);
+}
+
+.status-feature-title {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.status-badge {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+
+.status-badge-implemented {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--color-success);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.status-badge-planned {
+  background: rgba(222, 165, 132, 0.15);
+  color: var(--color-rust);
+  border: 1px solid rgba(222, 165, 132, 0.3);
+}
+
+.status-feature-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+  padding-left: calc(20px + var(--space-sm));
 }
 
 /* Footer - Owner: Scenario 6 */
