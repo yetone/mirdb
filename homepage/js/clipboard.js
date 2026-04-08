@@ -69,7 +69,8 @@
    * Initialize all copy buttons on the page
    */
   function initCopyButtons() {
-    const copyButtons = document.querySelectorAll('.install-copy-btn, [data-copy]');
+    // Select all copy buttons: installation buttons, code example buttons, and any with data-copy
+    const copyButtons = document.querySelectorAll('.install-copy-btn, .code-copy-btn, [data-copy]');
 
     copyButtons.forEach(button => {
       // Store original label for later restoration
@@ -82,7 +83,12 @@
         let textToCopy = button.dataset.copy;
 
         if (!textToCopy) {
-          const codeBlock = button.closest('.install-code-block');
+          // Check for installation code block
+          let codeBlock = button.closest('.install-code-block');
+          // Fallback to code example block
+          if (!codeBlock) {
+            codeBlock = button.closest('.code-block');
+          }
           if (codeBlock) {
             const codeElement = codeBlock.querySelector('code');
             textToCopy = codeElement?.textContent?.trim() || '';
