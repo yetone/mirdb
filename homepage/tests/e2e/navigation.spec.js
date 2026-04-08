@@ -149,4 +149,61 @@ test.describe('Navigation and Links', () => {
             await expect(link).toHaveAttribute('target', '_blank');
         }
     });
+
+    // BEGIN: Footer Content Tests - Owner: Scenario 15
+    test('footer displays license information', async ({ page }) => {
+        // Scenario 15 - Test Case ID: 2
+        // Input: Check footer for license information
+        // Expected: Footer displays license information (likely MIT or Apache)
+
+        const footer = page.locator('footer');
+        await expect(footer).toBeVisible();
+
+        // Get footer text content
+        const footerText = await footer.textContent();
+
+        // Verify license information is present (MIT or Apache)
+        const hasLicense = footerText.includes('MIT') || footerText.includes('Apache');
+        expect(hasLicense).toBeTruthy();
+    });
+
+    test('footer contains copyright notice with appropriate year', async ({ page }) => {
+        // Scenario 15 - Test Case ID: 3
+        // Input: Check footer for copyright
+        // Expected: Footer contains copyright notice with appropriate year
+
+        const footer = page.locator('footer');
+        await expect(footer).toBeVisible();
+
+        // Get footer text content
+        const footerText = await footer.textContent();
+
+        // Verify copyright symbol is present (© or "Copyright")
+        const hasCopyright = footerText.includes('©') || footerText.toLowerCase().includes('copyright');
+        expect(hasCopyright).toBeTruthy();
+
+        // Verify year is present (4-digit year)
+        const yearPattern = /20\d{2}/;
+        const hasYear = yearPattern.test(footerText);
+        expect(hasYear).toBeTruthy();
+    });
+
+    test('footer uses semantic HTML with footer element', async ({ page }) => {
+        // Scenario 15 - Test Case ID: 4
+        // Input: Verify footer semantic HTML
+        // Expected: Footer uses <footer> element for proper semantics
+
+        // Check that footer element exists
+        const footer = page.locator('footer');
+        await expect(footer).toBeVisible();
+
+        // Verify it has role="contentinfo" for accessibility
+        const role = await footer.getAttribute('role');
+        expect(role).toBe('contentinfo');
+
+        // Verify footer is a semantic <footer> element (not a div with class)
+        const tagName = await footer.evaluate(el => el.tagName.toLowerCase());
+        expect(tagName).toBe('footer');
+    });
+    // END: Footer Content Tests - Owner: Scenario 15
 });
