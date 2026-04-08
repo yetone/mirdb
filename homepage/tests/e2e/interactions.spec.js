@@ -281,3 +281,137 @@ test.describe('Copy Code Functionality', () => {
     expect(clipboardText).toBe(expectedText);
   });
 });
+
+/**
+ * Smooth Scrolling Navigation E2E Tests
+ * Owner: Scenario 14 - Smooth Scrolling Navigation
+ *
+ * Test cases:
+ * - Click Features link from top of page - page smoothly scrolls to features section
+ * - Click Architecture link from top of page - page smoothly scrolls to architecture section
+ * - Verify scroll-behavior CSS property - HTML or body has scroll-behavior: smooth applied
+ * - Verify prefers-reduced-motion support - smooth scroll is disabled when user prefers reduced motion
+ */
+test.describe('Smooth Scrolling Navigation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    // Wait for main.js to initialize
+    await page.waitForFunction(() => window.MirDBMain !== undefined);
+  });
+
+  test('click Features link from top of page smoothly scrolls to features section', async ({ page }) => {
+    // Ensure we're at the top of the page
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
+    // Get initial scroll position
+    const initialScrollY = await page.evaluate(() => window.scrollY);
+    expect(initialScrollY).toBe(0);
+
+    // Get target section position
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Click the Features link in navigation
+    const featuresLink = page.locator('a.nav-link[href="#features"]');
+    await expect(featuresLink).toBeVisible();
+    await featuresLink.click();
+
+    // Wait a bit for smooth scroll to complete (smooth scroll takes time)
+    await page.waitForTimeout(800);
+
+    // Verify we've scrolled to the features section
+    const finalScrollY = await page.evaluate(() => window.scrollY);
+    expect(finalScrollY).toBeGreaterThan(initialScrollY);
+
+    // Verify the features section is now in the viewport
+    const isInViewport = await featuresSection.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top >= -100 && rect.top <= 200;
+    });
+    expect(isInViewport).toBe(true);
+  });
+
+  test('click Architecture link from top of page smoothly scrolls to architecture section', async ({ page }) => {
+    // Ensure we're at the top of the page
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
+    // Get initial scroll position
+    const initialScrollY = await page.evaluate(() => window.scrollY);
+    expect(initialScrollY).toBe(0);
+
+    // Get target section position
+    const architectureSection = page.locator('#architecture');
+    await expect(architectureSection).toBeVisible();
+
+    // Click the Architecture link in navigation
+    const architectureLink = page.locator('a.nav-link[href="#architecture"]');
+    await expect(architectureLink).toBeVisible();
+    await architectureLink.click();
+
+    // Wait for smooth scroll to complete (architecture section is further down)
+    await page.waitForTimeout(1500);
+
+    // Verify we've scrolled to the architecture section
+    const finalScrollY = await page.evaluate(() => window.scrollY);
+    expect(finalScrollY).toBeGreaterThan(initialScrollY);
+
+    // Verify the architecture section is now in the viewport (allow wider tolerance for longer scroll)
+    const isInViewport = await architectureSection.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      // Check that the section is visible in the top portion of the viewport
+      return rect.top >= -150 && rect.top <= 350;
+    });
+    expect(isInViewport).toBe(true);
+  });
+
+  test('HTML element has scroll-behavior smooth CSS property', async ({ page }) => {
+    // Check if html element has scroll-behavior: smooth
+    const htmlScrollBehavior = await page.evaluate(() => {
+      const html = document.documentElement;
+      return window.getComputedStyle(html).scrollBehavior;
+    });
+    expect(htmlScrollBehavior).toBe('smooth');
+  });
+
+  test('smooth scroll is disabled when user prefers reduced motion', async ({ page }) => {
+    // Emulate reduced motion preference
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
+    // Reload to apply the preference
+    await page.reload();
+    await page.waitForFunction(() => window.MirDBMain !== undefined);
+
+    // Verify the prefersReducedMotion function returns true
+    const prefersReduced = await page.evaluate(() => {
+      return window.MirDBMain.prefersReducedMotion();
+    });
+    expect(prefersReduced).toBe(true);
+
+    // Verify the CSS scroll-behavior is set to 'auto' when reduced motion is preferred
+    const htmlScrollBehavior = await page.evaluate(() => {
+      const html = document.documentElement;
+      return window.getComputedStyle(html).scrollBehavior;
+    });
+    expect(htmlScrollBehavior).toBe('auto');
+  });
+
+  test('smooth scroll provides accessible focus management', async ({ page }) => {
+    // Ensure we're at the top of the page
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
+    // Click the Features link
+    const featuresLink = page.locator('a.nav-link[href="#features"]');
+    await featuresLink.click();
+
+    // Wait for scroll to complete
+    await page.waitForTimeout(800);
+
+    // Check that the target section has been given a tabindex for focus management
+    const featuresSection = page.locator('#features');
+    const tabindex = await featuresSection.getAttribute('tabindex');
+    expect(tabindex).toBe('-1');
+  });
+});
