@@ -1,0 +1,18 @@
+{
+  "hero": {
+    "expectedTitle": "Persistent Key-Value Store with Memcached Protocol",
+    "expectedRustMention": "Rust",
+    "primaryCta": {
+      "text": "Get Started",
+      "href": "#installation"
+    },
+    "secondaryCta": {
+      "text": "View Code",
+      "hrefContains": "github.com"
+    }
+  },
+  "navigation": {
+    "logo": "MirDB",
+    "links": ["Features", "Architecture", "Installation"]
+  }
+}
