@@ -1,0 +1,201 @@
+/**
+ * Theme Variables - Dark/Light Mode
+ * Owner: Scenario 10 - Dark Mode and Light Mode
+ *
+ * Expected exports:
+ * - :root (light mode default variables)
+ * - [data-theme="dark"] (dark mode overrides)
+ * - @media (prefers-color-scheme: dark) (system preference)
+ *
+ * Color Variables:
+ * --color-bg-primary
+ * --color-bg-secondary
+ * --color-text-primary
+ * --color-text-secondary
+ * --color-accent (Rust orange)
+ * --color-accent-hover
+ */
+
+/* ============================================
+   Light Theme (Default)
+   ============================================ */
+:root {
+  /* Theme-specific colors */
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f8f9fa;
+  --theme-bg-tertiary: #e9ecef;
+  --theme-text-primary: #1a1a2e;
+  --theme-text-secondary: #495057;
+  --theme-code-bg: #f6f8fa;
+  --theme-border: #d0d7de;
+
+  /* Accent colors (consistent across themes) */
+  --theme-accent: #e94560;
+  --theme-accent-hover: #ff6b6b;
+  --theme-rust: #c96d4f;
+  --theme-success: #2da44e;
+
+  /* Theme indicator */
+  --theme-mode: light;
+}
+
+/* Apply theme variables to component variables */
+[data-theme="light"],
+:root:not([data-theme="dark"]) {
+  --color-bg-primary: var(--theme-bg-primary);
+  --color-bg-secondary: var(--theme-bg-secondary);
+  --color-bg-tertiary: var(--theme-bg-tertiary);
+  --color-text-primary: var(--theme-text-primary);
+  --color-text-secondary: var(--theme-text-secondary);
+  --color-code-bg: var(--theme-code-bg);
+  --color-border: var(--theme-border);
+  --color-accent: var(--theme-accent);
+  --color-accent-hover: var(--theme-accent-hover);
+  --color-rust: var(--theme-rust);
+  --color-success: var(--theme-success);
+}
+
+/* ============================================
+   Dark Theme
+   ============================================ */
+[data-theme="dark"] {
+  --color-bg-primary: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-bg-tertiary: #0f3460;
+  --color-text-primary: #eaeaea;
+  --color-text-secondary: #b0b0b0;
+  --color-code-bg: #0d1117;
+  --color-border: #30363d;
+  --color-accent: #e94560;
+  --color-accent-hover: #ff6b6b;
+  --color-rust: #dea584;
+  --color-success: #4ade80;
+  --theme-mode: dark;
+}
+
+/* ============================================
+   System Preference Detection
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --color-bg-primary: #1a1a2e;
+    --color-bg-secondary: #16213e;
+    --color-bg-tertiary: #0f3460;
+    --color-text-primary: #eaeaea;
+    --color-text-secondary: #b0b0b0;
+    --color-code-bg: #0d1117;
+    --color-border: #30363d;
+    --color-accent: #e94560;
+    --color-accent-hover: #ff6b6b;
+    --color-rust: #dea584;
+    --color-success: #4ade80;
+    --theme-mode: dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8f9fa;
+    --color-bg-tertiary: #e9ecef;
+    --color-text-primary: #1a1a2e;
+    --color-text-secondary: #495057;
+    --color-code-bg: #f6f8fa;
+    --color-border: #d0d7de;
+    --color-accent: #e94560;
+    --color-accent-hover: #ff6b6b;
+    --color-rust: #c96d4f;
+    --color-success: #2da44e;
+    --theme-mode: light;
+  }
+}
+
+/* ============================================
+   Theme Toggle Button Styles
+   ============================================ */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.theme-toggle:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+  transform: rotate(15deg);
+}
+
+/* Sun icon (shown in dark mode) */
+.theme-icon-sun {
+  display: none;
+}
+
+/* Moon icon (shown in light mode) */
+.theme-icon-moon {
+  display: block;
+}
+
+[data-theme="dark"] .theme-icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+
+/* System preference detection for icons when no explicit theme is set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .theme-icon-sun {
+    display: block;
+  }
+
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .theme-icon-moon {
+    display: none;
+  }
+}
+
+/* ============================================
+   Theme Transition (smooth switching)
+   ============================================ */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease !important;
+}
