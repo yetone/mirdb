@@ -1,0 +1,143 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" aria-labelledby="arch-title arch-desc" role="img">
+  <title id="arch-title">MirDB LSM Tree Architecture Diagram</title>
+  <desc id="arch-desc">Visual representation of the Log-Structured Merge tree architecture showing data flow from write requests through memtable to SSTable levels</desc>
+
+  <defs>
+    <linearGradient id="memtableGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ade80;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#4ade80;stop-opacity:0.1" />
+    </linearGradient>
+    <linearGradient id="sstableGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0.1" />
+    </linearGradient>
+    <linearGradient id="walGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e94560"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="transparent"/>
+
+  <!-- Write Request -->
+  <g class="arch-write-request">
+    <rect x="50" y="20" width="120" height="50" rx="8" fill="url(#memtableGrad)" stroke="#4ade80" stroke-width="2"/>
+    <text x="110" y="50" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="14" font-weight="600">Write Request</text>
+  </g>
+
+  <!-- Arrow to WAL -->
+  <path d="M 110 70 L 110 95" stroke="#e94560" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+
+  <!-- WAL Box -->
+  <g class="arch-wal">
+    <rect x="50" y="100" width="120" height="50" rx="8" fill="url(#walGrad)" stroke="#f59e0b" stroke-width="2"/>
+    <text x="110" y="125" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="13" font-weight="600">WAL</text>
+    <text x="110" y="142" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="10">(Write-Ahead Log)</text>
+  </g>
+
+  <!-- Arrow to Memtable -->
+  <path d="M 110 150 L 110 175" stroke="#e94560" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+
+  <!-- Memtable Box -->
+  <g class="arch-memtable">
+    <rect x="30" y="180" width="160" height="80" rx="8" fill="url(#memtableGrad)" stroke="#4ade80" stroke-width="2"/>
+    <text x="110" y="210" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="14" font-weight="600">Memtable</text>
+    <text x="110" y="228" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="11">(Skip List)</text>
+    <text x="110" y="248" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="10">In-Memory, Sorted</text>
+  </g>
+
+  <!-- Arrow from Memtable to Immutable -->
+  <path d="M 110 260 L 110 285" stroke="#e94560" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  <text x="150" y="277" fill="#b0b0b0" font-family="sans-serif" font-size="10">(when full)</text>
+
+  <!-- Immutable Memtables -->
+  <g class="arch-imm-memtable">
+    <rect x="30" y="290" width="160" height="60" rx="8" fill="url(#memtableGrad)" stroke="#4ade80" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="110" y="318" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="13" font-weight="600">Imm Memtables</text>
+    <text x="110" y="338" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="10">Queue for Flushing</text>
+  </g>
+
+  <!-- Arrow to Level 0 (Minor Compaction) -->
+  <path d="M 190 320 L 300 320" stroke="#e94560" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  <text x="245" y="310" text-anchor="middle" fill="#dea584" font-family="sans-serif" font-size="10" font-weight="500">Minor</text>
+  <text x="245" y="340" text-anchor="middle" fill="#dea584" font-family="sans-serif" font-size="10" font-weight="500">Compaction</text>
+
+  <!-- SSTable Levels -->
+  <!-- Level 0 -->
+  <g class="arch-level0">
+    <rect x="310" y="100" width="180" height="70" rx="8" fill="url(#sstableGrad)" stroke="#60a5fa" stroke-width="2"/>
+    <text x="400" y="125" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="14" font-weight="600">Level 0 SSTables</text>
+    <text x="400" y="145" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="11">Recently Flushed</text>
+    <text x="400" y="160" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="10">(May Overlap)</text>
+  </g>
+
+  <!-- Arrow L0 to L1 -->
+  <path d="M 400 170 L 400 205" stroke="#e94560" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  <text x="450" y="190" fill="#dea584" font-family="sans-serif" font-size="10" font-weight="500">Major Compaction</text>
+
+  <!-- Level 1 -->
+  <g class="arch-level1">
+    <rect x="310" y="210" width="180" height="60" rx="8" fill="url(#sstableGrad)" stroke="#60a5fa" stroke-width="2"/>
+    <text x="400" y="235" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="14" font-weight="600">Level 1 SSTables</text>
+    <text x="400" y="255" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="10">Sorted, Non-Overlapping</text>
+  </g>
+
+  <!-- Arrow L1 to L2 -->
+  <path d="M 400 270 L 400 305" stroke="#e94560" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+
+  <!-- Level 2 -->
+  <g class="arch-level2">
+    <rect x="310" y="310" width="180" height="60" rx="8" fill="url(#sstableGrad)" stroke="#60a5fa" stroke-width="2"/>
+    <text x="400" y="335" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="14" font-weight="600">Level 2 SSTables</text>
+    <text x="400" y="355" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="10">Larger, More Merged</text>
+  </g>
+
+  <!-- Arrow L2 to LN -->
+  <path d="M 400 370 L 400 405" stroke="#e94560" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+
+  <!-- Level N -->
+  <g class="arch-levelN">
+    <rect x="310" y="410" width="180" height="60" rx="8" fill="url(#sstableGrad)" stroke="#60a5fa" stroke-width="2"/>
+    <text x="400" y="435" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="14" font-weight="600">Level N SSTables</text>
+    <text x="400" y="455" text-anchor="middle" fill="#b0b0b0" font-family="sans-serif" font-size="10">Oldest Data</text>
+  </g>
+
+  <!-- Read Path -->
+  <g class="arch-read-path">
+    <rect x="580" y="20" width="120" height="50" rx="8" fill="url(#memtableGrad)" stroke="#4ade80" stroke-width="2"/>
+    <text x="640" y="50" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="14" font-weight="600">Read Request</text>
+  </g>
+
+  <!-- Read arrows -->
+  <path d="M 580 45 L 490 135" stroke="#4ade80" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowhead)" fill="none"/>
+  <path d="M 580 45 L 190 220" stroke="#4ade80" stroke-width="2" stroke-dasharray="5,3" fill="none"/>
+
+  <!-- Read Order Legend -->
+  <g class="arch-legend">
+    <rect x="560" y="100" width="200" height="140" rx="8" fill="rgba(22, 33, 62, 0.8)" stroke="#30363d" stroke-width="1"/>
+    <text x="660" y="125" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="13" font-weight="600">Read Order</text>
+    <text x="580" y="150" fill="#4ade80" font-family="sans-serif" font-size="12">1.</text>
+    <text x="600" y="150" fill="#b0b0b0" font-family="sans-serif" font-size="12">Active Memtable</text>
+    <text x="580" y="170" fill="#4ade80" font-family="sans-serif" font-size="12">2.</text>
+    <text x="600" y="170" fill="#b0b0b0" font-family="sans-serif" font-size="12">Imm Memtables</text>
+    <text x="580" y="190" fill="#60a5fa" font-family="sans-serif" font-size="12">3.</text>
+    <text x="600" y="190" fill="#b0b0b0" font-family="sans-serif" font-size="12">Level 0 (linear)</text>
+    <text x="580" y="210" fill="#60a5fa" font-family="sans-serif" font-size="12">4.</text>
+    <text x="600" y="210" fill="#b0b0b0" font-family="sans-serif" font-size="12">Level 1+ (binary)</text>
+    <text x="580" y="230" fill="#b0b0b0" font-family="sans-serif" font-size="10" font-style="italic">First match wins</text>
+  </g>
+
+  <!-- Components Legend -->
+  <g class="arch-components-legend">
+    <rect x="560" y="260" width="200" height="100" rx="8" fill="rgba(22, 33, 62, 0.8)" stroke="#30363d" stroke-width="1"/>
+    <text x="660" y="285" text-anchor="middle" fill="#eaeaea" font-family="sans-serif" font-size="13" font-weight="600">Components</text>
+    <rect x="580" y="300" width="16" height="16" rx="3" fill="url(#memtableGrad)" stroke="#4ade80" stroke-width="1"/>
+    <text x="605" y="312" fill="#b0b0b0" font-family="sans-serif" font-size="11">In-Memory</text>
+    <rect x="580" y="325" width="16" height="16" rx="3" fill="url(#sstableGrad)" stroke="#60a5fa" stroke-width="1"/>
+    <text x="605" y="337" fill="#b0b0b0" font-family="sans-serif" font-size="11">On-Disk (SSTable)</text>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+{
+  "mirdb": {
+    "defaultPort": 12333,
+    "defaultWorkDir": "/tmp/mirdb",
+    "githubUrl": "https://github.com/durbanlegend/mirdb",
+    "protocol": "memcached"
+  },
+  "features": [
+    "Memcached Protocol",
+    "SSTable Persistence",
+    "LSM Tree Architecture",
+    "Rust Implementation",
+    "Tokio Async",
+    "Multi-level Compaction"
+  ],
+  "installation": {
+    "cargoCommand": "cargo install mirdb",
+    "gitCloneCommand": "git clone https://github.com/durbanlegend/mirdb.git",
+    "cargoBuildCommand": "cargo build --release"
+  }
+}

@@ -1,0 +1,607 @@
+/**
+ * Responsive Breakpoints
+ * Owner: Scenario 8 (mobile), Scenario 9 (tablet)
+ *
+ * Breakpoints:
+ * - Mobile: 320px - 767px
+ * - Tablet: 768px - 1023px
+ * - Desktop: 1024px+
+ *
+ * Expected media queries:
+ * @media (max-width: 767px) - Mobile styles
+ * @media (min-width: 768px) and (max-width: 1023px) - Tablet styles
+ */
+
+/* ============================================
+   Mobile Responsive Styles (320px - 767px)
+   Owner: Scenario 8 - Responsive Design - Mobile
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Container adjustments */
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  /* Navigation - Mobile */
+  .nav .nav-container {
+    padding: var(--space-sm) var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    font-size: var(--font-size-base);
+    z-index: 101;
+  }
+
+  .nav-logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Hamburger menu button */
+  .nav-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 101;
+  }
+
+  .nav-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+  }
+
+  .nav-menu-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: rotate(45deg) translateY(5px);
+  }
+
+  .nav-menu-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-menu-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-5px);
+  }
+
+  /* Mobile navigation links */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: var(--space-md) 0;
+    gap: 0;
+    order: 3;
+  }
+
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .nav-link::after {
+    display: none;
+  }
+
+  .nav-link-github {
+    margin-top: var(--space-sm);
+    justify-content: center;
+    border: 1px solid var(--color-border);
+  }
+
+  /* Hero Section - Mobile */
+  .hero-section {
+    padding: var(--space-xl) 0;
+    min-height: auto;
+  }
+
+  .hero-container {
+    padding: 0 var(--space-md);
+  }
+
+  .hero-title {
+    font-size: var(--font-size-xl);
+    line-height: 1.3;
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+  }
+
+  .hero-cta {
+    width: 100%;
+    min-width: auto;
+    padding: var(--space-md);
+  }
+
+  /* Features Section - Mobile */
+  .features-section {
+    padding: var(--space-lg) 0;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .features-card {
+    padding: var(--space-md);
+  }
+
+  .features-card-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .features-card-title {
+    font-size: var(--font-size-base);
+  }
+
+  .features-card-description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Code Examples Section - Mobile */
+  .code-section {
+    padding: var(--space-lg) 0;
+  }
+
+  .code-examples-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .code-example {
+    padding: var(--space-md);
+  }
+
+  .code-block pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .code-block code {
+    font-size: calc(var(--font-size-sm) - 1px);
+  }
+
+  .code-client-example {
+    padding: var(--space-md);
+  }
+
+  .code-client-title {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Architecture Section - Mobile */
+  .arch-section {
+    padding: var(--space-lg) 0;
+  }
+
+  .arch-components-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .arch-component {
+    padding: var(--space-md);
+  }
+
+  .arch-component-header {
+    flex-wrap: wrap;
+  }
+
+  .arch-diagram-wrapper {
+    padding: var(--space-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .arch-diagram {
+    min-width: 300px;
+  }
+
+  .arch-data-flow {
+    padding: var(--space-md);
+  }
+
+  .arch-flow-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .arch-flow-step {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .arch-flow-arrow {
+    width: 2px;
+    height: 24px;
+    margin: var(--space-sm) 0;
+  }
+
+  .arch-flow-arrow::after {
+    right: -4px;
+    top: auto;
+    bottom: 0;
+    border: 5px solid transparent;
+    border-top-color: var(--color-accent);
+    border-left-color: transparent;
+  }
+
+  /* Installation Section - Mobile */
+  .install-section {
+    padding: var(--space-lg) 0;
+  }
+
+  .install-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .install-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .install-methods {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .install-method {
+    padding: var(--space-md);
+  }
+
+  .install-code-block pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .install-code-block code {
+    font-size: calc(var(--font-size-sm) - 1px);
+    white-space: pre;
+  }
+
+  .install-config {
+    padding: var(--space-md);
+  }
+
+  .install-config-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .install-config-table th,
+  .install-config-table td {
+    padding: var(--space-sm);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  /* Status Section - Mobile */
+  .status-section {
+    padding: var(--space-lg) 0;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .status-category {
+    padding: var(--space-md);
+  }
+
+  .status-category-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .status-feature {
+    padding: var(--space-sm);
+  }
+
+  .status-feature-header {
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .status-feature-title {
+    font-size: var(--font-size-sm);
+  }
+
+  .status-badge {
+    font-size: calc(var(--font-size-sm) - 2px);
+    padding: 2px var(--space-xs);
+  }
+
+  .status-feature-description {
+    padding-left: calc(20px + var(--space-xs));
+    font-size: calc(var(--font-size-sm) - 1px);
+  }
+
+  /* Footer - Mobile */
+  .footer {
+    padding: var(--space-lg) 0 var(--space-md);
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-md);
+  }
+
+  .footer-brand {
+    max-width: 100%;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Prevent horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+  }
+
+  main {
+    overflow-x: hidden;
+  }
+
+  /* Ensure all sections don't overflow */
+  section {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Code blocks horizontal scroll */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tables horizontal scroll */
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Images responsive */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Hide hamburger menu on desktop */
+@media (min-width: 768px) {
+  .nav-menu-toggle {
+    display: none;
+  }
+}
+
+/* ============================================
+   Tablet Breakpoint (768px - 1023px)
+   Owner: Scenario 9
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Container adjustments */
+  .container {
+    padding: 0 var(--space-lg);
+  }
+
+  /* Navigation - tablet: full nav visible */
+  .nav .nav-container {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .nav-links {
+    gap: var(--space-md);
+  }
+
+  .nav-link {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Hero Section - tablet */
+  .hero-section {
+    padding: var(--space-xl) 0;
+    min-height: 50vh;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-base);
+    max-width: 600px;
+  }
+
+  .hero-ctas {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* Features Section - 2 column grid on tablet */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .features-card {
+    padding: var(--space-md);
+  }
+
+  .features-card-title {
+    font-size: var(--font-size-base);
+  }
+
+  .features-card-description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Code Examples Section - tablet */
+  .code-examples-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .code-example {
+    padding: var(--space-md);
+  }
+
+  .code-client-example {
+    padding: var(--space-md);
+  }
+
+  /* Architecture Section - tablet */
+  .arch-components-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .arch-component {
+    padding: var(--space-md);
+  }
+
+  .arch-diagram-wrapper {
+    padding: var(--space-md);
+  }
+
+  /* Data Flow - horizontal on tablet */
+  .arch-flow-steps {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .arch-flow-step {
+    max-width: 150px;
+  }
+
+  .arch-flow-arrow {
+    width: 24px;
+    height: 2px;
+    margin-top: 20px;
+  }
+
+  .arch-flow-arrow::after {
+    right: 0;
+    top: -4px;
+    border: 5px solid transparent;
+    border-left-color: var(--color-accent);
+  }
+
+  /* Installation Section - tablet */
+  .install-section {
+    overflow-x: hidden;
+  }
+
+  .install-methods {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .install-method {
+    padding: var(--space-md);
+    min-width: 0;
+  }
+
+  .install-code-block {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .install-code-block pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .install-code-block code {
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
+
+  .install-config {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .install-config-table {
+    min-width: auto;
+    max-width: 100%;
+    table-layout: fixed;
+  }
+
+  .install-config-table th,
+  .install-config-table td {
+    padding: var(--space-sm);
+    font-size: var(--font-size-sm);
+    word-break: break-word;
+  }
+
+  /* Status Section - tablet: stack categories */
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-category {
+    padding: var(--space-md);
+  }
+
+  /* Footer - tablet */
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .footer-brand {
+    max-width: 280px;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Code blocks - ensure no overflow */
+  .code-block pre,
+  .install-code-block pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

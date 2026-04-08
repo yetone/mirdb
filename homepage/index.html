@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility, built in Rust with LSM tree architecture.">
+  <meta name="keywords" content="MirDB, key-value store, Memcached, Rust, LSM tree, persistent storage">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A persistent key-value store with Memcached protocol compatibility, built in Rust">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://mirdb.io/assets/images/og-image.png">
+  <meta property="og:url" content="https://mirdb.io/">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Theme initialization (inline to prevent flash of unstyled content) -->
+  <script>
+    (function() {
+      var stored = null;
+      try { stored = localStorage.getItem('mirdb-theme'); } catch(e) {}
+      if (stored) {
+        document.documentElement.setAttribute('data-theme', stored);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- BEGIN: nav -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="container nav-container">
+      <a href="#" class="nav-logo" aria-label="MirDB Home">
+        <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="6" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2"/>
+          <line x1="2" y1="12" x2="30" y2="12" stroke="currentColor" stroke-width="2"/>
+          <circle cx="7" cy="9" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="9" r="1.5" fill="currentColor"/>
+          <line x1="8" y1="18" x2="24" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="8" y1="22" x2="18" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="nav-logo-text">MirDB</span>
+      </a>
+
+      <button class="nav-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#installation" class="nav-link">Docs</a>
+        <a href="https://github.com/durbanlegend/mirdb" class="nav-link nav-link-github" target="_blank" rel="noopener noreferrer">
+          <svg class="nav-github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <!-- Theme Toggle Button - Owner: Scenario 10 -->
+        <button class="theme-toggle" type="button" aria-label="Switch to dark mode" data-testid="theme-toggle">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg class="theme-toggle-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg class="theme-toggle-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <!-- END: nav -->
+
+  <main id="main-content">
+    <!-- BEGIN: hero -->
+    <section id="hero" class="hero-section" aria-labelledby="hero-title">
+      <div class="hero-container">
+        <h1 id="hero-title" class="hero-title">Persistent Key-Value Store with Memcached Protocol</h1>
+        <p class="hero-tagline">A fast, reliable key-value database built in <span class="hero-rust-highlight">Rust</span> with full Memcached protocol compatibility. Drop-in replacement for your caching layer with data persistence.</p>
+        <div class="hero-ctas">
+          <a href="#installation" class="hero-cta hero-cta-primary">Get Started</a>
+          <a href="https://github.com/example/mirdb" class="hero-cta hero-cta-secondary" target="_blank" rel="noopener noreferrer">View Code</a>
+        </div>
+      </div>
+    </section>
+    <!-- END: hero -->
+
+    <!-- BEGIN: features -->
+    <section id="features" class="features-section" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title" class="section-title">Key Features</h2>
+        <div class="features-grid" role="list">
+
+          <!-- Feature 1: Memcached Protocol -->
+          <article class="features-card" role="listitem" data-feature="memcached">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="8" width="40" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                <line x1="4" y1="20" x2="44" y2="20" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="14" r="2" fill="currentColor"/>
+                <circle cx="20" cy="14" r="2" fill="currentColor"/>
+                <line x1="12" y1="28" x2="36" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="34" x2="28" y2="34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Memcached Protocol</h3>
+            <p class="features-card-description">Memcached protocol compatibility - drop-in replacement for your existing applications with full command support.</p>
+          </article>
+
+          <!-- Feature 2: Persistent Storage -->
+          <article class="features-card" role="listitem" data-feature="persistence">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M14 6V2M24 6V2M34 6V2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="14" y1="16" x2="34" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="14" y1="24" x2="34" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="14" y1="32" x2="26" y2="32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Persistent Storage</h3>
+            <p class="features-card-description">Persistent storage using SSTables ensures your data survives restarts with efficient on-disk format.</p>
+          </article>
+
+          <!-- Feature 3: LSM Tree -->
+          <article class="features-card" role="listitem" data-feature="lsm-tree">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="12" cy="24" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="36" cy="24" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="6" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="18" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="30" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="42" cy="40" r="4" stroke="currentColor" stroke-width="2"/>
+                <line x1="24" y1="12" x2="12" y2="20" stroke="currentColor" stroke-width="2"/>
+                <line x1="24" y1="12" x2="36" y2="20" stroke="currentColor" stroke-width="2"/>
+                <line x1="12" y1="28" x2="6" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="12" y1="28" x2="18" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="36" y1="28" x2="30" y2="36" stroke="currentColor" stroke-width="2"/>
+                <line x1="36" y1="28" x2="42" y2="36" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">LSM Tree Architecture</h3>
+            <p class="features-card-description">LSM tree architecture for performance with optimized write amplification and fast sequential reads.</p>
+          </article>
+
+          <!-- Feature 4: Rust Implementation -->
+          <article class="features-card" role="listitem" data-feature="rust">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/>
+                <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 6V12M24 36V42M42 24H36M12 24H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M36.7 11.3L32 16M16 32L11.3 36.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M11.3 11.3L16 16M32 32L36.7 36.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Built with Rust</h3>
+            <p class="features-card-description">Rust implementation for safety and speed with zero-cost abstractions and memory safety guarantees.</p>
+          </article>
+
+          <!-- Feature 5: Tokio Async -->
+          <article class="features-card" role="listitem" data-feature="tokio">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 12L24 4L40 12V36L24 44L8 36V12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M24 4V24" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 24L8 12" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 24L40 12" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 24V44" stroke="currentColor" stroke-width="2"/>
+                <circle cx="24" cy="24" r="4" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Async Networking</h3>
+            <p class="features-card-description">Async networking with Tokio runtime enables high concurrency and efficient I/O operations.</p>
+          </article>
+
+          <!-- Feature 6: Multi-level Compaction -->
+          <article class="features-card" role="listitem" data-feature="compaction">
+            <div class="features-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="4" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                <rect x="10" y="18" width="28" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                <rect x="14" y="32" width="20" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 12V18M24 26V32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M20 14L24 18L28 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 28L24 32L28 28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="features-card-title">Multi-level Compaction</h3>
+            <p class="features-card-description">Multi-level compaction strategy optimizes storage efficiency and maintains consistent read performance.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+    <!-- END: features -->
+
+    <!-- BEGIN: code-examples -->
+    <section id="code-examples" class="code-section" aria-labelledby="code-title">
+      <div class="container">
+        <h2 id="code-title" class="section-title">Usage Examples</h2>
+        <p class="code-subtitle">MirDB uses the standard Memcached protocol. Use any Memcached client to interact with your data.</p>
+
+        <div class="code-examples-grid">
+          <!-- SET Operation -->
+          <article class="code-example" data-operation="set">
+            <h3 class="code-example-title">
+              <span class="code-example-badge code-badge-set">SET</span>
+              Store a Value
+            </h3>
+            <p class="code-example-description">Store a key-value pair with optional TTL (time-to-live) in seconds.</p>
+            <div class="code-block" data-language="memcached">
+              <div class="code-block-header">
+                <span class="code-block-language">Memcached Protocol</span>
+                <button class="code-copy-btn" type="button" aria-label="Copy SET command example" data-copy="set mykey 0 3600 11&#10;Hello World&#10;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <pre><code class="code-highlighted"><span class="code-keyword">set</span> <span class="code-key">mykey</span> <span class="code-number">0</span> <span class="code-number">3600</span> <span class="code-number">11</span>
+<span class="code-string">Hello World</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">STORED</span></code></pre>
+            </div>
+            <p class="code-example-syntax">Syntax: <code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;</code></p>
+          </article>
+
+          <!-- GET Operation -->
+          <article class="code-example" data-operation="get">
+            <h3 class="code-example-title">
+              <span class="code-example-badge code-badge-get">GET</span>
+              Retrieve a Value
+            </h3>
+            <p class="code-example-description">Retrieve one or more values by their keys.</p>
+            <div class="code-block" data-language="memcached">
+              <div class="code-block-header">
+                <span class="code-block-language">Memcached Protocol</span>
+                <button class="code-copy-btn" type="button" aria-label="Copy GET command example" data-copy="get mykey&#10;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <pre><code class="code-highlighted"><span class="code-keyword">get</span> <span class="code-key">mykey</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">VALUE mykey 0 11</span>
+<span class="code-string">Hello World</span>
+<span class="code-response">END</span></code></pre>
+            </div>
+            <p class="code-example-syntax">Syntax: <code>get &lt;key1&gt; [&lt;key2&gt; ...]</code></p>
+          </article>
+
+          <!-- DELETE Operation -->
+          <article class="code-example" data-operation="delete">
+            <h3 class="code-example-title">
+              <span class="code-example-badge code-badge-delete">DELETE</span>
+              Remove a Key
+            </h3>
+            <p class="code-example-description">Delete a key and its associated value from the store.</p>
+            <div class="code-block" data-language="memcached">
+              <div class="code-block-header">
+                <span class="code-block-language">Memcached Protocol</span>
+                <button class="code-copy-btn" type="button" aria-label="Copy DELETE command example" data-copy="delete mykey&#10;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <pre><code class="code-highlighted"><span class="code-keyword">delete</span> <span class="code-key">mykey</span>
+
+<span class="code-comment"># Response:</span>
+<span class="code-response">DELETED</span></code></pre>
+            </div>
+            <p class="code-example-syntax">Syntax: <code>delete &lt;key&gt; [noreply]</code></p>
+          </article>
+        </div>
+
+        <!-- Python client example -->
+        <div class="code-client-example">
+          <h3 class="code-client-title">Using with Python</h3>
+          <p class="code-example-description">Use any standard Memcached client library to connect to MirDB.</p>
+          <div class="code-block" data-language="python">
+            <div class="code-block-header">
+              <span class="code-block-language">Python</span>
+              <button class="code-copy-btn" type="button" aria-label="Copy Python example" data-copy="from pymemcache.client import base&#10;&#10;# Connect to MirDB (default port 12333)&#10;client = base.Client(('localhost', 12333))&#10;&#10;# Store a value&#10;client.set('user:123', 'John Doe')&#10;&#10;# Retrieve a value&#10;name = client.get('user:123')&#10;print(name)  # b'John Doe'&#10;&#10;# Delete a key&#10;client.delete('user:123')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre><code class="code-highlighted"><span class="code-keyword">from</span> <span class="code-module">pymemcache.client</span> <span class="code-keyword">import</span> base
+
+<span class="code-comment"># Connect to MirDB (default port 12333)</span>
+client = base.Client((<span class="code-string">'localhost'</span>, <span class="code-number">12333</span>))
+
+<span class="code-comment"># Store a value</span>
+client.<span class="code-function">set</span>(<span class="code-string">'user:123'</span>, <span class="code-string">'John Doe'</span>)
+
+<span class="code-comment"># Retrieve a value</span>
+name = client.<span class="code-function">get</span>(<span class="code-string">'user:123'</span>)
+<span class="code-function">print</span>(name)  <span class="code-comment"># b'John Doe'</span>
+
+<span class="code-comment"># Delete a key</span>
+client.<span class="code-function">delete</span>(<span class="code-string">'user:123'</span>)</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: code-examples -->
+
+    <!-- BEGIN: architecture -->
+    <section id="architecture" class="arch-section" aria-labelledby="architecture-title">
+      <div class="container">
+        <h2 id="architecture-title" class="section-title">Architecture</h2>
+        <p class="arch-subtitle">MirDB uses an LSM (Log-Structured Merge) tree architecture for optimal write performance with efficient reads.</p>
+
+        <!-- LSM Tree Diagram -->
+        <div class="arch-diagram-wrapper">
+          <img src="assets/images/architecture.svg" alt="MirDB LSM Tree Architecture showing data flow from write requests through memtable to SSTable levels" class="arch-diagram" loading="lazy">
+        </div>
+
+        <!-- Architecture Components Grid -->
+        <div class="arch-components-grid" role="list">
+
+          <!-- Memtable Component -->
+          <article class="arch-component" role="listitem" data-component="memtable">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-memtable" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                  <line x1="8" y1="18" x2="40" y2="18" stroke="currentColor" stroke-width="2"/>
+                  <line x1="8" y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="16" cy="13" r="2" fill="currentColor"/>
+                  <circle cx="24" cy="23" r="2" fill="currentColor"/>
+                  <circle cx="32" cy="33" r="2" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">Memtable</h3>
+            </div>
+            <p class="arch-component-description">In-memory write buffer implemented as a <strong>skip list</strong> data structure. All writes go here first, providing O(log n) insert and lookup performance. The skip list maintains sorted order for efficient sequential access.</p>
+            <ul class="arch-component-details">
+              <li>Skip list with configurable max height (default 32)</li>
+              <li>Thread-safe with RwLock synchronization</li>
+              <li>Flushes to disk when reaching 4MB threshold</li>
+            </ul>
+          </article>
+
+          <!-- SSTable Component -->
+          <article class="arch-component" role="listitem" data-component="sstable">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-sstable" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="6" y="6" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="6" y="18" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="6" y="30" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <path d="M14 10H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M14 22H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M14 34H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">SSTable</h3>
+            </div>
+            <p class="arch-component-description">Sorted String Tables provide <strong>persistent storage</strong> on disk. Data is organized into blocks with prefix compression, checksums, and optional Snappy compression for space efficiency.</p>
+            <ul class="arch-component-details">
+              <li>Block-based format with 4KB default block size</li>
+              <li>Cuckoo filter for fast negative lookups</li>
+              <li>LRU block cache for repeated reads</li>
+            </ul>
+          </article>
+
+          <!-- Compaction Component -->
+          <article class="arch-component" role="listitem" data-component="compaction">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-compaction" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="6" y="4" width="36" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="10" y="16" width="28" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="14" y="28" width="20" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="18" y="40" width="12" height="6" rx="2" fill="currentColor"/>
+                  <path d="M24 12V16M24 24V28M24 36V40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">Multi-Level Compaction</h3>
+            </div>
+            <p class="arch-component-description">Background compaction merges and compacts data across levels. <strong>Minor compaction</strong> flushes memtables to Level 0, while <strong>major compaction</strong> merges SSTables between levels.</p>
+            <ul class="arch-component-details">
+              <li>Level 0 triggers at 4 files (may overlap)</li>
+              <li>Higher levels: sorted, non-overlapping within level</li>
+              <li>Size ratio: 10MB * 10^level threshold</li>
+            </ul>
+          </article>
+
+          <!-- WAL Component -->
+          <article class="arch-component" role="listitem" data-component="wal">
+            <div class="arch-component-header">
+              <div class="arch-component-icon arch-icon-wal" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 8H36L40 16V40C40 41.1 39.1 42 38 42H10C8.9 42 8 41.1 8 40V10C8 8.9 8.9 8 10 8H12Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M36 8V16H40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="14" y1="24" x2="34" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="14" y1="30" x2="34" y2="30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <line x1="14" y1="36" x2="26" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="arch-component-title">Write-Ahead Log</h3>
+            </div>
+            <p class="arch-component-description">Every write is first appended to the <strong>WAL</strong> before being applied to the memtable. This ensures durability and enables crash recovery by replaying uncommitted writes.</p>
+            <ul class="arch-component-details">
+              <li>Sequential append-only writes for durability</li>
+              <li>Enables crash recovery and data integrity</li>
+              <li>Cleaned up after successful memtable flush</li>
+            </ul>
+          </article>
+
+        </div>
+
+        <!-- Data Flow Summary -->
+        <div class="arch-data-flow">
+          <h3 class="arch-data-flow-title">Data Flow</h3>
+          <div class="arch-flow-steps">
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">1</span>
+              <div class="arch-flow-content">
+                <strong>Write</strong>
+                <p>Data appended to WAL, then inserted into memtable</p>
+              </div>
+            </div>
+            <div class="arch-flow-arrow" aria-hidden="true"></div>
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">2</span>
+              <div class="arch-flow-content">
+                <strong>Flush</strong>
+                <p>Full memtable becomes immutable and flushes to Level 0</p>
+              </div>
+            </div>
+            <div class="arch-flow-arrow" aria-hidden="true"></div>
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">3</span>
+              <div class="arch-flow-content">
+                <strong>Compact</strong>
+                <p>Background threads merge SSTables down through levels</p>
+              </div>
+            </div>
+            <div class="arch-flow-arrow" aria-hidden="true"></div>
+            <div class="arch-flow-step">
+              <span class="arch-flow-number">4</span>
+              <div class="arch-flow-content">
+                <strong>Read</strong>
+                <p>Search memtable, then Level 0, then lower levels</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- END: architecture -->
+
+    <!-- BEGIN: installation -->
+    <section id="installation" class="install-section" aria-labelledby="install-title">
+      <div class="container">
+        <h2 id="install-title" class="install-title">Installation</h2>
+        <p class="install-subtitle">Get started with MirDB in minutes. Choose your preferred installation method.</p>
+
+        <div class="install-methods">
+          <!-- Method 1: Build from Source -->
+          <div class="install-method">
+            <h3 class="install-method-title">Build from Source</h3>
+            <ol class="install-steps">
+              <li class="install-step">
+                <p>Clone the repository</p>
+                <div class="install-code-block">
+                  <pre><code>git clone https://github.com/durbanlegend/mirdb.git</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy git clone command" data-copy="git clone https://github.com/durbanlegend/mirdb.git">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Navigate to the project directory</p>
+                <div class="install-code-block">
+                  <pre><code>cd mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cd command" data-copy="cd mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Build the release binary</p>
+                <div class="install-code-block">
+                  <pre><code>cargo build --release</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cargo build command" data-copy="cargo build --release">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Run MirDB</p>
+                <div class="install-code-block">
+                  <pre><code>./target/release/mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy run command" data-copy="./target/release/mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Method 2: Cargo Install -->
+          <div class="install-method">
+            <h3 class="install-method-title">Using Cargo Install</h3>
+            <ol class="install-steps">
+              <li class="install-step">
+                <p>Install directly from crates.io (when available)</p>
+                <div class="install-code-block">
+                  <pre><code>cargo install mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cargo install command" data-copy="cargo install mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Or install directly from GitHub</p>
+                <div class="install-code-block">
+                  <pre tabindex="0"><code>cargo install --git https://github.com/durbanlegend/mirdb.git</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy cargo install from git command" data-copy="cargo install --git https://github.com/durbanlegend/mirdb.git">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+              <li class="install-step">
+                <p>Run MirDB (binary added to PATH)</p>
+                <div class="install-code-block">
+                  <pre><code>mirdb</code></pre>
+                  <button class="install-copy-btn" type="button" aria-label="Copy mirdb command" data-copy="mirdb">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Default Configuration -->
+        <div class="install-config">
+          <h3 class="install-config-title">Default Configuration</h3>
+          <p>MirDB runs with sensible defaults out of the box:</p>
+          <table class="install-config-table">
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Default Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Port</td>
+                <td><code>12333</code></td>
+                <td>The TCP port MirDB listens on (Memcached protocol)</td>
+              </tr>
+              <tr>
+                <td>Work Directory</td>
+                <td><code>/tmp/mirdb</code></td>
+                <td>Directory for SSTable files and write-ahead log</td>
+              </tr>
+              <tr>
+                <td>Bind Address</td>
+                <td><code>0.0.0.0</code></td>
+                <td>Network interface to bind to</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <!-- END: installation -->
+
+    <!-- BEGIN: status -->
+    <section id="status" class="status-section" aria-labelledby="status-title">
+      <div class="container">
+        <h2 id="status-title" class="section-title">Project Status</h2>
+        <p class="status-subtitle">Track the implementation progress of MirDB features and upcoming enhancements.</p>
+
+        <div class="status-grid">
+          <!-- Implemented Features -->
+          <div class="status-category">
+            <h3 class="status-category-title status-category-implemented">
+              <svg class="status-category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Implemented
+            </h3>
+
+            <div class="status-features">
+              <!-- Memcached Protocol -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Memcached Protocol</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Full Memcached protocol compatibility with support for GET, SET, DELETE, and other standard commands.</p>
+              </article>
+
+              <!-- LSM Tree Architecture -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">LSM Tree Architecture</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Log-Structured Merge tree implementation with memtable, SSTables, and multi-level compaction.</p>
+              </article>
+
+              <!-- Persistent Storage -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Persistent Storage</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Durable persistence using SSTables and write-ahead logging for crash recovery.</p>
+              </article>
+
+              <!-- Async Runtime -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Tokio Async Runtime</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">High-performance async networking powered by Tokio for concurrent connections.</p>
+              </article>
+
+              <!-- Compaction -->
+              <article class="status-feature status-implemented" data-status="implemented">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Multi-level Compaction</h4>
+                  <span class="status-badge status-badge-implemented">Complete</span>
+                </div>
+                <p class="status-feature-description">Background compaction process to optimize storage and maintain read performance.</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="status-category">
+            <h3 class="status-category-title status-category-planned">
+              <svg class="status-category-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Planned
+            </h3>
+
+            <div class="status-features">
+              <!-- Raft Consensus -->
+              <article class="status-feature status-planned" data-status="planned">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Raft Consensus</h4>
+                  <span class="status-badge status-badge-planned">Planned</span>
+                </div>
+                <p class="status-feature-description">Distributed consensus using Raft protocol for high availability and data replication across nodes.</p>
+              </article>
+
+              <!-- Clustering -->
+              <article class="status-feature status-planned" data-status="planned">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Cluster Mode</h4>
+                  <span class="status-badge status-badge-planned">Planned</span>
+                </div>
+                <p class="status-feature-description">Multi-node clustering for horizontal scaling and automatic failover capabilities.</p>
+              </article>
+
+              <!-- Metrics -->
+              <article class="status-feature status-planned" data-status="planned">
+                <div class="status-feature-header">
+                  <div class="status-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h4 class="status-feature-title">Metrics & Monitoring</h4>
+                  <span class="status-badge status-badge-planned">Planned</span>
+                </div>
+                <p class="status-feature-description">Built-in metrics export for Prometheus and detailed performance monitoring dashboards.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: status -->
+  </main>
+
+  <!-- BEGIN: footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">MirDB</span>
+          <p class="footer-description">A persistent key-value store with Memcached protocol compatibility.</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/durbanlegend/mirdb" class="footer-link footer-github-link" target="_blank" rel="noopener noreferrer">
+            <svg class="footer-github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>GitHub Repository</span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 MirDB Project. Licensed under MIT.</p>
+      </div>
+    </div>
+  </footer>
+  <!-- END: footer -->
+
+  <script src="js/theme.js"></script>
+  <script src="js/clipboard.js"></script>
+  <script src="js/main.js" defer></script>
+
+  <!-- Mobile Navigation Toggle - Owner: Scenario 8 (Responsive Mobile) -->
+  <script>
+    (function() {
+      'use strict';
+      var menuToggle = document.querySelector('.nav-menu-toggle');
+      var navLinks = document.querySelector('.nav-links');
+
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', function() {
+          var expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+          menuToggle.setAttribute('aria-expanded', !expanded);
+          navLinks.classList.toggle('nav-open');
+        });
+
+        // Close menu when clicking a nav link
+        navLinks.querySelectorAll('.nav-link').forEach(function(link) {
+          link.addEventListener('click', function() {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            navLinks.classList.remove('nav-open');
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
