@@ -52,9 +52,27 @@ pub struct EndpointInfo {
 impl Default for EndpointInfo {
     fn default() -> Self {
         Self {
-            host: "localhost".to_string(),
-            port: 11211,
+            host: "0.0.0.0".to_string(),
+            port: 12333,
         }
+    }
+}
+
+impl EndpointInfo {
+    /// Create endpoint info from an address string like "0.0.0.0:12333"
+    pub fn from_addr_string(addr: &str) -> Self {
+        if let Some(idx) = addr.rfind(':') {
+            let host = addr[..idx].to_string();
+            let port = addr[idx + 1..].parse().unwrap_or(12333);
+            Self { host, port }
+        } else {
+            Self::default()
+        }
+    }
+
+    /// Get the connection string in "host:port" format
+    pub fn connection_string(&self) -> String {
+        format!("{}:{}", self.host, self.port)
     }
 }
 
@@ -215,8 +233,8 @@ mod tests {
         let response = StatusResponse::default();
         assert_eq!(response.status, ServerStatus::Running);
         assert_eq!(response.uptime_seconds, 0);
-        assert_eq!(response.endpoint.host, "localhost");
-        assert_eq!(response.endpoint.port, 11211);
+        assert_eq!(response.endpoint.host, "0.0.0.0");
+        assert_eq!(response.endpoint.port, 12333);
     }
 
     #[test]
@@ -239,8 +257,8 @@ mod tests {
         let response = get_status(&state);
 
         assert_eq!(response.status, ServerStatus::Running);
-        assert_eq!(response.endpoint.host, "localhost");
-        assert_eq!(response.endpoint.port, 11211);
+        assert_eq!(response.endpoint.host, "0.0.0.0");
+        assert_eq!(response.endpoint.port, 12333);
         assert!(!response.version.is_empty());
     }
 
@@ -302,5 +320,32 @@ mod tests {
 
         state.set_status(ServerStatus::Running);
         assert_eq!(state.status(), ServerStatus::Running);
+    }
+
+    #[test]
+    fn test_endpoint_from_addr_string() {
+        let endpoint = EndpointInfo::from_addr_string("192.168.1.100:8080");
+        assert_eq!(endpoint.host, "192.168.1.100");
+        assert_eq!(endpoint.port, 8080);
+
+        let endpoint2 = EndpointInfo::from_addr_string("0.0.0.0:12333");
+        assert_eq!(endpoint2.host, "0.0.0.0");
+        assert_eq!(endpoint2.port, 12333);
+
+        let endpoint3 = EndpointInfo::from_addr_string("localhost:3000");
+        assert_eq!(endpoint3.host, "localhost");
+        assert_eq!(endpoint3.port, 3000);
+    }
+
+    #[test]
+    fn test_endpoint_connection_string() {
+        let endpoint = EndpointInfo {
+            host: "127.0.0.1".to_string(),
+            port: 5000,
+        };
+        assert_eq!(endpoint.connection_string(), "127.0.0.1:5000");
+
+        let default_endpoint = EndpointInfo::default();
+        assert_eq!(default_endpoint.connection_string(), "0.0.0.0:12333");
     }
 }

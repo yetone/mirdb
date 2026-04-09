@@ -525,21 +525,171 @@ ul {
     transform: translateY(-1px);
 }
 
-/* Endpoint Info - Scenario 14 styling placeholder */
+/* Endpoint Info - Scenario 14 */
 .endpoint-info {
     background-color: var(--color-bg-secondary);
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
+    border: 1px solid var(--color-border);
 }
 
-.endpoint-details p {
-    margin-bottom: var(--spacing-sm);
+.endpoint-description {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.endpoint-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.endpoint-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
     font-family: var(--font-family-mono);
     font-size: 0.875rem;
 }
 
-.endpoint-details p:last-child {
-    margin-bottom: 0;
+.endpoint-label {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    min-width: 120px;
+}
+
+.endpoint-value {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.endpoint-connection {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.endpoint-copy-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: 1;
+}
+
+.endpoint-connection-string {
+    font-family: var(--font-family-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    background-color: var(--color-bg-card);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+    user-select: all;
+}
+
+.endpoint-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.endpoint-copy-btn:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
+    border-color: var(--color-primary);
+}
+
+.endpoint-copy-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.endpoint-copy-btn .copy-icon,
+.endpoint-copy-btn .check-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.endpoint-copy-btn .check-icon {
+    display: none;
+    color: var(--color-success);
+}
+
+.endpoint-copy-btn.copied .copy-icon {
+    display: none;
+}
+
+.endpoint-copy-btn.copied .check-icon {
+    display: block;
+}
+
+.endpoint-copy-btn.copied {
+    color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.endpoint-copy-btn.copied .copy-text::after {
+    content: 'd!';
+}
+
+.endpoint-copy-btn.copied .copy-text {
+    font-size: 0;
+}
+
+.endpoint-copy-btn.copied .copy-text::after {
+    font-size: 0.875rem;
+    content: 'Copied!';
+}
+
+/* Mobile adjustments for endpoint section */
+@media (max-width: 768px) {
+    .endpoint-connection {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .endpoint-copy-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: var(--spacing-sm);
+    }
+
+    .endpoint-connection-string {
+        width: 100%;
+        text-align: center;
+    }
+
+    .endpoint-copy-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .endpoint-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+
+    .endpoint-label {
+        min-width: auto;
+    }
 }
 
 /* =============================================

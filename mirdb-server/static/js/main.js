@@ -273,6 +273,9 @@
         // Initialize DOM references
         initializeElements();
 
+        // Initialize endpoint display elements - Scenario 14
+        initializeEndpointElements();
+
         // Initialize mobile navigation - Scenario 9
         initializeMobileNav();
 
@@ -301,6 +304,125 @@
     }
 
     // =============================================
+    // Endpoint Display Functions - Scenario 14
+    // =============================================
+
+    let endpointHost = null;
+    let endpointPort = null;
+    let endpointConnectionString = null;
+    let quickstartEndpoint = null;
+    let endpointCopyBtn = null;
+
+    /**
+     * Initialize endpoint display elements
+     */
+    function initializeEndpointElements() {
+        endpointHost = document.getElementById('endpoint-host');
+        endpointPort = document.getElementById('endpoint-port');
+        endpointConnectionString = document.getElementById('endpoint-connection-string');
+        quickstartEndpoint = document.getElementById('quickstart-endpoint');
+        endpointCopyBtn = document.getElementById('endpoint-copy-btn');
+
+        if (endpointCopyBtn) {
+            endpointCopyBtn.addEventListener('click', copyEndpointToClipboard);
+        }
+    }
+
+    /**
+     * Update the endpoint display with server information
+     * @param {Object} endpoint - Endpoint object with host and port
+     */
+    function updateEndpointDisplay(endpoint) {
+        if (!endpoint) return;
+
+        const { host, port } = endpoint;
+        const connectionString = `${host}:${port}`;
+
+        if (endpointHost) {
+            endpointHost.textContent = host;
+        }
+        if (endpointPort) {
+            endpointPort.textContent = port;
+        }
+        if (endpointConnectionString) {
+            endpointConnectionString.textContent = connectionString;
+        }
+        if (quickstartEndpoint) {
+            quickstartEndpoint.textContent = connectionString;
+        }
+
+        // Dispatch event for endpoint update
+        const event = new CustomEvent('mirdb:endpoint-updated', {
+            detail: { host, port, connectionString }
+        });
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Copy the endpoint connection string to clipboard
+     */
+    async function copyEndpointToClipboard() {
+        if (!endpointConnectionString) return;
+
+        const text = endpointConnectionString.textContent;
+
+        try {
+            await navigator.clipboard.writeText(text);
+            showCopySuccess();
+        } catch (err) {
+            // Fallback for older browsers
+            fallbackCopyToClipboard(text);
+        }
+    }
+
+    /**
+     * Fallback copy method for browsers without clipboard API
+     * @param {string} text - Text to copy
+     */
+    function fallbackCopyToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            document.execCommand('copy');
+            showCopySuccess();
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    /**
+     * Show copy success feedback
+     */
+    function showCopySuccess() {
+        if (!endpointCopyBtn) return;
+
+        endpointCopyBtn.classList.add('copied');
+        endpointCopyBtn.setAttribute('aria-label', 'Copied!');
+
+        // Reset after 2 seconds
+        setTimeout(function() {
+            endpointCopyBtn.classList.remove('copied');
+            endpointCopyBtn.setAttribute('aria-label', 'Copy connection string to clipboard');
+        }, 2000);
+    }
+
+    // Listen for status updates to refresh endpoint info
+    document.addEventListener('mirdb:status-updated', function(event) {
+        if (event.detail && event.detail.endpoint) {
+            updateEndpointDisplay(event.detail.endpoint);
+        }
+    });
+
+    // =============================================
     // Export for testing and external access
     // =============================================
     window.MirDB = window.MirDB || {};
@@ -314,6 +436,12 @@
         STATUS_RUNNING: STATUS_RUNNING,
         STATUS_STOPPED: STATUS_STOPPED,
         STATUS_ERROR: STATUS_ERROR
+    };
+
+    // Endpoint exports - Scenario 14
+    window.MirDB.endpoint = {
+        updateDisplay: updateEndpointDisplay,
+        copyToClipboard: copyEndpointToClipboard
     };
 
     // Mobile navigation exports - Scenario 9

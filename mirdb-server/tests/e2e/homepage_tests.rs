@@ -1813,3 +1813,262 @@ fn test_theme_toggle_icons_aria_hidden() {
         "Theme toggle icons should have aria-hidden='true'"
     );
 }
+
+// =============================================
+// Scenario 14: Endpoint Information Display Tests
+// =============================================
+
+/// Test Case 14-1: Parse page for endpoint information
+/// Verifies host address is displayed (e.g., 0.0.0.0 or localhost)
+#[test]
+fn test_endpoint_host_display() {
+    let html = load_homepage_html();
+
+    // Check for endpoint host element
+    assert!(
+        has_element_with_id(&html, "endpoint-host"),
+        "Should have endpoint host element with id='endpoint-host'"
+    );
+
+    // Check for host value (default is 0.0.0.0)
+    assert!(
+        html.contains(">0.0.0.0<") || html.contains(">localhost<") || html.contains(">127.0.0.1<"),
+        "Endpoint host should display a valid address (0.0.0.0, localhost, or 127.0.0.1)"
+    );
+}
+
+/// Test Case 14-2: Parse page for port information
+/// Verifies port number is displayed (default: 12333)
+#[test]
+fn test_endpoint_port_display() {
+    let html = load_homepage_html();
+
+    // Check for endpoint port element
+    assert!(
+        has_element_with_id(&html, "endpoint-port"),
+        "Should have endpoint port element with id='endpoint-port'"
+    );
+
+    // Check for default port 12333
+    assert!(
+        html.contains(">12333<"),
+        "Endpoint port should display default port 12333"
+    );
+}
+
+/// Test Case 14-3: Endpoint info section exists
+/// Verifies endpoint information section is present
+#[test]
+fn test_endpoint_info_section_exists() {
+    let html = load_homepage_html();
+
+    // Check for endpoint-info section
+    assert!(
+        has_element_with_id(&html, "endpoint-info"),
+        "Should have endpoint info section with id='endpoint-info'"
+    );
+
+    // Check for section title
+    assert!(
+        html.contains(">Connection Info<") || html.contains("endpoint-title"),
+        "Endpoint section should have a title"
+    );
+}
+
+/// Test Case 14-4: Verify copy-to-clipboard button exists
+/// Verifies user can easily copy connection string
+#[test]
+fn test_endpoint_copy_button_exists() {
+    let html = load_homepage_html();
+
+    // Check for copy button
+    assert!(
+        has_element_with_id(&html, "endpoint-copy-btn"),
+        "Should have copy button with id='endpoint-copy-btn'"
+    );
+
+    // Check for aria-label on copy button
+    assert!(
+        html.contains("Copy connection string") || html.contains("Copy to clipboard"),
+        "Copy button should have descriptive aria-label"
+    );
+}
+
+/// Test Case 14-5: Connection string element exists
+/// Verifies the connection string is displayed in a copyable format
+#[test]
+fn test_endpoint_connection_string_display() {
+    let html = load_homepage_html();
+
+    // Check for connection string element
+    assert!(
+        has_element_with_id(&html, "endpoint-connection-string"),
+        "Should have connection string element with id='endpoint-connection-string'"
+    );
+
+    // Check for default connection string format
+    assert!(
+        html.contains("0.0.0.0:12333") || html.contains("localhost:12333"),
+        "Connection string should display in host:port format"
+    );
+}
+
+/// Test Case 14-6: Endpoint section has proper accessibility attributes
+/// Verifies endpoint section has ARIA attributes
+#[test]
+fn test_endpoint_section_accessibility() {
+    let html = load_homepage_html();
+
+    // Check for role="region"
+    assert!(
+        html.contains("endpoint-info") && html.contains("role=\"region\""),
+        "Endpoint section should have role='region'"
+    );
+
+    // Check for aria-labelledby
+    assert!(
+        html.contains("aria-labelledby=\"endpoint-title\""),
+        "Endpoint section should have aria-labelledby referencing the title"
+    );
+}
+
+/// Test Case 14-7: CSS has endpoint info styles
+/// Verifies CSS includes styles for endpoint section
+#[test]
+fn test_css_has_endpoint_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for endpoint-info styles
+    assert!(
+        css.contains(".endpoint-info"),
+        "CSS should have .endpoint-info styles"
+    );
+
+    // Check for endpoint-copy-btn styles
+    assert!(
+        css.contains(".endpoint-copy-btn"),
+        "CSS should have .endpoint-copy-btn styles"
+    );
+
+    // Check for endpoint-connection-string styles
+    assert!(
+        css.contains(".endpoint-connection-string"),
+        "CSS should have .endpoint-connection-string styles"
+    );
+}
+
+/// Test Case 14-8: JavaScript has endpoint update function
+/// Verifies main.js can update endpoint display
+#[test]
+fn test_main_js_has_endpoint_functions() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for endpoint update function
+    assert!(
+        js.contains("updateEndpointDisplay"),
+        "main.js should have updateEndpointDisplay function"
+    );
+
+    // Check for copy to clipboard function
+    assert!(
+        js.contains("copyEndpointToClipboard") || js.contains("copyToClipboard"),
+        "main.js should have copy to clipboard function"
+    );
+}
+
+/// Test Case 14-9: JavaScript exports endpoint module
+/// Verifies endpoint functions are accessible via window.MirDB.endpoint
+#[test]
+fn test_main_js_exports_endpoint_module() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for endpoint namespace export
+    assert!(
+        js.contains("MirDB.endpoint") || js.contains("window.MirDB.endpoint"),
+        "main.js should export endpoint module"
+    );
+}
+
+/// Test Case 14-10: JavaScript listens for status updates to refresh endpoint
+/// Verifies endpoint info updates when status is received
+#[test]
+fn test_main_js_endpoint_updates_on_status() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for status update event listener
+    assert!(
+        js.contains("mirdb:status-updated") && js.contains("endpoint"),
+        "main.js should update endpoint when status is received"
+    );
+}
+
+/// Test Case 14-11: Quickstart section also shows endpoint
+/// Verifies quickstart intro has endpoint information
+#[test]
+fn test_quickstart_shows_endpoint() {
+    let html = load_homepage_html();
+
+    // Check for endpoint in quickstart intro
+    assert!(
+        has_element_with_id(&html, "quickstart-endpoint"),
+        "Quickstart section should have endpoint element"
+    );
+
+    // Check for consistent endpoint value
+    assert!(
+        html.contains("quickstart-endpoint") && html.contains("0.0.0.0:12333"),
+        "Quickstart endpoint should match the connection endpoint"
+    );
+}
+
+/// Test Case 14-12: Copy button has hover and focus styles
+/// Verifies copy button is accessible and interactive
+#[test]
+fn test_copy_button_interactive_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for hover styles
+    assert!(
+        css.contains(".endpoint-copy-btn:hover"),
+        "CSS should have .endpoint-copy-btn:hover styles"
+    );
+
+    // Check for focus styles
+    assert!(
+        css.contains(".endpoint-copy-btn:focus"),
+        "CSS should have .endpoint-copy-btn:focus styles for accessibility"
+    );
+}
+
+/// Test Case 14-13: Copy button has copied state styles
+/// Verifies visual feedback when copy succeeds
+#[test]
+fn test_copy_button_copied_state_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for copied state styles
+    assert!(
+        css.contains(".endpoint-copy-btn.copied"),
+        "CSS should have .endpoint-copy-btn.copied styles for feedback"
+    );
+}
+
+/// Test Case 14-14: Connection string is selectable
+/// Verifies user can select the connection string
+#[test]
+fn test_connection_string_selectable() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for user-select: all on connection string
+    assert!(
+        css.contains("user-select: all") || css.contains("user-select:all"),
+        "Connection string should have user-select: all for easy selection"
+    );
+}

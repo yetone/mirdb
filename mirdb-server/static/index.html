@@ -160,7 +160,7 @@
             <!-- Quick Start Section - Scenario 5 -->
             <div class="quickstart" id="quickstart" role="region" aria-labelledby="quickstart-title">
                 <h2 class="section-title" id="quickstart-title">Quick Start</h2>
-                <p class="quickstart-intro">Connect to MirDB using the Memcached protocol at <code class="endpoint-code" id="quickstart-endpoint">0.0.0.0:12333</code></p>
+                <p class="quickstart-intro">Connect to MirDB using the Memcached protocol at <code class="endpoint-code" id="quickstart-endpoint" aria-label="Memcached protocol endpoint">0.0.0.0:12333</code></p>
 
                 <div class="code-examples">
                     <!-- SET Command Example -->
@@ -221,9 +221,32 @@
             <!-- Endpoint Info - Scenario 14 -->
             <div class="endpoint-info" id="endpoint-info" role="region" aria-labelledby="endpoint-title">
                 <h2 class="section-title" id="endpoint-title">Connection Info</h2>
+                <p class="endpoint-description">Connect to MirDB using the Memcached protocol:</p>
                 <div class="endpoint-details">
-                    <p><strong>Host:</strong> <span id="endpoint-host">localhost</span></p>
-                    <p><strong>Port:</strong> <span id="endpoint-port">11211</span></p>
+                    <div class="endpoint-row">
+                        <span class="endpoint-label">Host:</span>
+                        <span class="endpoint-value" id="endpoint-host">0.0.0.0</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="endpoint-label">Port:</span>
+                        <span class="endpoint-value" id="endpoint-port">12333</span>
+                    </div>
+                    <div class="endpoint-connection">
+                        <span class="endpoint-label">Connection String:</span>
+                        <div class="endpoint-copy-wrapper">
+                            <code class="endpoint-connection-string" id="endpoint-connection-string">0.0.0.0:12333</code>
+                            <button type="button" class="endpoint-copy-btn" id="endpoint-copy-btn" aria-label="Copy connection string to clipboard" title="Copy to clipboard">
+                                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
