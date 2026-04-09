@@ -557,9 +557,117 @@ ul {
 }
 
 /* =============================================
-   Responsive Styles Placeholder
+   Responsive Styles
    - Scenario 8: Desktop responsive (>= 1024px)
    - Scenario 9: Mobile responsive (<= 768px)
+   ============================================= */
+
+/* =============================================
+   Desktop Styles (1024px and above) - Scenario 8
+   ============================================= */
+@media (min-width: 1024px) {
+    /* Ensure content is constrained and centered on desktop */
+    .main {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+
+    /* Full horizontal navigation on desktop - no hamburger menu */
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-list {
+        display: flex;
+        flex-direction: row;
+        gap: var(--spacing-lg);
+    }
+
+    .nav-link {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    /* Metrics grid in row layout on desktop */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    /* Features grid side-by-side */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    /* Code examples can display in two columns on wide screens */
+    .code-examples {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    /* Documentation links horizontal layout */
+    .doc-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--spacing-md);
+    }
+
+    /* Footer horizontal layout */
+    .footer-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+}
+
+/* =============================================
+   Large Desktop Styles (1920px and above) - Scenario 8
+   Content should be centered, not stretched edge-to-edge
+   ============================================= */
+@media (min-width: 1920px) {
+    /* Ensure content remains constrained on very large screens */
+    :root {
+        --max-width: 1400px;
+    }
+
+    .main {
+        max-width: var(--max-width);
+        margin: 0 auto;
+    }
+
+    .header-container {
+        max-width: var(--max-width);
+    }
+
+    .footer-container {
+        max-width: var(--max-width);
+    }
+
+    /* Hero content shouldn't stretch too wide */
+    .hero-content {
+        max-width: 800px;
+    }
+
+    /* Maintain readable line lengths */
+    .quickstart-intro {
+        max-width: 800px;
+    }
+
+    .doc-description {
+        max-width: 800px;
+    }
+}
+
+/* =============================================
+   Mobile Styles (768px and below) - Scenario 9
    ============================================= */
 @media (max-width: 768px) {
     .header-container {
