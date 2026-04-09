@@ -376,3 +376,212 @@ fn test_css_has_responsive_styles() {
     // Check for media queries (responsive design)
     assert!(css.contains("@media"), "Should have media queries for responsiveness");
 }
+
+// =============================================
+// Scenario 2: System Status Display Tests
+// =============================================
+
+/// Test Case 2-1: Status indicator has ARIA label for accessibility
+/// Verifies the status indicator has proper ARIA attributes for screen readers
+#[test]
+fn test_status_indicator_has_aria_label() {
+    let html = load_homepage_html();
+
+    // Check for ARIA label on status indicator
+    assert!(
+        html.contains("aria-label=") && html.contains("status-indicator"),
+        "Status indicator should have aria-label attribute"
+    );
+
+    // Check that ARIA label describes the server status
+    assert!(
+        html.contains("Server status:") ||
+        html.contains("aria-label=\"Server status"),
+        "ARIA label should describe the current server state"
+    );
+}
+
+/// Test Case 2-2: Status indicator has role attribute
+/// Verifies the status indicator has proper role for accessibility
+#[test]
+fn test_status_indicator_has_role() {
+    let html = load_homepage_html();
+
+    // Check for role="status" on status indicator
+    assert!(
+        html.contains("role=\"status\""),
+        "Status indicator should have role='status' attribute"
+    );
+}
+
+/// Test Case 2-3: Status indicator has aria-live attribute
+/// Verifies the status indicator announces updates to screen readers
+#[test]
+fn test_status_indicator_has_aria_live() {
+    let html = load_homepage_html();
+
+    // Check for aria-live="polite" on status indicator
+    assert!(
+        html.contains("aria-live=\"polite\""),
+        "Status indicator should have aria-live='polite' attribute"
+    );
+}
+
+/// Test Case 2-4: Running status indicator displays correctly
+/// Verifies running state shows green indicator with 'Running' label
+#[test]
+fn test_running_status_indicator_display() {
+    let html = load_homepage_html();
+
+    // Check for running class on status dot
+    assert!(
+        html.contains("status-dot running"),
+        "Status dot should have 'running' class by default"
+    );
+
+    // Check for Running text in status indicator
+    assert!(
+        html.contains(">Running<") ||
+        html.contains("class=\"status-text\">Running</span>"),
+        "Status text should display 'Running'"
+    );
+}
+
+/// Test Case 2-5: CSS has running status styles (green indicator)
+/// Verifies CSS defines green color for running status
+#[test]
+fn test_css_has_running_status_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for status dot running styles
+    assert!(
+        css.contains(".status-dot.running"),
+        "CSS should have .status-dot.running styles"
+    );
+
+    // Check that running status uses success/green color
+    assert!(
+        css.contains("--color-success") || css.contains("#22c55e") || css.contains("green"),
+        "Running status should use green/success color"
+    );
+}
+
+/// Test Case 2-6: CSS has stopped status styles (red indicator)
+/// Verifies CSS defines red color for stopped status
+#[test]
+fn test_css_has_stopped_status_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for status dot stopped styles
+    assert!(
+        css.contains(".status-dot.stopped"),
+        "CSS should have .status-dot.stopped styles"
+    );
+
+    // Check that stopped status uses danger/red color
+    assert!(
+        css.contains("--color-danger") || css.contains("#ef4444") || css.contains("red"),
+        "Stopped status should use red/danger color"
+    );
+}
+
+/// Test Case 2-7: CSS has error status styles
+/// Verifies CSS defines warning color for error status
+#[test]
+fn test_css_has_error_status_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for status dot error styles
+    assert!(
+        css.contains(".status-dot.error"),
+        "CSS should have .status-dot.error styles"
+    );
+}
+
+/// Test Case 2-8: Status dot has hidden aria for decorative element
+/// Verifies the status dot visual indicator is hidden from screen readers
+#[test]
+fn test_status_dot_aria_hidden() {
+    let html = load_homepage_html();
+
+    // Check for aria-hidden on status dot
+    assert!(
+        html.contains("status-dot") && html.contains("aria-hidden=\"true\""),
+        "Status dot should have aria-hidden='true' since it's decorative"
+    );
+}
+
+/// Test Case 2-9: JavaScript file exists and is loaded
+/// Verifies main.js is loaded for status functionality
+#[test]
+fn test_main_js_file_exists() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let js = fs::read_to_string(&path)
+        .unwrap_or_else(|e| panic!("Failed to read main.js at {:?}: {}", path, e));
+
+    // Verify JS file has content
+    assert!(!js.is_empty(), "main.js file should not be empty");
+
+    // Verify it contains status-related functionality
+    assert!(
+        js.contains("status") || js.contains("Status"),
+        "main.js should contain status-related code"
+    );
+}
+
+/// Test Case 2-10: JavaScript has status update function
+/// Verifies main.js can update the status display
+#[test]
+fn test_main_js_has_status_functions() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for status update functionality
+    assert!(
+        js.contains("updateStatusDisplay") || js.contains("updateStatus"),
+        "main.js should have function to update status display"
+    );
+
+    // Check for fetch status functionality
+    assert!(
+        js.contains("fetchStatus") || js.contains("/api/status"),
+        "main.js should have function to fetch status from API"
+    );
+}
+
+/// Test Case 2-11: JavaScript exports status functions for testing
+/// Verifies status functions are accessible for external testing
+#[test]
+fn test_main_js_exports_status_module() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check that status functions are exported
+    assert!(
+        js.contains("window.MirDB") || js.contains("MirDB.status"),
+        "main.js should export status module for testing"
+    );
+}
+
+/// Test Case 2-12: HTML loads main.js
+/// Verifies main.js script is included in HTML
+#[test]
+fn test_html_loads_main_js() {
+    let html = load_homepage_html();
+
+    // Check for main.js script tag
+    assert!(
+        html.contains("main.js"),
+        "HTML should load main.js script"
+    );
+
+    // Check script source path
+    assert!(
+        html.contains("src=\"/static/js/main.js\"") ||
+        html.contains("src='/static/js/main.js'"),
+        "HTML should load main.js from correct path"
+    );
+}

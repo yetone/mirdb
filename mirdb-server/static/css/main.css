@@ -222,6 +222,11 @@ ul {
     background-color: var(--color-danger);
 }
 
+.status-dot.error {
+    background-color: var(--color-warning);
+    animation: pulse 1s infinite;
+}
+
 @keyframes pulse {
     0%, 100% {
         opacity: 1;

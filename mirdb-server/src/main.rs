@@ -1,4 +1,6 @@
 #![allow(unused_imports, unused_macros, dead_code)]
+#![allow(semicolon_in_expressions_from_macros)]
+#![allow(mismatched_lifetime_syntaxes)]
 
 use std::cell::RefCell;
 use std::error::Error;
@@ -53,6 +55,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod http;
 
 pub struct Server {
     store: Arc<Store>,
