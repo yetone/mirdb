@@ -20,6 +20,7 @@
     const API_BASE_URL = '/api';
     const METRICS_ENDPOINT = `${API_BASE_URL}/metrics`;
     const METRICS_REFRESH_INTERVAL = 30000; // 30 seconds
+    const FETCH_TIMEOUT = 10000; // 10 seconds timeout for API calls
 
     // =============================================
     // State Management
@@ -27,11 +28,15 @@
     let refreshIntervalId = null;
     let lastMetricsUpdate = null;
     let isRefreshing = false;
+    let isInErrorState = false;
+    let consecutiveErrors = 0;
 
     // =============================================
     // DOM Element References
     // =============================================
     let metricsElements = {};
+    let dashboardSection = null;
+    let metricsErrorDisplay = null;
 
     /**
      * Initialize DOM element references for metrics display
@@ -44,6 +49,43 @@
             ops: document.querySelector('[data-metric="ops"]'),
             storage: document.querySelector('[data-metric="storage"]')
         };
+        dashboardSection = document.getElementById('dashboard');
+
+        // Create or find the error display element for metrics
+        metricsErrorDisplay = document.getElementById('metrics-error-display');
+        if (!metricsErrorDisplay && dashboardSection) {
+            metricsErrorDisplay = createErrorDisplayElement();
+        }
+    }
+
+    /**
+     * Create the error display element for the metrics section
+     * @returns {HTMLElement} The created error display element
+     */
+    function createErrorDisplayElement() {
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'metrics-error-display';
+        errorDiv.className = 'metrics-error';
+        errorDiv.setAttribute('role', 'alert');
+        errorDiv.setAttribute('aria-live', 'assertive');
+        errorDiv.setAttribute('aria-atomic', 'true');
+        errorDiv.style.display = 'none';
+
+        errorDiv.innerHTML = `
+            <span class="error-icon" aria-hidden="true">⚠</span>
+            <span class="error-message">Unable to load metrics</span>
+            <span class="error-detail"></span>
+        `;
+
+        // Insert after the section title
+        const sectionTitle = dashboardSection.querySelector('.section-title');
+        if (sectionTitle && sectionTitle.nextSibling) {
+            dashboardSection.insertBefore(errorDiv, sectionTitle.nextSibling);
+        } else {
+            dashboardSection.appendChild(errorDiv);
+        }
+
+        return errorDiv;
     }
 
     // =============================================
@@ -121,6 +163,99 @@
     }
 
     // =============================================
+    // Error State Functions - Scenario 15 Error Handling
+    // =============================================
+
+    /**
+     * Show error state in the metrics dashboard
+     * @param {string} errorType - Type of error ('fetch', 'timeout', 'server')
+     * @param {string} [detail] - Additional error details
+     */
+    function showMetricsError(errorType, detail) {
+        isInErrorState = true;
+        consecutiveErrors++;
+
+        if (!metricsErrorDisplay) return;
+
+        const errorMessage = metricsErrorDisplay.querySelector('.error-message');
+        const errorDetail = metricsErrorDisplay.querySelector('.error-detail');
+
+        let message = 'Unable to load metrics';
+        let detailText = '';
+
+        switch (errorType) {
+            case 'timeout':
+                message = 'Metrics request timed out';
+                detailText = 'The server is taking too long to respond. Will retry automatically.';
+                break;
+            case 'server':
+                message = 'Metrics server error';
+                detailText = detail || 'The server returned an error. Will retry automatically.';
+                break;
+            case 'network':
+                message = 'Network error';
+                detailText = 'Unable to connect to the server. Check your connection.';
+                break;
+            default:
+                message = 'Unable to load metrics';
+                detailText = detail || 'Will retry automatically.';
+        }
+
+        if (errorMessage) errorMessage.textContent = message;
+        if (errorDetail) errorDetail.textContent = detailText;
+
+        metricsErrorDisplay.style.display = 'flex';
+        metricsErrorDisplay.classList.add('error-visible');
+
+        // Add error class to metric cards
+        const metricsGrid = dashboardSection ? dashboardSection.querySelector('.metrics-grid') : null;
+        if (metricsGrid) {
+            metricsGrid.classList.add('metrics-error-state');
+        }
+
+        // Dispatch custom event for error state
+        const event = new CustomEvent('mirdb:metrics-error-displayed', {
+            detail: { errorType, message, consecutiveErrors }
+        });
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Clear error state and restore normal display
+     */
+    function clearMetricsError() {
+        if (!isInErrorState) return;
+
+        isInErrorState = false;
+        consecutiveErrors = 0;
+
+        if (metricsErrorDisplay) {
+            metricsErrorDisplay.style.display = 'none';
+            metricsErrorDisplay.classList.remove('error-visible');
+        }
+
+        // Remove error class from metric cards
+        const metricsGrid = dashboardSection ? dashboardSection.querySelector('.metrics-grid') : null;
+        if (metricsGrid) {
+            metricsGrid.classList.remove('metrics-error-state');
+        }
+
+        // Dispatch custom event for recovery
+        const event = new CustomEvent('mirdb:metrics-recovered', {
+            detail: { timestamp: Date.now() }
+        });
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Check if metrics are currently in error state
+     * @returns {boolean} True if in error state
+     */
+    function isMetricsInError() {
+        return isInErrorState;
+    }
+
+    // =============================================
     // Metrics Update Functions
     // =============================================
 
@@ -178,20 +313,46 @@
     }
 
     /**
-     * Fetch metrics from the API
+     * Fetch metrics from the API with timeout support
      * @returns {Promise<Object>} Metrics response object
+     * @throws {Error} Throws error on fetch failure, timeout, or server error
      */
     async function fetchMetrics() {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
         try {
-            const response = await fetch(METRICS_ENDPOINT);
+            const response = await fetch(METRICS_ENDPOINT, {
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const error = new Error(`HTTP error! status: ${response.status}`);
+                error.type = 'server';
+                error.status = response.status;
+                throw error;
             }
 
             const data = await response.json();
             return data;
         } catch (error) {
+            clearTimeout(timeoutId);
+
+            // Determine error type for better error messaging
+            if (error.name === 'AbortError') {
+                const timeoutError = new Error('Request timed out');
+                timeoutError.type = 'timeout';
+                throw timeoutError;
+            }
+
+            if (error.type === 'server') {
+                throw error;
+            }
+
+            // Network or other fetch errors
+            error.type = 'network';
             console.error('Failed to fetch metrics:', error);
             throw error;
         }
@@ -200,6 +361,7 @@
     /**
      * Refresh metrics by fetching from API and updating display
      * Preserves DOM state (scroll position, focused element)
+     * Handles errors gracefully and supports recovery
      * @returns {Promise<Object|null>} Metrics data or null on error
      */
     async function refreshMetrics() {
@@ -219,6 +381,12 @@
 
         try {
             const metrics = await fetchMetrics();
+
+            // Clear any existing error state on successful fetch (recovery)
+            if (isInErrorState) {
+                clearMetricsError();
+            }
+
             updateMetricsDisplay(metrics);
 
             // Restore DOM state (should already be preserved since no page reload)
@@ -234,9 +402,18 @@
 
             return metrics;
         } catch (error) {
+            // Show error state in UI (Scenario 15)
+            const errorType = error.type || 'fetch';
+            const detail = error.status ? `Server returned status ${error.status}` : error.message;
+            showMetricsError(errorType, detail);
+
             // Dispatch error event for error handling (Scenario 15)
             const event = new CustomEvent('mirdb:metrics-error', {
-                detail: { error: error.message }
+                detail: {
+                    error: error.message,
+                    type: errorType,
+                    consecutiveErrors: consecutiveErrors
+                }
             });
             document.dispatchEvent(event);
 
@@ -383,6 +560,11 @@
         getRefreshInterval: getRefreshInterval,
         getLastUpdateTime: getLastUpdateTime,
 
+        // Error handling functions - Scenario 15
+        showError: showMetricsError,
+        clearError: clearMetricsError,
+        isInError: isMetricsInError,
+
         // Formatting utilities
         formatUptime: formatUptime,
         formatBytes: formatBytes,
@@ -394,7 +576,8 @@
         updateWithMock: updateWithMockMetrics,
 
         // Constants (exposed for testing)
-        REFRESH_INTERVAL: METRICS_REFRESH_INTERVAL
+        REFRESH_INTERVAL: METRICS_REFRESH_INTERVAL,
+        FETCH_TIMEOUT: FETCH_TIMEOUT
     };
 
     // Initialize when DOM is ready

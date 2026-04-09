@@ -20,11 +20,18 @@
     const API_BASE_URL = '/api';
     const STATUS_ENDPOINT = `${API_BASE_URL}/status`;
     const STATUS_REFRESH_INTERVAL = 30000; // 30 seconds
+    const FETCH_TIMEOUT = 10000; // 10 seconds timeout
 
     // Status indicator states
     const STATUS_RUNNING = 'running';
     const STATUS_STOPPED = 'stopped';
     const STATUS_ERROR = 'error';
+    const STATUS_UNKNOWN = 'unknown';
+
+    // Error state tracking
+    let isInErrorState = false;
+    let consecutiveErrors = 0;
+    let statusRefreshIntervalId = null;
 
     // =============================================
     // DOM Element References
@@ -50,7 +57,7 @@
 
     /**
      * Update the status indicator display
-     * @param {string} status - The server status ('running', 'stopped', or 'error')
+     * @param {string} status - The server status ('running', 'stopped', 'error', or 'unknown')
      * @param {string} [message] - Optional custom message to display
      */
     function updateStatusDisplay(status, message) {
@@ -60,7 +67,7 @@
         }
 
         // Remove all status classes
-        statusDot.classList.remove('running', 'stopped', 'error');
+        statusDot.classList.remove('running', 'stopped', 'error', 'unknown');
 
         // Determine display text and ARIA label
         let displayText;
@@ -71,20 +78,34 @@
                 displayText = message || 'Running';
                 ariaLabel = 'Server status: Running. The MirDB server is operational.';
                 statusDot.classList.add('running');
+                isInErrorState = false;
+                consecutiveErrors = 0;
                 break;
             case STATUS_STOPPED:
                 displayText = message || 'Stopped';
                 ariaLabel = 'Server status: Stopped. The MirDB server is not running.';
                 statusDot.classList.add('stopped');
+                isInErrorState = false;
+                consecutiveErrors = 0;
                 break;
             case STATUS_ERROR:
                 displayText = message || 'Error';
-                ariaLabel = 'Server status: Error. Unable to connect to the MirDB server.';
+                ariaLabel = 'Server status: Error. Unable to connect to the MirDB server. Will retry automatically.';
                 statusDot.classList.add('error');
+                isInErrorState = true;
+                consecutiveErrors++;
+                break;
+            case STATUS_UNKNOWN:
+                displayText = message || 'Unknown';
+                ariaLabel = 'Server status: Unknown. Unable to determine server status. Will retry automatically.';
+                statusDot.classList.add('unknown');
+                isInErrorState = true;
+                consecutiveErrors++;
                 break;
             default:
                 displayText = message || 'Unknown';
                 ariaLabel = 'Server status: Unknown. Unable to determine server status.';
+                statusDot.classList.add('unknown');
         }
 
         // Update display
@@ -92,25 +113,57 @@
 
         // Update ARIA attributes for accessibility
         statusIndicator.setAttribute('aria-label', ariaLabel);
-        statusIndicator.setAttribute('aria-live', 'polite');
+        statusIndicator.setAttribute('aria-live', 'assertive');
         statusIndicator.setAttribute('role', 'status');
+
+        // Dispatch status change event
+        const event = new CustomEvent('mirdb:status-changed', {
+            detail: { status, message: displayText, isError: isInErrorState }
+        });
+        document.dispatchEvent(event);
     }
 
     /**
-     * Fetch server status from the API
+     * Fetch server status from the API with timeout support
      * @returns {Promise<Object>} The status response object
+     * @throws {Error} Throws error on fetch failure, timeout, or server error
      */
     async function fetchStatus() {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
         try {
-            const response = await fetch(STATUS_ENDPOINT);
+            const response = await fetch(STATUS_ENDPOINT, {
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const error = new Error(`HTTP error! status: ${response.status}`);
+                error.type = 'server';
+                error.status = response.status;
+                throw error;
             }
 
             const data = await response.json();
             return data;
         } catch (error) {
+            clearTimeout(timeoutId);
+
+            // Determine error type for better error messaging
+            if (error.name === 'AbortError') {
+                const timeoutError = new Error('Request timed out');
+                timeoutError.type = 'timeout';
+                throw timeoutError;
+            }
+
+            if (error.type === 'server') {
+                throw error;
+            }
+
+            // Network or other fetch errors
+            error.type = 'network';
             console.error('Failed to fetch status:', error);
             throw error;
         }
@@ -118,11 +171,23 @@
 
     /**
      * Refresh the status display by fetching from API
+     * Handles errors gracefully and supports recovery
+     * @returns {Promise<Object|null>} Status data or null on error
      */
     async function refreshStatus() {
+        const wasInErrorState = isInErrorState;
+
         try {
             const status = await fetchStatus();
             updateStatusDisplay(status.status);
+
+            // If recovering from error state, dispatch recovery event
+            if (wasInErrorState) {
+                const recoveryEvent = new CustomEvent('mirdb:status-recovered', {
+                    detail: { status: status.status, timestamp: Date.now() }
+                });
+                document.dispatchEvent(recoveryEvent);
+            }
 
             // Dispatch custom event for other components that might need status data
             const event = new CustomEvent('mirdb:status-updated', {
@@ -132,12 +197,26 @@
 
             return status;
         } catch (error) {
-            // Update display to show error state
-            updateStatusDisplay(STATUS_ERROR, 'Unavailable');
+            // Determine appropriate error message based on error type
+            let errorMessage = 'Unavailable';
+            if (error.type === 'timeout') {
+                errorMessage = 'Timeout';
+            } else if (error.type === 'server' && error.status) {
+                errorMessage = 'Server Error';
+            } else if (error.type === 'network') {
+                errorMessage = 'Offline';
+            }
+
+            // Update display to show error/unknown state
+            updateStatusDisplay(STATUS_UNKNOWN, errorMessage);
 
             // Dispatch error event
             const event = new CustomEvent('mirdb:status-error', {
-                detail: { error: error.message }
+                detail: {
+                    error: error.message,
+                    type: error.type || 'unknown',
+                    consecutiveErrors: consecutiveErrors
+                }
             });
             document.dispatchEvent(event);
 
@@ -151,11 +230,41 @@
      * @returns {number} Interval ID for clearing if needed
      */
     function startStatusRefresh(interval = STATUS_REFRESH_INTERVAL) {
+        // Stop any existing refresh
+        stopStatusRefresh();
+
         // Initial fetch
         refreshStatus();
 
         // Set up periodic refresh
-        return setInterval(refreshStatus, interval);
+        statusRefreshIntervalId = setInterval(refreshStatus, interval);
+        return statusRefreshIntervalId;
+    }
+
+    /**
+     * Stop automatic status refresh
+     */
+    function stopStatusRefresh() {
+        if (statusRefreshIntervalId !== null) {
+            clearInterval(statusRefreshIntervalId);
+            statusRefreshIntervalId = null;
+        }
+    }
+
+    /**
+     * Check if status is currently in error state
+     * @returns {boolean} True if in error state
+     */
+    function isStatusInError() {
+        return isInErrorState;
+    }
+
+    /**
+     * Get the number of consecutive errors
+     * @returns {number} Number of consecutive errors
+     */
+    function getConsecutiveErrors() {
+        return consecutiveErrors;
     }
 
     // =============================================
@@ -181,6 +290,13 @@
      */
     function setErrorStatus() {
         updateStatusDisplay(STATUS_ERROR, 'Unavailable');
+    }
+
+    /**
+     * Set status display to unknown state (for testing)
+     */
+    function setUnknownStatus() {
+        updateStatusDisplay(STATUS_UNKNOWN, 'Unknown');
     }
 
     // =============================================
@@ -430,12 +546,18 @@
         updateDisplay: updateStatusDisplay,
         refresh: refreshStatus,
         startRefresh: startStatusRefresh,
+        stopRefresh: stopStatusRefresh,
         setRunning: setRunningStatus,
         setStopped: setStoppedStatus,
         setError: setErrorStatus,
+        setUnknown: setUnknownStatus,
+        isInError: isStatusInError,
+        getConsecutiveErrors: getConsecutiveErrors,
         STATUS_RUNNING: STATUS_RUNNING,
         STATUS_STOPPED: STATUS_STOPPED,
-        STATUS_ERROR: STATUS_ERROR
+        STATUS_ERROR: STATUS_ERROR,
+        STATUS_UNKNOWN: STATUS_UNKNOWN,
+        FETCH_TIMEOUT: FETCH_TIMEOUT
     };
 
     // Endpoint exports - Scenario 14

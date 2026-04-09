@@ -1271,3 +1271,118 @@ html, body {
         flex-wrap: wrap;
     }
 }
+
+/* =============================================
+   Error State Styles - Scenario 15
+   Error handling for API unavailable states
+   ============================================= */
+
+/* Unknown status indicator (fallback for error states) */
+.status-dot.unknown {
+    background-color: var(--color-warning);
+    animation: pulse-slow 3s infinite;
+}
+
+@keyframes pulse-slow {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Metrics Error Display Container */
+.metrics-error {
+    display: none;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: rgba(245, 158, 11, 0.1);
+    border: 1px solid var(--color-warning);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text);
+}
+
+.metrics-error.error-visible {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.metrics-error .error-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.metrics-error .error-message {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.metrics-error .error-detail {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-left: auto;
+}
+
+/* Metrics grid in error state */
+.metrics-grid.metrics-error-state {
+    opacity: 0.6;
+    position: relative;
+}
+
+.metrics-grid.metrics-error-state .metric-card {
+    border-color: var(--color-warning);
+}
+
+.metrics-grid.metrics-error-state .metric-value {
+    color: var(--color-text-secondary);
+}
+
+/* Mobile responsive error display */
+@media (max-width: 768px) {
+    .metrics-error {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+
+    .metrics-error .error-detail {
+        margin-left: 0;
+    }
+}
+
+/* High contrast mode support for error states */
+@media (prefers-contrast: high) {
+    .metrics-error {
+        background-color: transparent;
+        border-width: 2px;
+    }
+
+    .status-dot.unknown {
+        border: 2px solid var(--color-text);
+    }
+}
+
+/* Reduced motion for error animations */
+@media (prefers-reduced-motion: reduce) {
+    .metrics-error.error-visible {
+        animation: none;
+    }
+
+    .status-dot.unknown {
+        animation: none;
+    }
+}
