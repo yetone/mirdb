@@ -10,16 +10,19 @@ use std::net::SocketAddr;
 use std::net::{TcpListener, TcpStream};
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
+use std::thread;
 
 use clap::App;
 use clap::Arg;
 use env_logger;
 use futures::{future, Future};
+use log::info;
 use tokio::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
 
 use crate::error::MyResult;
+use crate::http::server::{create_app_state_with_endpoint, HttpConfig, start_http_server};
 use crate::options::Options;
 use crate::parser::parse;
 use crate::proto::Proto;
@@ -106,12 +109,25 @@ fn main() -> MyResult<()> {
                 .help("Sets a custom config file")
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("http-port")
+                .long("http-port")
+                .value_name("PORT")
+                .help("HTTP server port (default: 8080)")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("no-http")
+                .long("no-http")
+                .help("Disable HTTP server")
+                .takes_value(false),
+        )
         .get_matches();
 
     let conf_path = matches.value_of("config").unwrap_or("default.conf");
     let conf = config::from_path(conf_path)?;
 
-    let addr = conf.addr.parse().unwrap();
+    let addr: SocketAddr = conf.addr.parse().unwrap();
     let opt = conf.to_options()?;
 
     let store = Store::new(opt.clone())?;
@@ -130,6 +146,48 @@ Welcome to MirDB!
         .trim_matches('\n')
     );
 
+    // Start HTTP server if enabled
+    let enable_http = !matches.is_present("no-http");
+    if enable_http {
+        let http_port: u16 = matches
+            .value_of("http-port")
+            .unwrap_or("8080")
+            .parse()
+            .unwrap_or(8080);
+
+        // Extract host and port from Memcached address for status display
+        let memcached_addr = conf.addr.clone();
+
+        // Parse endpoint info
+        let (host, port) = if let Some(idx) = memcached_addr.rfind(':') {
+            let h = memcached_addr[..idx].to_string();
+            let p: u16 = memcached_addr[idx + 1..].parse().unwrap_or(12333);
+            (h, p)
+        } else {
+            ("0.0.0.0".to_string(), 12333)
+        };
+
+        // Create shared state with Memcached endpoint info
+        let app_state = create_app_state_with_endpoint(host, port);
+
+        // Configure HTTP server
+        let http_addr: SocketAddr = format!("0.0.0.0:{}", http_port).parse().unwrap();
+        let http_config = HttpConfig::new(http_addr, memcached_addr);
+
+        // Start HTTP server in a separate thread
+        thread::spawn(move || {
+            info!("Starting HTTP server on port {}", http_port);
+            let http_server = start_http_server(http_config, app_state);
+            tokio::run(http_server);
+        });
+
+        println!("HTTP server: http://0.0.0.0:{}", http_port);
+    }
+
+    println!("Memcached protocol: {}", conf.addr);
+    println!();
+
+    // Start Memcached protocol server (blocks)
     serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())

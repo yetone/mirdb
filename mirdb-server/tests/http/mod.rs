@@ -6,5 +6,5 @@
 //! - static_tests: Static file serving tests (Scenario 17)
 
 mod api_tests;
-// mod integration_tests; // To be implemented by Scenario 16
+mod integration_tests;
 // mod static_tests;      // To be implemented by Scenario 17

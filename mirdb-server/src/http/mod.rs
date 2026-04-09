@@ -12,6 +12,6 @@
 //! - static_files: Static asset serving (Scenario 17)
 
 pub mod api;
-// pub mod server;      // To be implemented by Scenario 16
-// pub mod routes;      // To be implemented by Scenario 16
+pub mod server;
+pub mod routes;
 // pub mod static_files; // To be implemented by Scenario 17
