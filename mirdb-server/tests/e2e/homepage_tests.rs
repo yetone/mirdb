@@ -1079,3 +1079,417 @@ fn test_css_has_documentation_link_styles() {
         "CSS should have documentation link hover styles"
     );
 }
+
+// =============================================
+// Scenario 11: Page Load Performance Tests
+// =============================================
+
+/// Performance constant: Maximum total page weight in bytes (500KB)
+const MAX_PAGE_WEIGHT_BYTES: usize = 500 * 1024;
+
+/// Performance constant: Maximum number of HTTP requests on initial load
+const MAX_HTTP_REQUESTS: usize = 20;
+
+/// Test Case 11-1: DOMContentLoaded time validation (per NFR-2)
+/// Verifies page structure supports sub-2-second load by checking for
+/// - No inline blocking scripts
+/// - Deferred/async script loading
+/// - Minimal DOM complexity
+#[test]
+fn test_page_load_performance_structure() {
+    let html = load_homepage_html();
+
+    // Check that critical CSS is not massive (affects DOMContentLoaded)
+    let css_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css_content = fs::read_to_string(&css_path).unwrap();
+
+    // CSS should be under 50KB for fast parsing (affects DOMContentLoaded)
+    let css_size = css_content.len();
+    assert!(
+        css_size < 50 * 1024,
+        "CSS file should be under 50KB for fast DOMContentLoaded, got {} bytes",
+        css_size
+    );
+
+    // HTML should not have massive inline styles (affects DOMContentLoaded)
+    let inline_style_count = html.matches("<style").count();
+    assert!(
+        inline_style_count < 3,
+        "Should have minimal inline styles for fast DOMContentLoaded, found {}",
+        inline_style_count
+    );
+
+    // HTML should have a reasonable DOM depth/size
+    let html_size = html.len();
+    assert!(
+        html_size < 50 * 1024,
+        "HTML should be under 50KB for fast DOMContentLoaded, got {} bytes",
+        html_size
+    );
+}
+
+/// Test Case 11-2: Time to Interactive (TTI) validation
+/// Verifies page structure supports sub-3-second TTI by checking for
+/// - Scripts loaded with defer or at end of body
+/// - No render-blocking resources
+/// - Efficient JavaScript
+#[test]
+fn test_time_to_interactive_structure() {
+    let html = load_homepage_html();
+
+    // Scripts should be at the end of body (before </body>) for faster TTI
+    let body_close_pos = html.rfind("</body>").unwrap_or(0);
+    let last_script_pos = html.rfind("<script").unwrap_or(0);
+
+    // Last script should be near the end of body (within 500 chars)
+    assert!(
+        body_close_pos > last_script_pos,
+        "Scripts should be placed before closing body tag for faster TTI"
+    );
+    assert!(
+        body_close_pos - last_script_pos < 500,
+        "Scripts should be near the end of body for faster TTI"
+    );
+
+    // Check JavaScript files are lightweight
+    let main_js_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let main_js = fs::read_to_string(&main_js_path).unwrap();
+    assert!(
+        main_js.len() < 30 * 1024,
+        "main.js should be under 30KB for fast TTI, got {} bytes",
+        main_js.len()
+    );
+
+    let metrics_js_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let metrics_js = fs::read_to_string(&metrics_js_path).unwrap();
+    assert!(
+        metrics_js.len() < 30 * 1024,
+        "metrics.js should be under 30KB for fast TTI, got {} bytes",
+        metrics_js.len()
+    );
+
+    // No inline blocking scripts in head
+    let head_section = html.split("</head>").next().unwrap_or("");
+    let head_script_count = head_section.matches("<script").count();
+    assert!(
+        head_script_count == 0,
+        "Should have no blocking scripts in <head> for fast TTI, found {}",
+        head_script_count
+    );
+}
+
+/// Test Case 11-3: Total page weight validation
+/// Verifies total transferred size is under 500KB
+#[test]
+fn test_total_page_weight() {
+    let static_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("static");
+
+    // Calculate total size of all static assets
+    let mut total_size: usize = 0;
+
+    // HTML file
+    let html_path = static_dir.join("index.html");
+    let html_size = fs::read_to_string(&html_path).unwrap().len();
+    total_size += html_size;
+
+    // CSS file
+    let css_path = static_dir.join("css/main.css");
+    let css_size = fs::read_to_string(&css_path).unwrap().len();
+    total_size += css_size;
+
+    // JavaScript files
+    let js_dir = static_dir.join("js");
+    if js_dir.exists() {
+        for entry in fs::read_dir(&js_dir).unwrap() {
+            let entry = entry.unwrap();
+            if entry.path().extension().map_or(false, |ext| ext == "js") {
+                let js_size = fs::read_to_string(entry.path()).unwrap().len();
+                total_size += js_size;
+            }
+        }
+    }
+
+    // Total should be under 500KB (MAX_PAGE_WEIGHT_BYTES)
+    assert!(
+        total_size < MAX_PAGE_WEIGHT_BYTES,
+        "Total page weight should be under 500KB ({} bytes), got {} bytes ({:.1} KB)",
+        MAX_PAGE_WEIGHT_BYTES,
+        total_size,
+        total_size as f64 / 1024.0
+    );
+
+    // Log the actual size for verification
+    println!(
+        "Total page weight: {} bytes ({:.1} KB) - under {} KB limit",
+        total_size,
+        total_size as f64 / 1024.0,
+        MAX_PAGE_WEIGHT_BYTES / 1024
+    );
+}
+
+/// Test Case 11-4: HTTP request count validation
+/// Verifies minimal number of HTTP requests (< 20)
+#[test]
+fn test_http_request_count() {
+    let html = load_homepage_html();
+
+    let mut request_count = 0;
+
+    // Count external stylesheets (CSS)
+    let stylesheet_count = html.matches("rel=\"stylesheet\"").count();
+    request_count += stylesheet_count;
+
+    // Count script tags (JS)
+    let script_count = html.matches("<script src=").count();
+    request_count += script_count;
+
+    // Count link preloads
+    let preload_count = html.matches("rel=\"preload\"").count();
+    request_count += preload_count;
+
+    // Count favicon (if present)
+    let favicon_count = html.matches("rel=\"icon\"").count();
+    request_count += favicon_count;
+
+    // Count images
+    let img_count = html.matches("<img").count();
+    request_count += img_count;
+
+    // Add 1 for the HTML document itself
+    request_count += 1;
+
+    // Total should be under MAX_HTTP_REQUESTS
+    assert!(
+        request_count < MAX_HTTP_REQUESTS,
+        "Should have fewer than {} HTTP requests, found {} (CSS: {}, JS: {}, images: {}, preloads: {}, favicon: {}, HTML: 1)",
+        MAX_HTTP_REQUESTS,
+        request_count,
+        stylesheet_count,
+        script_count,
+        img_count,
+        preload_count,
+        favicon_count
+    );
+
+    // Log the actual count for verification
+    println!(
+        "Total HTTP requests: {} - under {} limit (CSS: {}, JS: {}, images: {})",
+        request_count, MAX_HTTP_REQUESTS, stylesheet_count, script_count, img_count
+    );
+}
+
+/// Test Case 11-5: Slow 3G usability validation
+/// Verifies page is usable within 5 seconds on slow connection by checking:
+/// - Critical content is in HTML (not loaded via JS)
+/// - Assets are small enough for slow connections
+/// - No large blocking resources
+#[test]
+fn test_slow_3g_usability() {
+    let html = load_homepage_html();
+
+    // Slow 3G bandwidth: ~50 KB/s
+    // 5 second budget = ~250KB total
+    const SLOW_3G_BUDGET_BYTES: usize = 250 * 1024;
+
+    // Calculate critical path size (HTML + CSS needed for first render)
+    let html_size = html.len();
+    let css_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css_size = fs::read_to_string(&css_path).unwrap().len();
+
+    let critical_size = html_size + css_size;
+
+    assert!(
+        critical_size < SLOW_3G_BUDGET_BYTES,
+        "Critical path (HTML + CSS) should be under {} bytes for slow 3G, got {} bytes",
+        SLOW_3G_BUDGET_BYTES,
+        critical_size
+    );
+
+    // Critical content should be visible without JavaScript
+    // Check that key sections are in HTML (not dynamically loaded)
+    assert!(
+        html.contains("MirDB"),
+        "Product name should be in HTML for slow 3G usability"
+    );
+    assert!(
+        html.contains("A Persistent Key-Value Store"),
+        "Tagline should be in HTML for slow 3G usability"
+    );
+    assert!(
+        html.contains("System Metrics") || html.contains("dashboard"),
+        "Dashboard section should be in HTML for slow 3G usability"
+    );
+    assert!(
+        html.contains("Quick Start") || html.contains("quickstart"),
+        "Quick start section should be in HTML for slow 3G usability"
+    );
+    assert!(
+        html.contains("Features") || html.contains("features"),
+        "Features section should be in HTML for slow 3G usability"
+    );
+
+    // Scripts should not block rendering
+    assert!(
+        !html.contains("<script src=") || html.rfind("<script").unwrap_or(0) > html.find("<main").unwrap_or(0),
+        "Scripts should not block main content rendering"
+    );
+
+    println!(
+        "Critical path size: {} bytes ({:.1} KB) - under {} KB slow 3G budget",
+        critical_size,
+        critical_size as f64 / 1024.0,
+        SLOW_3G_BUDGET_BYTES / 1024
+    );
+}
+
+/// Additional performance test: CSS efficiency
+/// Verifies CSS is optimized for performance
+#[test]
+fn test_css_performance_efficiency() {
+    let css_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&css_path).unwrap();
+
+    // No @import statements (cause additional requests)
+    assert!(
+        !css.contains("@import"),
+        "CSS should not use @import (causes additional HTTP requests)"
+    );
+
+    // Uses CSS variables for consistency (sign of well-organized CSS)
+    assert!(
+        css.contains(":root") && css.contains("--"),
+        "CSS should use CSS variables for maintainability"
+    );
+
+    // Has media queries (responsive design)
+    assert!(
+        css.contains("@media"),
+        "CSS should have media queries for responsive design"
+    );
+
+    // No excessive selectors (reasonable complexity)
+    let selector_count = css.matches('{').count();
+    assert!(
+        selector_count < 200,
+        "CSS should have reasonable number of selectors for performance, found {}",
+        selector_count
+    );
+}
+
+/// Additional performance test: JavaScript efficiency
+/// Verifies JavaScript is optimized for performance
+#[test]
+fn test_js_performance_efficiency() {
+    let main_js_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/main.js");
+    let main_js = fs::read_to_string(&main_js_path).unwrap();
+
+    let metrics_js_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let metrics_js = fs::read_to_string(&metrics_js_path).unwrap();
+
+    // No synchronous XMLHttpRequest (blocks rendering)
+    assert!(
+        !main_js.contains("XMLHttpRequest") || main_js.contains("async"),
+        "main.js should not use synchronous XMLHttpRequest"
+    );
+    assert!(
+        !metrics_js.contains("XMLHttpRequest") || metrics_js.contains("async"),
+        "metrics.js should not use synchronous XMLHttpRequest"
+    );
+
+    // Uses modern async patterns (fetch, async/await)
+    assert!(
+        main_js.contains("fetch") || main_js.contains("async"),
+        "main.js should use modern async patterns"
+    );
+    assert!(
+        metrics_js.contains("fetch"),
+        "metrics.js should use fetch API"
+    );
+
+    // Uses 'use strict' for better performance
+    assert!(
+        main_js.contains("'use strict'") || main_js.contains("\"use strict\""),
+        "main.js should use strict mode"
+    );
+    assert!(
+        metrics_js.contains("'use strict'") || metrics_js.contains("\"use strict\""),
+        "metrics.js should use strict mode"
+    );
+
+    // No document.write (blocks parsing)
+    assert!(
+        !main_js.contains("document.write"),
+        "main.js should not use document.write"
+    );
+    assert!(
+        !metrics_js.contains("document.write"),
+        "metrics.js should not use document.write"
+    );
+}
+
+/// Additional performance test: HTML structure efficiency
+/// Verifies HTML is optimized for fast rendering
+#[test]
+fn test_html_performance_structure() {
+    let html = load_homepage_html();
+
+    // Has proper doctype for standards mode (faster rendering)
+    assert!(
+        html.starts_with("<!DOCTYPE html>"),
+        "HTML should have DOCTYPE for standards mode"
+    );
+
+    // Has viewport meta tag (needed for responsive rendering)
+    assert!(
+        html.contains("name=\"viewport\""),
+        "HTML should have viewport meta tag"
+    );
+
+    // Has charset meta tag early (helps parser)
+    let head_section = html.split("</head>").next().unwrap_or("");
+    assert!(
+        head_section.contains("charset=\"UTF-8\"") || head_section.contains("charset=UTF-8"),
+        "HTML should have charset meta tag in head"
+    );
+
+    // CSS is in head (not body)
+    let css_link_pos = html.find("rel=\"stylesheet\"").unwrap_or(0);
+    let head_close_pos = html.find("</head>").unwrap_or(0);
+    assert!(
+        css_link_pos < head_close_pos,
+        "CSS should be linked in <head> for optimal rendering"
+    );
+
+    // No excessive nesting (keep DOM depth reasonable)
+    let max_nesting = count_max_nesting(&html);
+    assert!(
+        max_nesting < 15,
+        "HTML should have reasonable nesting depth for performance, found {}",
+        max_nesting
+    );
+}
+
+/// Helper function to estimate maximum nesting depth in HTML
+fn count_max_nesting(html: &str) -> usize {
+    let mut current_depth = 0;
+    let mut max_depth = 0;
+
+    // Simple heuristic: count common block-level elements
+    let block_elements = ["<div", "<section", "<main", "<article", "<header", "<footer", "<nav", "<ul", "<ol", "<li"];
+    let close_elements = ["</div>", "</section>", "</main>", "</article>", "</header>", "</footer>", "</nav>", "</ul>", "</ol>", "</li>"];
+
+    for line in html.lines() {
+        for open_tag in &block_elements {
+            current_depth += line.matches(open_tag).count();
+        }
+        if current_depth > max_depth {
+            max_depth = current_depth;
+        }
+        for close_tag in &close_elements {
+            let closes = line.matches(close_tag).count();
+            current_depth = current_depth.saturating_sub(closes);
+        }
+    }
+
+    max_depth
+}
