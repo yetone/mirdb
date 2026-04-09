@@ -113,17 +113,46 @@
             <div class="features" id="features" role="region" aria-labelledby="features-title">
                 <h2 class="section-title" id="features-title">Features</h2>
                 <div class="features-grid" role="list" aria-label="MirDB features">
-                    <div class="feature-card" role="listitem">
-                        <h3>SSTable Storage</h3>
-                        <p>Sorted String Tables for efficient persistent storage</p>
+                    <div class="feature-card" id="feature-sstable" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">SSTable Storage</h3>
+                        <p class="feature-description">Sorted String Tables provide durable, persistent on-disk storage with efficient key-value lookups using data blocks, index blocks, and Snappy compression.</p>
                     </div>
-                    <div class="feature-card" role="listitem">
-                        <h3>Skip-List Memtable</h3>
-                        <p>High-performance in-memory data structure</p>
+                    <div class="feature-card" id="feature-skiplist" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                                <line x1="10" y1="6.5" x2="14" y2="6.5"></line>
+                                <line x1="10" y1="17.5" x2="14" y2="17.5"></line>
+                                <line x1="6.5" y1="10" x2="6.5" y2="14"></line>
+                                <line x1="17.5" y1="10" x2="17.5" y2="14"></line>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Skip-List Memtable</h3>
+                        <p class="feature-description">High-performance in-memory skip-list data structure provides O(log n) reads and writes with efficient memory management and thread-safe operations.</p>
                     </div>
-                    <div class="feature-card" role="listitem">
-                        <h3>Auto Compaction</h3>
-                        <p>Automatic minor and major compaction</p>
+                    <div class="feature-card" id="feature-compaction" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="17 1 21 5 17 9"></polyline>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                <polyline points="7 23 3 19 7 15"></polyline>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Auto Compaction</h3>
+                        <p class="feature-description">Automatic background compaction with minor compaction (memtable to Level 0) and major compaction (merging between levels) for optimal storage efficiency.</p>
                     </div>
                 </div>
             </div>
