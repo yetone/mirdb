@@ -811,3 +811,273 @@ a:focus-visible {
         grid-template-columns: 1fr;
     }
 }
+
+/* =============================================
+   Mobile Styles (375px and below) - Scenario 9
+   Minimum mobile viewport support per NFR-1
+   ============================================= */
+@media (max-width: 375px) {
+    /* Reduce root spacing for compact mobile */
+    :root {
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.5rem;
+        --spacing-2xl: 2rem;
+    }
+
+    /* Main content padding adjustment for small screens */
+    .main {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    /* Hero section mobile adjustments */
+    .hero {
+        padding: var(--spacing-lg) 0;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-tagline {
+        font-size: 0.9rem;
+    }
+
+    /* Dashboard mobile compact */
+    .dashboard {
+        padding: var(--spacing-md);
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    /* Metrics single column stack on smallest screens */
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .metric-card {
+        padding: var(--spacing-md);
+    }
+
+    .metric-value {
+        font-size: 1.25rem;
+    }
+
+    /* Footer compact */
+    .footer-container {
+        padding: var(--spacing-md);
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    /* Code blocks horizontal scroll with touch */
+    .code-block {
+        padding: var(--spacing-md);
+        font-size: 0.75rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .code-example-title {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.85rem;
+    }
+}
+
+/* =============================================
+   Mobile Navigation - Scenario 9
+   Hamburger menu for mobile viewports
+   ============================================= */
+
+/* Hamburger menu button - hidden on desktop */
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 200;
+    position: relative;
+}
+
+.hamburger-menu:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--border-radius);
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--color-text);
+    border-radius: 1px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger-line + .hamburger-line {
+    margin-top: 5px;
+}
+
+/* Hamburger animation when menu is open */
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu[aria-expanded="true"] .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile navigation - show hamburger, hide nav list by default */
+@media (max-width: 768px) {
+    .hamburger-menu {
+        display: flex;
+    }
+
+    .header-container {
+        position: relative;
+    }
+
+    /* Navigation list - hidden by default on mobile */
+    .nav-list {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background-color: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        padding: var(--spacing-sm);
+        margin-top: var(--spacing-sm);
+        z-index: 150;
+    }
+
+    /* Show nav when expanded */
+    .nav-list.nav-open {
+        display: flex;
+    }
+
+    /* Mobile nav links - full width touch targets */
+    .nav-link {
+        display: block;
+        width: 100%;
+        padding: var(--spacing-md);
+        min-height: 44px;
+        line-height: 1.5;
+    }
+}
+
+/* =============================================
+   Touch Target Sizes - Scenario 9
+   Minimum 44x44px for all interactive elements
+   ============================================= */
+@media (max-width: 768px) {
+    /* Ensure all buttons and links have minimum touch target */
+    .cta-button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--spacing-md) var(--spacing-lg);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-link {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .doc-link,
+    .doc-links li a {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .footer-link {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* Status indicator touch target */
+    .status-indicator {
+        min-height: 44px;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    /* Feature cards touch target for entire card */
+    .feature-card {
+        min-height: 44px;
+    }
+
+    /* Metric cards touch target */
+    .metric-card {
+        min-height: 44px;
+    }
+}
+
+/* =============================================
+   Prevent Horizontal Overflow - Scenario 9
+   Ensure no horizontal scrolling at 375px
+   ============================================= */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+@media (max-width: 768px) {
+    /* Prevent any element from causing horizontal overflow */
+    * {
+        max-width: 100%;
+    }
+
+    .header-container,
+    .main,
+    .footer-container,
+    .hero-content,
+    .dashboard,
+    .content {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Code blocks can scroll horizontally within their container */
+    .code-block {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Endpoint code can wrap on mobile */
+    .endpoint-code {
+        word-break: break-all;
+    }
+
+    /* Documentation links wrap properly */
+    .doc-links {
+        flex-wrap: wrap;
+    }
+}

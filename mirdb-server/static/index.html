@@ -42,7 +42,13 @@
                 <span class="version" id="version">v0.1.0</span>
             </div>
             <nav class="nav" id="nav" aria-label="Main navigation">
-                <ul class="nav-list">
+                <!-- Hamburger Menu Button - Scenario 9: Mobile Responsive -->
+                <button class="hamburger-menu" id="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+                <ul class="nav-list" id="nav-list">
                     <li><a href="#overview" class="nav-link" id="nav-overview">Overview</a></li>
                     <li><a href="https://github.com/memcached/memcached/wiki/Protocols" class="nav-link" id="nav-api-docs" target="_blank" rel="noopener">API Docs</a></li>
                     <li><a href="https://github.com/yetone/mirdb" class="nav-link" id="nav-github" target="_blank" rel="noopener">GitHub</a></li>

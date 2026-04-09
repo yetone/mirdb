@@ -184,6 +184,85 @@
     }
 
     // =============================================
+    // Mobile Navigation Toggle - Scenario 9
+    // =============================================
+
+    let hamburgerMenu = null;
+    let navList = null;
+
+    /**
+     * Initialize mobile navigation elements
+     */
+    function initializeMobileNav() {
+        hamburgerMenu = document.getElementById('hamburger-menu');
+        navList = document.getElementById('nav-list');
+
+        if (hamburgerMenu && navList) {
+            // Add click handler for hamburger menu
+            hamburgerMenu.addEventListener('click', toggleMobileNav);
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (navList.classList.contains('nav-open') &&
+                    !hamburgerMenu.contains(event.target) &&
+                    !navList.contains(event.target)) {
+                    closeMobileNav();
+                }
+            });
+
+            // Close menu when pressing Escape
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && navList.classList.contains('nav-open')) {
+                    closeMobileNav();
+                    hamburgerMenu.focus();
+                }
+            });
+
+            // Close menu when a nav link is clicked
+            navList.querySelectorAll('.nav-link').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    closeMobileNav();
+                });
+            });
+        }
+    }
+
+    /**
+     * Toggle mobile navigation menu
+     */
+    function toggleMobileNav() {
+        if (!hamburgerMenu || !navList) return;
+
+        const isOpen = navList.classList.contains('nav-open');
+
+        if (isOpen) {
+            closeMobileNav();
+        } else {
+            openMobileNav();
+        }
+    }
+
+    /**
+     * Open mobile navigation menu
+     */
+    function openMobileNav() {
+        if (!hamburgerMenu || !navList) return;
+
+        navList.classList.add('nav-open');
+        hamburgerMenu.setAttribute('aria-expanded', 'true');
+    }
+
+    /**
+     * Close mobile navigation menu
+     */
+    function closeMobileNav() {
+        if (!hamburgerMenu || !navList) return;
+
+        navList.classList.remove('nav-open');
+        hamburgerMenu.setAttribute('aria-expanded', 'false');
+    }
+
+    // =============================================
     // Initialization
     // =============================================
 
@@ -193,6 +272,9 @@
     function init() {
         // Initialize DOM references
         initializeElements();
+
+        // Initialize mobile navigation - Scenario 9
+        initializeMobileNav();
 
         // Set initial status display (default to running until API responds)
         if (statusIndicator) {
@@ -232,6 +314,16 @@
         STATUS_RUNNING: STATUS_RUNNING,
         STATUS_STOPPED: STATUS_STOPPED,
         STATUS_ERROR: STATUS_ERROR
+    };
+
+    // Mobile navigation exports - Scenario 9
+    window.MirDB.mobileNav = {
+        toggle: toggleMobileNav,
+        open: openMobileNav,
+        close: closeMobileNav,
+        isOpen: function() {
+            return navList ? navList.classList.contains('nav-open') : false;
+        }
     };
 
     // Initialize when DOM is ready
