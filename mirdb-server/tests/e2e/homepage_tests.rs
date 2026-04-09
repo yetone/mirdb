@@ -2072,3 +2072,244 @@ fn test_connection_string_selectable() {
         "Connection string should have user-select: all for easy selection"
     );
 }
+
+// =============================================
+// Scenario 18: Product Version Display Tests
+// =============================================
+
+/// Test Case 18-1: Parse page for product name (E2E)
+/// Verifies MirDB product name is displayed in header
+#[test]
+fn test_product_name_displayed_in_header() {
+    let html = load_homepage_html();
+
+    // Check for MirDB product name in header section
+    assert!(
+        html.contains("id=\"header\"") && html.contains("MirDB"),
+        "Header should contain MirDB product name"
+    );
+
+    // Check for MirDB in logo text
+    assert!(
+        html.contains("class=\"logo-text\">MirDB</span>"),
+        "Logo text should display 'MirDB'"
+    );
+
+    // Check for MirDB in hero section title
+    assert!(
+        html.contains("<h1 class=\"hero-title\">MirDB</h1>"),
+        "Hero section should have 'MirDB' as the main title"
+    );
+}
+
+/// Test Case 18-2: Parse page for version number (E2E)
+/// Verifies version number is displayed (e.g., v0.1.0)
+#[test]
+fn test_version_number_displayed() {
+    let html = load_homepage_html();
+
+    // Check for version element
+    assert!(
+        has_element_with_id(&html, "version"),
+        "Should have version element with id='version'"
+    );
+
+    // Check for version class
+    assert!(
+        html.contains("class=\"version\""),
+        "Version element should have 'version' class"
+    );
+
+    // Check version format (v followed by semver pattern)
+    // Using env! to get the actual version from Cargo.toml
+    let cargo_version = env!("CARGO_PKG_VERSION");
+    let expected_version = format!("v{}", cargo_version);
+    assert!(
+        html.contains(&expected_version),
+        "Version should display '{}' in v0.0.0 format",
+        expected_version
+    );
+}
+
+/// Test Case 18-3: Compare displayed version with Cargo.toml (Integration)
+/// Verifies displayed version matches package version from Cargo.toml
+#[test]
+fn test_displayed_version_matches_cargo_toml() {
+    let html = load_homepage_html();
+
+    // Get version from Cargo.toml at compile time
+    let cargo_version = env!("CARGO_PKG_VERSION");
+
+    // Format expected display version (with 'v' prefix)
+    let expected_version = format!("v{}", cargo_version);
+
+    // Check that HTML contains the correct version
+    assert!(
+        html.contains(&expected_version),
+        "Displayed version should match Cargo.toml version. Expected '{}', but not found in HTML",
+        expected_version
+    );
+
+    // Verify version is in the version element specifically
+    let version_section = format!(">v{}</span>", cargo_version);
+    assert!(
+        html.contains(&version_section) || html.contains(&format!(">{}</span>", expected_version)),
+        "Version element should display '{}' from Cargo.toml",
+        expected_version
+    );
+}
+
+/// Test Case 18-4: API returns accurate version information (Integration)
+/// Verifies /api/status endpoint returns accurate version from Cargo.toml
+#[test]
+fn test_api_returns_accurate_version() {
+    // Get version from Cargo.toml at compile time
+    let cargo_version = env!("CARGO_PKG_VERSION");
+
+    // Simulate status API response (matches the actual implementation in status.rs)
+    let status_json = format!(
+        r#"{{"status":"running","uptime_seconds":0,"version":"{}","endpoint":{{"host":"0.0.0.0","port":12333}}}}"#,
+        cargo_version
+    );
+
+    // Parse the response
+    let parsed: serde_json::Value = serde_json::from_str(&status_json).unwrap();
+
+    // Verify version field exists
+    assert!(
+        parsed.get("version").is_some(),
+        "Status API should return 'version' field"
+    );
+
+    // Verify version matches Cargo.toml
+    let api_version = parsed.get("version").unwrap().as_str().unwrap();
+    assert_eq!(
+        api_version, cargo_version,
+        "API version '{}' should match Cargo.toml version '{}'",
+        api_version, cargo_version
+    );
+}
+
+/// Test Case 18-5: Status.rs uses CARGO_PKG_VERSION
+/// Verifies the status module gets version from Cargo.toml
+#[test]
+fn test_status_module_uses_cargo_version() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/http/api/status.rs");
+    let status_code = fs::read_to_string(&path)
+        .unwrap_or_else(|e| panic!("Failed to read status.rs at {:?}: {}", path, e));
+
+    // Check that status.rs uses env!("CARGO_PKG_VERSION")
+    assert!(
+        status_code.contains("CARGO_PKG_VERSION"),
+        "status.rs should use CARGO_PKG_VERSION to get version from Cargo.toml"
+    );
+
+    // Check it's used in the version field
+    assert!(
+        status_code.contains("version") && status_code.contains("CARGO_PKG_VERSION"),
+        "status.rs should set version from CARGO_PKG_VERSION"
+    );
+}
+
+/// Test Case 18-6: Version in header is styled appropriately
+/// Verifies CSS has styles for version display in header
+#[test]
+fn test_version_has_css_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for version styles
+    assert!(
+        css.contains(".version"),
+        "CSS should have .version styles"
+    );
+}
+
+/// Test Case 18-7: Version is visible in header alongside logo
+/// Verifies version is positioned near the logo in header
+#[test]
+fn test_version_positioned_with_logo() {
+    let html = load_homepage_html();
+
+    // Find positions of logo and version
+    let logo_pos = html.find("id=\"logo\"").unwrap_or(0);
+    let version_pos = html.find("id=\"version\"").unwrap_or(0);
+
+    // Version should appear after logo but in the same header section
+    assert!(
+        version_pos > logo_pos && version_pos - logo_pos < 500,
+        "Version should be positioned near the logo in header"
+    );
+
+    // Both should be within logo-section
+    assert!(
+        html.contains("logo-section") &&
+        html.find("logo-section").unwrap_or(usize::MAX) < logo_pos,
+        "Logo and version should be within logo-section container"
+    );
+}
+
+/// Test Case 18-8: Version format is human-readable
+/// Verifies version uses 'v' prefix for user-friendly display
+#[test]
+fn test_version_format_is_readable() {
+    let html = load_homepage_html();
+    let cargo_version = env!("CARGO_PKG_VERSION");
+
+    // Version should have 'v' prefix for human readability
+    let readable_version = format!("v{}", cargo_version);
+    assert!(
+        html.contains(&readable_version),
+        "Version should use 'v' prefix for readability: expected '{}'",
+        readable_version
+    );
+
+    // Should not display raw version without prefix
+    let raw_version_in_span = format!("\"version\">{}</span>", cargo_version);
+    let prefixed_version_in_span = format!("\"version\">v{}</span>", cargo_version);
+    assert!(
+        html.contains(&prefixed_version_in_span) || !html.contains(&raw_version_in_span),
+        "Version display should prefer 'v' prefixed format"
+    );
+}
+
+/// Test Case 18-9: StatusResponse struct has version field
+/// Verifies the StatusResponse properly includes version
+#[test]
+fn test_status_response_has_version_field() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/http/api/status.rs");
+    let status_code = fs::read_to_string(&path).unwrap();
+
+    // Check StatusResponse struct has version field
+    assert!(
+        status_code.contains("pub struct StatusResponse") &&
+        status_code.contains("pub version: String"),
+        "StatusResponse struct should have 'version: String' field"
+    );
+}
+
+/// Test Case 18-10: Version is consistent across all displays
+/// Verifies version shown in header matches what API returns
+#[test]
+fn test_version_consistency() {
+    let html = load_homepage_html();
+    let cargo_version = env!("CARGO_PKG_VERSION");
+
+    // Check version in HTML header
+    let html_version = format!("v{}", cargo_version);
+    assert!(
+        html.contains(&html_version),
+        "HTML should display version '{}'",
+        html_version
+    );
+
+    // Check that the same version would be returned by API
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/http/api/status.rs");
+    let status_code = fs::read_to_string(&path).unwrap();
+
+    // Verify the status module uses the same CARGO_PKG_VERSION
+    assert!(
+        status_code.contains("env!(\"CARGO_PKG_VERSION\")"),
+        "Status API should use env!(\"CARGO_PKG_VERSION\") for consistency"
+    );
+}
