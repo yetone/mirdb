@@ -8,4 +8,4 @@
 //! - metrics: Performance metrics endpoint (/api/metrics)
 
 pub mod status;
-// pub mod metrics; // To be implemented by Scenario 3
+pub mod metrics;
