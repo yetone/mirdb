@@ -15,6 +15,7 @@ use log::debug;
 use crate::http::api::metrics::{get_metrics, get_metrics_json};
 use crate::http::api::status::{get_status, get_status_json};
 use crate::http::server::AppState;
+use crate::http::static_files::{serve_static, get_default_static_dir, get_content_type};
 
 /// Route an incoming HTTP request to the appropriate handler
 ///
@@ -31,8 +32,8 @@ pub fn route_request(req: Request<Body>, state: AppState) -> Response<Body> {
     debug!("HTTP {} {}", method, path);
 
     match (method, path.as_str()) {
-        // Homepage route
-        (Method::GET, "/") => handle_homepage(),
+        // Homepage route - serve static index.html (Scenario 17)
+        (Method::GET, "/") => handle_static_index(),
 
         // API routes
         (Method::GET, "/api/status") => handle_status(state),
@@ -41,9 +42,9 @@ pub fn route_request(req: Request<Body>, state: AppState) -> Response<Body> {
         // Health check endpoint
         (Method::GET, "/health") => handle_health(),
 
-        // Static files (placeholder for Scenario 17)
+        // Static files - Scenario 17 implementation
         (Method::GET, path) if path.starts_with("/static/") => {
-            handle_static_placeholder(path)
+            handle_static_file(path)
         }
 
         // 404 for everything else
@@ -51,11 +52,33 @@ pub fn route_request(req: Request<Body>, state: AppState) -> Response<Body> {
     }
 }
 
-/// Handle homepage request (GET /)
+/// Handle homepage request (GET /) - Scenario 17
 ///
-/// Returns a simple HTML page indicating the homepage is working.
-/// The actual homepage content will be served by Scenario 17's static file serving.
-fn handle_homepage() -> Response<Body> {
+/// Serves the static index.html file from the static directory.
+/// Falls back to a simple inline HTML if the static file is not found.
+fn handle_static_index() -> Response<Body> {
+    let static_dir = get_default_static_dir();
+    let index_path = static_dir.join("index.html");
+
+    if index_path.exists() {
+        // Serve the static index.html with caching headers
+        match std::fs::read(&index_path) {
+            Ok(content) => {
+                return Response::builder()
+                    .status(StatusCode::OK)
+                    .header("Content-Type", "text/html; charset=utf-8")
+                    .header("Content-Length", content.len())
+                    .header("Cache-Control", "public, max-age=300") // 5 minutes for HTML
+                    .body(Body::from(content))
+                    .unwrap();
+            }
+            Err(e) => {
+                log::warn!("Failed to read index.html: {}", e);
+            }
+        }
+    }
+
+    // Fallback to inline HTML if static file not found
     let html = r#"<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,7 +116,7 @@ fn handle_homepage() -> Response<Body> {
     </style>
 </head>
 <body>
-    <h1>🗄️ MirDB</h1>
+    <h1>MirDB</h1>
     <p>A Persistent Key-Value Store with Memcached Protocol</p>
 
     <div class="status">
@@ -125,6 +148,7 @@ get mykey</code></pre>
     Response::builder()
         .status(StatusCode::OK)
         .header("Content-Type", "text/html; charset=utf-8")
+        .header("Cache-Control", "public, max-age=300")
         .body(Body::from(html))
         .unwrap()
 }
@@ -200,13 +224,15 @@ fn handle_health() -> Response<Body> {
         .unwrap()
 }
 
-/// Placeholder handler for static files (to be implemented by Scenario 17)
-fn handle_static_placeholder(path: &str) -> Response<Body> {
-    // Scenario 17 will implement proper static file serving
-    error_response(
-        StatusCode::NOT_FOUND,
-        &format!("Static file serving not yet implemented: {}", path),
-    )
+/// Handle static file requests (GET /static/*) - Scenario 17
+///
+/// Serves static files from the static directory with appropriate:
+/// - Content-Type headers based on file extension
+/// - Cache-Control headers for browser caching
+/// - 404 responses for missing files
+fn handle_static_file(path: &str) -> Response<Body> {
+    let static_dir = get_default_static_dir();
+    serve_static(&static_dir, path)
 }
 
 /// Handle 404 Not Found
@@ -231,8 +257,8 @@ mod tests {
     use crate::http::server::create_app_state;
 
     #[test]
-    fn test_handle_homepage() {
-        let response = handle_homepage();
+    fn test_handle_static_index() {
+        let response = handle_static_index();
         assert_eq!(response.status(), StatusCode::OK);
         assert!(response.headers().get("Content-Type").unwrap().to_str().unwrap().contains("text/html"));
     }

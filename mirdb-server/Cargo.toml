@@ -30,3 +30,4 @@ hyper = "0.12"
 
 [dev-dependencies]
 rand = "0.6.1"
+tempfile = "3.2"

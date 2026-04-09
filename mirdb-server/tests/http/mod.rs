@@ -7,4 +7,4 @@
 
 mod api_tests;
 mod integration_tests;
-// mod static_tests;      // To be implemented by Scenario 17
+mod static_tests;      // Implemented by Scenario 17

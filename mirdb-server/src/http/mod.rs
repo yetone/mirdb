@@ -14,4 +14,4 @@
 pub mod api;
 pub mod server;
 pub mod routes;
-// pub mod static_files; // To be implemented by Scenario 17
+pub mod static_files; // Implemented by Scenario 17
