@@ -585,3 +585,237 @@ fn test_html_loads_main_js() {
         "HTML should load main.js from correct path"
     );
 }
+
+// =============================================
+// Scenario 4: Metrics Auto-Refresh Tests
+// =============================================
+
+/// Test Case 4-1: Metrics.js file exists
+/// Verifies metrics.js file exists for auto-refresh functionality
+#[test]
+fn test_metrics_js_file_exists() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path)
+        .unwrap_or_else(|e| panic!("Failed to read metrics.js at {:?}: {}", path, e));
+
+    assert!(!js.is_empty(), "metrics.js file should not be empty");
+}
+
+/// Test Case 4-2: Metrics.js has API endpoint configured
+/// Verifies metrics.js references /api/metrics endpoint
+#[test]
+fn test_metrics_js_has_api_endpoint() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("/api/metrics"),
+        "metrics.js should reference /api/metrics endpoint"
+    );
+}
+
+/// Test Case 4-3: Metrics.js has 30-second refresh interval
+/// Verifies setInterval or setTimeout is configured for 30000ms
+#[test]
+fn test_metrics_js_has_30_second_interval() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for 30000ms interval configuration
+    assert!(
+        js.contains("30000"),
+        "metrics.js should configure 30000ms (30 seconds) refresh interval"
+    );
+
+    // Check for setInterval usage
+    assert!(
+        js.contains("setInterval"),
+        "metrics.js should use setInterval for periodic refresh"
+    );
+}
+
+/// Test Case 4-4: Metrics.js has refresh function
+/// Verifies metrics.js has a function to refresh metrics
+#[test]
+fn test_metrics_js_has_refresh_function() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("refreshMetrics") || js.contains("refresh"),
+        "metrics.js should have a refresh function"
+    );
+}
+
+/// Test Case 4-5: Metrics.js uses fetch API
+/// Verifies metrics.js uses fetch API (not full page reload)
+#[test]
+fn test_metrics_js_uses_fetch_api() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("fetch("),
+        "metrics.js should use fetch API for AJAX requests"
+    );
+
+    // Ensure no full page reload
+    assert!(
+        !js.contains("location.reload"),
+        "metrics.js should NOT use location.reload"
+    );
+}
+
+/// Test Case 4-6: Metrics.js preserves scroll position
+/// Verifies metrics.js tracks and preserves scroll position during refresh
+#[test]
+fn test_metrics_js_preserves_scroll_position() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("scrollX") && js.contains("scrollY"),
+        "metrics.js should track scroll position"
+    );
+
+    assert!(
+        js.contains("scrollTo"),
+        "metrics.js should have ability to restore scroll position"
+    );
+}
+
+/// Test Case 4-7: Metrics.js preserves focused element
+/// Verifies metrics.js tracks and preserves active element during refresh
+#[test]
+fn test_metrics_js_preserves_focus() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("activeElement"),
+        "metrics.js should track active element"
+    );
+
+    assert!(
+        js.contains("focus()"),
+        "metrics.js should restore focus if needed"
+    );
+}
+
+/// Test Case 4-8: Metrics.js has uptime formatting
+/// Verifies metrics.js can format uptime seconds to human-readable format
+#[test]
+fn test_metrics_js_formats_uptime() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("formatUptime"),
+        "metrics.js should have formatUptime function"
+    );
+}
+
+/// Test Case 4-9: HTML loads metrics.js script
+/// Verifies index.html includes metrics.js script tag
+#[test]
+fn test_html_loads_metrics_js() {
+    let html = load_homepage_html();
+
+    assert!(
+        html.contains("metrics.js"),
+        "HTML should load metrics.js script"
+    );
+
+    assert!(
+        html.contains("src=\"/static/js/metrics.js\"") ||
+        html.contains("src='/static/js/metrics.js'"),
+        "HTML should load metrics.js from correct path"
+    );
+}
+
+/// Test Case 4-10: Metrics.js is loaded after main.js
+/// Verifies metrics.js script comes after main.js in HTML
+#[test]
+fn test_metrics_js_loaded_after_main_js() {
+    let html = load_homepage_html();
+
+    let main_js_pos = html.find("main.js").unwrap_or(0);
+    let metrics_js_pos = html.find("metrics.js").unwrap_or(0);
+
+    assert!(
+        metrics_js_pos > main_js_pos,
+        "metrics.js should be loaded after main.js"
+    );
+}
+
+/// Test Case 4-11: HTML has data-metric attributes for all metrics
+/// Verifies dashboard elements have data-metric attributes for JS targeting
+#[test]
+fn test_html_has_data_metric_attributes() {
+    let html = load_homepage_html();
+
+    let metrics = ["uptime", "memory", "keys", "ops", "storage"];
+    for metric in &metrics {
+        assert!(
+            html.contains(&format!("data-metric=\"{}\"", metric)),
+            "HTML should have data-metric=\"{}\" attribute", metric
+        );
+    }
+}
+
+/// Test Case 4-12: Metrics.js exports to MirDB namespace
+/// Verifies metrics functions are accessible via window.MirDB.metrics
+#[test]
+fn test_metrics_js_exports_to_namespace() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("window.MirDB.metrics"),
+        "metrics.js should export to window.MirDB.metrics namespace"
+    );
+}
+
+/// Test Case 4-13: Metrics.js can stop refresh
+/// Verifies metrics.js has ability to stop the refresh interval
+#[test]
+fn test_metrics_js_can_stop_refresh() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("stopMetricsRefresh") && js.contains("clearInterval"),
+        "metrics.js should have ability to stop refresh interval"
+    );
+}
+
+/// Test Case 4-14: Metrics.js handles errors gracefully
+/// Verifies metrics.js has error handling for API failures
+#[test]
+fn test_metrics_js_handles_errors() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("catch") && js.contains("error"),
+        "metrics.js should handle fetch errors"
+    );
+
+    assert!(
+        js.contains("mirdb:metrics-error"),
+        "metrics.js should dispatch error event on failure"
+    );
+}
+
+/// Test Case 4-15: Metrics.js dispatches update event
+/// Verifies metrics.js dispatches custom event when metrics update
+#[test]
+fn test_metrics_js_dispatches_update_event() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/metrics.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    assert!(
+        js.contains("mirdb:metrics-updated") && js.contains("CustomEvent"),
+        "metrics.js should dispatch mirdb:metrics-updated custom event"
+    );
+}
