@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!--
+  MirDB Homepage - Main HTML Document
+
+  Owner: Scenario 1 - Homepage Core Rendering
+  Co-owners: Multiple scenarios for specific sections
+
+  Section ownership:
+  - Header: Scenario 1
+  - Hero + Status Indicator: Scenario 2
+  - Dashboard Metrics: Scenario 4
+  - Features: Scenario 13
+  - Quick Start: Scenario 5
+  - Documentation Links: Scenario 6
+  - Endpoint Info: Scenario 14
+  - Footer: Scenario 1
+  - Version Display: Scenario 18
+  - Theme Toggle Button: Scenario 7
+  - ARIA Attributes: Scenario 10
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/themes.css">
+</head>
+<body>
+    <!-- Skip Link for Keyboard Navigation - Scenario 10 Accessibility -->
+    <a href="#content" class="skip-link">Skip to main content</a>
+
+    <!-- Header Section - Scenario 1 -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo" id="logo">
+                    <span class="logo-icon">&#x1F5C4;</span>
+                    <span class="logo-text">MirDB</span>
+                </div>
+                <span class="version" id="version">v0.1.0</span>
+            </div>
+            <nav class="nav" id="nav" aria-label="Main navigation">
+                <!-- Hamburger Menu Button - Scenario 9: Mobile Responsive -->
+                <button class="hamburger-menu" id="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+                <ul class="nav-list" id="nav-list">
+                    <li><a href="#overview" class="nav-link" id="nav-overview">Overview</a></li>
+                    <li><a href="https://github.com/memcached/memcached/wiki/Protocols" class="nav-link" id="nav-api-docs" target="_blank" rel="noopener">API Docs</a></li>
+                    <li><a href="https://github.com/yetone/mirdb" class="nav-link" id="nav-github" target="_blank" rel="noopener">GitHub</a></li>
+                </ul>
+                <!-- Theme Toggle Button - Scenario 7 -->
+                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle theme">
+                    <svg class="theme-toggle-icon icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
+                    <svg class="theme-toggle-icon icon-sun" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Hero Section - Scenario 1 structure, Scenario 2 status indicator -->
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">MirDB</h1>
+                <p class="hero-tagline" id="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+                <div class="status-indicator" id="status-indicator" role="status" aria-live="polite" aria-label="Server status: Running. The MirDB server is operational.">
+                    <span class="status-dot running" aria-hidden="true"></span>
+                    <span class="status-text">Running</span>
+                </div>
+                <a href="#quickstart" class="cta-button" id="cta-button">Get Started in Seconds</a>
+            </div>
+        </section>
+
+        <!-- Dashboard Panel - Scenario 1 structure, Scenario 4 metrics refresh -->
+        <section class="dashboard" id="dashboard" aria-label="System metrics dashboard">
+            <h2 class="section-title">System Metrics</h2>
+            <div class="metrics-grid" role="list" aria-label="Performance metrics">
+                <div class="metric-card" id="metric-uptime" role="listitem" aria-label="Uptime: 0 hours 0 minutes 0 seconds">
+                    <span class="metric-label">Uptime</span>
+                    <span class="metric-value" data-metric="uptime" aria-live="polite">0h 0m 0s</span>
+                </div>
+                <div class="metric-card" id="metric-memory" role="listitem" aria-label="Memory Usage: 0 megabytes">
+                    <span class="metric-label">Memory Usage</span>
+                    <span class="metric-value" data-metric="memory" aria-live="polite">0 MB</span>
+                </div>
+                <div class="metric-card" id="metric-keys" role="listitem" aria-label="Total Keys: 0">
+                    <span class="metric-label">Total Keys</span>
+                    <span class="metric-value" data-metric="keys" aria-live="polite">0</span>
+                </div>
+                <div class="metric-card" id="metric-ops" role="listitem" aria-label="Operations per second: 0">
+                    <span class="metric-label">Ops/sec</span>
+                    <span class="metric-value" data-metric="ops" aria-live="polite">0</span>
+                </div>
+                <div class="metric-card" id="metric-storage" role="listitem" aria-label="Storage Used: 0 megabytes">
+                    <span class="metric-label">Storage Used</span>
+                    <span class="metric-value" data-metric="storage" aria-live="polite">0 MB</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Sections placeholder for other scenarios -->
+        <section class="content" id="content">
+            <!-- Features Section - Scenario 13 -->
+            <div class="features" id="features" role="region" aria-labelledby="features-title">
+                <h2 class="section-title" id="features-title">Features</h2>
+                <div class="features-grid" role="list" aria-label="MirDB features">
+                    <div class="feature-card" id="feature-sstable" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">SSTable Storage</h3>
+                        <p class="feature-description">Sorted String Tables provide durable, persistent on-disk storage with efficient key-value lookups using data blocks, index blocks, and Snappy compression.</p>
+                    </div>
+                    <div class="feature-card" id="feature-skiplist" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                                <line x1="10" y1="6.5" x2="14" y2="6.5"></line>
+                                <line x1="10" y1="17.5" x2="14" y2="17.5"></line>
+                                <line x1="6.5" y1="10" x2="6.5" y2="14"></line>
+                                <line x1="17.5" y1="10" x2="17.5" y2="14"></line>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Skip-List Memtable</h3>
+                        <p class="feature-description">High-performance in-memory skip-list data structure provides O(log n) reads and writes with efficient memory management and thread-safe operations.</p>
+                    </div>
+                    <div class="feature-card" id="feature-compaction" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="17 1 21 5 17 9"></polyline>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                <polyline points="7 23 3 19 7 15"></polyline>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Auto Compaction</h3>
+                        <p class="feature-description">Automatic background compaction with minor compaction (memtable to Level 0) and major compaction (merging between levels) for optimal storage efficiency.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Start Section - Scenario 5 -->
+            <div class="quickstart" id="quickstart" role="region" aria-labelledby="quickstart-title">
+                <h2 class="section-title" id="quickstart-title">Quick Start</h2>
+                <p class="quickstart-intro">Connect to MirDB using the Memcached protocol at <code class="endpoint-code" id="quickstart-endpoint" aria-label="Memcached protocol endpoint">0.0.0.0:12333</code></p>
+
+                <div class="code-examples">
+                    <!-- SET Command Example -->
+                    <div class="code-example" id="set-example">
+                        <h3 class="code-example-title">SET - Store a key-value pair</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Syntax: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</span>
+<span class="code-comment"># flags: 32-bit unsigned integer (client-defined)</span>
+<span class="code-comment"># exptime: expiration time in seconds (0 = never)</span>
+<span class="code-comment"># bytes: number of bytes in the data block</span>
+
+<span class="code-command">set</span> <span class="code-key">mykey</span> <span class="code-param">0</span> <span class="code-param">3600</span> <span class="code-param">5</span>
+<span class="code-value">hello</span>
+<span class="code-response">STORED</span></code></pre>
+                    </div>
+
+                    <!-- GET Command Example -->
+                    <div class="code-example" id="get-example">
+                        <h3 class="code-example-title">GET - Retrieve a value</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Syntax: get &lt;key&gt; [&lt;key2&gt; ...]</span>
+
+<span class="code-command">get</span> <span class="code-key">mykey</span>
+<span class="code-response">VALUE mykey 0 5</span>
+<span class="code-value">hello</span>
+<span class="code-response">END</span></code></pre>
+                    </div>
+
+                    <!-- DELETE Command Example -->
+                    <div class="code-example" id="delete-example">
+                        <h3 class="code-example-title">DELETE - Remove a key</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Syntax: delete &lt;key&gt; [noreply]</span>
+
+<span class="code-command">delete</span> <span class="code-key">mykey</span>
+<span class="code-response">DELETED</span></code></pre>
+                    </div>
+
+                    <!-- Connection Example -->
+                    <div class="code-example" id="connection-example">
+                        <h3 class="code-example-title">Connect via Telnet or Netcat</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Using telnet</span>
+<span class="code-command">telnet</span> <span class="code-param">0.0.0.0</span> <span class="code-param">12333</span>
+
+<span class="code-comment"># Using netcat</span>
+<span class="code-command">nc</span> <span class="code-param">0.0.0.0</span> <span class="code-param">12333</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation Links - Scenario 6 -->
+            <div class="documentation" id="documentation" role="region" aria-labelledby="documentation-title">
+                <h2 class="section-title" id="documentation-title">Documentation</h2>
+                <p class="doc-description">Learn more about MirDB and the Memcached protocol.</p>
+                <ul class="doc-links">
+                    <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" id="doc-link-readme" class="doc-link" target="_blank" rel="noopener">README</a></li>
+                    <li><a href="https://github.com/memcached/memcached/wiki/Protocols" id="doc-link-protocol" class="doc-link" target="_blank" rel="noopener">Memcached Protocol</a></li>
+                </ul>
+            </div>
+
+            <!-- Endpoint Info - Scenario 14 -->
+            <div class="endpoint-info" id="endpoint-info" role="region" aria-labelledby="endpoint-title">
+                <h2 class="section-title" id="endpoint-title">Connection Info</h2>
+                <p class="endpoint-description">Connect to MirDB using the Memcached protocol:</p>
+                <div class="endpoint-details">
+                    <div class="endpoint-row">
+                        <span class="endpoint-label">Host:</span>
+                        <span class="endpoint-value" id="endpoint-host">0.0.0.0</span>
+                    </div>
+                    <div class="endpoint-row">
+                        <span class="endpoint-label">Port:</span>
+                        <span class="endpoint-value" id="endpoint-port">12333</span>
+                    </div>
+                    <div class="endpoint-connection">
+                        <span class="endpoint-label">Connection String:</span>
+                        <div class="endpoint-copy-wrapper">
+                            <code class="endpoint-connection-string" id="endpoint-connection-string">0.0.0.0:12333</code>
+                            <button type="button" class="endpoint-copy-btn" id="endpoint-copy-btn" aria-label="Copy connection string to clipboard" title="Copy to clipboard">
+                                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section - Scenario 1 -->
+    <footer class="footer" id="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="https://github.com/memcached/memcached/wiki/Protocols" class="footer-link" id="footer-protocol" target="_blank" rel="noopener">Memcached Protocol</a>
+                <a href="https://github.com/yetone/mirdb" class="footer-link" id="footer-github" target="_blank" rel="noopener">GitHub</a>
+            </div>
+            <div class="footer-license" id="footer-license">
+                <p>MIT License</p>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; 2024 MirDB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript files - Owned by other scenarios -->
+    <script src="/static/js/main.js"></script>
+    <!-- Metrics auto-refresh - Scenario 4 -->
+    <script src="/static/js/metrics.js"></script>
+    <!-- Theme toggle - Scenario 7 -->
+    <script src="/static/js/theme.js"></script>
+</body>
+</html>
