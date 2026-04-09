@@ -27,6 +27,9 @@
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
+    <!-- Skip Link for Keyboard Navigation - Scenario 10 Accessibility -->
+    <a href="#content" class="skip-link">Skip to main content</a>
+
     <!-- Header Section - Scenario 1 -->
     <header class="header" id="header">
         <div class="header-container">
@@ -37,7 +40,7 @@
                 </div>
                 <span class="version" id="version">v0.1.0</span>
             </div>
-            <nav class="nav" id="nav">
+            <nav class="nav" id="nav" aria-label="Main navigation">
                 <ul class="nav-list">
                     <li><a href="#overview" class="nav-link" id="nav-overview">Overview</a></li>
                     <li><a href="https://github.com/memcached/memcached/wiki/Protocols" class="nav-link" id="nav-api-docs" target="_blank" rel="noopener">API Docs</a></li>
@@ -62,28 +65,28 @@
         </section>
 
         <!-- Dashboard Panel - Scenario 1 structure, Scenario 4 metrics refresh -->
-        <section class="dashboard" id="dashboard">
+        <section class="dashboard" id="dashboard" aria-label="System metrics dashboard">
             <h2 class="section-title">System Metrics</h2>
-            <div class="metrics-grid">
-                <div class="metric-card" id="metric-uptime">
+            <div class="metrics-grid" role="list" aria-label="Performance metrics">
+                <div class="metric-card" id="metric-uptime" role="listitem" aria-label="Uptime: 0 hours 0 minutes 0 seconds">
                     <span class="metric-label">Uptime</span>
-                    <span class="metric-value" data-metric="uptime">0h 0m 0s</span>
+                    <span class="metric-value" data-metric="uptime" aria-live="polite">0h 0m 0s</span>
                 </div>
-                <div class="metric-card" id="metric-memory">
+                <div class="metric-card" id="metric-memory" role="listitem" aria-label="Memory Usage: 0 megabytes">
                     <span class="metric-label">Memory Usage</span>
-                    <span class="metric-value" data-metric="memory">0 MB</span>
+                    <span class="metric-value" data-metric="memory" aria-live="polite">0 MB</span>
                 </div>
-                <div class="metric-card" id="metric-keys">
+                <div class="metric-card" id="metric-keys" role="listitem" aria-label="Total Keys: 0">
                     <span class="metric-label">Total Keys</span>
-                    <span class="metric-value" data-metric="keys">0</span>
+                    <span class="metric-value" data-metric="keys" aria-live="polite">0</span>
                 </div>
-                <div class="metric-card" id="metric-ops">
+                <div class="metric-card" id="metric-ops" role="listitem" aria-label="Operations per second: 0">
                     <span class="metric-label">Ops/sec</span>
-                    <span class="metric-value" data-metric="ops">0</span>
+                    <span class="metric-value" data-metric="ops" aria-live="polite">0</span>
                 </div>
-                <div class="metric-card" id="metric-storage">
+                <div class="metric-card" id="metric-storage" role="listitem" aria-label="Storage Used: 0 megabytes">
                     <span class="metric-label">Storage Used</span>
-                    <span class="metric-value" data-metric="storage">0 MB</span>
+                    <span class="metric-value" data-metric="storage" aria-live="polite">0 MB</span>
                 </div>
             </div>
         </section>
@@ -91,18 +94,18 @@
         <!-- Content Sections placeholder for other scenarios -->
         <section class="content" id="content">
             <!-- Features Section - Scenario 13 -->
-            <div class="features" id="features">
-                <h2 class="section-title">Features</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
+            <div class="features" id="features" role="region" aria-labelledby="features-title">
+                <h2 class="section-title" id="features-title">Features</h2>
+                <div class="features-grid" role="list" aria-label="MirDB features">
+                    <div class="feature-card" role="listitem">
                         <h3>SSTable Storage</h3>
                         <p>Sorted String Tables for efficient persistent storage</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card" role="listitem">
                         <h3>Skip-List Memtable</h3>
                         <p>High-performance in-memory data structure</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card" role="listitem">
                         <h3>Auto Compaction</h3>
                         <p>Automatic minor and major compaction</p>
                     </div>
@@ -110,8 +113,8 @@
             </div>
 
             <!-- Quick Start Section - Scenario 5 -->
-            <div class="quickstart" id="quickstart">
-                <h2 class="section-title">Quick Start</h2>
+            <div class="quickstart" id="quickstart" role="region" aria-labelledby="quickstart-title">
+                <h2 class="section-title" id="quickstart-title">Quick Start</h2>
                 <p class="quickstart-intro">Connect to MirDB using the Memcached protocol at <code class="endpoint-code" id="quickstart-endpoint">0.0.0.0:12333</code></p>
 
                 <div class="code-examples">
@@ -161,8 +164,8 @@
             </div>
 
             <!-- Documentation Links - Scenario 6 -->
-            <div class="documentation" id="documentation">
-                <h2 class="section-title">Documentation</h2>
+            <div class="documentation" id="documentation" role="region" aria-labelledby="documentation-title">
+                <h2 class="section-title" id="documentation-title">Documentation</h2>
                 <p class="doc-description">Learn more about MirDB and the Memcached protocol.</p>
                 <ul class="doc-links">
                     <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" id="doc-link-readme" class="doc-link" target="_blank" rel="noopener">README</a></li>
@@ -171,8 +174,8 @@
             </div>
 
             <!-- Endpoint Info - Scenario 14 -->
-            <div class="endpoint-info" id="endpoint-info">
-                <h2 class="section-title">Connection Info</h2>
+            <div class="endpoint-info" id="endpoint-info" role="region" aria-labelledby="endpoint-title">
+                <h2 class="section-title" id="endpoint-title">Connection Info</h2>
                 <div class="endpoint-details">
                     <p><strong>Host:</strong> <span id="endpoint-host">localhost</span></p>
                     <p><strong>Port:</strong> <span id="endpoint-port">11211</span></p>

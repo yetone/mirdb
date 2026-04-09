@@ -542,6 +542,106 @@ ul {
 }
 
 /* =============================================
+   Focus/Accessibility Styles - Scenario 10
+   ============================================= */
+
+/* Global focus styles for keyboard navigation */
+:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Link focus styles */
+a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Navigation link focus */
+.nav-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    background-color: var(--color-bg-secondary);
+}
+
+/* CTA Button focus */
+.cta-button:focus-visible {
+    outline: 3px solid var(--color-primary-dark);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+}
+
+/* Doc link focus */
+.doc-link:focus-visible,
+.doc-links li a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Footer link focus */
+.footer-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-primary);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 1000;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --color-text: #000000;
+        --color-bg: #ffffff;
+        --color-border: #000000;
+    }
+
+    .status-dot {
+        border: 2px solid var(--color-text);
+    }
+
+    .metric-card,
+    .feature-card,
+    .code-example {
+        border-width: 2px;
+    }
+}
+
+/* =============================================
    Utility Classes
    ============================================= */
 .visually-hidden {
