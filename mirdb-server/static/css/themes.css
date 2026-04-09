@@ -1,0 +1,132 @@
+/*
+ * MirDB Homepage - Theme Definitions
+ *
+ * Owner: Scenario 7 - Dark/Light Mode Toggle
+ *
+ * Defines CSS custom properties for:
+ * - Light theme (default)
+ * - Dark theme
+ *
+ * Theme switching via data-theme attribute on <html>
+ */
+
+/* =============================================
+   Light Theme (Default)
+   ============================================= */
+:root,
+[data-theme="light"] {
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-secondary: #64748b;
+    --color-success: #22c55e;
+    --color-danger: #ef4444;
+    --color-warning: #f59e0b;
+
+    --color-bg: #ffffff;
+    --color-bg-secondary: #f8fafc;
+    --color-bg-card: #ffffff;
+    --color-text: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-border: #e2e8f0;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Code block colors for light mode */
+    --code-bg: #1e293b;
+    --code-text: #e2e8f0;
+}
+
+/* =============================================
+   Dark Theme
+   ============================================= */
+[data-theme="dark"] {
+    --color-primary: #3b82f6;
+    --color-primary-dark: #2563eb;
+    --color-secondary: #94a3b8;
+    --color-success: #4ade80;
+    --color-danger: #f87171;
+    --color-warning: #fbbf24;
+
+    --color-bg: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-card: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-border: #334155;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+    /* Code block colors for dark mode */
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+}
+
+/* =============================================
+   Theme Toggle Button Styles
+   ============================================= */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--color-border);
+    transform: scale(1.05);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-toggle-icon {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-text);
+    transition: fill 0.2s ease;
+}
+
+/* Sun icon visible in dark mode */
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    display: none;
+}
+
+/* Moon icon visible in light mode (default) */
+.theme-toggle .icon-moon {
+    display: block;
+}
+
+/* =============================================
+   Smooth Theme Transition
+   ============================================= */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}

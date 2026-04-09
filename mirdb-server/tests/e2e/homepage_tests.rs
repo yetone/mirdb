@@ -1493,3 +1493,323 @@ fn count_max_nesting(html: &str) -> usize {
 
     max_depth
 }
+
+// =============================================
+// Scenario 7: Dark/Light Mode Toggle Tests
+// =============================================
+
+/// Test Case 7-1: Theme toggle button exists in HTML
+/// Verifies the theme toggle button element is present
+#[test]
+fn test_theme_toggle_button_exists() {
+    let html = load_homepage_html();
+
+    // Check for theme toggle button with proper ID
+    assert!(
+        has_element_with_id(&html, "theme-toggle"),
+        "Should have theme toggle button with id='theme-toggle'"
+    );
+
+    // Check it's a button element
+    assert!(
+        html.contains("<button") && html.contains("theme-toggle"),
+        "Theme toggle should be a button element"
+    );
+}
+
+/// Test Case 7-2: Theme toggle button has ARIA label for accessibility
+/// Verifies the toggle button has proper ARIA attributes
+#[test]
+fn test_theme_toggle_has_aria_label() {
+    let html = load_homepage_html();
+
+    // Check for aria-label on theme toggle
+    assert!(
+        html.contains("theme-toggle") && html.contains("aria-label="),
+        "Theme toggle should have aria-label attribute"
+    );
+
+    // Check aria-label contains mode information
+    assert!(
+        html.contains("Switch to") && (html.contains("dark mode") || html.contains("light mode")),
+        "Theme toggle aria-label should describe the action"
+    );
+}
+
+/// Test Case 7-3: Theme toggle has sun and moon icons
+/// Verifies the toggle button has icons for both themes
+#[test]
+fn test_theme_toggle_has_icons() {
+    let html = load_homepage_html();
+
+    // Check for sun icon (shown in dark mode)
+    assert!(
+        html.contains("icon-sun"),
+        "Theme toggle should have sun icon for dark mode"
+    );
+
+    // Check for moon icon (shown in light mode)
+    assert!(
+        html.contains("icon-moon"),
+        "Theme toggle should have moon icon for light mode"
+    );
+}
+
+/// Test Case 7-4: themes.css file exists and is valid
+/// Verifies the themes CSS file exists with theme definitions
+#[test]
+fn test_themes_css_file_exists() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/themes.css");
+    let css = fs::read_to_string(&path)
+        .unwrap_or_else(|e| panic!("Failed to read themes.css at {:?}: {}", path, e));
+
+    // Verify CSS file has content
+    assert!(!css.is_empty(), "themes.css file should not be empty");
+}
+
+/// Test Case 7-5: themes.css has light theme variables
+/// Verifies light theme CSS custom properties are defined
+#[test]
+fn test_themes_css_has_light_theme() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/themes.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for light theme selector
+    assert!(
+        css.contains("[data-theme=\"light\"]") || css.contains(":root"),
+        "themes.css should have light theme definition"
+    );
+
+    // Check for light theme colors (white-ish backgrounds)
+    assert!(
+        css.contains("--color-bg") && css.contains("#ffffff"),
+        "Light theme should define light background colors"
+    );
+
+    // Check for light theme text colors (dark text)
+    assert!(
+        css.contains("--color-text") && css.contains("#1e293b"),
+        "Light theme should define dark text colors"
+    );
+}
+
+/// Test Case 7-6: themes.css has dark theme variables
+/// Verifies dark theme CSS custom properties are defined
+#[test]
+fn test_themes_css_has_dark_theme() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/themes.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for dark theme selector
+    assert!(
+        css.contains("[data-theme=\"dark\"]"),
+        "themes.css should have dark theme definition with [data-theme=\"dark\"]"
+    );
+
+    // Check for dark theme colors (dark backgrounds)
+    assert!(
+        css.contains("#0f172a") || css.contains("#1e293b"),
+        "Dark theme should define dark background colors"
+    );
+
+    // Check for dark theme text colors (light text)
+    assert!(
+        css.contains("#f1f5f9") || css.contains("#e2e8f0"),
+        "Dark theme should define light text colors"
+    );
+}
+
+/// Test Case 7-7: themes.css has theme toggle button styles
+/// Verifies CSS includes styles for the theme toggle button
+#[test]
+fn test_themes_css_has_toggle_button_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/themes.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for theme toggle styles
+    assert!(
+        css.contains(".theme-toggle"),
+        "themes.css should have .theme-toggle styles"
+    );
+
+    // Check for hover styles
+    assert!(
+        css.contains(".theme-toggle:hover"),
+        "themes.css should have .theme-toggle:hover styles"
+    );
+
+    // Check for focus styles (accessibility)
+    assert!(
+        css.contains(".theme-toggle:focus"),
+        "themes.css should have .theme-toggle:focus styles for accessibility"
+    );
+}
+
+/// Test Case 7-8: theme.js file exists
+/// Verifies the theme JavaScript file exists
+#[test]
+fn test_theme_js_file_exists() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/theme.js");
+    let js = fs::read_to_string(&path)
+        .unwrap_or_else(|e| panic!("Failed to read theme.js at {:?}: {}", path, e));
+
+    // Verify JS file has content
+    assert!(!js.is_empty(), "theme.js file should not be empty");
+}
+
+/// Test Case 7-9: theme.js has toggle function
+/// Verifies theme.js has a function to toggle themes
+#[test]
+fn test_theme_js_has_toggle_function() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/theme.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for toggle function
+    assert!(
+        js.contains("toggleTheme") || js.contains("toggle"),
+        "theme.js should have a toggle function"
+    );
+}
+
+/// Test Case 7-10: theme.js uses localStorage for persistence
+/// Verifies theme.js stores preference in localStorage
+#[test]
+fn test_theme_js_uses_localstorage() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/theme.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for localStorage usage
+    assert!(
+        js.contains("localStorage.getItem") || js.contains("localStorage.setItem"),
+        "theme.js should use localStorage for persistence"
+    );
+
+    // Check for storage key
+    assert!(
+        js.contains("mirdb-theme") || js.contains("theme"),
+        "theme.js should have a storage key for theme preference"
+    );
+}
+
+/// Test Case 7-11: theme.js respects system preference
+/// Verifies theme.js checks system color scheme preference
+#[test]
+fn test_theme_js_respects_system_preference() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/theme.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for system preference detection
+    assert!(
+        js.contains("prefers-color-scheme") || js.contains("matchMedia"),
+        "theme.js should detect system color scheme preference"
+    );
+}
+
+/// Test Case 7-12: theme.js exports to MirDB namespace
+/// Verifies theme functions are accessible via window.MirDB.theme
+#[test]
+fn test_theme_js_exports_to_namespace() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/theme.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for MirDB namespace export
+    assert!(
+        js.contains("window.MirDB") && js.contains("theme"),
+        "theme.js should export to window.MirDB.theme namespace"
+    );
+}
+
+/// Test Case 7-13: theme.js applies theme via data attribute
+/// Verifies theme.js sets data-theme attribute on html element
+#[test]
+fn test_theme_js_uses_data_attribute() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/theme.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for data-theme attribute manipulation
+    assert!(
+        js.contains("data-theme") || js.contains("setAttribute"),
+        "theme.js should use data-theme attribute for theme switching"
+    );
+}
+
+/// Test Case 7-14: HTML links to themes.css
+/// Verifies index.html includes themes.css stylesheet
+#[test]
+fn test_html_links_to_themes_css() {
+    let html = load_homepage_html();
+
+    // Check for themes.css link
+    assert!(
+        html.contains("themes.css"),
+        "HTML should link to themes.css stylesheet"
+    );
+
+    // Check proper stylesheet link
+    assert!(
+        html.contains("href=\"/static/css/themes.css\"") ||
+        html.contains("href='/static/css/themes.css'"),
+        "HTML should link to themes.css from correct path"
+    );
+}
+
+/// Test Case 7-15: HTML loads theme.js
+/// Verifies index.html includes theme.js script
+#[test]
+fn test_html_loads_theme_js() {
+    let html = load_homepage_html();
+
+    // Check for theme.js script tag
+    assert!(
+        html.contains("theme.js"),
+        "HTML should load theme.js script"
+    );
+
+    // Check script source path
+    assert!(
+        html.contains("src=\"/static/js/theme.js\"") ||
+        html.contains("src='/static/js/theme.js'"),
+        "HTML should load theme.js from correct path"
+    );
+}
+
+/// Test Case 7-16: theme.js dispatches custom event on theme change
+/// Verifies theme.js dispatches event when theme changes
+#[test]
+fn test_theme_js_dispatches_event() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/js/theme.js");
+    let js = fs::read_to_string(&path).unwrap();
+
+    // Check for custom event dispatch
+    assert!(
+        js.contains("CustomEvent") && js.contains("mirdb:theme-changed"),
+        "theme.js should dispatch mirdb:theme-changed custom event"
+    );
+}
+
+/// Test Case 7-17: themes.css has theme transition styles
+/// Verifies CSS includes smooth transition for theme changes
+#[test]
+fn test_themes_css_has_transition_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/themes.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for transition class
+    assert!(
+        css.contains("theme-transition") || css.contains("transition"),
+        "themes.css should have theme transition styles"
+    );
+}
+
+/// Test Case 7-18: Theme toggle icons are hidden from screen readers
+/// Verifies icons have aria-hidden for accessibility
+#[test]
+fn test_theme_toggle_icons_aria_hidden() {
+    let html = load_homepage_html();
+
+    // Check for aria-hidden on SVG icons
+    assert!(
+        html.contains("aria-hidden=\"true\"") && html.contains("theme-toggle-icon"),
+        "Theme toggle icons should have aria-hidden='true'"
+    );
+}

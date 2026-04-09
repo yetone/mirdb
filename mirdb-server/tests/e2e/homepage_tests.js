@@ -418,6 +418,191 @@ test('CSS has media queries for responsiveness', () => {
 });
 
 // =============================================
+// Scenario 7: Dark/Light Mode Toggle Tests
+// =============================================
+console.log('\nScenario 7: Dark/Light Mode Toggle Tests');
+
+// Helper to load themes.css
+function loadThemesCss() {
+    const cssPath = path.join(__dirname, '../../static/css/themes.css');
+    return fs.readFileSync(cssPath, 'utf-8');
+}
+
+// Helper to load theme.js
+function loadThemeJs() {
+    const jsPath = path.join(__dirname, '../../static/js/theme.js');
+    return fs.readFileSync(jsPath, 'utf-8');
+}
+
+test('theme toggle button exists', () => {
+    const html = loadHomepageHtml();
+    assert(hasElementWithId(html, 'theme-toggle'), 'Should have theme toggle button with id="theme-toggle"');
+});
+
+test('theme toggle is a button element', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('<button') && html.includes('theme-toggle'), 'Theme toggle should be a button element');
+});
+
+test('theme toggle has aria-label for accessibility', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('theme-toggle') && html.includes('aria-label='), 'Theme toggle should have aria-label attribute');
+});
+
+test('theme toggle aria-label describes the action', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('Switch to') && (html.includes('dark mode') || html.includes('light mode')),
+           'Theme toggle aria-label should describe the action');
+});
+
+test('theme toggle has sun icon for dark mode', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('icon-sun'), 'Theme toggle should have sun icon for dark mode');
+});
+
+test('theme toggle has moon icon for light mode', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('icon-moon'), 'Theme toggle should have moon icon for light mode');
+});
+
+test('themes.css file exists', () => {
+    const css = loadThemesCss();
+    assert(css.length > 0, 'themes.css file should not be empty');
+});
+
+test('themes.css has light theme definition', () => {
+    const css = loadThemesCss();
+    assert(css.includes('[data-theme="light"]') || css.includes(':root'),
+           'themes.css should have light theme definition');
+});
+
+test('themes.css defines light background colors', () => {
+    const css = loadThemesCss();
+    assert(css.includes('--color-bg') && css.includes('#ffffff'),
+           'Light theme should define light background colors');
+});
+
+test('themes.css defines light theme text colors', () => {
+    const css = loadThemesCss();
+    assert(css.includes('--color-text') && css.includes('#1e293b'),
+           'Light theme should define dark text colors');
+});
+
+test('themes.css has dark theme definition', () => {
+    const css = loadThemesCss();
+    assert(css.includes('[data-theme="dark"]'),
+           'themes.css should have dark theme definition with [data-theme="dark"]');
+});
+
+test('themes.css defines dark background colors', () => {
+    const css = loadThemesCss();
+    assert(css.includes('#0f172a') || css.includes('#1e293b'),
+           'Dark theme should define dark background colors');
+});
+
+test('themes.css defines dark theme text colors', () => {
+    const css = loadThemesCss();
+    assert(css.includes('#f1f5f9') || css.includes('#e2e8f0'),
+           'Dark theme should define light text colors');
+});
+
+test('themes.css has theme toggle button styles', () => {
+    const css = loadThemesCss();
+    assert(css.includes('.theme-toggle'), 'themes.css should have .theme-toggle styles');
+});
+
+test('themes.css has toggle hover styles', () => {
+    const css = loadThemesCss();
+    assert(css.includes('.theme-toggle:hover'), 'themes.css should have .theme-toggle:hover styles');
+});
+
+test('themes.css has toggle focus styles for accessibility', () => {
+    const css = loadThemesCss();
+    assert(css.includes('.theme-toggle:focus'), 'themes.css should have .theme-toggle:focus styles');
+});
+
+test('theme.js file exists', () => {
+    const js = loadThemeJs();
+    assert(js.length > 0, 'theme.js file should not be empty');
+});
+
+test('theme.js has toggle function', () => {
+    const js = loadThemeJs();
+    assert(js.includes('toggleTheme') || js.includes('toggle'),
+           'theme.js should have a toggle function');
+});
+
+test('theme.js uses localStorage for persistence', () => {
+    const js = loadThemeJs();
+    assert(js.includes('localStorage.getItem') || js.includes('localStorage.setItem'),
+           'theme.js should use localStorage for persistence');
+});
+
+test('theme.js has storage key', () => {
+    const js = loadThemeJs();
+    assert(js.includes('mirdb-theme') || js.includes('THEME_KEY'),
+           'theme.js should have a storage key for theme preference');
+});
+
+test('theme.js respects system preference', () => {
+    const js = loadThemeJs();
+    assert(js.includes('prefers-color-scheme') || js.includes('matchMedia'),
+           'theme.js should detect system color scheme preference');
+});
+
+test('theme.js exports to MirDB namespace', () => {
+    const js = loadThemeJs();
+    assert(js.includes('window.MirDB') && js.includes('theme'),
+           'theme.js should export to window.MirDB.theme namespace');
+});
+
+test('theme.js uses data-theme attribute', () => {
+    const js = loadThemeJs();
+    assert(js.includes('data-theme') || js.includes('setAttribute'),
+           'theme.js should use data-theme attribute for theme switching');
+});
+
+test('HTML links to themes.css', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('themes.css'), 'HTML should link to themes.css stylesheet');
+});
+
+test('HTML loads themes.css from correct path', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('href="/static/css/themes.css"') || html.includes("href='/static/css/themes.css'"),
+           'HTML should link to themes.css from correct path');
+});
+
+test('HTML loads theme.js', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('theme.js'), 'HTML should load theme.js script');
+});
+
+test('HTML loads theme.js from correct path', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('src="/static/js/theme.js"') || html.includes("src='/static/js/theme.js'"),
+           'HTML should load theme.js from correct path');
+});
+
+test('theme.js dispatches custom event on theme change', () => {
+    const js = loadThemeJs();
+    assert(js.includes('CustomEvent') && js.includes('mirdb:theme-changed'),
+           'theme.js should dispatch mirdb:theme-changed custom event');
+});
+
+test('themes.css has theme transition styles', () => {
+    const css = loadThemesCss();
+    assert(css.includes('theme-transition') || css.includes('transition'),
+           'themes.css should have theme transition styles');
+});
+
+test('theme toggle icons have aria-hidden', () => {
+    const html = loadHomepageHtml();
+    assert(html.includes('aria-hidden="true"') && html.includes('theme-toggle-icon'),
+           'Theme toggle icons should have aria-hidden="true"');
+});
+
+// =============================================
 // Summary
 // =============================================
 console.log('\n' + '='.repeat(50));
