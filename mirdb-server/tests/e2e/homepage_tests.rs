@@ -819,3 +819,263 @@ fn test_metrics_js_dispatches_update_event() {
         "metrics.js should dispatch mirdb:metrics-updated custom event"
     );
 }
+
+// =============================================
+// Scenario 6: Documentation Links Tests
+// =============================================
+
+/// Test Case 6-1: README link element exists with href pointing to README
+/// Verifies the documentation section has a README link with proper href
+#[test]
+fn test_readme_link_element_exists() {
+    let html = load_homepage_html();
+
+    // Check for README link with proper ID
+    assert!(
+        has_element_with_id(&html, "doc-link-readme"),
+        "Should have README link with id='doc-link-readme'"
+    );
+
+    // Check for README link text
+    assert!(
+        contains_text(&html, ">README<") || contains_text(&html, ">README</a>"),
+        "Should have README link text"
+    );
+}
+
+/// Test Case 6-2: README link points to correct URL
+/// Verifies README link href points to the project README on GitHub
+#[test]
+fn test_readme_link_has_correct_href() {
+    let html = load_homepage_html();
+
+    // Check that README link points to the GitHub README
+    assert!(
+        html.contains("href=\"https://github.com/yetone/mirdb/blob/master/README.md\""),
+        "README link should point to GitHub README"
+    );
+}
+
+/// Test Case 6-3: Memcached protocol link element exists
+/// Verifies the documentation section has a Memcached protocol link
+#[test]
+fn test_memcached_protocol_link_element_exists() {
+    let html = load_homepage_html();
+
+    // Check for Memcached protocol link with proper ID
+    assert!(
+        has_element_with_id(&html, "doc-link-protocol"),
+        "Should have Memcached protocol link with id='doc-link-protocol'"
+    );
+
+    // Check for Memcached Protocol link text
+    assert!(
+        contains_text(&html, "Memcached Protocol"),
+        "Should have 'Memcached Protocol' link text"
+    );
+}
+
+/// Test Case 6-4: Memcached protocol link points to correct URL
+/// Verifies Memcached protocol link href points to the official protocol wiki
+#[test]
+fn test_memcached_protocol_link_has_correct_href() {
+    let html = load_homepage_html();
+
+    // Check that Memcached protocol link points to the official wiki
+    assert!(
+        html.contains("href=\"https://github.com/memcached/memcached/wiki/Protocols\""),
+        "Memcached protocol link should point to official protocol wiki"
+    );
+}
+
+/// Test Case 6-5: README link is navigable (has target="_blank")
+/// Verifies README link opens in new tab for external navigation
+#[test]
+fn test_readme_link_opens_in_new_tab() {
+    let html = load_homepage_html();
+
+    // Check that the README link area has target="_blank"
+    assert!(
+        html.contains("doc-link-readme") && html.contains("target=\"_blank\""),
+        "README link should open in new tab (target='_blank')"
+    );
+
+    // Check for rel="noopener" for security
+    assert!(
+        html.contains("rel=\"noopener\""),
+        "External links should have rel='noopener' for security"
+    );
+}
+
+/// Test Case 6-6: Memcached protocol link is navigable (has target="_blank")
+/// Verifies Memcached protocol link opens in new tab for external navigation
+#[test]
+fn test_memcached_protocol_link_opens_in_new_tab() {
+    let html = load_homepage_html();
+
+    // Check that the protocol link area has target="_blank"
+    assert!(
+        html.contains("doc-link-protocol") && html.contains("target=\"_blank\""),
+        "Memcached protocol link should open in new tab (target='_blank')"
+    );
+}
+
+/// Test Case 6-7: GitHub repository link exists in navigation
+/// Verifies navigation has GitHub link pointing to repository
+#[test]
+fn test_github_nav_link_exists() {
+    let html = load_homepage_html();
+
+    // Check for GitHub nav link
+    assert!(
+        has_element_with_id(&html, "nav-github"),
+        "Should have GitHub link in navigation with id='nav-github'"
+    );
+
+    // Check for GitHub link text
+    assert!(
+        contains_text(&html, ">GitHub<") || contains_text(&html, ">GitHub</a>"),
+        "Navigation should have GitHub link text"
+    );
+}
+
+/// Test Case 6-8: GitHub repository link points to correct repository
+/// Verifies GitHub link points to yetone/mirdb repository
+#[test]
+fn test_github_nav_link_has_correct_href() {
+    let html = load_homepage_html();
+
+    // Check that GitHub link points to the correct repository
+    assert!(
+        html.contains("href=\"https://github.com/yetone/mirdb\""),
+        "GitHub link should point to https://github.com/yetone/mirdb"
+    );
+}
+
+/// Test Case 6-9: Documentation section exists
+/// Verifies the documentation section container exists
+#[test]
+fn test_documentation_section_exists() {
+    let html = load_homepage_html();
+
+    // Check for documentation section
+    assert!(
+        has_element_with_id(&html, "documentation"),
+        "Should have documentation section with id='documentation'"
+    );
+
+    // Check for documentation section title
+    assert!(
+        contains_text(&html, ">Documentation<"),
+        "Documentation section should have 'Documentation' title"
+    );
+}
+
+/// Test Case 6-10: Documentation links have doc-link class for styling
+/// Verifies documentation links have proper CSS class
+#[test]
+fn test_documentation_links_have_doc_link_class() {
+    let html = load_homepage_html();
+
+    // Check that README link has doc-link class
+    assert!(
+        html.contains("class=\"doc-link\"") || html.contains("class=\"doc-link "),
+        "Documentation links should have 'doc-link' class for styling"
+    );
+}
+
+/// Test Case 6-11: Footer also has Memcached protocol link
+/// Verifies protocol documentation is accessible from footer
+#[test]
+fn test_footer_has_protocol_link() {
+    let html = load_homepage_html();
+
+    // Check for protocol link in footer
+    assert!(
+        has_element_with_id(&html, "footer-protocol"),
+        "Footer should have Memcached protocol link"
+    );
+
+    // Check footer protocol link has correct URL
+    assert!(
+        html.contains("footer-protocol") && html.contains("memcached/memcached/wiki/Protocols"),
+        "Footer protocol link should point to official wiki"
+    );
+}
+
+/// Test Case 6-12: Footer has GitHub repository link
+/// Verifies GitHub link is accessible from footer
+#[test]
+fn test_footer_has_github_link() {
+    let html = load_homepage_html();
+
+    // Check for GitHub link in footer
+    assert!(
+        has_element_with_id(&html, "footer-github"),
+        "Footer should have GitHub link"
+    );
+
+    // Check footer GitHub link has correct URL
+    assert!(
+        html.contains("footer-github") && html.contains("github.com/yetone/mirdb"),
+        "Footer GitHub link should point to repository"
+    );
+}
+
+/// Test Case 6-13: Documentation section has description text
+/// Verifies documentation section includes helpful description
+#[test]
+fn test_documentation_section_has_description() {
+    let html = load_homepage_html();
+
+    // Check for documentation description
+    assert!(
+        html.contains("doc-description") || html.contains("Learn more about MirDB"),
+        "Documentation section should have a description"
+    );
+}
+
+/// Test Case 6-14: All external links have rel="noopener" for security
+/// Verifies external links follow security best practices
+#[test]
+fn test_external_links_have_noopener() {
+    let html = load_homepage_html();
+
+    // Check that target="_blank" links have rel="noopener"
+    // Count occurrences of target="_blank" and rel="noopener"
+    let target_blank_count = html.matches("target=\"_blank\"").count();
+    let noopener_count = html.matches("rel=\"noopener\"").count();
+
+    assert!(
+        noopener_count >= target_blank_count,
+        "All target='_blank' links should have rel='noopener' ({} vs {})",
+        target_blank_count,
+        noopener_count
+    );
+}
+
+/// Test Case 6-15: CSS has documentation link styles
+/// Verifies CSS includes styles for documentation links
+#[test]
+fn test_css_has_documentation_link_styles() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("static/css/main.css");
+    let css = fs::read_to_string(&path).unwrap();
+
+    // Check for documentation section styles
+    assert!(
+        css.contains(".documentation"),
+        "CSS should have .documentation styles"
+    );
+
+    // Check for doc-links styles
+    assert!(
+        css.contains(".doc-links"),
+        "CSS should have .doc-links styles"
+    );
+
+    // Check for doc-link or doc-links hover styles
+    assert!(
+        css.contains(".doc-link:hover") || css.contains(".doc-links li a:hover"),
+        "CSS should have documentation link hover styles"
+    );
+}
