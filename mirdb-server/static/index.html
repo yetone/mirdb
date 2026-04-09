@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!--
+  MirDB Homepage - Main HTML Document
+
+  Owner: Scenario 1 - Homepage Core Rendering
+  Co-owners: Multiple scenarios for specific sections
+
+  Section ownership:
+  - Header: Scenario 1
+  - Hero + Status Indicator: Scenario 2
+  - Dashboard Metrics: Scenario 4
+  - Features: Scenario 13
+  - Quick Start: Scenario 5
+  - Documentation Links: Scenario 6
+  - Endpoint Info: Scenario 14
+  - Footer: Scenario 1
+  - Version Display: Scenario 18
+  - Theme Toggle Button: Scenario 7
+  - ARIA Attributes: Scenario 10
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <!-- Header Section - Scenario 1 -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo" id="logo">
+                    <span class="logo-icon">&#x1F5C4;</span>
+                    <span class="logo-text">MirDB</span>
+                </div>
+                <span class="version" id="version">v0.1.0</span>
+            </div>
+            <nav class="nav" id="nav">
+                <ul class="nav-list">
+                    <li><a href="#overview" class="nav-link" id="nav-overview">Overview</a></li>
+                    <li><a href="https://github.com/memcached/memcached/wiki/Protocols" class="nav-link" id="nav-api-docs" target="_blank" rel="noopener">API Docs</a></li>
+                    <li><a href="https://github.com/yetone/mirdb" class="nav-link" id="nav-github" target="_blank" rel="noopener">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Hero Section - Scenario 1 structure, Scenario 2 status indicator -->
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">MirDB</h1>
+                <p class="hero-tagline" id="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+                <div class="status-indicator" id="status-indicator">
+                    <span class="status-dot running"></span>
+                    <span class="status-text">Running</span>
+                </div>
+                <a href="#quickstart" class="cta-button" id="cta-button">Get Started in Seconds</a>
+            </div>
+        </section>
+
+        <!-- Dashboard Panel - Scenario 1 structure, Scenario 4 metrics refresh -->
+        <section class="dashboard" id="dashboard">
+            <h2 class="section-title">System Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card" id="metric-uptime">
+                    <span class="metric-label">Uptime</span>
+                    <span class="metric-value" data-metric="uptime">0h 0m 0s</span>
+                </div>
+                <div class="metric-card" id="metric-memory">
+                    <span class="metric-label">Memory Usage</span>
+                    <span class="metric-value" data-metric="memory">0 MB</span>
+                </div>
+                <div class="metric-card" id="metric-keys">
+                    <span class="metric-label">Total Keys</span>
+                    <span class="metric-value" data-metric="keys">0</span>
+                </div>
+                <div class="metric-card" id="metric-ops">
+                    <span class="metric-label">Ops/sec</span>
+                    <span class="metric-value" data-metric="ops">0</span>
+                </div>
+                <div class="metric-card" id="metric-storage">
+                    <span class="metric-label">Storage Used</span>
+                    <span class="metric-value" data-metric="storage">0 MB</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Sections placeholder for other scenarios -->
+        <section class="content" id="content">
+            <!-- Features Section - Scenario 13 -->
+            <div class="features" id="features">
+                <h2 class="section-title">Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>SSTable Storage</h3>
+                        <p>Sorted String Tables for efficient persistent storage</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Skip-List Memtable</h3>
+                        <p>High-performance in-memory data structure</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Auto Compaction</h3>
+                        <p>Automatic minor and major compaction</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Start Section - Scenario 5 -->
+            <div class="quickstart" id="quickstart">
+                <h2 class="section-title">Quick Start</h2>
+                <div class="code-examples">
+                    <pre class="code-block"><code># Connect via telnet
+telnet localhost 11211
+
+# SET a value
+set mykey 0 0 5
+hello
+
+# GET a value
+get mykey
+
+# DELETE a value
+delete mykey</code></pre>
+                </div>
+            </div>
+
+            <!-- Documentation Links - Scenario 6 -->
+            <div class="documentation" id="documentation">
+                <h2 class="section-title">Documentation</h2>
+                <ul class="doc-links">
+                    <li><a href="https://github.com/yetone/mirdb/blob/master/README.md" target="_blank" rel="noopener">README</a></li>
+                    <li><a href="https://github.com/memcached/memcached/wiki/Protocols" target="_blank" rel="noopener">Memcached Protocol</a></li>
+                </ul>
+            </div>
+
+            <!-- Endpoint Info - Scenario 14 -->
+            <div class="endpoint-info" id="endpoint-info">
+                <h2 class="section-title">Connection Info</h2>
+                <div class="endpoint-details">
+                    <p><strong>Host:</strong> <span id="endpoint-host">localhost</span></p>
+                    <p><strong>Port:</strong> <span id="endpoint-port">11211</span></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section - Scenario 1 -->
+    <footer class="footer" id="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="https://github.com/memcached/memcached/wiki/Protocols" class="footer-link" id="footer-protocol" target="_blank" rel="noopener">Memcached Protocol</a>
+                <a href="https://github.com/yetone/mirdb" class="footer-link" id="footer-github" target="_blank" rel="noopener">GitHub</a>
+            </div>
+            <div class="footer-license" id="footer-license">
+                <p>MIT License</p>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; 2024 MirDB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript files - Owned by other scenarios -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
