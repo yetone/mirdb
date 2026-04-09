@@ -112,19 +112,51 @@
             <!-- Quick Start Section - Scenario 5 -->
             <div class="quickstart" id="quickstart">
                 <h2 class="section-title">Quick Start</h2>
+                <p class="quickstart-intro">Connect to MirDB using the Memcached protocol at <code class="endpoint-code" id="quickstart-endpoint">0.0.0.0:12333</code></p>
+
                 <div class="code-examples">
-                    <pre class="code-block"><code># Connect via telnet
-telnet localhost 11211
+                    <!-- SET Command Example -->
+                    <div class="code-example" id="set-example">
+                        <h3 class="code-example-title">SET - Store a key-value pair</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Syntax: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</span>
+<span class="code-comment"># flags: 32-bit unsigned integer (client-defined)</span>
+<span class="code-comment"># exptime: expiration time in seconds (0 = never)</span>
+<span class="code-comment"># bytes: number of bytes in the data block</span>
 
-# SET a value
-set mykey 0 0 5
-hello
+<span class="code-command">set</span> <span class="code-key">mykey</span> <span class="code-param">0</span> <span class="code-param">3600</span> <span class="code-param">5</span>
+<span class="code-value">hello</span>
+<span class="code-response">STORED</span></code></pre>
+                    </div>
 
-# GET a value
-get mykey
+                    <!-- GET Command Example -->
+                    <div class="code-example" id="get-example">
+                        <h3 class="code-example-title">GET - Retrieve a value</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Syntax: get &lt;key&gt; [&lt;key2&gt; ...]</span>
 
-# DELETE a value
-delete mykey</code></pre>
+<span class="code-command">get</span> <span class="code-key">mykey</span>
+<span class="code-response">VALUE mykey 0 5</span>
+<span class="code-value">hello</span>
+<span class="code-response">END</span></code></pre>
+                    </div>
+
+                    <!-- DELETE Command Example -->
+                    <div class="code-example" id="delete-example">
+                        <h3 class="code-example-title">DELETE - Remove a key</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Syntax: delete &lt;key&gt; [noreply]</span>
+
+<span class="code-command">delete</span> <span class="code-key">mykey</span>
+<span class="code-response">DELETED</span></code></pre>
+                    </div>
+
+                    <!-- Connection Example -->
+                    <div class="code-example" id="connection-example">
+                        <h3 class="code-example-title">Connect via Telnet or Netcat</h3>
+                        <pre class="code-block"><code><span class="code-comment"># Using telnet</span>
+<span class="code-command">telnet</span> <span class="code-param">0.0.0.0</span> <span class="code-param">12333</span>
+
+<span class="code-comment"># Using netcat</span>
+<span class="code-command">nc</span> <span class="code-param">0.0.0.0</span> <span class="code-param">12333</span></code></pre>
+                    </div>
                 </div>
             </div>
 

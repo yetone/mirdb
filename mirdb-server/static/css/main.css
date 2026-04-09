@@ -352,24 +352,98 @@ ul {
     color: var(--color-text-secondary);
 }
 
-/* Quick Start Section - Scenario 5 styling placeholder */
+/* =============================================
+   Quick Start Section - Scenario 5
+   ============================================= */
 .quickstart {
     margin-bottom: var(--spacing-lg);
+}
+
+.quickstart-intro {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.endpoint-code {
+    font-family: var(--font-family-mono);
+    background-color: var(--color-bg-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+    font-weight: 600;
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+}
+
+.code-examples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.code-example {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.code-example-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border);
+    margin: 0;
 }
 
 .code-block {
     background-color: #1e293b;
     color: #e2e8f0;
-    border-radius: var(--border-radius);
+    border-radius: 0;
     padding: var(--spacing-lg);
     overflow-x: auto;
     font-family: var(--font-family-mono);
     font-size: 0.875rem;
     line-height: 1.7;
+    margin: 0;
+}
+
+.code-example .code-block {
+    border-radius: 0;
 }
 
 .code-block code {
     font-family: inherit;
+}
+
+/* Code Syntax Highlighting - Scenario 5 */
+.code-comment {
+    color: #6b7280;
+    font-style: italic;
+}
+
+.code-command {
+    color: #60a5fa;
+    font-weight: 600;
+}
+
+.code-key {
+    color: #fbbf24;
+}
+
+.code-param {
+    color: #a78bfa;
+}
+
+.code-value {
+    color: #34d399;
+}
+
+.code-response {
+    color: #f472b6;
+    font-weight: 500;
 }
 
 /* Documentation Links - Scenario 6 styling placeholder */
