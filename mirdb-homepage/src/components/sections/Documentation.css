@@ -1,0 +1,100 @@
+/**
+ * Documentation Section Styles
+ * Owner: Scenario 6 - Documentation Links
+ */
+
+.documentation {
+  background-color: var(--color-bg-secondary);
+}
+
+.documentation__title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.documentation__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.documentation__nav {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.documentation__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.documentation__item {
+  display: flex;
+}
+
+.documentation__link {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.documentation__link:hover {
+  border-color: var(--color-secondary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.documentation__link:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.documentation__link-label {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.documentation__link-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.documentation__external-icon {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  color: var(--color-text-muted);
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.documentation__link:hover .documentation__external-icon {
+  opacity: 1;
+  color: var(--color-secondary);
+}
+
+@media (max-width: 768px) {
+  .documentation__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .documentation__list {
+    grid-template-columns: 1fr;
+  }
+}
