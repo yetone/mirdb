@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Hero from './components/hero/Hero';
+import MetricsDashboard from './components/dashboard/MetricsDashboard';
 
 function HomePage() {
   return (
@@ -14,8 +15,7 @@ function DashboardPage() {
   return (
     <Layout>
       <div className="page-content">
-        <h1>Dashboard</h1>
-        <p>Real-time metrics and system overview.</p>
+        <MetricsDashboard />
       </div>
     </Layout>
   );
