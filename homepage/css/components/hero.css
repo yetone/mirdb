@@ -49,3 +49,28 @@
   gap: var(--spacing-md);
   justify-content: center;
 }
+
+/* GitHub icon styling */
+.hero-cta .github-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  vertical-align: middle;
+  margin-right: var(--spacing-xs);
+}
+
+/* Responsive hero section */
+@media (max-width: 640px) {
+  .hero {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+}

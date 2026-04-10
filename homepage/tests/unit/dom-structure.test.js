@@ -21,6 +21,88 @@ beforeAll(() => {
   document = dom.window.document;
 });
 
+// ===== Scenario 1: Hero Section Tests =====
+
+describe('Hero Section - Value Proposition Display', () => {
+  describe('TC2: Hero section HTML structure', () => {
+    it('should have a hero section with correct id', () => {
+      const heroSection = document.getElementById('hero');
+      expect(heroSection).not.toBeNull();
+      expect(heroSection.classList.contains('hero')).toBe(true);
+    });
+
+    it('should have a semantic h1 heading with project name', () => {
+      const heroTitle = document.querySelector('.hero h1');
+      expect(heroTitle).not.toBeNull();
+      expect(heroTitle.classList.contains('hero-title')).toBe(true);
+      expect(heroTitle.textContent).toContain('MirDB');
+    });
+
+    it('should have a tagline paragraph explaining the value proposition', () => {
+      const tagline = document.querySelector('.hero-tagline');
+      expect(tagline).not.toBeNull();
+      expect(tagline.tagName.toLowerCase()).toBe('p');
+      // Should mention persistent key-value store
+      const text = tagline.textContent.toLowerCase();
+      expect(text).toContain('persistent');
+      expect(text).toContain('key-value');
+    });
+
+    it('should mention Memcached compatibility in tagline', () => {
+      const tagline = document.querySelector('.hero-tagline');
+      const text = tagline.textContent.toLowerCase();
+      expect(text).toContain('memcached');
+    });
+
+    it('should have 3-5 key feature highlights', () => {
+      const featuresList = document.querySelector('.hero-features');
+      expect(featuresList).not.toBeNull();
+
+      const features = featuresList.querySelectorAll('li');
+      expect(features.length).toBeGreaterThanOrEqual(3);
+      expect(features.length).toBeLessThanOrEqual(5);
+    });
+  });
+
+  describe('Hero section CTA buttons', () => {
+    it('should have a Get Started CTA button', () => {
+      const getStartedBtn = document.querySelector('.hero-cta .btn-primary');
+      expect(getStartedBtn).not.toBeNull();
+      expect(getStartedBtn.textContent.trim()).toContain('Get Started');
+    });
+
+    it('should have Get Started button link to getting-started section', () => {
+      const getStartedBtn = document.querySelector('.hero-cta .btn-primary');
+      expect(getStartedBtn.getAttribute('href')).toBe('#getting-started');
+    });
+
+    it('should have a GitHub CTA button', () => {
+      const githubBtn = document.querySelector('.hero-cta .btn-secondary');
+      expect(githubBtn).not.toBeNull();
+      expect(githubBtn.textContent.trim()).toContain('GitHub');
+    });
+
+    it('should have GitHub button link to external repository', () => {
+      const githubBtn = document.querySelector('.hero-cta .btn-secondary');
+      const href = githubBtn.getAttribute('href');
+      expect(href).toContain('github.com');
+      expect(href).toContain('mirdb');
+    });
+
+    it('should open GitHub link in new tab', () => {
+      const githubBtn = document.querySelector('.hero-cta .btn-secondary');
+      expect(githubBtn.getAttribute('target')).toBe('_blank');
+      expect(githubBtn.getAttribute('rel')).toContain('noopener');
+    });
+
+    it('should have aria-hidden on decorative GitHub icon', () => {
+      const icon = document.querySelector('.hero-cta .btn-secondary svg');
+      expect(icon).not.toBeNull();
+      expect(icon.getAttribute('aria-hidden')).toBe('true');
+    });
+  });
+});
+
 // ===== Scenario 2: Features Section Tests =====
 
 describe('Features Section - Key Capabilities', () => {
