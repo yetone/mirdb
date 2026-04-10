@@ -75,19 +75,25 @@ code {
   outline-offset: 2px;
 }
 
-/* Skip link for accessibility */
+/* Skip link for accessibility - WCAG 2.1 AA compliant */
 .skip-link {
   position: absolute;
   top: -40px;
   left: 0;
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-primary);
-  color: white;
+  background: #1f2937;
+  color: #ffffff;
   z-index: 1000;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
 }
 
 .skip-link:focus {
-  top: 0;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 /* Container utility */

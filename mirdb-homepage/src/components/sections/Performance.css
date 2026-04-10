@@ -120,13 +120,13 @@
 }
 
 .metric-card__improvement--positive {
-  color: #059669;
-  background-color: #d1fae5;
+  color: #166534;
+  background-color: #dcfce7;
 }
 
 .metric-card__improvement--negative {
-  color: #dc2626;
-  background-color: #fee2e2;
+  color: #991b1b;
+  background-color: #fef2f2;
 }
 
 /* Comparison Section */

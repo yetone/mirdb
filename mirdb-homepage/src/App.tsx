@@ -4,7 +4,10 @@ import { Footer } from './components/layout';
 function App() {
   return (
     <>
-      <main>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <main id="main-content" tabIndex={-1}>
         <Hero />
         <Features />
         <QuickStart />
