@@ -1,0 +1,51 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section
+ */
+
+.hero {
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  text-align: center;
+  background-color: var(--color-bg-primary);
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-tagline {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-features {
+  text-align: left;
+  display: inline-block;
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero-features li {
+  padding: var(--spacing-sm) 0;
+  padding-left: var(--spacing-lg);
+  position: relative;
+}
+
+.hero-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+
+.hero-cta {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}

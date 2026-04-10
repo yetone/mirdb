@@ -1,0 +1,40 @@
+/**
+ * Configuration Section Styles
+ * Owner: Scenario 5 - Configuration Section
+ */
+
+.configuration {
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  background-color: var(--color-bg-primary);
+}
+
+.config-table-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-bg-primary);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.config-table th,
+.config-table td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.config-table th {
+  background-color: var(--color-bg-secondary);
+  font-weight: 600;
+}
+
+.config-table tr:last-child td {
+  border-bottom: none;
+}

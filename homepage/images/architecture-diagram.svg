@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <title>MirDB LSM Tree Architecture</title>
+  <desc>Visual representation of MirDB's LSM tree data flow showing write path from client through WAL to memtable to SSTable, and read path from client through memtable and SSTable levels</desc>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#f5f5f5"/>
+
+  <!-- Client -->
+  <rect x="20" y="160" width="100" height="80" rx="8" fill="#4da6ff"/>
+  <text x="70" y="205" text-anchor="middle" font-family="sans-serif" font-size="14" fill="white">Client</text>
+
+  <!-- WAL -->
+  <rect x="180" y="100" width="100" height="60" rx="8" fill="#ff9933"/>
+  <text x="230" y="135" text-anchor="middle" font-family="sans-serif" font-size="14" fill="white">WAL</text>
+
+  <!-- Memtable -->
+  <rect x="180" y="200" width="100" height="100" rx="8" fill="#66cc66"/>
+  <text x="230" y="245" text-anchor="middle" font-family="sans-serif" font-size="14" fill="white">Memtable</text>
+  <text x="230" y="265" text-anchor="middle" font-family="sans-serif" font-size="10" fill="white">(Skip List)</text>
+
+  <!-- SSTable Level 0 -->
+  <rect x="340" y="160" width="120" height="80" rx="8" fill="#9966cc"/>
+  <text x="400" y="195" text-anchor="middle" font-family="sans-serif" font-size="14" fill="white">SSTable L0</text>
+  <text x="400" y="215" text-anchor="middle" font-family="sans-serif" font-size="10" fill="white">(Sorted Files)</text>
+
+  <!-- SSTable Level 1+ -->
+  <rect x="520" y="160" width="120" height="80" rx="8" fill="#cc6699"/>
+  <text x="580" y="195" text-anchor="middle" font-family="sans-serif" font-size="14" fill="white">SSTable L1+</text>
+  <text x="580" y="215" text-anchor="middle" font-family="sans-serif" font-size="10" fill="white">(Compacted)</text>
+
+  <!-- Compaction -->
+  <rect x="700" y="160" width="80" height="80" rx="8" fill="#666"/>
+  <text x="740" y="200" text-anchor="middle" font-family="sans-serif" font-size="12" fill="white">Compact</text>
+
+  <!-- Arrows -->
+  <!-- Client to WAL -->
+  <path d="M120 180 L175 135" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <!-- Client to Memtable -->
+  <path d="M120 200 L175 230" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <!-- WAL to Memtable -->
+  <path d="M230 160 L230 195" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <!-- Memtable to SSTable L0 -->
+  <path d="M280 250 L335 220" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <!-- SSTable L0 to L1 -->
+  <path d="M460 200 L515 200" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <!-- L1 to Compaction -->
+  <path d="M640 200 L695 200" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Labels -->
+  <text x="400" y="50" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold">MirDB LSM Tree Architecture</text>
+  <text x="150" y="380" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#666">Write Path</text>
+  <text x="450" y="380" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#666">Storage</text>
+</svg>

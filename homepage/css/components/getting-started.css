@@ -1,0 +1,54 @@
+/**
+ * Getting Started Section Styles
+ * Owner: Scenario 3 - Getting Started Section
+ */
+
+.getting-started {
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  background-color: var(--color-bg-secondary);
+}
+
+.getting-started-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.code-block {
+  margin-bottom: var(--spacing-xl);
+  background-color: var(--color-bg-primary);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-border);
+}
+
+.code-lang {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.code-content {
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  background-color: var(--color-code-bg);
+}
+
+.code-content code {
+  background: none;
+  padding: 0;
+}
