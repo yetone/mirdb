@@ -1,0 +1,12 @@
+# robots.txt for MirDB Homepage
+# https://mirdb.io/
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://mirdb.io/sitemap.xml
+
+# Crawl delay (optional, for polite crawling)
+Crawl-delay: 1
