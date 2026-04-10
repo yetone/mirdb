@@ -116,12 +116,42 @@ section {
   border: 0;
 }
 
-/* Responsive adjustments */
+/* Mobile Responsive Design - Scenario 10 */
+
+/* Touch target accessibility - ensure minimum 44px touch targets on mobile */
+@media (max-width: 768px) {
+  /* Ensure all buttons and interactive elements have 44px minimum height for touch */
+  button,
+  .btn,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+  }
+
+  /* Ensure touch targets for copy buttons */
+  .quickstart__copy-button {
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* Responsive font size adjustments */
 @media (max-width: 768px) {
   :root {
     --font-size-hero: 2.5rem;
     --font-size-4xl: 2rem;
     --font-size-3xl: 1.5rem;
+  }
+
+  /* Ensure container padding for mobile */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Section spacing on mobile */
+  section {
+    padding: var(--spacing-2xl) 0;
   }
 }
 
@@ -130,5 +160,23 @@ section {
     --font-size-hero: 2rem;
     --font-size-4xl: 1.75rem;
     --font-size-3xl: 1.25rem;
+  }
+
+  /* Tighter container padding for very small screens */
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+/* Prevent horizontal overflow on mobile */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  /* Ensure images and media don't overflow */
+  img, video, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
   }
 }
