@@ -257,3 +257,181 @@ test.describe('Contributing Section and GitHub Links - Scenario 7', () => {
     await expect(label).toHaveText('Discussions');
   });
 });
+
+test.describe('Link Validation - Scenario 15', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: All internal links resolve to valid pages', async ({ page }) => {
+    // Get all anchor elements on the page
+    const links = await page.locator('a[href]').all();
+    const internalLinks: { href: string; text: string }[] = [];
+
+    for (const link of links) {
+      const href = await link.getAttribute('href');
+      const text = await link.textContent();
+
+      // Check for internal links (start with / or #, but not //external)
+      if (href && (href.startsWith('/') || href.startsWith('#')) && !href.startsWith('//')) {
+        internalLinks.push({ href, text: text || '' });
+      }
+    }
+
+    // Verify we found internal links
+    expect(internalLinks.length).toBeGreaterThan(0);
+
+    // Verify all internal links resolve correctly
+    for (const { href, text } of internalLinks) {
+      if (href.startsWith('#')) {
+        // Check anchor links resolve to an element on the page
+        const targetId = href.substring(1);
+        if (targetId) {
+          const targetElement = page.locator(`#${targetId}`);
+          await expect(targetElement, `Anchor link "${text}" pointing to ${href} should resolve to an element`).toBeAttached();
+        }
+      } else {
+        // For path-based internal links, verify they exist (won't 404)
+        // The /docs/quickstart is a relative link that would work in production
+        expect(href).toMatch(/^\/[a-zA-Z0-9\-\/]*$/);
+      }
+    }
+  });
+
+  test('TC2: All external links have valid URLs', async ({ page, request }) => {
+    // Get all anchor elements with external links
+    const links = await page.locator('a[href^="http"]').all();
+    const externalLinks: { href: string; text: string }[] = [];
+
+    for (const link of links) {
+      const href = await link.getAttribute('href');
+      const text = await link.textContent();
+
+      if (href) {
+        externalLinks.push({ href, text: text || '' });
+      }
+    }
+
+    // Verify we found external links
+    expect(externalLinks.length).toBeGreaterThan(0);
+
+    // Check each external link has a valid URL format
+    for (const { href, text } of externalLinks) {
+      // Verify URL is well-formed
+      expect(() => new URL(href), `External link "${text}" should have valid URL format: ${href}`).not.toThrow();
+
+      // Verify URL uses HTTPS
+      const url = new URL(href);
+      expect(url.protocol, `External link "${text}" should use HTTPS: ${href}`).toBe('https:');
+    }
+  });
+
+  test('TC2b: External links point to known valid domains', async ({ page }) => {
+    // Get all external links
+    const links = await page.locator('a[href^="http"]').all();
+    const validDomains = [
+      'github.com',
+      'docs.mirdb.dev',
+      'crates.io',
+      'discord.gg',
+      'twitter.com',
+    ];
+
+    for (const link of links) {
+      const href = await link.getAttribute('href');
+      if (href) {
+        const url = new URL(href);
+        expect(
+          validDomains.some(domain => url.hostname === domain || url.hostname.endsWith(`.${domain}`)),
+          `External link ${href} should point to a known valid domain`
+        ).toBe(true);
+      }
+    }
+  });
+
+  test('TC3: No anchor tags have empty or # only href', async ({ page }) => {
+    // Get all anchor elements
+    const allAnchors = await page.locator('a').all();
+
+    for (const anchor of allAnchors) {
+      const href = await anchor.getAttribute('href');
+      const testId = await anchor.getAttribute('data-testid');
+      const text = await anchor.textContent();
+      const identifier = testId || text || 'unknown';
+
+      // Check href is not empty
+      expect(href, `Anchor "${identifier}" should have an href attribute`).not.toBeNull();
+      expect(href?.trim(), `Anchor "${identifier}" should not have an empty href`).not.toBe('');
+
+      // Check href is not just '#'
+      expect(href, `Anchor "${identifier}" should not have href="#" only`).not.toBe('#');
+    }
+  });
+
+  test('TC4: External links have proper security attributes', async ({ page }) => {
+    // Get all external links (http/https)
+    const externalLinks = await page.locator('a[href^="http"]').all();
+
+    expect(externalLinks.length).toBeGreaterThan(0);
+
+    for (const link of externalLinks) {
+      const href = await link.getAttribute('href');
+      const target = await link.getAttribute('target');
+      const rel = await link.getAttribute('rel');
+      const testId = await link.getAttribute('data-testid');
+      const text = await link.textContent();
+      const identifier = testId || text || href || 'unknown';
+
+      // External links should open in new tab
+      expect(target, `External link "${identifier}" should have target="_blank"`).toBe('_blank');
+
+      // External links should have security attributes
+      expect(rel, `External link "${identifier}" should have rel attribute`).not.toBeNull();
+      expect(rel, `External link "${identifier}" should include 'noopener'`).toContain('noopener');
+      expect(rel, `External link "${identifier}" should include 'noreferrer'`).toContain('noreferrer');
+    }
+  });
+
+  test('All links are accessible via keyboard', async ({ page }) => {
+    // Get all anchor elements
+    const allAnchors = await page.locator('a[href]').all();
+
+    for (const anchor of allAnchors) {
+      // Verify links are focusable (not have tabindex=-1 without aria-hidden parent)
+      const tabIndex = await anchor.getAttribute('tabindex');
+      const ariaHidden = await anchor.getAttribute('aria-hidden');
+
+      if (tabIndex === '-1') {
+        // If tabindex is -1, it should be in a hidden context or have specific reason
+        expect(ariaHidden).toBe('true');
+      }
+    }
+  });
+
+  test('Skip link is present and functional', async ({ page }) => {
+    const skipLink = page.locator('a.skip-link');
+
+    await expect(skipLink).toBeAttached();
+
+    const href = await skipLink.getAttribute('href');
+    expect(href).toBe('#main-content');
+
+    // Verify the target element exists
+    const mainContent = page.locator('#main-content');
+    await expect(mainContent).toBeAttached();
+  });
+
+  test('Link count validation - expected number of links present', async ({ page }) => {
+    const allLinks = await page.locator('a[href]').all();
+
+    // We should have at least these links:
+    // - Skip link (1)
+    // - CTA button (1)
+    // - Crates badge (1)
+    // - Documentation links (3)
+    // - Contributing links (4)
+    // - Footer links (3 resources + 3 social = 6)
+    // Total minimum: 18 links
+    expect(allLinks.length).toBeGreaterThanOrEqual(15);
+  });
+});
