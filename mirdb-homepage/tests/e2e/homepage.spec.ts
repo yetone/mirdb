@@ -685,3 +685,157 @@ test.describe('Performance Section - Scenario 5', () => {
     expect(initialTransform !== hoverTransform).toBe(true);
   });
 });
+
+/**
+ * Scenario 9: Footer Content Tests
+ */
+test.describe('Footer Section - Scenario 9', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Check for copyright notice with year', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+
+    // Verify copyright notice is present
+    const copyright = page.getByTestId('footer-copyright');
+    await expect(copyright).toBeVisible();
+
+    // Verify copyright contains current year
+    const copyrightText = await copyright.textContent();
+    const currentYear = new Date().getFullYear().toString();
+    expect(copyrightText).toContain(currentYear);
+    expect(copyrightText?.toLowerCase()).toContain('mirdb');
+  });
+
+  test('TC2: Check for license link', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify license link is present
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toBeVisible();
+    await expect(licenseLink).toHaveText('License');
+
+    // Verify it links to LICENSE file
+    const href = await licenseLink.getAttribute('href');
+    expect(href?.toLowerCase()).toContain('license');
+  });
+
+  test('TC3: Check for social/external links', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify social links container is present
+    const socialLinks = page.getByTestId('footer-social-links');
+    await expect(socialLinks).toBeVisible();
+
+    // Verify GitHub link is present
+    const githubLink = page.getByTestId('footer-social-github');
+    await expect(githubLink).toBeVisible();
+
+    // Verify Discord link is present
+    const discordLink = page.getByTestId('footer-social-discord');
+    await expect(discordLink).toBeVisible();
+
+    // Verify Twitter link is present
+    const twitterLink = page.getByTestId('footer-social-twitter');
+    await expect(twitterLink).toBeVisible();
+  });
+
+  test('TC4: Click license link navigates to license file/page', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Get the license link
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toBeVisible();
+
+    // Verify it's a link element
+    const tagName = await licenseLink.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('a');
+
+    // Verify href points to LICENSE
+    const href = await licenseLink.getAttribute('href');
+    expect(href).toContain('LICENSE');
+    expect(href).toContain('github.com');
+  });
+
+  test('TC5: Verify external links have proper attributes (target="_blank" and rel="noopener")', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check license link attributes
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toHaveAttribute('target', '_blank');
+    const licenseRel = await licenseLink.getAttribute('rel');
+    expect(licenseRel).toContain('noopener');
+
+    // Check GitHub social link attributes
+    const githubLink = page.getByTestId('footer-social-github');
+    await expect(githubLink).toHaveAttribute('target', '_blank');
+    const githubRel = await githubLink.getAttribute('rel');
+    expect(githubRel).toContain('noopener');
+
+    // Check Discord social link attributes
+    const discordLink = page.getByTestId('footer-social-discord');
+    await expect(discordLink).toHaveAttribute('target', '_blank');
+    const discordRel = await discordLink.getAttribute('rel');
+    expect(discordRel).toContain('noopener');
+
+    // Check Twitter social link attributes
+    const twitterLink = page.getByTestId('footer-social-twitter');
+    await expect(twitterLink).toHaveAttribute('target', '_blank');
+    const twitterRel = await twitterLink.getAttribute('rel');
+    expect(twitterRel).toContain('noopener');
+  });
+
+  test('Footer has proper accessibility role', async ({ page }) => {
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify footer has contentinfo role
+    await expect(footer).toHaveAttribute('role', 'contentinfo');
+  });
+
+  test('Social links have accessible labels', async ({ page }) => {
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify each social link has an aria-label
+    const githubLink = page.getByTestId('footer-social-github');
+    await expect(githubLink).toHaveAttribute('aria-label', 'GitHub');
+
+    const discordLink = page.getByTestId('footer-social-discord');
+    await expect(discordLink).toHaveAttribute('aria-label', 'Discord');
+
+    const twitterLink = page.getByTestId('footer-social-twitter');
+    await expect(twitterLink).toHaveAttribute('aria-label', 'Twitter');
+  });
+
+  test('Footer is responsive on mobile', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+
+    // Verify all elements are still visible on mobile
+    const copyright = page.getByTestId('footer-copyright');
+    await expect(copyright).toBeVisible();
+
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toBeVisible();
+
+    const socialLinks = page.getByTestId('footer-social-links');
+    await expect(socialLinks).toBeVisible();
+  });
+});
