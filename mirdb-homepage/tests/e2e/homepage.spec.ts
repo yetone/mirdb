@@ -1,12 +1,13 @@
 /**
  * Homepage E2E Tests
- * Owner: Shared across Scenarios 1, 2, 3, 4, 9, 16
+ * Owner: Shared across Scenarios 1, 2, 3, 4, 5, 9, 16
  *
  * Playwright tests for homepage functionality:
  * - Hero section (Scenario 1)
  * - Features section (Scenario 2)
  * - Code example section (Scenario 3)
  * - Quick start section (Scenario 4)
+ * - Performance section (Scenario 5)
  * - Footer section (Scenario 9)
  * - Theme toggle (Scenario 16)
  */
@@ -325,6 +326,172 @@ test.describe('Features Section - Scenario 2', () => {
     // Should have 1 column on mobile (single value means 1 column)
     const columns = gridStyle.gridTemplateColumns.split(' ').length;
     expect(columns).toBe(1);
+  });
+});
+
+/**
+ * Scenario 4: Quick Start Section Tests
+ */
+test.describe('Quick Start Section - Scenario 4', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Quick Start section exists with heading', async ({ page }) => {
+    // Navigate to Quick Start section
+    const quickstartSection = page.getByTestId('quickstart-section');
+    await expect(quickstartSection).toBeVisible();
+
+    // Verify heading is present
+    const heading = page.getByTestId('quickstart-heading');
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveText('Quick Start');
+
+    // Verify section has proper accessibility
+    await expect(quickstartSection).toHaveAttribute('aria-labelledby', 'quickstart-heading');
+  });
+
+  test('TC2: Installation command (cargo add) is displayed', async ({ page }) => {
+    // Find the install step
+    const installStep = page.getByTestId('quickstart-step-install');
+    await expect(installStep).toBeVisible();
+
+    // Find the install command block
+    const installCommand = page.getByTestId('quickstart-install-command');
+    await expect(installCommand).toBeVisible();
+
+    // Verify cargo add command is present
+    const commandCode = page.getByTestId('quickstart-install-command-code');
+    await expect(commandCode).toBeVisible();
+    const commandText = await commandCode.textContent();
+    expect(commandText?.toLowerCase()).toContain('cargo add');
+    expect(commandText?.toLowerCase()).toContain('mirdb');
+  });
+
+  test('TC3: Usage commands are shown', async ({ page }) => {
+    // Find the usage step
+    const usageStep = page.getByTestId('quickstart-step-usage');
+    await expect(usageStep).toBeVisible();
+
+    // Find the usage command block
+    const usageCommand = page.getByTestId('quickstart-usage-command');
+    await expect(usageCommand).toBeVisible();
+
+    // Verify basic usage code is present
+    const commandCode = page.getByTestId('quickstart-usage-command-code');
+    await expect(commandCode).toBeVisible();
+    const commandText = await commandCode.textContent();
+
+    // Should contain DB operations
+    expect(commandText).toContain('DB');
+    expect(commandText?.toLowerCase()).toMatch(/put|set|insert/);
+    expect(commandText?.toLowerCase()).toMatch(/get|read|fetch/);
+
+    // Also verify the run command step exists
+    const runStep = page.getByTestId('quickstart-step-run');
+    await expect(runStep).toBeVisible();
+
+    const runCommand = page.getByTestId('quickstart-run-command-code');
+    await expect(runCommand).toBeVisible();
+    const runText = await runCommand.textContent();
+    expect(runText?.toLowerCase()).toContain('cargo run');
+  });
+
+  test('TC4: Commands have copy functionality', async ({ page }) => {
+    // Find copy buttons
+    const installCopyButton = page.getByTestId('quickstart-install-command-copy-button');
+    const usageCopyButton = page.getByTestId('quickstart-usage-command-copy-button');
+    const runCopyButton = page.getByTestId('quickstart-run-command-copy-button');
+
+    // Verify all copy buttons are visible
+    await expect(installCopyButton).toBeVisible();
+    await expect(usageCopyButton).toBeVisible();
+    await expect(runCopyButton).toBeVisible();
+
+    // Verify copy buttons have accessible labels
+    await expect(installCopyButton).toHaveAttribute('aria-label', /copy/i);
+    await expect(usageCopyButton).toHaveAttribute('aria-label', /copy/i);
+    await expect(runCopyButton).toHaveAttribute('aria-label', /copy/i);
+
+    // Click the install copy button and verify it changes state
+    await installCopyButton.click();
+
+    // Wait for the copied state
+    await page.waitForTimeout(100);
+
+    // Verify the button shows "Copied!" state
+    await expect(installCopyButton).toHaveAttribute('aria-label', /copied/i);
+    await expect(installCopyButton).toHaveClass(/copied/);
+  });
+
+  test('Copy button has visual feedback on hover', async ({ page }) => {
+    const copyButton = page.getByTestId('quickstart-install-command-copy-button');
+    await expect(copyButton).toBeVisible();
+
+    // Get initial styles
+    const initialStyles = await copyButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        borderColor: styles.borderColor,
+        color: styles.color,
+      };
+    });
+
+    // Hover over the button
+    await copyButton.hover();
+    await page.waitForTimeout(200);
+
+    // Get hover styles
+    const hoverStyles = await copyButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        borderColor: styles.borderColor,
+        color: styles.color,
+      };
+    });
+
+    // Verify visual change on hover
+    const hasVisualChange =
+      initialStyles.backgroundColor !== hoverStyles.backgroundColor ||
+      initialStyles.borderColor !== hoverStyles.borderColor ||
+      initialStyles.color !== hoverStyles.color;
+
+    expect(hasVisualChange).toBe(true);
+  });
+
+  test('Quick Start section displays all three steps', async ({ page }) => {
+    const steps = page.locator('[data-testid^="quickstart-step-"]');
+    await expect(steps).toHaveCount(3);
+
+    // Verify step order
+    const installStep = page.getByTestId('quickstart-step-install');
+    const usageStep = page.getByTestId('quickstart-step-usage');
+    const runStep = page.getByTestId('quickstart-step-run');
+
+    await expect(installStep).toBeVisible();
+    await expect(usageStep).toBeVisible();
+    await expect(runStep).toBeVisible();
+
+    // Verify numbered steps
+    const stepNumbers = page.locator('.quickstart__step-number');
+    await expect(stepNumbers).toHaveCount(3);
+
+    const stepTexts = await stepNumbers.allTextContents();
+    expect(stepTexts).toEqual(['1', '2', '3']);
+  });
+
+  test('Quick Start commands use monospace font', async ({ page }) => {
+    const commandCode = page.getByTestId('quickstart-install-command-code');
+    await expect(commandCode).toBeVisible();
+
+    const fontFamily = await commandCode.evaluate((el) => {
+      return window.getComputedStyle(el).fontFamily;
+    });
+
+    // Should use a monospace font
+    expect(fontFamily.toLowerCase()).toMatch(/mono|consolas|courier|fira|menlo|monaco/);
   });
 });
 
