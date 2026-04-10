@@ -42,6 +42,10 @@
   }
 }
 
+.hero__badge {
+  margin-bottom: var(--spacing-md);
+}
+
 .hero__tagline {
   font-size: var(--font-size-2xl);
   color: var(--color-primary);

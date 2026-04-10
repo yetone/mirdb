@@ -1,0 +1,75 @@
+/**
+ * Badge component styles
+ * Owner: Scenario 8 - Rust Crate Badge Display
+ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.badge__label {
+  padding: 0.375rem 0.5rem;
+  background-color: var(--color-badge-label-bg, #555);
+  color: var(--color-badge-label-text, #fff);
+}
+
+.badge__value {
+  padding: 0.375rem 0.5rem;
+  background-color: var(--color-badge-value-bg, #4c1);
+  color: var(--color-badge-value-text, #fff);
+}
+
+/* Variant: crates.io */
+.badge--crates .badge__label {
+  background-color: var(--color-crates-label-bg, #3b3b3b);
+  color: var(--color-crates-label-text, #fff);
+}
+
+.badge--crates .badge__value {
+  background-color: var(--color-crates-value-bg, #f5a623);
+  color: var(--color-crates-value-text, #000);
+}
+
+/* Variant: success */
+.badge--success .badge__value {
+  background-color: var(--color-success, #28a745);
+}
+
+/* Variant: info */
+.badge--info .badge__value {
+  background-color: var(--color-info, #17a2b8);
+}
+
+/* Link wrapper */
+.badge__link {
+  display: inline-flex;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border-radius: 4px;
+}
+
+.badge__link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.badge__link:focus {
+  outline: 2px solid var(--color-focus, #4299e1);
+  outline-offset: 2px;
+}
+
+.badge__link:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.badge__link:focus-visible {
+  outline: 2px solid var(--color-focus, #4299e1);
+  outline-offset: 2px;
+}

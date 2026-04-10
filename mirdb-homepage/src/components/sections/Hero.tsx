@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '../common/Button';
+import { CratesBadge } from '../ui/Badge';
 import { PROJECT_INFO, QUICKSTART_URL } from '../../utils/constants';
 import './Hero.css';
 
@@ -20,6 +21,9 @@ export const Hero: React.FC = () => {
         <h1 className="hero__title" data-testid="hero-title">
           {PROJECT_INFO.name}
         </h1>
+        <div className="hero__badge">
+          <CratesBadge version="0.1.0" />
+        </div>
         <p className="hero__tagline" data-testid="hero-tagline">
           {PROJECT_INFO.tagline}
         </p>

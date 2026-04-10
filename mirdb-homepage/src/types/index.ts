@@ -46,3 +46,22 @@ export interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
+
+/**
+ * Badge component types
+ * Added by Scenario 8 - Rust Crate Badge Display
+ */
+export interface BadgeProps {
+  label: string;
+  value: string;
+  href?: string;
+  variant?: 'default' | 'crates' | 'success' | 'info';
+  className?: string;
+  testId?: string;
+}
+
+export interface CratesBadgeProps {
+  version: string;
+  crateName?: string;
+  className?: string;
+}
