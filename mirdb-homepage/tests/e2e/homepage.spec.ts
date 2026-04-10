@@ -327,3 +327,194 @@ test.describe('Features Section - Scenario 2', () => {
     expect(columns).toBe(1);
   });
 });
+
+/**
+ * Scenario 5: Performance Metrics Display Tests
+ */
+test.describe('Performance Section - Scenario 5', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Check performance section exists', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await expect(performanceSection).toBeVisible();
+
+    // Verify section has proper ID for navigation
+    await expect(performanceSection).toHaveAttribute('id', 'performance');
+
+    // Verify section has aria-labelledby for accessibility
+    await expect(performanceSection).toHaveAttribute('aria-labelledby', 'performance-heading');
+
+    // Verify heading is visible
+    const heading = page.locator('#performance-heading');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('Performance');
+  });
+
+  test('TC2: Verify throughput metric is displayed with clear label and units (ops/sec)', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Find the throughput metric card
+    const throughputCard = page.getByTestId('metric-card-throughput');
+    await expect(throughputCard).toBeVisible();
+
+    // Verify label is displayed
+    const label = page.getByTestId('metric-label-throughput');
+    await expect(label).toBeVisible();
+    await expect(label).toContainText('Throughput');
+
+    // Verify value is displayed
+    const value = page.getByTestId('metric-value-throughput');
+    await expect(value).toBeVisible();
+
+    // Verify unit is displayed as ops/sec
+    const unit = page.getByTestId('metric-unit-throughput');
+    await expect(unit).toBeVisible();
+    await expect(unit).toHaveText('ops/sec');
+  });
+
+  test('TC3: Verify latency metric is displayed with clear label and units (ms)', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Find the latency metric card
+    const latencyCard = page.getByTestId('metric-card-latency');
+    await expect(latencyCard).toBeVisible();
+
+    // Verify label is displayed
+    const label = page.getByTestId('metric-label-latency');
+    await expect(label).toBeVisible();
+    await expect(label).toContainText('Latency');
+
+    // Verify value is displayed
+    const value = page.getByTestId('metric-value-latency');
+    await expect(value).toBeVisible();
+
+    // Verify unit is displayed as ms
+    const unit = page.getByTestId('metric-unit-latency');
+    await expect(unit).toBeVisible();
+    await expect(unit).toHaveText('ms');
+  });
+
+  test('TC4: Verify memory metric is displayed with clear label and units (MB)', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Find the memory metric card
+    const memoryCard = page.getByTestId('metric-card-memory');
+    await expect(memoryCard).toBeVisible();
+
+    // Verify label is displayed
+    const label = page.getByTestId('metric-label-memory');
+    await expect(label).toBeVisible();
+    await expect(label).toContainText('Memory');
+
+    // Verify value is displayed
+    const value = page.getByTestId('metric-value-memory');
+    await expect(value).toBeVisible();
+
+    // Verify unit is displayed as MB
+    const unit = page.getByTestId('metric-unit-memory');
+    await expect(unit).toBeVisible();
+    await expect(unit).toHaveText('MB');
+  });
+
+  test('TC5: Check comparison database is shown for context', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Check for comparison data in metric cards
+    const throughputComparison = page.getByTestId('metric-comparison-throughput');
+    await expect(throughputComparison).toBeVisible();
+
+    // Verify comparison table exists
+    const comparisonTable = page.getByTestId('comparison-table');
+    await expect(comparisonTable).toBeVisible();
+
+    // Verify at least one comparison database row exists (not MirDB)
+    const leveldbRow = page.getByTestId('comparison-row-leveldb');
+    await expect(leveldbRow).toBeVisible();
+
+    // Verify the comparison database has metrics
+    const leveldbThroughput = page.getByTestId('leveldb-throughput');
+    await expect(leveldbThroughput).toBeVisible();
+
+    const leveldbLatency = page.getByTestId('leveldb-latency');
+    await expect(leveldbLatency).toBeVisible();
+
+    const leveldbMemory = page.getByTestId('leveldb-memory');
+    await expect(leveldbMemory).toBeVisible();
+  });
+
+  test('Performance metrics grid layout on desktop', async ({ page }) => {
+    // Set desktop viewport
+    await page.setViewportSize({ width: 1280, height: 720 });
+
+    const metricsGrid = page.getByTestId('performance-metrics');
+    await expect(metricsGrid).toBeVisible();
+
+    // Verify grid layout
+    const gridStyle = await metricsGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+      };
+    });
+
+    expect(gridStyle.display).toBe('grid');
+    // Should have 3 columns on desktop
+    const columns = gridStyle.gridTemplateColumns.split(' ').length;
+    expect(columns).toBe(3);
+  });
+
+  test('Performance metrics grid is responsive on mobile', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+
+    const metricsGrid = page.getByTestId('performance-metrics');
+    await expect(metricsGrid).toBeVisible();
+
+    // Verify grid has single column on mobile
+    const gridStyle = await metricsGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+      };
+    });
+
+    expect(gridStyle.display).toBe('grid');
+    const columns = gridStyle.gridTemplateColumns.split(' ').length;
+    expect(columns).toBe(1);
+  });
+
+  test('Metric cards have hover effect', async ({ page }) => {
+    const metricCard = page.getByTestId('metric-card-throughput');
+    await expect(metricCard).toBeVisible();
+
+    // Get initial styles
+    const initialTransform = await metricCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Hover over the card
+    await metricCard.hover();
+    await page.waitForTimeout(300);
+
+    // Get styles after hover
+    const hoverTransform = await metricCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Verify visual change on hover
+    expect(initialTransform !== hoverTransform).toBe(true);
+  });
+});
