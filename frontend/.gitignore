@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Testing
+coverage/
+playwright-report/
+test-results/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
