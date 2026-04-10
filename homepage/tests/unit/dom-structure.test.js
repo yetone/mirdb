@@ -428,3 +428,123 @@ describe('Getting Started Section - Installation & Usage', () => {
     });
   });
 });
+
+// ===== Scenario 4: Architecture Section Tests =====
+
+describe('Architecture Section - LSM Tree Diagram', () => {
+  describe('Test Case 1: Architecture section contains visual diagram', () => {
+    it('should have an architecture section with id="architecture"', () => {
+      const architectureSection = document.getElementById('architecture');
+      expect(architectureSection).not.toBeNull();
+      expect(architectureSection.tagName.toLowerCase()).toBe('section');
+    });
+
+    it('should have an architecture section with class="architecture"', () => {
+      const architectureSection = document.querySelector('.architecture');
+      expect(architectureSection).not.toBeNull();
+      expect(architectureSection.classList.contains('architecture')).toBe(true);
+    });
+
+    it('should contain a visual diagram (SVG or image)', () => {
+      const architectureSection = document.getElementById('architecture');
+      const diagramContainer = architectureSection.querySelector('.architecture-diagram');
+      expect(diagramContainer).not.toBeNull();
+
+      // Check for image element with SVG source or inline SVG
+      const img = diagramContainer.querySelector('img[src*=".svg"], img[src*="architecture"]');
+      const svg = diagramContainer.querySelector('svg');
+      const hasVisualDiagram = img !== null || svg !== null;
+      expect(hasVisualDiagram).toBe(true);
+    });
+
+    it('diagram should reference LSM tree architecture', () => {
+      const architectureSection = document.getElementById('architecture');
+      const img = architectureSection.querySelector('.architecture-diagram img');
+
+      if (img) {
+        // Check alt text or src for LSM reference
+        const alt = img.getAttribute('alt')?.toLowerCase() || '';
+        const src = img.getAttribute('src')?.toLowerCase() || '';
+        const hasLSMReference = alt.includes('lsm') || src.includes('architecture');
+        expect(hasLSMReference).toBe(true);
+      }
+    });
+
+    it('should have a section title mentioning Architecture', () => {
+      const architectureSection = document.getElementById('architecture');
+      const title = architectureSection.querySelector('.section-title, h2');
+      expect(title).not.toBeNull();
+      expect(title.textContent.toLowerCase()).toContain('architecture');
+    });
+  });
+
+  describe('Test Case 3: Architecture diagram accessibility', () => {
+    it('diagram image should have descriptive alt text', () => {
+      const architectureSection = document.getElementById('architecture');
+      const img = architectureSection.querySelector('.architecture-diagram img');
+
+      if (img) {
+        const alt = img.getAttribute('alt');
+        expect(alt).not.toBeNull();
+        expect(alt.length).toBeGreaterThan(20); // Alt text should be descriptive
+      }
+    });
+
+    it('alt text should describe LSM tree data flow', () => {
+      const architectureSection = document.getElementById('architecture');
+      const img = architectureSection.querySelector('.architecture-diagram img');
+
+      if (img) {
+        const alt = img.getAttribute('alt').toLowerCase();
+        // Should mention key components: WAL, memtable, SSTable
+        const describesDataFlow =
+          (alt.includes('wal') || alt.includes('write')) &&
+          alt.includes('memtable') &&
+          (alt.includes('sstable') || alt.includes('ss table'));
+        expect(describesDataFlow).toBe(true);
+      }
+    });
+
+    it('SVG diagram should have title element for accessibility', () => {
+      // This tests the SVG file content indirectly through fetch if possible
+      // For unit tests, we verify the alt text on the img element
+      const architectureSection = document.getElementById('architecture');
+      const img = architectureSection.querySelector('.architecture-diagram img');
+      const svg = architectureSection.querySelector('.architecture-diagram svg');
+
+      if (img) {
+        // Image should have alt text
+        expect(img.getAttribute('alt')).not.toBeNull();
+      }
+      if (svg) {
+        // Inline SVG should have title
+        const title = svg.querySelector('title');
+        expect(title).not.toBeNull();
+      }
+    });
+
+    it('architecture description should provide context', () => {
+      const architectureSection = document.getElementById('architecture');
+      const description = architectureSection.querySelector('.architecture-description');
+      expect(description).not.toBeNull();
+
+      const text = description.textContent.toLowerCase();
+      // Should mention LSM tree
+      expect(text.includes('lsm') || text.includes('log-structured')).toBe(true);
+    });
+  });
+
+  describe('Architecture section structure', () => {
+    it('should have architecture-content container', () => {
+      const architectureSection = document.getElementById('architecture');
+      const content = architectureSection.querySelector('.architecture-content');
+      expect(content).not.toBeNull();
+    });
+
+    it('should have architecture-diagram container', () => {
+      const architectureSection = document.getElementById('architecture');
+      const diagram = architectureSection.querySelector('.architecture-diagram');
+      expect(diagram).not.toBeNull();
+    });
+  });
+});
