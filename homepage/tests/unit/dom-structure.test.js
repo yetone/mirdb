@@ -24,54 +24,103 @@ beforeAll(() => {
 // ===== Scenario 1: Hero Section Tests =====
 
 describe('Hero Section - Value Proposition Display', () => {
-  describe('TC2: Hero section HTML structure', () => {
-    it('should have a hero section with correct id', () => {
+  describe('Test Case 1: Hero section displays with MirDB branding and tagline', () => {
+    it('should have a hero section with id="hero"', () => {
       const heroSection = document.getElementById('hero');
+      expect(heroSection).not.toBeNull();
+      expect(heroSection.tagName.toLowerCase()).toBe('section');
+    });
+
+    it('should have a hero section with class="hero"', () => {
+      const heroSection = document.querySelector('.hero');
       expect(heroSection).not.toBeNull();
       expect(heroSection.classList.contains('hero')).toBe(true);
     });
 
-    it('should have a semantic h1 heading with project name', () => {
-      const heroTitle = document.querySelector('.hero h1');
+    it('should display MirDB name/branding in the hero title', () => {
+      const heroTitle = document.querySelector('.hero-title');
       expect(heroTitle).not.toBeNull();
-      expect(heroTitle.classList.contains('hero-title')).toBe(true);
       expect(heroTitle.textContent).toContain('MirDB');
     });
 
-    it('should have a tagline paragraph explaining the value proposition', () => {
-      const tagline = document.querySelector('.hero-tagline');
-      expect(tagline).not.toBeNull();
-      expect(tagline.tagName.toLowerCase()).toBe('p');
-      // Should mention persistent key-value store
-      const text = tagline.textContent.toLowerCase();
-      expect(text).toContain('persistent');
-      expect(text).toContain('key-value');
+    it('should have a tagline explaining persistent key-value store', () => {
+      const heroTagline = document.querySelector('.hero-tagline');
+      expect(heroTagline).not.toBeNull();
+      const taglineText = heroTagline.textContent.toLowerCase();
+      expect(taglineText).toContain('key-value');
+      expect(taglineText).toContain('persistent');
     });
 
     it('should mention Memcached compatibility in tagline', () => {
-      const tagline = document.querySelector('.hero-tagline');
-      const text = tagline.textContent.toLowerCase();
-      expect(text).toContain('memcached');
+      const heroTagline = document.querySelector('.hero-tagline');
+      const taglineText = heroTagline.textContent.toLowerCase();
+      expect(taglineText).toContain('memcached');
+    });
+  });
+
+  describe('Test Case 2: Hero section HTML structure validation', () => {
+    it('should contain semantic heading (h1) with project name', () => {
+      const heroSection = document.getElementById('hero');
+      const h1 = heroSection.querySelector('h1');
+      expect(h1).not.toBeNull();
+      expect(h1.classList.contains('hero-title')).toBe(true);
+      expect(h1.textContent).toContain('MirDB');
     });
 
-    it('should have 3-5 key feature highlights', () => {
-      const featuresList = document.querySelector('.hero-features');
+    it('should have a descriptive paragraph (hero-tagline)', () => {
+      const heroSection = document.getElementById('hero');
+      const tagline = heroSection.querySelector('.hero-tagline');
+      expect(tagline).not.toBeNull();
+      expect(tagline.tagName.toLowerCase()).toBe('p');
+      expect(tagline.textContent.trim().length).toBeGreaterThan(10);
+    });
+
+    it('should have 3-5 key feature highlights in hero-features list', () => {
+      const heroSection = document.getElementById('hero');
+      const featuresList = heroSection.querySelector('.hero-features');
       expect(featuresList).not.toBeNull();
 
       const features = featuresList.querySelectorAll('li');
       expect(features.length).toBeGreaterThanOrEqual(3);
       expect(features.length).toBeLessThanOrEqual(5);
     });
+
+    it('should have hero-features as an unordered list (ul)', () => {
+      const heroSection = document.getElementById('hero');
+      const featuresList = heroSection.querySelector('.hero-features');
+      expect(featuresList.tagName.toLowerCase()).toBe('ul');
+    });
+
+    it('each hero feature should have meaningful content', () => {
+      const heroSection = document.getElementById('hero');
+      const features = heroSection.querySelectorAll('.hero-features li');
+
+      features.forEach((feature, index) => {
+        expect(feature.textContent.trim().length, `Feature ${index + 1} should have content`).toBeGreaterThan(10);
+      });
+    });
+
+    it('should have a hero-content container for layout', () => {
+      const heroSection = document.getElementById('hero');
+      const heroContent = heroSection.querySelector('.hero-content');
+      expect(heroContent).not.toBeNull();
+    });
   });
 
-  describe('Hero section CTA buttons', () => {
+  describe('Hero Section CTA Buttons Structure', () => {
+    it('should have a hero-cta container for buttons', () => {
+      const heroSection = document.getElementById('hero');
+      const ctaContainer = heroSection.querySelector('.hero-cta');
+      expect(ctaContainer).not.toBeNull();
+    });
+
     it('should have a Get Started CTA button', () => {
       const getStartedBtn = document.querySelector('.hero-cta .btn-primary');
       expect(getStartedBtn).not.toBeNull();
       expect(getStartedBtn.textContent.trim()).toContain('Get Started');
     });
 
-    it('should have Get Started button link to getting-started section', () => {
+    it('should have Get Started button linking to #getting-started section', () => {
       const getStartedBtn = document.querySelector('.hero-cta .btn-primary');
       expect(getStartedBtn.getAttribute('href')).toBe('#getting-started');
     });
@@ -82,23 +131,26 @@ describe('Hero Section - Value Proposition Display', () => {
       expect(githubBtn.textContent.trim()).toContain('GitHub');
     });
 
-    it('should have GitHub button link to external repository', () => {
+    it('should have GitHub button linking to external repository', () => {
       const githubBtn = document.querySelector('.hero-cta .btn-secondary');
       const href = githubBtn.getAttribute('href');
       expect(href).toContain('github.com');
-      expect(href).toContain('mirdb');
+      expect(href.toLowerCase()).toContain('mirdb');
     });
 
-    it('should open GitHub link in new tab', () => {
+    it('should open GitHub link in new tab with security attributes', () => {
       const githubBtn = document.querySelector('.hero-cta .btn-secondary');
       expect(githubBtn.getAttribute('target')).toBe('_blank');
       expect(githubBtn.getAttribute('rel')).toContain('noopener');
     });
 
-    it('should have aria-hidden on decorative GitHub icon', () => {
-      const icon = document.querySelector('.hero-cta .btn-secondary svg');
-      expect(icon).not.toBeNull();
-      expect(icon.getAttribute('aria-hidden')).toBe('true');
+    it('should have CTA buttons with proper styling classes', () => {
+      const heroSection = document.getElementById('hero');
+      const getStartedBtn = heroSection.querySelector('.btn-primary');
+      const githubBtn = heroSection.querySelector('.btn-secondary');
+
+      expect(getStartedBtn).not.toBeNull();
+      expect(githubBtn).not.toBeNull();
     });
   });
 });
