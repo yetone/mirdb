@@ -1,0 +1,35 @@
+/**
+ * Application-wide constants for MirDB Homepage.
+ */
+
+export const GITHUB_URL = 'https://github.com/mirdb/mirdb';
+export const CRATES_URL = 'https://crates.io/crates/mirdb';
+export const DOCS_BASE_URL = 'https://docs.mirdb.dev';
+export const QUICKSTART_URL = '/docs/quickstart';
+
+export const SOCIAL_LINKS = {
+  github: GITHUB_URL,
+  discord: 'https://discord.gg/mirdb',
+  twitter: 'https://twitter.com/mirdb',
+};
+
+export const THEME_STORAGE_KEY = 'mirdb-theme';
+
+export const PROJECT_INFO = {
+  name: 'MirDB',
+  tagline: 'A high-performance Rust key-value storage engine',
+  description: 'Built with LSM-tree architecture for blazing fast reads and writes',
+};
+
+export const DOCS_LINKS = {
+  architecture: `${DOCS_BASE_URL}/architecture`,
+  apiReference: `${DOCS_BASE_URL}/api`,
+  configuration: `${DOCS_BASE_URL}/configuration`,
+};
+
+export const CONTRIBUTING_LINKS = {
+  github: GITHUB_URL,
+  contributing: `${GITHUB_URL}/blob/main/CONTRIBUTING.md`,
+  issues: `${GITHUB_URL}/issues`,
+  discussions: `${GITHUB_URL}/discussions`,
+};

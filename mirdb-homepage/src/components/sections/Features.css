@@ -1,0 +1,55 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 2 - Features Section Display
+ */
+
+.features {
+  background-color: var(--color-bg-primary);
+}
+
+.features__title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.features__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+}
+
+/* Feature card specific styles within grid */
+.features__grid .feature-card {
+  height: 100%;
+}
+
+/* Responsive: tablet and below */
+@media (max-width: 768px) {
+  .features__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .features__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+}
+
+/* Large screens: 3 columns */
+@media (min-width: 1024px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}

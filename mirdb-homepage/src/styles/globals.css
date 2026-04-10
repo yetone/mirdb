@@ -1,0 +1,188 @@
+/**
+ * Global styles and resets for MirDB Homepage.
+ */
+
+@import './variables.css';
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+a {
+  color: var(--color-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-secondary-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+code {
+  font-family: var(--font-family-mono);
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Skip link for accessibility - WCAG 2.1 AA compliant */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: #1f2937;
+  color: #ffffff;
+  z-index: 1000;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Container utility */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* Section spacing */
+section {
+  padding: var(--spacing-3xl) 0;
+}
+
+/* Visually hidden for accessibility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mobile Responsive Design - Scenario 10 */
+
+/* Touch target accessibility - ensure minimum 44px touch targets on mobile */
+@media (max-width: 768px) {
+  /* Ensure all buttons and interactive elements have 44px minimum height for touch */
+  button,
+  .btn,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+  }
+
+  /* Ensure touch targets for copy buttons */
+  .quickstart__copy-button {
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* Responsive font size adjustments */
+@media (max-width: 768px) {
+  :root {
+    --font-size-hero: 2.5rem;
+    --font-size-4xl: 2rem;
+    --font-size-3xl: 1.5rem;
+  }
+
+  /* Ensure container padding for mobile */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Section spacing on mobile */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-hero: 2rem;
+    --font-size-4xl: 1.75rem;
+    --font-size-3xl: 1.25rem;
+  }
+
+  /* Tighter container padding for very small screens */
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+/* Prevent horizontal overflow on mobile */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  /* Ensure images and media don't overflow */
+  img, video, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
+  }
+}

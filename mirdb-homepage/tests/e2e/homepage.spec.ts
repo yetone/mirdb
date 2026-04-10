@@ -1,0 +1,1135 @@
+/**
+ * Homepage E2E Tests
+ * Owner: Shared across Scenarios 1, 2, 3, 4, 5, 9, 16
+ *
+ * Playwright tests for homepage functionality:
+ * - Hero section (Scenario 1)
+ * - Features section (Scenario 2)
+ * - Code example section (Scenario 3)
+ * - Quick start section (Scenario 4)
+ * - Performance section (Scenario 5)
+ * - Footer section (Scenario 9)
+ * - Theme toggle (Scenario 16)
+ */
+
+import { test, expect } from '@playwright/test';
+
+/**
+ * Scenario 1: Hero Section and Value Proposition Tests
+ */
+test.describe('Hero Section', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('Test Case 1: Project name MirDB is visible in large typography (48px+ on desktop)', async ({ page }) => {
+    // Set desktop viewport
+    await page.setViewportSize({ width: 1280, height: 720 });
+
+    const heroTitle = page.getByTestId('hero-title');
+    await expect(heroTitle).toBeVisible();
+    await expect(heroTitle).toHaveText('MirDB');
+
+    // Verify font size is at least 48px
+    const fontSize = await heroTitle.evaluate((el) => {
+      return window.getComputedStyle(el).fontSize;
+    });
+    const fontSizeNum = parseFloat(fontSize);
+    expect(fontSizeNum).toBeGreaterThanOrEqual(48);
+  });
+
+  test('Test Case 2: Tagline describing MirDB as a high-performance Rust key-value store is visible', async ({ page }) => {
+    const tagline = page.getByTestId('hero-tagline');
+    await expect(tagline).toBeVisible();
+
+    const taglineText = await tagline.textContent();
+    expect(taglineText?.toLowerCase()).toContain('high-performance');
+    expect(taglineText?.toLowerCase()).toContain('rust');
+    expect(taglineText?.toLowerCase()).toContain('key-value');
+  });
+
+  test('Test Case 3: Click Get Started button navigates to quick start documentation', async ({ page }) => {
+    const ctaButton = page.getByTestId('cta-button');
+    await expect(ctaButton).toBeVisible();
+    await expect(ctaButton).toHaveText('Get Started');
+
+    // Get the href attribute
+    const href = await ctaButton.getAttribute('href');
+    expect(href).toBe('/docs/quickstart');
+
+    // Verify the button is clickable (link element)
+    const tagName = await ctaButton.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('a');
+  });
+
+  test('Test Case 4: Button displays hover state with visual feedback', async ({ page }) => {
+    const ctaButton = page.getByTestId('cta-button');
+    await expect(ctaButton).toBeVisible();
+
+    // Get initial styles
+    const initialBgColor = await ctaButton.evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+
+    // Hover over the button
+    await ctaButton.hover();
+
+    // Wait for transition
+    await page.waitForTimeout(300);
+
+    // Get hover styles
+    const hoverBgColor = await ctaButton.evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+
+    // Verify visual change occurred (background color changed or transform applied)
+    const hasVisualChange = initialBgColor !== hoverBgColor;
+    expect(hasVisualChange).toBe(true);
+  });
+
+  test('Test Case 5: Button displays visible focus indicator when focused via keyboard', async ({ page }) => {
+    const ctaButton = page.getByTestId('cta-button');
+
+    // Tab to the button to focus it
+    await page.keyboard.press('Tab');
+
+    // Ensure the button is focused
+    const isFocused = await ctaButton.evaluate((el) => {
+      return document.activeElement === el;
+    });
+
+    // If not focused, tab again (might have skip link)
+    if (!isFocused) {
+      await page.keyboard.press('Tab');
+    }
+
+    // Check for visible focus indicator
+    const outlineStyle = await ctaButton.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return {
+        outline: style.outline,
+        outlineWidth: style.outlineWidth,
+        outlineColor: style.outlineColor,
+        boxShadow: style.boxShadow,
+      };
+    });
+
+    // Verify there's a visible focus indicator (outline or box-shadow)
+    const hasOutline = outlineStyle.outlineWidth !== '0px' && outlineStyle.outline !== 'none';
+    const hasBoxShadow = outlineStyle.boxShadow !== 'none';
+    expect(hasOutline || hasBoxShadow).toBe(true);
+  });
+});
+
+/**
+ * Scenario 2: Features Section Display Tests
+ */
+test.describe('Features Section - Scenario 2', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Check features section for LSM-tree content', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Find the LSM-tree feature card
+    const lsmTreeCard = page.getByTestId('feature-card-lsm-tree');
+    await expect(lsmTreeCard).toBeVisible();
+
+    // Verify heading contains LSM-tree
+    const cardTitle = lsmTreeCard.locator('.card__title');
+    await expect(cardTitle).toContainText('LSM-tree');
+
+    // Verify description mentions architecture
+    const cardDescription = lsmTreeCard.locator('.card__description');
+    await expect(cardDescription).toBeVisible();
+    const descText = await cardDescription.textContent();
+    expect(descText?.toLowerCase()).toContain('architecture');
+  });
+
+  test('TC2: Check features section for Rust implementation content', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Find the Rust implementation feature card
+    const rustCard = page.getByTestId('feature-card-rust-implementation');
+    await expect(rustCard).toBeVisible();
+
+    // Verify heading mentions Rust
+    const cardTitle = rustCard.locator('.card__title');
+    await expect(cardTitle).toContainText('Rust');
+
+    // Verify description highlights Rust benefits
+    const cardDescription = rustCard.locator('.card__description');
+    await expect(cardDescription).toBeVisible();
+    const descText = await cardDescription.textContent();
+    expect(descText?.toLowerCase()).toMatch(/memory|safety|performance/);
+  });
+
+  test('TC3: Check features section for crash recovery content', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Find the crash recovery feature card
+    const crashRecoveryCard = page.getByTestId('feature-card-crash-recovery');
+    await expect(crashRecoveryCard).toBeVisible();
+
+    // Verify heading mentions crash recovery
+    const cardTitle = crashRecoveryCard.locator('.card__title');
+    await expect(cardTitle).toContainText('Crash Recovery');
+
+    // Verify description mentions durability
+    const cardDescription = crashRecoveryCard.locator('.card__description');
+    await expect(cardDescription).toBeVisible();
+    const descText = await cardDescription.textContent();
+    expect(descText?.toLowerCase()).toMatch(/durability|recovery|data loss/);
+  });
+
+  test('TC4: Check features section for Memcached compatibility content', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Find the Memcached compatibility feature card
+    const memcachedCard = page.getByTestId('feature-card-memcached-compatibility');
+    await expect(memcachedCard).toBeVisible();
+
+    // Verify heading mentions Memcached
+    const cardTitle = memcachedCard.locator('.card__title');
+    await expect(cardTitle).toContainText('Memcached');
+
+    // Verify description mentions protocol compatibility
+    const cardDescription = memcachedCard.locator('.card__description');
+    await expect(cardDescription).toBeVisible();
+    const descText = await cardDescription.textContent();
+    expect(descText?.toLowerCase()).toMatch(/protocol|compatibility|client/);
+  });
+
+  test('TC5: Verify features grid layout on desktop', async ({ page }) => {
+    // Set desktop viewport
+    await page.setViewportSize({ width: 1280, height: 720 });
+
+    // Verify features grid is visible
+    const featuresGrid = page.getByTestId('features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Verify grid has correct CSS grid layout (2 columns)
+    const gridStyle = await featuresGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+        gap: styles.gap,
+      };
+    });
+
+    expect(gridStyle.display).toBe('grid');
+    // Should have 2 columns on desktop
+    expect(gridStyle.gridTemplateColumns.split(' ').length).toBeGreaterThanOrEqual(2);
+
+    // Verify all 4 feature cards are present
+    const featureCards = page.locator('[data-testid^="feature-card-"]');
+    await expect(featureCards).toHaveCount(4);
+
+    // Verify consistent spacing (gap should be set)
+    expect(gridStyle.gap).toBeTruthy();
+    expect(gridStyle.gap).not.toBe('normal');
+  });
+
+  test('TC6: Hover over feature card displays hover effect', async ({ page }) => {
+    const featureCard = page.getByTestId('feature-card-lsm-tree');
+    await expect(featureCard).toBeVisible();
+
+    // Get initial styles
+    const initialStyles = await featureCard.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        transform: styles.transform,
+        boxShadow: styles.boxShadow,
+        borderColor: styles.borderColor,
+      };
+    });
+
+    // Hover over the card
+    await featureCard.hover();
+
+    // Wait for transition to complete
+    await page.waitForTimeout(300);
+
+    // Get styles after hover
+    const hoverStyles = await featureCard.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        transform: styles.transform,
+        boxShadow: styles.boxShadow,
+        borderColor: styles.borderColor,
+      };
+    });
+
+    // Verify visual feedback on hover (at least one style should change)
+    const hasVisualChange =
+      initialStyles.transform !== hoverStyles.transform ||
+      initialStyles.boxShadow !== hoverStyles.boxShadow ||
+      initialStyles.borderColor !== hoverStyles.borderColor;
+
+    expect(hasVisualChange).toBe(true);
+  });
+
+  test('Features section has proper accessibility attributes', async ({ page }) => {
+    const featuresSection = page.locator('#features');
+
+    // Verify section has aria-labelledby
+    await expect(featuresSection).toHaveAttribute('aria-labelledby', 'features-heading');
+
+    // Verify heading is present and visible
+    const heading = page.locator('#features-heading');
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveText('Key Features');
+  });
+
+  test('Each feature card has an icon', async ({ page }) => {
+    const featureCards = page.locator('[data-testid^="feature-card-"]');
+    const cardCount = await featureCards.count();
+
+    for (let i = 0; i < cardCount; i++) {
+      const card = featureCards.nth(i);
+      const icon = card.locator('.card__icon');
+      await expect(icon).toBeVisible();
+
+      // Verify icon contains SVG
+      const svg = icon.locator('svg');
+      await expect(svg).toBeVisible();
+    }
+  });
+
+  test('Features grid is responsive on mobile', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+
+    const featuresGrid = page.getByTestId('features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Verify grid has single column layout on mobile
+    const gridStyle = await featuresGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+      };
+    });
+
+    expect(gridStyle.display).toBe('grid');
+    // Should have 1 column on mobile (single value means 1 column)
+    const columns = gridStyle.gridTemplateColumns.split(' ').length;
+    expect(columns).toBe(1);
+  });
+});
+
+/**
+ * Scenario 4: Quick Start Section Tests
+ */
+test.describe('Quick Start Section - Scenario 4', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Quick Start section exists with heading', async ({ page }) => {
+    // Navigate to Quick Start section
+    const quickstartSection = page.getByTestId('quickstart-section');
+    await expect(quickstartSection).toBeVisible();
+
+    // Verify heading is present
+    const heading = page.getByTestId('quickstart-heading');
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveText('Quick Start');
+
+    // Verify section has proper accessibility
+    await expect(quickstartSection).toHaveAttribute('aria-labelledby', 'quickstart-heading');
+  });
+
+  test('TC2: Installation command (cargo add) is displayed', async ({ page }) => {
+    // Find the install step
+    const installStep = page.getByTestId('quickstart-step-install');
+    await expect(installStep).toBeVisible();
+
+    // Find the install command block
+    const installCommand = page.getByTestId('quickstart-install-command');
+    await expect(installCommand).toBeVisible();
+
+    // Verify cargo add command is present
+    const commandCode = page.getByTestId('quickstart-install-command-code');
+    await expect(commandCode).toBeVisible();
+    const commandText = await commandCode.textContent();
+    expect(commandText?.toLowerCase()).toContain('cargo add');
+    expect(commandText?.toLowerCase()).toContain('mirdb');
+  });
+
+  test('TC3: Usage commands are shown', async ({ page }) => {
+    // Find the usage step
+    const usageStep = page.getByTestId('quickstart-step-usage');
+    await expect(usageStep).toBeVisible();
+
+    // Find the usage command block
+    const usageCommand = page.getByTestId('quickstart-usage-command');
+    await expect(usageCommand).toBeVisible();
+
+    // Verify basic usage code is present
+    const commandCode = page.getByTestId('quickstart-usage-command-code');
+    await expect(commandCode).toBeVisible();
+    const commandText = await commandCode.textContent();
+
+    // Should contain DB operations
+    expect(commandText).toContain('DB');
+    expect(commandText?.toLowerCase()).toMatch(/put|set|insert/);
+    expect(commandText?.toLowerCase()).toMatch(/get|read|fetch/);
+
+    // Also verify the run command step exists
+    const runStep = page.getByTestId('quickstart-step-run');
+    await expect(runStep).toBeVisible();
+
+    const runCommand = page.getByTestId('quickstart-run-command-code');
+    await expect(runCommand).toBeVisible();
+    const runText = await runCommand.textContent();
+    expect(runText?.toLowerCase()).toContain('cargo run');
+  });
+
+  test('TC4: Commands have copy functionality', async ({ page }) => {
+    // Find copy buttons
+    const installCopyButton = page.getByTestId('quickstart-install-command-copy-button');
+    const usageCopyButton = page.getByTestId('quickstart-usage-command-copy-button');
+    const runCopyButton = page.getByTestId('quickstart-run-command-copy-button');
+
+    // Verify all copy buttons are visible
+    await expect(installCopyButton).toBeVisible();
+    await expect(usageCopyButton).toBeVisible();
+    await expect(runCopyButton).toBeVisible();
+
+    // Verify copy buttons have accessible labels
+    await expect(installCopyButton).toHaveAttribute('aria-label', /copy/i);
+    await expect(usageCopyButton).toHaveAttribute('aria-label', /copy/i);
+    await expect(runCopyButton).toHaveAttribute('aria-label', /copy/i);
+
+    // Click the install copy button and verify it changes state
+    await installCopyButton.click();
+
+    // Wait for the copied state
+    await page.waitForTimeout(100);
+
+    // Verify the button shows "Copied!" state
+    await expect(installCopyButton).toHaveAttribute('aria-label', /copied/i);
+    await expect(installCopyButton).toHaveClass(/copied/);
+  });
+
+  test('Copy button has visual feedback on hover', async ({ page }) => {
+    const copyButton = page.getByTestId('quickstart-install-command-copy-button');
+    await expect(copyButton).toBeVisible();
+
+    // Get initial styles
+    const initialStyles = await copyButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        borderColor: styles.borderColor,
+        color: styles.color,
+      };
+    });
+
+    // Hover over the button
+    await copyButton.hover();
+    await page.waitForTimeout(200);
+
+    // Get hover styles
+    const hoverStyles = await copyButton.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        backgroundColor: styles.backgroundColor,
+        borderColor: styles.borderColor,
+        color: styles.color,
+      };
+    });
+
+    // Verify visual change on hover
+    const hasVisualChange =
+      initialStyles.backgroundColor !== hoverStyles.backgroundColor ||
+      initialStyles.borderColor !== hoverStyles.borderColor ||
+      initialStyles.color !== hoverStyles.color;
+
+    expect(hasVisualChange).toBe(true);
+  });
+
+  test('Quick Start section displays all three steps', async ({ page }) => {
+    const steps = page.locator('[data-testid^="quickstart-step-"]');
+    await expect(steps).toHaveCount(3);
+
+    // Verify step order
+    const installStep = page.getByTestId('quickstart-step-install');
+    const usageStep = page.getByTestId('quickstart-step-usage');
+    const runStep = page.getByTestId('quickstart-step-run');
+
+    await expect(installStep).toBeVisible();
+    await expect(usageStep).toBeVisible();
+    await expect(runStep).toBeVisible();
+
+    // Verify numbered steps
+    const stepNumbers = page.locator('.quickstart__step-number');
+    await expect(stepNumbers).toHaveCount(3);
+
+    const stepTexts = await stepNumbers.allTextContents();
+    expect(stepTexts).toEqual(['1', '2', '3']);
+  });
+
+  test('Quick Start commands use monospace font', async ({ page }) => {
+    const commandCode = page.getByTestId('quickstart-install-command-code');
+    await expect(commandCode).toBeVisible();
+
+    const fontFamily = await commandCode.evaluate((el) => {
+      return window.getComputedStyle(el).fontFamily;
+    });
+
+    // Should use a monospace font
+    expect(fontFamily.toLowerCase()).toMatch(/mono|consolas|courier|fira|menlo|monaco/);
+  });
+});
+
+/**
+ * Scenario 5: Performance Metrics Display Tests
+ */
+test.describe('Performance Section - Scenario 5', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Check performance section exists', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await expect(performanceSection).toBeVisible();
+
+    // Verify section has proper ID for navigation
+    await expect(performanceSection).toHaveAttribute('id', 'performance');
+
+    // Verify section has aria-labelledby for accessibility
+    await expect(performanceSection).toHaveAttribute('aria-labelledby', 'performance-heading');
+
+    // Verify heading is visible
+    const heading = page.locator('#performance-heading');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText('Performance');
+  });
+
+  test('TC2: Verify throughput metric is displayed with clear label and units (ops/sec)', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Find the throughput metric card
+    const throughputCard = page.getByTestId('metric-card-throughput');
+    await expect(throughputCard).toBeVisible();
+
+    // Verify label is displayed
+    const label = page.getByTestId('metric-label-throughput');
+    await expect(label).toBeVisible();
+    await expect(label).toContainText('Throughput');
+
+    // Verify value is displayed
+    const value = page.getByTestId('metric-value-throughput');
+    await expect(value).toBeVisible();
+
+    // Verify unit is displayed as ops/sec
+    const unit = page.getByTestId('metric-unit-throughput');
+    await expect(unit).toBeVisible();
+    await expect(unit).toHaveText('ops/sec');
+  });
+
+  test('TC3: Verify latency metric is displayed with clear label and units (ms)', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Find the latency metric card
+    const latencyCard = page.getByTestId('metric-card-latency');
+    await expect(latencyCard).toBeVisible();
+
+    // Verify label is displayed
+    const label = page.getByTestId('metric-label-latency');
+    await expect(label).toBeVisible();
+    await expect(label).toContainText('Latency');
+
+    // Verify value is displayed
+    const value = page.getByTestId('metric-value-latency');
+    await expect(value).toBeVisible();
+
+    // Verify unit is displayed as ms
+    const unit = page.getByTestId('metric-unit-latency');
+    await expect(unit).toBeVisible();
+    await expect(unit).toHaveText('ms');
+  });
+
+  test('TC4: Verify memory metric is displayed with clear label and units (MB)', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Find the memory metric card
+    const memoryCard = page.getByTestId('metric-card-memory');
+    await expect(memoryCard).toBeVisible();
+
+    // Verify label is displayed
+    const label = page.getByTestId('metric-label-memory');
+    await expect(label).toBeVisible();
+    await expect(label).toContainText('Memory');
+
+    // Verify value is displayed
+    const value = page.getByTestId('metric-value-memory');
+    await expect(value).toBeVisible();
+
+    // Verify unit is displayed as MB
+    const unit = page.getByTestId('metric-unit-memory');
+    await expect(unit).toBeVisible();
+    await expect(unit).toHaveText('MB');
+  });
+
+  test('TC5: Check comparison database is shown for context', async ({ page }) => {
+    // Navigate to performance section
+    const performanceSection = page.getByTestId('performance-section');
+    await performanceSection.scrollIntoViewIfNeeded();
+
+    // Check for comparison data in metric cards
+    const throughputComparison = page.getByTestId('metric-comparison-throughput');
+    await expect(throughputComparison).toBeVisible();
+
+    // Verify comparison table exists
+    const comparisonTable = page.getByTestId('comparison-table');
+    await expect(comparisonTable).toBeVisible();
+
+    // Verify at least one comparison database row exists (not MirDB)
+    const leveldbRow = page.getByTestId('comparison-row-leveldb');
+    await expect(leveldbRow).toBeVisible();
+
+    // Verify the comparison database has metrics
+    const leveldbThroughput = page.getByTestId('leveldb-throughput');
+    await expect(leveldbThroughput).toBeVisible();
+
+    const leveldbLatency = page.getByTestId('leveldb-latency');
+    await expect(leveldbLatency).toBeVisible();
+
+    const leveldbMemory = page.getByTestId('leveldb-memory');
+    await expect(leveldbMemory).toBeVisible();
+  });
+
+  test('Performance metrics grid layout on desktop', async ({ page }) => {
+    // Set desktop viewport
+    await page.setViewportSize({ width: 1280, height: 720 });
+
+    const metricsGrid = page.getByTestId('performance-metrics');
+    await expect(metricsGrid).toBeVisible();
+
+    // Verify grid layout
+    const gridStyle = await metricsGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+      };
+    });
+
+    expect(gridStyle.display).toBe('grid');
+    // Should have 3 columns on desktop
+    const columns = gridStyle.gridTemplateColumns.split(' ').length;
+    expect(columns).toBe(3);
+  });
+
+  test('Performance metrics grid is responsive on mobile', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+
+    const metricsGrid = page.getByTestId('performance-metrics');
+    await expect(metricsGrid).toBeVisible();
+
+    // Verify grid has single column on mobile
+    const gridStyle = await metricsGrid.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+      };
+    });
+
+    expect(gridStyle.display).toBe('grid');
+    const columns = gridStyle.gridTemplateColumns.split(' ').length;
+    expect(columns).toBe(1);
+  });
+
+  test('Metric cards have hover effect', async ({ page }) => {
+    const metricCard = page.getByTestId('metric-card-throughput');
+    await expect(metricCard).toBeVisible();
+
+    // Get initial styles
+    const initialTransform = await metricCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Hover over the card
+    await metricCard.hover();
+    await page.waitForTimeout(300);
+
+    // Get styles after hover
+    const hoverTransform = await metricCard.evaluate((el) => {
+      return window.getComputedStyle(el).transform;
+    });
+
+    // Verify visual change on hover
+    expect(initialTransform !== hoverTransform).toBe(true);
+  });
+});
+
+/**
+ * Scenario 9: Footer Content Tests
+ */
+test.describe('Footer Section - Scenario 9', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: Check for copyright notice with year', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+
+    // Verify copyright notice is present
+    const copyright = page.getByTestId('footer-copyright');
+    await expect(copyright).toBeVisible();
+
+    // Verify copyright contains current year
+    const copyrightText = await copyright.textContent();
+    const currentYear = new Date().getFullYear().toString();
+    expect(copyrightText).toContain(currentYear);
+    expect(copyrightText?.toLowerCase()).toContain('mirdb');
+  });
+
+  test('TC2: Check for license link', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify license link is present
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toBeVisible();
+    await expect(licenseLink).toHaveText('License');
+
+    // Verify it links to LICENSE file
+    const href = await licenseLink.getAttribute('href');
+    expect(href?.toLowerCase()).toContain('license');
+  });
+
+  test('TC3: Check for social/external links', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify social links container is present
+    const socialLinks = page.getByTestId('footer-social-links');
+    await expect(socialLinks).toBeVisible();
+
+    // Verify GitHub link is present
+    const githubLink = page.getByTestId('footer-social-github');
+    await expect(githubLink).toBeVisible();
+
+    // Verify Discord link is present
+    const discordLink = page.getByTestId('footer-social-discord');
+    await expect(discordLink).toBeVisible();
+
+    // Verify Twitter link is present
+    const twitterLink = page.getByTestId('footer-social-twitter');
+    await expect(twitterLink).toBeVisible();
+  });
+
+  test('TC4: Click license link navigates to license file/page', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Get the license link
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toBeVisible();
+
+    // Verify it's a link element
+    const tagName = await licenseLink.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('a');
+
+    // Verify href points to LICENSE
+    const href = await licenseLink.getAttribute('href');
+    expect(href).toContain('LICENSE');
+    expect(href).toContain('github.com');
+  });
+
+  test('TC5: Verify external links have proper attributes (target="_blank" and rel="noopener")', async ({ page }) => {
+    // Scroll to footer
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Check license link attributes
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toHaveAttribute('target', '_blank');
+    const licenseRel = await licenseLink.getAttribute('rel');
+    expect(licenseRel).toContain('noopener');
+
+    // Check GitHub social link attributes
+    const githubLink = page.getByTestId('footer-social-github');
+    await expect(githubLink).toHaveAttribute('target', '_blank');
+    const githubRel = await githubLink.getAttribute('rel');
+    expect(githubRel).toContain('noopener');
+
+    // Check Discord social link attributes
+    const discordLink = page.getByTestId('footer-social-discord');
+    await expect(discordLink).toHaveAttribute('target', '_blank');
+    const discordRel = await discordLink.getAttribute('rel');
+    expect(discordRel).toContain('noopener');
+
+    // Check Twitter social link attributes
+    const twitterLink = page.getByTestId('footer-social-twitter');
+    await expect(twitterLink).toHaveAttribute('target', '_blank');
+    const twitterRel = await twitterLink.getAttribute('rel');
+    expect(twitterRel).toContain('noopener');
+  });
+
+  test('Footer has proper accessibility role', async ({ page }) => {
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify footer has contentinfo role
+    await expect(footer).toHaveAttribute('role', 'contentinfo');
+  });
+
+  test('Social links have accessible labels', async ({ page }) => {
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+
+    // Verify each social link has an aria-label
+    const githubLink = page.getByTestId('footer-social-github');
+    await expect(githubLink).toHaveAttribute('aria-label', 'GitHub');
+
+    const discordLink = page.getByTestId('footer-social-discord');
+    await expect(discordLink).toHaveAttribute('aria-label', 'Discord');
+
+    const twitterLink = page.getByTestId('footer-social-twitter');
+    await expect(twitterLink).toHaveAttribute('aria-label', 'Twitter');
+  });
+
+  test('Footer is responsive on mobile', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+
+    const footer = page.getByTestId('footer-section');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+
+    // Verify all elements are still visible on mobile
+    const copyright = page.getByTestId('footer-copyright');
+    await expect(copyright).toBeVisible();
+
+    const licenseLink = page.getByTestId('footer-license-link');
+    await expect(licenseLink).toBeVisible();
+
+    const socialLinks = page.getByTestId('footer-social-links');
+    await expect(socialLinks).toBeVisible();
+  });
+});
+
+/**
+ * Scenario 16: Dark/Light Mode Toggle Tests
+ */
+test.describe('Theme Toggle - Scenario 16', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear localStorage before each test to start fresh
+    await page.addInitScript(() => {
+      localStorage.clear();
+    });
+    await page.goto('/');
+  });
+
+  test('TC1: Check for theme toggle control - Dark/light mode toggle is visible on the page', async ({ page }) => {
+    // Find the theme toggle button
+    const themeToggle = page.getByTestId('theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Verify it's a button element
+    const tagName = await themeToggle.evaluate((el) => el.tagName.toLowerCase());
+    expect(tagName).toBe('button');
+
+    // Verify it has proper ARIA attributes
+    await expect(themeToggle).toHaveAttribute('aria-label', /switch to (light|dark) mode/i);
+    await expect(themeToggle).toHaveAttribute('aria-pressed');
+  });
+
+  test('TC2: Click theme toggle - Theme changes between dark and light mode', async ({ page }) => {
+    const themeToggle = page.getByTestId('theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Get initial theme state
+    const initialTheme = await page.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    // Click the toggle
+    await themeToggle.click();
+
+    // Wait for theme transition
+    await page.waitForTimeout(100);
+
+    // Verify theme changed
+    const newTheme = await page.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    expect(newTheme).not.toBe(initialTheme);
+
+    // If initial was light (or null/undefined), new should be dark
+    if (!initialTheme || initialTheme === 'light') {
+      expect(newTheme).toBe('dark');
+    } else {
+      expect(newTheme).toBe('light');
+    }
+
+    // Verify visual change - background color should be different
+    const bgColor = await page.evaluate(() => {
+      return window.getComputedStyle(document.body).backgroundColor;
+    });
+
+    // Dark mode should have dark background
+    if (newTheme === 'dark') {
+      // Dark backgrounds typically have low RGB values
+      expect(bgColor).not.toBe('rgb(255, 255, 255)');
+    }
+
+    // Click again to toggle back
+    await themeToggle.click();
+    await page.waitForTimeout(100);
+
+    const finalTheme = await page.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    // Should be back to original or light
+    if (!initialTheme || initialTheme === 'light') {
+      expect(finalTheme).toBe('light');
+    } else {
+      expect(finalTheme).toBe('dark');
+    }
+  });
+
+  test('TC3: Reload page after changing theme - Theme preference persists after page reload', async ({ context }) => {
+    // Create a fresh page without addInitScript clearing localStorage
+    const freshPage = await context.newPage();
+
+    // Clear localStorage first via page.evaluate after navigation
+    await freshPage.goto('/');
+    await freshPage.evaluate(() => {
+      localStorage.clear();
+    });
+    await freshPage.reload();
+    await freshPage.waitForLoadState('domcontentloaded');
+
+    const themeToggle = freshPage.getByTestId('theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Get initial theme (should be system default or light)
+    const initialTheme = await freshPage.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    // Toggle to the opposite theme
+    await themeToggle.click();
+    await freshPage.waitForTimeout(100);
+
+    const toggledTheme = await freshPage.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    // Verify theme changed
+    expect(toggledTheme).not.toBe(initialTheme);
+
+    // Verify localStorage was updated
+    const storedTheme = await freshPage.evaluate(() => {
+      return localStorage.getItem('mirdb-theme');
+    });
+    expect(storedTheme).toBe(toggledTheme);
+
+    // Reload the page (localStorage persists across reloads in the same page)
+    await freshPage.reload();
+
+    // Wait for page to load
+    await freshPage.waitForLoadState('domcontentloaded');
+
+    // Wait for React to hydrate
+    await freshPage.waitForTimeout(200);
+
+    // Verify theme persisted
+    const persistedTheme = await freshPage.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    expect(persistedTheme).toBe(toggledTheme);
+
+    await freshPage.close();
+  });
+
+  test('TC4: Check localStorage for theme preference - Theme preference stored in browser localStorage', async ({ page }) => {
+    const themeToggle = page.getByTestId('theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Toggle the theme
+    await themeToggle.click();
+    await page.waitForTimeout(100);
+
+    // Check localStorage for theme preference
+    const storedTheme = await page.evaluate(() => {
+      return localStorage.getItem('mirdb-theme');
+    });
+
+    // Verify theme is stored in localStorage
+    expect(storedTheme).toBeTruthy();
+    expect(['light', 'dark']).toContain(storedTheme);
+
+    // Get current theme attribute
+    const currentTheme = await page.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    // Stored value should match current theme
+    expect(storedTheme).toBe(currentTheme);
+  });
+
+  test('TC5: Check system preference detection - Theme defaults to system preference on first visit', async ({ page, context }) => {
+    // Create a new page with emulated dark color scheme
+    const darkPage = await context.newPage();
+    await darkPage.emulateMedia({ colorScheme: 'dark' });
+
+    // Clear localStorage to simulate first visit
+    await darkPage.addInitScript(() => {
+      localStorage.clear();
+    });
+
+    await darkPage.goto('/');
+    await darkPage.waitForLoadState('domcontentloaded');
+
+    // Check that the theme matches system preference (dark)
+    const darkTheme = await darkPage.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    expect(darkTheme).toBe('dark');
+    await darkPage.close();
+
+    // Create another page with emulated light color scheme
+    const lightPage = await context.newPage();
+    await lightPage.emulateMedia({ colorScheme: 'light' });
+
+    // Clear localStorage to simulate first visit
+    await lightPage.addInitScript(() => {
+      localStorage.clear();
+    });
+
+    await lightPage.goto('/');
+    await lightPage.waitForLoadState('domcontentloaded');
+
+    // Check that the theme matches system preference (light)
+    const lightTheme = await lightPage.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    expect(lightTheme).toBe('light');
+    await lightPage.close();
+  });
+
+  test('Theme toggle has visible focus indicator for keyboard navigation', async ({ page }) => {
+    const themeToggle = page.getByTestId('theme-toggle');
+
+    // Tab to focus the toggle
+    await page.keyboard.press('Tab'); // Skip link
+    await page.keyboard.press('Tab'); // Theme toggle (should be next focusable element)
+
+    // Check if toggle is focused
+    const isFocused = await themeToggle.evaluate((el) => {
+      return document.activeElement === el;
+    });
+
+    // If not focused, keep tabbing
+    if (!isFocused) {
+      await page.keyboard.press('Tab');
+    }
+
+    // Verify focus is visible
+    const focusStyles = await themeToggle.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        outline: styles.outline,
+        outlineWidth: styles.outlineWidth,
+        boxShadow: styles.boxShadow,
+      };
+    });
+
+    // Should have visible focus indicator
+    const hasOutline = focusStyles.outlineWidth !== '0px';
+    const hasBoxShadow = focusStyles.boxShadow !== 'none';
+    expect(hasOutline || hasBoxShadow).toBe(true);
+  });
+
+  test('Theme toggle can be activated with keyboard', async ({ page }) => {
+    const themeToggle = page.getByTestId('theme-toggle');
+
+    // Get initial theme
+    const initialTheme = await page.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    // Focus the toggle
+    await themeToggle.focus();
+
+    // Press Enter to toggle
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(100);
+
+    // Verify theme changed
+    const afterEnter = await page.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    expect(afterEnter).not.toBe(initialTheme);
+
+    // Press Space to toggle back
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(100);
+
+    const afterSpace = await page.evaluate(() => {
+      return document.documentElement.getAttribute('data-theme');
+    });
+
+    expect(afterSpace).toBe(initialTheme || 'light');
+  });
+
+  test('Theme toggle has minimum touch target size on mobile', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+
+    const themeToggle = page.getByTestId('theme-toggle');
+    await expect(themeToggle).toBeVisible();
+
+    // Get element dimensions
+    const dimensions = await themeToggle.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return {
+        width: rect.width,
+        height: rect.height,
+      };
+    });
+
+    // WCAG recommends minimum 44x44 touch target
+    expect(dimensions.width).toBeGreaterThanOrEqual(44);
+    expect(dimensions.height).toBeGreaterThanOrEqual(44);
+  });
+});
