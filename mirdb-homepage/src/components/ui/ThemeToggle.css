@@ -1,0 +1,87 @@
+/**
+ * ThemeToggle Component Styles
+ * Owner: Scenario 16 - Dark/Light Mode Toggle
+ */
+
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: var(--spacing-sm);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Icon container */
+.theme-toggle__icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+/* Sun icon (shown in dark mode to indicate switch to light) */
+.theme-toggle__icon--sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.8);
+}
+
+.theme-toggle--dark .theme-toggle__icon--sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Moon icon (shown in light mode to indicate switch to dark) */
+.theme-toggle__icon--moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle--dark .theme-toggle__icon--moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.8);
+}
+
+/* Adjust colors based on theme */
+.theme-toggle--light {
+  color: var(--color-text);
+}
+
+.theme-toggle--dark {
+  color: var(--color-text);
+}
+
+/* Mobile touch target - ensure 44px minimum */
+@media (max-width: 768px) {
+  .theme-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

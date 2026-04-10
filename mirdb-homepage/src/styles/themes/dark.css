@@ -1,0 +1,49 @@
+/**
+ * Dark Theme Styles
+ * Owner: Scenario 16 - Dark/Light Mode Toggle
+ *
+ * Dark theme applied via data-theme="dark" attribute on html element
+ */
+
+[data-theme="dark"] {
+  /* Colors - Dark Theme - WCAG 2.1 AA Compliant */
+  --color-primary: #ff9800;
+  --color-primary-hover: #ffb74d;
+  --color-primary-dark: #f57c00;
+  --color-secondary: #90caf9;
+  --color-secondary-hover: #64b5f6;
+  --color-background: #121212;
+  --color-surface: #1e1e1e;
+  --color-text: #e0e0e0;
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #b0bec5;
+  --color-text-muted: #9ca3af;
+  --color-border: #424242;
+  --color-focus: #64b5f6;
+  --color-bg-primary: #111827;
+  --color-bg-secondary: #1f2937;
+  --color-bg-tertiary: #374151;
+
+  /* Dark theme specific shadows - more subtle */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+/* Ensure smooth transitions when changing themes */
+html {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Adjust specific component colors for dark mode */
+[data-theme="dark"] body {
+  color-scheme: dark;
+}
+
+/* Improve code block contrast in dark mode */
+[data-theme="dark"] code,
+[data-theme="dark"] pre {
+  background-color: var(--color-bg-tertiary);
+}

@@ -1,0 +1,33 @@
+/**
+ * Light Theme Styles
+ * Owner: Scenario 16 - Dark/Light Mode Toggle
+ *
+ * Light theme is the default - these variables are defined in variables.css
+ * This file serves as documentation and can be used for theme-specific overrides
+ */
+
+:root,
+[data-theme="light"] {
+  /* Colors - Light Theme - WCAG 2.1 AA Compliant */
+  --color-primary: #c43e00;
+  --color-primary-hover: #d64600;
+  --color-primary-dark: #a23400;
+  --color-secondary: #1d4ed8;
+  --color-secondary-hover: #1e40af;
+  --color-background: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-text: #212121;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #5f6572;
+  --color-border: #e0e0e0;
+  --color-focus: #2563eb;
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f9fafb;
+  --color-bg-tertiary: #f3f4f6;
+
+  /* Light theme specific shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
