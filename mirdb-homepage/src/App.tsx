@@ -1,4 +1,4 @@
-import { Hero, Features, Documentation, Performance, QuickStart } from './components/sections';
+import { Hero, Features, Documentation, Performance, QuickStart, Contributing } from './components/sections';
 
 function App() {
   return (
@@ -8,6 +8,7 @@ function App() {
       <QuickStart />
       <Performance />
       <Documentation />
+      <Contributing />
     </main>
   );
 }

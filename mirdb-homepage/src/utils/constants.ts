@@ -26,3 +26,10 @@ export const DOCS_LINKS = {
   apiReference: `${DOCS_BASE_URL}/api`,
   configuration: `${DOCS_BASE_URL}/configuration`,
 };
+
+export const CONTRIBUTING_LINKS = {
+  github: GITHUB_URL,
+  contributing: `${GITHUB_URL}/blob/main/CONTRIBUTING.md`,
+  issues: `${GITHUB_URL}/issues`,
+  discussions: `${GITHUB_URL}/discussions`,
+};

@@ -144,3 +144,116 @@ test.describe('Documentation Links - Scenario 6', () => {
     await expect(configDescription).toContainText('Configuration');
   });
 });
+
+test.describe('Contributing Section and GitHub Links - Scenario 7', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('TC1: GitHub repository link is present', async ({ page }) => {
+    const githubLink = page.getByTestId('contributing-link-github');
+
+    await expect(githubLink).toBeVisible();
+    await expect(githubLink).toHaveAttribute('href', 'https://github.com/mirdb/mirdb');
+
+    // Verify link label is correct
+    const label = githubLink.locator('.contributing__link-label');
+    await expect(label).toHaveText('GitHub Repository');
+  });
+
+  test('TC2: Contribution guidelines link is present', async ({ page }) => {
+    const contributingLink = page.getByTestId('contributing-link-contributing-guidelines');
+
+    await expect(contributingLink).toBeVisible();
+    await expect(contributingLink).toHaveAttribute('href', 'https://github.com/mirdb/mirdb/blob/main/CONTRIBUTING.md');
+
+    // Verify link label is correct
+    const label = contributingLink.locator('.contributing__link-label');
+    await expect(label).toHaveText('Contribution Guidelines');
+  });
+
+  test('TC3: GitHub link opens in new tab with rel noopener', async ({ page }) => {
+    const githubLink = page.getByTestId('contributing-link-github');
+
+    await expect(githubLink).toBeVisible();
+
+    // Verify the link opens in a new tab with proper security attributes
+    await expect(githubLink).toHaveAttribute('target', '_blank');
+    await expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('TC4: Contribution guidelines link navigates to guidelines document', async ({ page }) => {
+    const contributingLink = page.getByTestId('contributing-link-contributing-guidelines');
+
+    await expect(contributingLink).toBeVisible();
+
+    // Verify the href points to the CONTRIBUTING.md file
+    const href = await contributingLink.getAttribute('href');
+    expect(href).toBe('https://github.com/mirdb/mirdb/blob/main/CONTRIBUTING.md');
+
+    // Verify the link opens in a new tab with proper security attributes
+    await expect(contributingLink).toHaveAttribute('target', '_blank');
+    await expect(contributingLink).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('Contributing section has proper accessibility attributes', async ({ page }) => {
+    const contributingSection = page.locator('#contributing');
+
+    // Verify section exists and is visible
+    await expect(contributingSection).toBeVisible();
+
+    // Verify section has aria-labelledby
+    await expect(contributingSection).toHaveAttribute('aria-labelledby', 'contributing-heading');
+
+    // Verify navigation has aria-label
+    const nav = page.locator('.contributing__nav');
+    await expect(nav).toHaveAttribute('aria-label', 'Contributing navigation');
+
+    // Verify heading is present
+    const heading = page.locator('#contributing-heading');
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveText('Contribute');
+  });
+
+  test('All contributing links have descriptions', async ({ page }) => {
+    const githubLink = page.getByTestId('contributing-link-github');
+    const contributingLink = page.getByTestId('contributing-link-contributing-guidelines');
+
+    // Verify each link has a description
+    const githubDescription = githubLink.locator('.contributing__link-description');
+    const contributingDescription = contributingLink.locator('.contributing__link-description');
+
+    await expect(githubDescription).toBeVisible();
+    await expect(contributingDescription).toBeVisible();
+
+    // Verify descriptions contain meaningful text
+    await expect(githubDescription).toContainText('source code');
+    await expect(contributingDescription).toContainText('contribute');
+  });
+
+  test('Issues link is present and has correct attributes', async ({ page }) => {
+    const issuesLink = page.getByTestId('contributing-link-issues');
+
+    await expect(issuesLink).toBeVisible();
+    await expect(issuesLink).toHaveAttribute('href', 'https://github.com/mirdb/mirdb/issues');
+    await expect(issuesLink).toHaveAttribute('target', '_blank');
+    await expect(issuesLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+    // Verify link label
+    const label = issuesLink.locator('.contributing__link-label');
+    await expect(label).toHaveText('Report Issues');
+  });
+
+  test('Discussions link is present and has correct attributes', async ({ page }) => {
+    const discussionsLink = page.getByTestId('contributing-link-discussions');
+
+    await expect(discussionsLink).toBeVisible();
+    await expect(discussionsLink).toHaveAttribute('href', 'https://github.com/mirdb/mirdb/discussions');
+    await expect(discussionsLink).toHaveAttribute('target', '_blank');
+    await expect(discussionsLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+    // Verify link label
+    const label = discussionsLink.locator('.contributing__link-label');
+    await expect(label).toHaveText('Discussions');
+  });
+});
