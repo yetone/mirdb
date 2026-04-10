@@ -244,3 +244,135 @@ describe('Features Section - Grid Layout Structure', () => {
     expect(featureCards.length).toBe(6);
   });
 });
+
+// ===== Scenario 3: Getting Started Section Tests =====
+
+describe('Getting Started Section - Installation & Usage', () => {
+  describe('Test Case 1: Installation section content', () => {
+    it('should have a getting-started section with id="getting-started"', () => {
+      const section = document.getElementById('getting-started');
+      expect(section).not.toBeNull();
+      expect(section.tagName.toLowerCase()).toBe('section');
+    });
+
+    it('should contain cargo build command or installation instructions', () => {
+      const section = document.getElementById('getting-started');
+      const installBlock = section.querySelector('#install-block');
+      expect(installBlock).not.toBeNull();
+
+      const codeContent = installBlock.querySelector('.code-content');
+      expect(codeContent).not.toBeNull();
+      expect(codeContent.textContent.toLowerCase()).toMatch(/cargo build|cargo install/);
+    });
+  });
+
+  describe('Test Case 2: SET command example', () => {
+    it('should show SET command syntax with example', () => {
+      const section = document.getElementById('getting-started');
+      const setBlock = section.querySelector('#set-command-block');
+      expect(setBlock).not.toBeNull();
+
+      const codeContent = setBlock.querySelector('.code-content');
+      expect(codeContent.textContent.toLowerCase()).toContain('set key');
+
+      // Check copy button data
+      const copyBtn = setBlock.querySelector('.copy-btn');
+      const copyData = copyBtn.getAttribute('data-copy');
+      expect(copyData).toContain('set key 0 0 5');
+      expect(copyData).toContain('value');
+    });
+  });
+
+  describe('Test Case 3: GET command example', () => {
+    it('should show GET command syntax with example', () => {
+      const section = document.getElementById('getting-started');
+      const getBlock = section.querySelector('#get-command-block');
+      expect(getBlock).not.toBeNull();
+
+      const codeContent = getBlock.querySelector('.code-content');
+      expect(codeContent.textContent.toLowerCase()).toContain('get key');
+
+      // Check copy button data
+      const copyBtn = getBlock.querySelector('.copy-btn');
+      const copyData = copyBtn.getAttribute('data-copy');
+      expect(copyData).toContain('get key');
+    });
+  });
+
+  describe('Test Case 4: INFO command example', () => {
+    it('should show INFO command for server statistics', () => {
+      const section = document.getElementById('getting-started');
+      const infoBlock = section.querySelector('#info-command-block');
+      expect(infoBlock).not.toBeNull();
+
+      const codeContent = infoBlock.querySelector('.code-content');
+      expect(codeContent.textContent.toLowerCase()).toContain('info');
+      // Should mention statistics/server info
+      expect(codeContent.textContent.toLowerCase()).toMatch(/statistics|status|info/);
+
+      // Check copy button data
+      const copyBtn = infoBlock.querySelector('.copy-btn');
+      const copyData = copyBtn.getAttribute('data-copy');
+      expect(copyData).toContain('info');
+    });
+  });
+
+  describe('Code blocks structure', () => {
+    it('each code block should have a copy button with data-copy attribute', () => {
+      const section = document.getElementById('getting-started');
+      const codeBlocks = section.querySelectorAll('.code-block');
+      expect(codeBlocks.length).toBeGreaterThan(0);
+
+      codeBlocks.forEach((block, index) => {
+        const copyBtn = block.querySelector('.copy-btn');
+        expect(copyBtn, `Code block ${index + 1} should have a copy button`).not.toBeNull();
+        expect(copyBtn.getAttribute('data-copy'), `Code block ${index + 1} copy button should have data-copy`).not.toBeNull();
+      });
+    });
+
+    it('copy buttons should have aria-label for accessibility', () => {
+      const section = document.getElementById('getting-started');
+      const copyBtns = section.querySelectorAll('.copy-btn');
+
+      copyBtns.forEach((btn, index) => {
+        const ariaLabel = btn.getAttribute('aria-label');
+        expect(ariaLabel, `Copy button ${index + 1} should have aria-label`).not.toBeNull();
+        expect(ariaLabel.toLowerCase()).toContain('copy');
+      });
+    });
+
+    it('code blocks should have code-content with pre and code elements', () => {
+      const section = document.getElementById('getting-started');
+      const codeBlocks = section.querySelectorAll('.code-block');
+
+      codeBlocks.forEach((block, index) => {
+        const codeContent = block.querySelector('.code-content');
+        expect(codeContent, `Code block ${index + 1} should have .code-content`).not.toBeNull();
+        expect(codeContent.tagName.toLowerCase()).toBe('pre');
+
+        const codeEl = codeContent.querySelector('code');
+        expect(codeEl, `Code block ${index + 1} should have code element`).not.toBeNull();
+      });
+    });
+  });
+
+  describe('Test Case 6: Link to full documentation', () => {
+    it('should have a link to full documentation/README', () => {
+      const section = document.getElementById('getting-started');
+      const docsLink = section.querySelector('#full-docs-link');
+      expect(docsLink).not.toBeNull();
+
+      const href = docsLink.getAttribute('href');
+      expect(href).toContain('github.com/nicksherron/mirdb');
+      expect(href.toLowerCase()).toContain('readme');
+    });
+
+    it('documentation link should open in new tab with proper security attributes', () => {
+      const section = document.getElementById('getting-started');
+      const docsLink = section.querySelector('#full-docs-link');
+
+      expect(docsLink.getAttribute('target')).toBe('_blank');
+      expect(docsLink.getAttribute('rel')).toContain('noopener');
+    });
+  });
+});

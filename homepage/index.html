@@ -150,46 +150,74 @@
     <section class="getting-started" id="getting-started">
       <h2 class="section-title">Getting Started</h2>
       <div class="getting-started-content">
-        <div class="code-block">
+        <h3 class="subsection-title">Installation</h3>
+        <div class="code-block" id="install-block">
           <div class="code-header">
-            <span class="code-lang">Installation</span>
-            <button class="copy-btn" data-copy="cargo install mirdb" aria-label="Copy installation command">
+            <span class="code-lang">Build from source</span>
+            <button class="copy-btn" data-copy="git clone https://github.com/nicksherron/mirdb.git
+cd mirdb
+cargo build --release" aria-label="Copy installation command">
               <span class="copy-icon">Copy</span>
             </button>
           </div>
-          <pre class="code-content"><code>cargo install mirdb</code></pre>
+          <pre class="code-content"><code>git clone https://github.com/nicksherron/mirdb.git
+cd mirdb
+cargo build --release</code></pre>
         </div>
 
-        <div class="code-block">
+        <h3 class="subsection-title">Usage Examples</h3>
+        <p class="usage-intro">MirDB uses the Memcached text protocol. Connect via telnet or any Memcached client:</p>
+
+        <div class="code-block" id="set-command-block">
           <div class="code-header">
-            <span class="code-lang">Usage Example</span>
-            <button class="copy-btn" data-copy="# Start MirDB server
-mirdb
-
-# Connect with any Memcached client
-telnet localhost 12333
-
-# Set a value
-SET mykey 0 0 5
-hello
-
-# Get the value
-GET mykey" aria-label="Copy usage example">
+            <span class="code-lang">SET Command</span>
+            <button class="copy-btn" data-copy="set key 0 0 5\r\nvalue\r\n" aria-label="Copy SET command">
               <span class="copy-icon">Copy</span>
             </button>
           </div>
-          <pre class="code-content"><code># Start MirDB server
-mirdb
+          <pre class="code-content"><code># Store a key-value pair
+# Syntax: set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;\r\n&lt;value&gt;\r\n
+set key 0 0 5\r\n
+value\r\n
 
-# Connect with any Memcached client
-telnet localhost 12333
+# Response: STORED</code></pre>
+        </div>
 
-# Set a value
-SET mykey 0 0 5
-hello
+        <div class="code-block" id="get-command-block">
+          <div class="code-header">
+            <span class="code-lang">GET Command</span>
+            <button class="copy-btn" data-copy="get key\r\n" aria-label="Copy GET command">
+              <span class="copy-icon">Copy</span>
+            </button>
+          </div>
+          <pre class="code-content"><code># Retrieve a value by key
+# Syntax: get &lt;key&gt;\r\n
+get key\r\n
 
-# Get the value
-GET mykey</code></pre>
+# Response:
+# VALUE key 0 5
+# value
+# END</code></pre>
+        </div>
+
+        <div class="code-block" id="info-command-block">
+          <div class="code-header">
+            <span class="code-lang">INFO Command</span>
+            <button class="copy-btn" data-copy="info\r\n" aria-label="Copy INFO command">
+              <span class="copy-icon">Copy</span>
+            </button>
+          </div>
+          <pre class="code-content"><code># Get server statistics and level information
+# MirDB-specific command
+info\r\n
+
+# Returns database status, SSTable levels, and performance metrics</code></pre>
+        </div>
+
+        <div class="docs-link">
+          <a href="https://github.com/nicksherron/mirdb#readme" id="full-docs-link" class="btn btn-secondary" target="_blank" rel="noopener">
+            View Full Documentation
+          </a>
         </div>
       </div>
     </section>
