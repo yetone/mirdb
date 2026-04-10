@@ -20,3 +20,9 @@ export const PROJECT_INFO = {
   tagline: 'A high-performance Rust key-value storage engine',
   description: 'Built with LSM-tree architecture for blazing fast reads and writes',
 };
+
+export const DOCS_LINKS = {
+  architecture: `${DOCS_BASE_URL}/architecture`,
+  apiReference: `${DOCS_BASE_URL}/api`,
+  configuration: `${DOCS_BASE_URL}/configuration`,
+};

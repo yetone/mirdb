@@ -4,9 +4,10 @@ node_modules/
 # Build output
 dist/
 
-# Environment files
-.env
-.env.local
+# Test results
+test-results/
+playwright-report/
+.playwright/
 
 # IDE
 .idea/
@@ -14,10 +15,18 @@ dist/
 *.swp
 *.swo
 
-# Testing
-test-results/
-playwright-report/
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # Cache
 .cache/
-*.log
