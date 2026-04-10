@@ -1,0 +1,14 @@
+/**
+ * Responsive Design Utilities
+ * Owner: Scenarios 9 & 10 - Responsive Design
+ */
+
+/* Container utilities */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Responsive breakpoints defined in component CSS files */

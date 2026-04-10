@@ -1,0 +1,36 @@
+/**
+ * Footer Styles
+ * Owner: Scenario 7 - Footer
+ */
+
+.footer {
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-links a {
+  color: var(--color-text-secondary);
+}
+
+.footer-links a:hover {
+  color: var(--color-accent);
+}
+
+.footer-copyright {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}

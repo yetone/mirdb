@@ -1,0 +1,84 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 2 - Features Section
+ *
+ * Expected styles:
+ * - .features: Features section container
+ * - .features-grid: CSS grid for feature cards
+ * - .feature-card: Individual feature card
+ * - .feature-icon: Feature icon wrapper
+ * - .feature-title: Feature card heading
+ * - .feature-description: Feature description text
+ */
+
+.features {
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  background-color: var(--color-bg-secondary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: var(--color-bg-primary);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-accent);
+}
+
+.feature-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+}
+
+.feature-description {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 640px) {
+  .features {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+}

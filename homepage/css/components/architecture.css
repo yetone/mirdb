@@ -1,0 +1,30 @@
+/**
+ * Architecture Section Styles
+ * Owner: Scenario 4 - Architecture Section
+ */
+
+.architecture {
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  background-color: var(--color-bg-primary);
+}
+
+.architecture-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.architecture-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.architecture-diagram {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.architecture-diagram img {
+  width: 100%;
+  height: auto;
+}
