@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Hero from './components/hero/Hero';
 import MetricsDashboard from './components/dashboard/MetricsDashboard';
+import QueryBuilder from './components/query/QueryBuilder';
 
 function HomePage() {
   return (
@@ -54,6 +55,14 @@ function DocsPage() {
   );
 }
 
+function QueryPage() {
+  return (
+    <Layout>
+      <QueryBuilder />
+    </Layout>
+  );
+}
+
 function App() {
   return (
     <Routes>
@@ -62,6 +71,7 @@ function App() {
       <Route path="/browser" element={<BrowserPage />} />
       <Route path="/config" element={<ConfigPage />} />
       <Route path="/docs" element={<DocsPage />} />
+      <Route path="/query" element={<QueryPage />} />
     </Routes>
   );
 }

@@ -31,3 +31,23 @@ export interface LsLevel {
   size_bytes: number;
   file_count: number;
 }
+
+// Query Builder types (Scenario 6)
+export interface QueryRequest {
+  command: string;
+}
+
+export interface QueryResponse {
+  response: string;
+  success: boolean;
+  error?: string;
+  execution_time_ms?: number;
+}
+
+export interface QueryHistoryItem {
+  id: string;
+  command: string;
+  response: string;
+  success: boolean;
+  timestamp: Date;
+}
