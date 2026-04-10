@@ -4,7 +4,7 @@
 
 export const GITHUB_URL = 'https://github.com/mirdb/mirdb';
 export const CRATES_URL = 'https://crates.io/crates/mirdb';
-export const DOCS_BASE_URL = '/docs';
+export const DOCS_BASE_URL = 'https://docs.mirdb.dev';
 export const QUICKSTART_URL = '/docs/quickstart';
 
 export const SOCIAL_LINKS = {
