@@ -1,10 +1,10 @@
-import { Hero } from './components/sections/Hero';
-import { Documentation } from './components/sections/Documentation';
+import { Hero, Features, Documentation } from './components/sections';
 
 function App() {
   return (
     <main>
       <Hero />
+      <Features />
       <Documentation />
     </main>
   );
