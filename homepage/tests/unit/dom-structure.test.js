@@ -548,3 +548,170 @@ describe('Architecture Section - LSM Tree Diagram', () => {
     });
   });
 });
+
+// ===== Scenario 5: Configuration Section Tests =====
+
+describe('Configuration Section - Default Settings', () => {
+  describe('Test Case 1: Table displays default port: 12333', () => {
+    it('should have a configuration section with id="configuration"', () => {
+      const section = document.getElementById('configuration');
+      expect(section).not.toBeNull();
+      expect(section.tagName.toLowerCase()).toBe('section');
+    });
+
+    it('should display default port value of 12333', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent;
+      expect(tableContent).toContain('12333');
+    });
+
+    it('should have port setting labeled correctly', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent.toLowerCase();
+      expect(tableContent).toContain('port');
+    });
+  });
+
+  describe('Test Case 2: Table displays default work directory: /tmp/mirdb', () => {
+    it('should display default work directory /tmp/mirdb', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent;
+      expect(tableContent).toContain('/tmp/mirdb');
+    });
+
+    it('should have work directory setting labeled correctly', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent.toLowerCase();
+      expect(tableContent).toMatch(/work.*directory|directory/);
+    });
+  });
+
+  describe('Test Case 3: Table displays default memtable size: 4MB', () => {
+    it('should display default memtable size of 4 MB', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent;
+      // Check for 4 MB or 4MB
+      expect(tableContent).toMatch(/4\s*MB/i);
+    });
+
+    it('should have memtable size setting labeled correctly', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent.toLowerCase();
+      expect(tableContent).toContain('memtable');
+    });
+  });
+
+  describe('Test Case 4: Table displays default SSTable size: 100MB', () => {
+    it('should display default SSTable size of 100 MB', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent;
+      // Check for 100 MB or 100MB
+      expect(tableContent).toMatch(/100\s*MB/i);
+    });
+
+    it('should have SSTable size setting labeled correctly', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent.toLowerCase();
+      expect(tableContent).toContain('sstable');
+    });
+  });
+
+  describe('Test Case 5: Table displays default block size: 4KB', () => {
+    it('should display default block size of 4 KB', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent;
+      // Check for 4 KB or 4KB
+      expect(tableContent).toMatch(/4\s*KB/i);
+    });
+
+    it('should have block size setting labeled correctly', () => {
+      const section = document.getElementById('configuration');
+      const tableContent = section.textContent.toLowerCase();
+      expect(tableContent).toContain('block');
+    });
+  });
+
+  describe('Test Case 6: Configuration table has columns for: Setting Name, Default Value, Description', () => {
+    it('should have a config-table element', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      expect(table).not.toBeNull();
+      expect(table.tagName.toLowerCase()).toBe('table');
+    });
+
+    it('should have a table header row with three columns', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      const headerRow = table.querySelector('thead tr');
+      expect(headerRow).not.toBeNull();
+
+      const headers = headerRow.querySelectorAll('th');
+      expect(headers.length).toBe(3);
+    });
+
+    it('should have Setting Name column header', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      const headers = table.querySelectorAll('thead th');
+      const headerTexts = Array.from(headers).map(h => h.textContent.toLowerCase());
+      expect(headerTexts.some(h => h.includes('setting'))).toBe(true);
+    });
+
+    it('should have Default Value column header', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      const headers = table.querySelectorAll('thead th');
+      const headerTexts = Array.from(headers).map(h => h.textContent.toLowerCase());
+      expect(headerTexts.some(h => h.includes('default') || h.includes('value'))).toBe(true);
+    });
+
+    it('should have Description column header', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      const headers = table.querySelectorAll('thead th');
+      const headerTexts = Array.from(headers).map(h => h.textContent.toLowerCase());
+      expect(headerTexts.some(h => h.includes('description'))).toBe(true);
+    });
+
+    it('should have 5 configuration rows in tbody (port, work dir, memtable, sstable, block)', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      const rows = table.querySelectorAll('tbody tr');
+      expect(rows.length).toBe(5);
+    });
+
+    it('each config row should have 3 cells', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      rows.forEach((row, index) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells.length, `Row ${index + 1} should have 3 cells`).toBe(3);
+      });
+    });
+  });
+
+  describe('Configuration table styling and structure', () => {
+    it('should have config-table-wrapper for responsive overflow', () => {
+      const section = document.getElementById('configuration');
+      const wrapper = section.querySelector('.config-table-wrapper');
+      expect(wrapper).not.toBeNull();
+    });
+
+    it('should have default values wrapped in code elements', () => {
+      const section = document.getElementById('configuration');
+      const table = section.querySelector('.config-table');
+      const codeElements = table.querySelectorAll('tbody code');
+      // At least 5 code elements for the 5 default values
+      expect(codeElements.length).toBeGreaterThanOrEqual(5);
+    });
+
+    it('should have section title', () => {
+      const section = document.getElementById('configuration');
+      const title = section.querySelector('.section-title');
+      expect(title).not.toBeNull();
+      expect(title.textContent.toLowerCase()).toContain('configuration');
+    });
+  });
+});
