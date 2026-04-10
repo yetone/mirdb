@@ -1,0 +1,42 @@
+/**
+ * Footer component styles
+ *
+ * Owner: Scenario 1 - Hero Section and Branding Display
+ */
+
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  margin-top: auto;
+  padding: 2rem 1rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-text {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-links {
+  font-size: 0.875rem;
+}
+
+.footer-link {
+  color: var(--color-text-secondary);
+  transition: color var(--transition);
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+}
+
+.footer-separator {
+  margin: 0 0.5rem;
+  color: var(--color-text-secondary);
+}
