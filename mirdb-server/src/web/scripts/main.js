@@ -24,6 +24,9 @@ function initApp() {
         window.UI.initCopyButtons();
     }
 
+    // Initialize mobile navigation (Scenario 11 - Responsive Design)
+    initMobileNavigation();
+
     // Initialize navigation
     initNavigation();
 
@@ -79,6 +82,73 @@ function initNavigation() {
 
     window.addEventListener('scroll', updateActiveNav);
     updateActiveNav();
+}
+
+/**
+ * Initialize mobile navigation toggle
+ * Owner: Scenario 11 - Responsive Design
+ *
+ * Handles hamburger menu toggle for mobile viewports.
+ * Creates an overlay element and manages aria attributes.
+ */
+function initMobileNavigation() {
+    var navToggle = document.getElementById('nav-toggle');
+    var navMenu = document.getElementById('nav-menu');
+
+    if (!navToggle || !navMenu) {
+        return;
+    }
+
+    // Create overlay element for mobile menu
+    var overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(overlay);
+
+    // Toggle menu function
+    function toggleMenu() {
+        var isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', !isExpanded);
+        navMenu.classList.toggle('nav-open', !isExpanded);
+        overlay.classList.toggle('nav-overlay-visible', !isExpanded);
+
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = !isExpanded ? 'hidden' : '';
+    }
+
+    // Close menu function
+    function closeMenu() {
+        navToggle.setAttribute('aria-expanded', 'false');
+        navMenu.classList.remove('nav-open');
+        overlay.classList.remove('nav-overlay-visible');
+        document.body.style.overflow = '';
+    }
+
+    // Toggle menu on button click
+    navToggle.addEventListener('click', toggleMenu);
+
+    // Close menu on overlay click
+    overlay.addEventListener('click', closeMenu);
+
+    // Close menu on nav link click
+    navMenu.querySelectorAll('.nav-link').forEach(function(link) {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+            closeMenu();
+            navToggle.focus();
+        }
+    });
+
+    // Close menu on window resize if viewport becomes large enough
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768 && navToggle.getAttribute('aria-expanded') === 'true') {
+            closeMenu();
+        }
+    });
 }
 
 /**
@@ -229,6 +299,7 @@ function escapeHtml(str) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         initApp: initApp,
+        initMobileNavigation: initMobileNavigation,
         initNavigation: initNavigation,
         initSmoothScroll: initSmoothScroll,
         initConfigDisplay: initConfigDisplay,
