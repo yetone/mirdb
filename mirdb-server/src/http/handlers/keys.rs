@@ -13,7 +13,7 @@ use std::time::Instant;
 
 use serde::{Deserialize, Serialize};
 
-use crate::request::{GetterType, Request};
+use crate::request::{GetterType, Request, SetterType};
 use crate::slice::Slice;
 use crate::store::Store;
 use crate::utils::to_str;
@@ -68,6 +68,14 @@ pub struct DeleteResponse {
     pub message: String,
 }
 
+/// Success response for set key operation
+#[derive(Debug, Serialize)]
+pub struct SetKeyResponse {
+    pub success: bool,
+    pub message: String,
+    pub key: String,
+}
+
 /// Result of handle_get_key operation
 pub enum GetKeyResult {
     /// Key found with value and metadata
@@ -84,6 +92,16 @@ pub enum DeleteKeyResult {
     Deleted(DeleteResponse),
     /// Key not found
     NotFound(ErrorResponse),
+    /// Internal error occurred
+    Error(ErrorResponse),
+}
+
+/// Result of handle_set_key operation
+pub enum SetKeyResult {
+    /// Key stored successfully
+    Stored(SetKeyResponse),
+    /// Bad request (validation error)
+    BadRequest(ErrorResponse),
     /// Internal error occurred
     Error(ErrorResponse),
 }
@@ -150,6 +168,81 @@ pub fn handle_get_key(store: Arc<Store>, key: String) -> GetKeyResult {
             }
         }
         Err(e) => GetKeyResult::Error(ErrorResponse {
+            error: "internal_error".to_string(),
+            message: format!("Store error: {:?}", e),
+        }),
+    }
+}
+
+/// Handle POST /api/keys request
+/// Stores a new key-value pair in the store
+///
+/// # Arguments
+/// * `store` - Arc reference to the Store
+/// * `request` - SetKeyRequest containing key, value, flags, and TTL
+///
+/// # Returns
+/// * `SetKeyResult::Stored` - Key stored successfully
+/// * `SetKeyResult::BadRequest` - Invalid request data
+/// * `SetKeyResult::Error` - Internal error occurred
+pub fn handle_set_key(store: Arc<Store>, request: SetKeyRequest) -> SetKeyResult {
+    let start = Instant::now();
+
+    // Validate key name
+    if request.key.is_empty() {
+        return SetKeyResult::BadRequest(ErrorResponse {
+            error: "bad_request".to_string(),
+            message: "Key name cannot be empty".to_string(),
+        });
+    }
+
+    // Create key and value slices
+    let key = Slice::from(request.key.as_str());
+    let value = Slice::from(request.value.as_str());
+    let bytes = value.len();
+
+    // Create a setter request
+    let set_request = Request::Setter {
+        setter: SetterType::Set,
+        key: key.clone(),
+        flags: request.flags,
+        ttl: request.ttl,
+        bytes,
+        payload: value,
+        no_reply: false,
+    };
+
+    // Apply the request to the store
+    match store.apply(set_request) {
+        Ok(response) => {
+            match response {
+                crate::response::Response::Stored => {
+                    let elapsed = start.elapsed();
+                    log::debug!(
+                        "SET key '{}' completed in {:?}",
+                        request.key,
+                        elapsed
+                    );
+
+                    SetKeyResult::Stored(SetKeyResponse {
+                        success: true,
+                        message: "Key stored successfully".to_string(),
+                        key: request.key,
+                    })
+                }
+                crate::response::Response::ClientError(msg) => {
+                    SetKeyResult::BadRequest(ErrorResponse {
+                        error: "bad_request".to_string(),
+                        message: msg,
+                    })
+                }
+                _ => SetKeyResult::Error(ErrorResponse {
+                    error: "internal_error".to_string(),
+                    message: "Unexpected response type".to_string(),
+                }),
+            }
+        }
+        Err(e) => SetKeyResult::Error(ErrorResponse {
             error: "internal_error".to_string(),
             message: format!("Store error: {:?}", e),
         }),
@@ -302,6 +395,188 @@ mod tests {
             elapsed.as_millis()
         );
     }
+
+    // Tests for handle_set_key (Scenario 5 - Key Operations - Set Key)
+
+    #[test]
+    fn test_set_key_success() {
+        let store = create_test_store();
+
+        let request = SetKeyRequest {
+            key: "test".to_string(),
+            value: "hello".to_string(),
+            flags: 0,
+            ttl: 3600,
+        };
+
+        let result = handle_set_key(store, request);
+
+        match result {
+            SetKeyResult::Stored(response) => {
+                assert!(response.success);
+                assert_eq!(response.key, "test");
+                assert_eq!(response.message, "Key stored successfully");
+            }
+            _ => panic!("Expected Stored result"),
+        }
+    }
+
+    #[test]
+    fn test_set_key_empty_key_name() {
+        let store = create_test_store();
+
+        let request = SetKeyRequest {
+            key: "".to_string(),
+            value: "hello".to_string(),
+            flags: 0,
+            ttl: 3600,
+        };
+
+        let result = handle_set_key(store, request);
+
+        match result {
+            SetKeyResult::BadRequest(error) => {
+                assert_eq!(error.error, "bad_request");
+                assert!(error.message.contains("cannot be empty"));
+            }
+            _ => panic!("Expected BadRequest result"),
+        }
+    }
+
+    #[test]
+    fn test_set_key_with_flags_and_ttl() {
+        let store = create_test_store();
+
+        let request = SetKeyRequest {
+            key: "mykey".to_string(),
+            value: "myvalue".to_string(),
+            flags: 42,
+            ttl: 7200,
+        };
+
+        let result = handle_set_key(store.clone(), request);
+
+        match result {
+            SetKeyResult::Stored(response) => {
+                assert!(response.success);
+                assert_eq!(response.key, "mykey");
+            }
+            _ => panic!("Expected Stored result"),
+        }
+
+        // Verify the key was stored correctly
+        let get_result = handle_get_key(store, "mykey".to_string());
+        match get_result {
+            GetKeyResult::Found(response) => {
+                assert_eq!(response.key, "mykey");
+                assert_eq!(response.value, "myvalue");
+                assert_eq!(response.flags, 42);
+            }
+            _ => panic!("Expected Found result"),
+        }
+    }
+
+    #[test]
+    fn test_set_key_performance() {
+        let store = create_test_store();
+
+        let request = SetKeyRequest {
+            key: "perf_set_test".to_string(),
+            value: "performance_test_value".to_string(),
+            flags: 0,
+            ttl: 3600,
+        };
+
+        // Measure set performance
+        let start = Instant::now();
+        let result = handle_set_key(store, request);
+        let elapsed = start.elapsed();
+
+        // Should complete within 500ms
+        assert!(
+            elapsed.as_millis() < 500,
+            "Set operation took {}ms, expected < 500ms",
+            elapsed.as_millis()
+        );
+
+        match result {
+            SetKeyResult::Stored(_) => {}
+            _ => panic!("Expected Stored result"),
+        }
+    }
+
+    #[test]
+    fn test_set_key_overwrite_existing() {
+        let store = create_test_store();
+
+        // Set initial key
+        let request1 = SetKeyRequest {
+            key: "overwrite_test".to_string(),
+            value: "initial_value".to_string(),
+            flags: 1,
+            ttl: 3600,
+        };
+        handle_set_key(store.clone(), request1);
+
+        // Overwrite with new value
+        let request2 = SetKeyRequest {
+            key: "overwrite_test".to_string(),
+            value: "new_value".to_string(),
+            flags: 2,
+            ttl: 7200,
+        };
+        let result = handle_set_key(store.clone(), request2);
+
+        match result {
+            SetKeyResult::Stored(response) => {
+                assert!(response.success);
+            }
+            _ => panic!("Expected Stored result"),
+        }
+
+        // Verify new value
+        let get_result = handle_get_key(store, "overwrite_test".to_string());
+        match get_result {
+            GetKeyResult::Found(response) => {
+                assert_eq!(response.value, "new_value");
+                assert_eq!(response.flags, 2);
+            }
+            _ => panic!("Expected Found result"),
+        }
+    }
+
+    #[test]
+    fn test_set_key_empty_value_allowed() {
+        let store = create_test_store();
+
+        let request = SetKeyRequest {
+            key: "empty_value_key".to_string(),
+            value: "".to_string(),
+            flags: 0,
+            ttl: 3600,
+        };
+
+        let result = handle_set_key(store.clone(), request);
+
+        match result {
+            SetKeyResult::Stored(response) => {
+                assert!(response.success);
+            }
+            _ => panic!("Expected Stored result"),
+        }
+
+        // Verify the key was stored with empty value
+        let get_result = handle_get_key(store, "empty_value_key".to_string());
+        match get_result {
+            GetKeyResult::Found(response) => {
+                assert_eq!(response.value, "");
+                assert_eq!(response.size, 0);
+            }
+            _ => panic!("Expected Found result"),
+        }
+    }
+
+    // Tests for handle_delete_key (Scenario 7 - Key Operations - Delete Key)
 
     #[test]
     fn test_delete_existing_key() {

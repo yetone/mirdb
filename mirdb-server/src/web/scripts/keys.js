@@ -210,10 +210,188 @@ var MirDBKeys = (function() {
     }
 
     /**
-     * Show set key form
+     * Show set key form modal
+     * Owner: Scenario 5 - Key Operations - Set Key
      */
     function showSetKeyForm() {
-        // Placeholder - to be implemented by Scenario 5
+        var modalContent = buildSetKeyForm();
+        MirDBUI.showModal(modalContent);
+    }
+
+    /**
+     * Build the set key form modal content
+     * @returns {HTMLElement} Form element for setting a key
+     */
+    function buildSetKeyForm() {
+        var container = document.createElement('div');
+        container.className = 'set-key-form';
+
+        // Modal title
+        var title = document.createElement('h2');
+        title.className = 'modal-title';
+        title.textContent = 'Set Key';
+        container.appendChild(title);
+
+        // Create form element
+        var form = document.createElement('form');
+        form.id = 'set-key-form';
+        form.setAttribute('aria-label', 'Set key form');
+
+        // Key input
+        var keyGroup = createFormGroup('key', 'Key', 'text', 'Enter key name', true);
+        form.appendChild(keyGroup);
+
+        // Value input (textarea for multiline values)
+        var valueGroup = document.createElement('div');
+        valueGroup.className = 'form-group';
+        var valueLabel = document.createElement('label');
+        valueLabel.setAttribute('for', 'set-key-value');
+        valueLabel.textContent = 'Value';
+        valueLabel.className = 'form-label';
+        var valueInput = document.createElement('textarea');
+        valueInput.id = 'set-key-value';
+        valueInput.name = 'value';
+        valueInput.className = 'form-input form-textarea';
+        valueInput.placeholder = 'Enter value';
+        valueInput.rows = 4;
+        valueInput.setAttribute('aria-label', 'Value');
+        valueGroup.appendChild(valueLabel);
+        valueGroup.appendChild(valueInput);
+        form.appendChild(valueGroup);
+
+        // Flags input
+        var flagsGroup = createFormGroup('flags', 'Flags', 'number', '0', false);
+        var flagsInput = flagsGroup.querySelector('input');
+        flagsInput.value = '0';
+        flagsInput.min = '0';
+        form.appendChild(flagsGroup);
+
+        // TTL input
+        var ttlGroup = createFormGroup('ttl', 'TTL (seconds)', 'number', '0 (no expiration)', false);
+        var ttlInput = ttlGroup.querySelector('input');
+        ttlInput.value = '0';
+        ttlInput.min = '0';
+        var ttlHint = document.createElement('span');
+        ttlHint.className = 'form-hint';
+        ttlHint.textContent = '0 = no expiration';
+        ttlGroup.appendChild(ttlHint);
+        form.appendChild(ttlGroup);
+
+        // Button section
+        var buttonSection = document.createElement('div');
+        buttonSection.className = 'modal-buttons';
+
+        var cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'btn btn-secondary';
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.onclick = function() {
+            MirDBUI.hideModal();
+        };
+
+        var submitBtn = document.createElement('button');
+        submitBtn.type = 'submit';
+        submitBtn.id = 'set-key-submit';
+        submitBtn.className = 'btn btn-primary';
+        submitBtn.textContent = 'Set Key';
+
+        buttonSection.appendChild(cancelBtn);
+        buttonSection.appendChild(submitBtn);
+        form.appendChild(buttonSection);
+
+        // Handle form submission
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            handleSetKeySubmit(form);
+        };
+
+        container.appendChild(form);
+        return container;
+    }
+
+    /**
+     * Create a form group with label and input
+     * @param {string} name - Input name
+     * @param {string} label - Label text
+     * @param {string} type - Input type
+     * @param {string} placeholder - Placeholder text
+     * @param {boolean} required - Whether the field is required
+     * @returns {HTMLElement} Form group element
+     */
+    function createFormGroup(name, label, type, placeholder, required) {
+        var group = document.createElement('div');
+        group.className = 'form-group';
+
+        var labelEl = document.createElement('label');
+        labelEl.setAttribute('for', 'set-key-' + name);
+        labelEl.textContent = label;
+        labelEl.className = 'form-label';
+        if (required) {
+            var requiredSpan = document.createElement('span');
+            requiredSpan.className = 'required';
+            requiredSpan.textContent = ' *';
+            requiredSpan.setAttribute('aria-label', 'required');
+            labelEl.appendChild(requiredSpan);
+        }
+
+        var input = document.createElement('input');
+        input.type = type;
+        input.id = 'set-key-' + name;
+        input.name = name;
+        input.className = 'form-input';
+        input.placeholder = placeholder;
+        input.setAttribute('aria-label', label);
+        if (required) {
+            input.required = true;
+        }
+
+        group.appendChild(labelEl);
+        group.appendChild(input);
+        return group;
+    }
+
+    /**
+     * Handle set key form submission
+     * @param {HTMLFormElement} form - The form element
+     */
+    function handleSetKeySubmit(form) {
+        var keyInput = form.querySelector('#set-key-key');
+        var valueInput = form.querySelector('#set-key-value');
+        var flagsInput = form.querySelector('#set-key-flags');
+        var ttlInput = form.querySelector('#set-key-ttl');
+        var submitBtn = form.querySelector('#set-key-submit');
+
+        var key = keyInput.value.trim();
+        var value = valueInput.value;
+        var flags = parseInt(flagsInput.value, 10) || 0;
+        var ttl = parseInt(ttlInput.value, 10) || 0;
+
+        // Validate key
+        if (!key) {
+            MirDBUI.showToast('Key name is required', 'error');
+            keyInput.focus();
+            return;
+        }
+
+        // Disable submit button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Setting...';
+
+        // Call API to set key
+        MirDBApi.setKey(key, value, flags, ttl)
+            .then(function(response) {
+                MirDBUI.showToast('Key "' + key + '" stored successfully', 'success');
+                MirDBUI.hideModal();
+                // Refresh key list if available
+                if (typeof loadKeys === 'function') {
+                    loadKeys(1);
+                }
+            })
+            .catch(function(error) {
+                MirDBUI.showToast('Failed to set key: ' + error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Set Key';
+            });
     }
 
     /**
@@ -270,3 +448,8 @@ var MirDBKeys = (function() {
         filterKeys: filterKeys
     };
 })();
+
+// Export MirDBKeys to window for browser usage
+if (typeof window !== 'undefined') {
+    window.MirDBKeys = MirDBKeys;
+}
