@@ -18,6 +18,7 @@ use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
 
 use crate::error::MyResult;
+use crate::http::start_http_server;
 use crate::options::Options;
 use crate::parser::parse;
 use crate::proto::Proto;
@@ -53,6 +54,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod http;
 
 pub struct Server {
     store: Arc<Store>,
@@ -127,6 +129,14 @@ Welcome to MirDB!
         .trim_matches('\n')
     );
 
+    // Start HTTP server alongside memcached (NFR-7: non-blocking integration)
+    // HTTP server runs on a separate thread to avoid blocking memcached operations
+    let http_port: u16 = 8080; // Default HTTP port for homepage
+    let http_addr: SocketAddr = format!("0.0.0.0:{}", http_port).parse().unwrap();
+    let http_store = store.clone();
+    start_http_server(http_addr, http_store, opt);
+
+    // Start memcached server (blocks main thread)
     serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())

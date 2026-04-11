@@ -1,0 +1,41 @@
+/*
+ * Dark Mode Styles
+ * Owner: Scenario 20 - Dark Mode Support
+ *
+ * Includes:
+ * - prefers-color-scheme media query
+ * - Terminal-style aesthetics
+ * - 4.5:1 contrast ratio compliance
+ */
+
+/* Dark mode via system preference */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark background colors */
+        --color-bg-primary: #121212;
+        --color-bg-secondary: #1E1E1E;
+        --color-bg-accent: #2D2D2D;
+
+        /* Adjusted text colors for contrast */
+        --color-text-primary: #E0E0E0;
+        --color-text-secondary: #B0B0B0;
+        --color-text-muted: #808080;
+
+        /* Border and shadows */
+        --color-border: #3D3D3D;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.25);
+        --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.35);
+    }
+}
+
+/* Manual dark mode toggle class */
+.dark-mode {
+    --color-bg-primary: #121212;
+    --color-bg-secondary: #1E1E1E;
+    --color-bg-accent: #2D2D2D;
+    --color-text-primary: #E0E0E0;
+    --color-text-secondary: #B0B0B0;
+    --color-text-muted: #808080;
+    --color-border: #3D3D3D;
+}

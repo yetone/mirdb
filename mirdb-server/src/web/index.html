@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/dark-mode.css">
+</head>
+<body>
+    <!-- Header: Owner - Scenario 1 -->
+    <header class="header">
+        <div class="header-brand">
+            <div class="logo" aria-label="MirDB Logo">
+                <svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true">
+                    <rect x="4" y="8" width="40" height="32" rx="4" fill="#E65100"/>
+                    <rect x="8" y="14" width="32" height="6" rx="2" fill="#FF9800"/>
+                    <rect x="8" y="24" width="24" height="4" rx="1" fill="#FFB74D"/>
+                    <rect x="8" y="32" width="16" height="4" rx="1" fill="#FFB74D"/>
+                    <circle cx="38" cy="34" r="4" fill="#FFF3E0"/>
+                </svg>
+                <span class="logo-text">MirDB</span>
+            </div>
+            <p class="tagline">A blazing-fast, persistent key-value store built in Rust</p>
+        </div>
+        <!-- Mobile Menu Toggle: Owner - Scenario 11 -->
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+            <span class="hamburger-icon" aria-hidden="true">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </span>
+        </button>
+        <nav class="nav" id="nav-menu" aria-label="Main navigation">
+            <ul class="nav-list">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#status" class="nav-link">Status</a></li>
+                <li><a href="#keys" class="nav-link">Keys</a></li>
+                <li><a href="#config" class="nav-link">Config</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main">
+        <!-- Hero Section: Owner - Scenario 1 -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to MirDB</h1>
+                <p class="hero-description">
+                    MirDB is a persistent key-value store built in Rust that implements the
+                    Memcached protocol with disk-based persistence using LSM-tree architecture.
+                </p>
+            </div>
+        </section>
+
+        <!-- Quick Start Section: Owner - Scenario 2 -->
+        <section id="quick-start" class="quick-start" aria-labelledby="quick-start-title">
+            <div class="quick-start-container">
+                <h2 id="quick-start-title" class="quick-start-title">Quick Start</h2>
+                <p class="quick-start-description">Connect to MirDB using the Memcached protocol. Use telnet or netcat to interact with your data.</p>
+
+                <div class="quick-start-examples">
+                    <!-- Connect Example -->
+                    <div class="code-example" data-testid="connect-example">
+                        <div class="code-header">
+                            <span class="code-label">Connect to MirDB</span>
+                            <button type="button" class="copy-btn" data-copy-target="connect-cmd" aria-label="Copy connect command">
+                                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="connect-cmd">telnet localhost 12333</code></pre>
+                    </div>
+
+                    <!-- Alternative Connect with nc -->
+                    <div class="code-example" data-testid="nc-connect-example">
+                        <div class="code-header">
+                            <span class="code-label">Alternative: Using netcat</span>
+                            <button type="button" class="copy-btn" data-copy-target="nc-cmd" aria-label="Copy netcat command">
+                                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="nc-cmd">nc localhost 12333</code></pre>
+                    </div>
+
+                    <!-- Set Key Example -->
+                    <div class="code-example" data-testid="set-example">
+                        <div class="code-header">
+                            <span class="code-label">Set a key</span>
+                            <button type="button" class="copy-btn" data-copy-target="set-cmd" aria-label="Copy set command">
+                                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="set-cmd">set mykey 0 0 5
+hello</code></pre>
+                        <p class="code-description">Format: set &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</p>
+                    </div>
+
+                    <!-- Get Key Example -->
+                    <div class="code-example" data-testid="get-example">
+                        <div class="code-header">
+                            <span class="code-label">Get a key</span>
+                            <button type="button" class="copy-btn" data-copy-target="get-cmd" aria-label="Copy get command">
+                                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="get-cmd">get mykey</code></pre>
+                    </div>
+
+                    <!-- Delete Key Example -->
+                    <div class="code-example" data-testid="delete-example">
+                        <div class="code-header">
+                            <span class="code-label">Delete a key</span>
+                            <button type="button" class="copy-btn" data-copy-target="delete-cmd" aria-label="Copy delete command">
+                                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="delete-cmd">delete mykey</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Server Status Section: Owner - Scenario 3 -->
+        <section id="status" class="section status-section">
+            <h2 class="section-title">Server Status</h2>
+            <div id="status-panel" class="status-panel">
+                <!-- Status dashboard - owned by Scenario 3 -->
+                <div class="status-placeholder">Loading status...</div>
+            </div>
+        </section>
+
+        <!-- Key Browser Section: Owner - Scenario 4 -->
+        <section id="keys" class="section keys-section">
+            <h2 class="section-title">Key Browser</h2>
+            <div id="key-browser" class="key-browser">
+                <!-- Key browser - owned by Scenarios 4-7 -->
+                <div class="keys-placeholder">Loading keys...</div>
+            </div>
+        </section>
+
+        <!-- Configuration Section: Owner - Scenario 8 -->
+        <section id="config" class="section config-section">
+            <h2 class="section-title">Configuration</h2>
+            <div id="config-panel" class="config-panel">
+                <!-- Config display - owned by Scenario 8 -->
+                <div class="config-placeholder">Loading configuration...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer: Owner - Scenario 10 -->
+    <footer class="footer" data-testid="footer">
+        <div class="footer-content">
+            <div class="footer-docs" data-testid="footer-docs">
+                <h3 class="footer-heading">Documentation</h3>
+                <nav class="footer-nav" aria-label="Documentation links">
+                    <a href="https://github.com/yetone/mirdb#readme" class="footer-link" data-testid="readme-link">README</a>
+                    <a href="https://github.com/yetone/mirdb" class="footer-link" data-testid="github-link">GitHub</a>
+                    <a href="/api-docs" class="footer-link" data-testid="api-docs-link">API Documentation</a>
+                </nav>
+            </div>
+            <div class="footer-info">
+                <p class="footer-copyright">&copy; 2024 MirDB Project. Licensed under <a href="https://opensource.org/licenses/MIT" class="footer-link" data-testid="license-link">MIT</a>.</p>
+                <p class="footer-version" data-testid="version-number">Version <span id="app-version">1.0.0</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/scripts/api.js"></script>
+    <script src="/scripts/ui.js"></script>
+    <script src="/scripts/status.js"></script>
+    <script src="/scripts/keys.js"></script>
+    <script src="/scripts/main.js"></script>
+</body>
+</html>
