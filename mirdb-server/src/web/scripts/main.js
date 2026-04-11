@@ -30,6 +30,9 @@ function initApp() {
     // Initialize smooth scrolling
     initSmoothScroll();
 
+    // Initialize auto-refresh
+    initAutoRefresh();
+
     console.log('MirDB Homepage initialized');
 }
 
@@ -37,21 +40,21 @@ function initApp() {
  * Initialize navigation highlighting based on scroll position
  */
 function initNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('section[id]');
+    var navLinks = document.querySelectorAll('.nav-link');
+    var sections = document.querySelectorAll('section[id]');
 
     function updateActiveNav() {
-        const scrollPosition = window.scrollY + 100;
+        var scrollPosition = window.scrollY + 100;
 
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
+        sections.forEach(function(section) {
+            var sectionTop = section.offsetTop;
+            var sectionHeight = section.offsetHeight;
+            var sectionId = section.getAttribute('id');
 
             if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
+                navLinks.forEach(function(link) {
                     link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
+                    if (link.getAttribute('href') === '#' + sectionId) {
                         link.classList.add('active');
                     }
                 });
@@ -60,8 +63,8 @@ function initNavigation() {
 
         // If at top of page, highlight Home
         if (scrollPosition < 200) {
-            navLinks.forEach(link => link.classList.remove('active'));
-            const homeLink = document.querySelector('.nav-link[href="#"]');
+            navLinks.forEach(function(link) { link.classList.remove('active'); });
+            var homeLink = document.querySelector('.nav-link[href="#home"]');
             if (homeLink) homeLink.classList.add('active');
         }
     }
@@ -74,16 +77,16 @@ function initNavigation() {
  * Initialize smooth scrolling for anchor links
  */
 function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
         anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href === '#') {
+            var href = this.getAttribute('href');
+            if (href === '#' || href === '#home') {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 return;
             }
 
-            const target = document.querySelector(href);
+            var target = document.querySelector(href);
             if (target) {
                 e.preventDefault();
                 target.scrollIntoView({ behavior: 'smooth' });
@@ -92,7 +95,15 @@ function initSmoothScroll() {
     });
 }
 
+/**
+ * Initialize auto-refresh for status dashboard (5-second interval)
+ */
+function initAutoRefresh() {
+    // Status refresh will be initialized by status.js
+    // This is a placeholder for the refresh coordinator
+}
+
 // Export for testing
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { initApp, initNavigation, initSmoothScroll };
+    module.exports = { initApp: initApp, initNavigation: initNavigation, initSmoothScroll: initSmoothScroll };
 }

@@ -5,29 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MirDB - Persistent Key-Value Store</title>
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/dark-mode.css">
 </head>
 <body>
     <!-- Header: Owner - Scenario 1 -->
     <header class="header">
-        <div class="header-container">
-            <div class="logo">
+        <div class="header-brand">
+            <div class="logo" aria-label="MirDB Logo">
+                <svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true">
+                    <rect x="4" y="8" width="40" height="32" rx="4" fill="#E65100"/>
+                    <rect x="8" y="14" width="32" height="6" rx="2" fill="#FF9800"/>
+                    <rect x="8" y="24" width="24" height="4" rx="1" fill="#FFB74D"/>
+                    <rect x="8" y="32" width="16" height="4" rx="1" fill="#FFB74D"/>
+                    <circle cx="38" cy="34" r="4" fill="#FFF3E0"/>
+                </svg>
                 <span class="logo-text">MirDB</span>
             </div>
-            <nav class="nav">
-                <a href="#" class="nav-link active">Home</a>
-                <a href="#status" class="nav-link">Status</a>
-                <a href="#keys" class="nav-link">Keys</a>
-                <a href="#config" class="nav-link">Config</a>
-            </nav>
+            <p class="tagline">A blazing-fast, persistent key-value store built in Rust</p>
         </div>
+        <nav class="nav" aria-label="Main navigation">
+            <ul class="nav-list">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#status" class="nav-link">Status</a></li>
+                <li><a href="#keys" class="nav-link">Keys</a></li>
+                <li><a href="#config" class="nav-link">Config</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main class="main">
         <!-- Hero Section: Owner - Scenario 1 -->
-        <section class="hero">
+        <section id="home" class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">MirDB</h1>
-                <p class="hero-tagline">A persistent key-value store built in Rust with Memcached protocol support</p>
+                <h1 class="hero-title">Welcome to MirDB</h1>
+                <p class="hero-description">
+                    MirDB is a persistent key-value store built in Rust that implements the
+                    Memcached protocol with disk-based persistence using LSM-tree architecture.
+                </p>
             </div>
         </section>
 
@@ -119,41 +133,47 @@ hello</code></pre>
         </section>
 
         <!-- Server Status Section: Owner - Scenario 3 -->
-        <section id="status" class="status-section">
-            <div class="section-container">
-                <h2 class="section-title">Server Status</h2>
-                <!-- Status content will be added by Scenario 3 -->
+        <section id="status" class="section status-section">
+            <h2 class="section-title">Server Status</h2>
+            <div id="status-panel" class="status-panel">
+                <!-- Status dashboard - owned by Scenario 3 -->
+                <div class="status-placeholder">Loading status...</div>
             </div>
         </section>
 
         <!-- Key Browser Section: Owner - Scenario 4 -->
-        <section id="keys" class="keys-section">
-            <div class="section-container">
-                <h2 class="section-title">Key Browser</h2>
-                <!-- Key browser content will be added by Scenario 4 -->
+        <section id="keys" class="section keys-section">
+            <h2 class="section-title">Key Browser</h2>
+            <div id="key-browser" class="key-browser">
+                <!-- Key browser - owned by Scenarios 4-7 -->
+                <div class="keys-placeholder">Loading keys...</div>
             </div>
         </section>
 
         <!-- Configuration Section: Owner - Scenario 8 -->
-        <section id="config" class="config-section">
-            <div class="section-container">
-                <h2 class="section-title">Configuration</h2>
-                <!-- Configuration content will be added by Scenario 8 -->
+        <section id="config" class="section config-section">
+            <h2 class="section-title">Configuration</h2>
+            <div id="config-panel" class="config-panel">
+                <!-- Config display - owned by Scenario 8 -->
+                <div class="config-placeholder">Loading configuration...</div>
             </div>
         </section>
     </main>
 
     <!-- Footer: Owner - Scenario 10 -->
     <footer class="footer">
-        <div class="footer-container">
-            <p class="footer-text">&copy; 2024 MirDB. Licensed under MIT.</p>
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2024 MirDB Project. Licensed under MIT.</p>
             <div class="footer-links">
-                <a href="https://github.com/example/mirdb" class="footer-link">GitHub</a>
+                <a href="https://github.com/yetone/mirdb" class="footer-link">GitHub</a>
             </div>
         </div>
     </footer>
 
+    <script src="/scripts/api.js"></script>
     <script src="/scripts/ui.js"></script>
+    <script src="/scripts/status.js"></script>
+    <script src="/scripts/keys.js"></script>
     <script src="/scripts/main.js"></script>
 </body>
 </html>

@@ -35,7 +35,7 @@ async function copyToClipboard(text) {
  * @returns {boolean} - Returns true if successful
  */
 function fallbackCopyToClipboard(text) {
-    const textArea = document.createElement('textarea');
+    var textArea = document.createElement('textarea');
     textArea.value = text;
     textArea.style.position = 'fixed';
     textArea.style.left = '-9999px';
@@ -46,7 +46,7 @@ function fallbackCopyToClipboard(text) {
     try {
         textArea.select();
         textArea.setSelectionRange(0, 99999);
-        const successful = document.execCommand('copy');
+        var successful = document.execCommand('copy');
         document.body.removeChild(textArea);
         return successful;
     } catch (err) {
@@ -60,21 +60,21 @@ function fallbackCopyToClipboard(text) {
  * Initialize copy buttons with click handlers
  */
 function initCopyButtons() {
-    const copyButtons = document.querySelectorAll('.copy-btn[data-copy-target]');
+    var copyButtons = document.querySelectorAll('.copy-btn[data-copy-target]');
 
-    copyButtons.forEach(button => {
-        button.addEventListener('click', async (event) => {
+    copyButtons.forEach(function(button) {
+        button.addEventListener('click', async function(event) {
             event.preventDefault();
-            const targetId = button.getAttribute('data-copy-target');
-            const targetElement = document.getElementById(targetId);
+            var targetId = button.getAttribute('data-copy-target');
+            var targetElement = document.getElementById(targetId);
 
             if (!targetElement) {
                 console.error('Copy target not found:', targetId);
                 return;
             }
 
-            const textToCopy = targetElement.textContent || targetElement.innerText;
-            const success = await copyToClipboard(textToCopy);
+            var textToCopy = targetElement.textContent || targetElement.innerText;
+            var success = await copyToClipboard(textToCopy);
 
             if (success) {
                 showCopyFeedback(button);
@@ -88,15 +88,15 @@ function initCopyButtons() {
  * @param {HTMLElement} button - The copy button element
  */
 function showCopyFeedback(button) {
-    const copyText = button.querySelector('.copy-text');
-    const originalText = copyText ? copyText.textContent : 'Copy';
+    var copyText = button.querySelector('.copy-text');
+    var originalText = copyText ? copyText.textContent : 'Copy';
 
     button.classList.add('copied');
     if (copyText) {
         copyText.textContent = 'Copied!';
     }
 
-    setTimeout(() => {
+    setTimeout(function() {
         button.classList.remove('copied');
         if (copyText) {
             copyText.textContent = originalText;
@@ -109,15 +109,17 @@ function showCopyFeedback(button) {
  * @param {string} message - The message to display
  * @param {string} type - The type of toast ('success', 'error', 'info')
  */
-function showToast(message, type = 'info') {
+function showToast(message, type) {
+    type = type || 'info';
+
     // Remove existing toasts
-    const existingToast = document.querySelector('.toast');
+    var existingToast = document.querySelector('.toast');
     if (existingToast) {
         existingToast.remove();
     }
 
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
     toast.textContent = message;
     toast.setAttribute('role', 'alert');
     toast.setAttribute('aria-live', 'polite');
@@ -125,14 +127,14 @@ function showToast(message, type = 'info') {
     document.body.appendChild(toast);
 
     // Trigger animation
-    requestAnimationFrame(() => {
+    requestAnimationFrame(function() {
         toast.classList.add('toast-visible');
     });
 
     // Remove after delay
-    setTimeout(() => {
+    setTimeout(function() {
         toast.classList.remove('toast-visible');
-        setTimeout(() => toast.remove(), 300);
+        setTimeout(function() { toast.remove(); }, 300);
     }, 3000);
 }
 
@@ -141,21 +143,22 @@ function showToast(message, type = 'info') {
  * @param {string|HTMLElement} content - The content to display in the modal
  */
 function showModal(content) {
-    const overlay = document.createElement('div');
+    var overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
+    overlay.id = 'modal-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
 
-    const modal = document.createElement('div');
+    var modal = document.createElement('div');
     modal.className = 'modal';
 
-    const closeBtn = document.createElement('button');
+    var closeBtn = document.createElement('button');
     closeBtn.className = 'modal-close';
     closeBtn.innerHTML = '&times;';
     closeBtn.setAttribute('aria-label', 'Close modal');
     closeBtn.onclick = hideModal;
 
-    const contentContainer = document.createElement('div');
+    var contentContainer = document.createElement('div');
     contentContainer.className = 'modal-content';
 
     if (typeof content === 'string') {
@@ -173,7 +176,7 @@ function showModal(content) {
     closeBtn.focus();
 
     // Close on overlay click
-    overlay.addEventListener('click', (e) => {
+    overlay.addEventListener('click', function(e) {
         if (e.target === overlay) {
             hideModal();
         }
@@ -187,7 +190,7 @@ function showModal(content) {
  * Hide the current modal
  */
 function hideModal() {
-    const overlay = document.querySelector('.modal-overlay');
+    var overlay = document.getElementById('modal-overlay');
     if (overlay) {
         overlay.remove();
         document.removeEventListener('keydown', handleModalKeydown);
@@ -211,29 +214,29 @@ function handleModalKeydown(e) {
  * @param {Function} [onCancel] - Optional callback when cancelled
  */
 function showConfirm(message, onConfirm, onCancel) {
-    const content = document.createElement('div');
+    var content = document.createElement('div');
     content.className = 'confirm-dialog';
 
-    const text = document.createElement('p');
+    var text = document.createElement('p');
     text.textContent = message;
 
-    const buttons = document.createElement('div');
-    buttons.className = 'confirm-buttons';
+    var buttons = document.createElement('div');
+    buttons.className = 'confirm-buttons modal-buttons';
 
-    const confirmBtn = document.createElement('button');
-    confirmBtn.className = 'btn btn-primary';
-    confirmBtn.textContent = 'Confirm';
-    confirmBtn.onclick = () => {
-        hideModal();
-        if (onConfirm) onConfirm();
-    };
-
-    const cancelBtn = document.createElement('button');
+    var cancelBtn = document.createElement('button');
     cancelBtn.className = 'btn btn-secondary';
     cancelBtn.textContent = 'Cancel';
-    cancelBtn.onclick = () => {
+    cancelBtn.onclick = function() {
         hideModal();
         if (onCancel) onCancel();
+    };
+
+    var confirmBtn = document.createElement('button');
+    confirmBtn.className = 'btn btn-primary btn-danger';
+    confirmBtn.textContent = 'Confirm';
+    confirmBtn.onclick = function() {
+        hideModal();
+        if (onConfirm) onConfirm();
     };
 
     buttons.appendChild(cancelBtn);
@@ -247,11 +250,20 @@ function showConfirm(message, onConfirm, onCancel) {
 // Export functions for use by other modules
 if (typeof window !== 'undefined') {
     window.UI = {
-        copyToClipboard,
-        initCopyButtons,
-        showToast,
-        showModal,
-        hideModal,
-        showConfirm
+        copyToClipboard: copyToClipboard,
+        initCopyButtons: initCopyButtons,
+        showToast: showToast,
+        showModal: showModal,
+        hideModal: hideModal,
+        showConfirm: showConfirm
     };
 }
+
+// Also export as MirDBUI for compatibility
+var MirDBUI = {
+    showModal: showModal,
+    hideModal: hideModal,
+    showToast: showToast,
+    showConfirm: showConfirm,
+    copyToClipboard: copyToClipboard
+};
