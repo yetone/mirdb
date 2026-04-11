@@ -512,3 +512,306 @@ body {
         align-self: flex-end;
     }
 }
+
+/* ============================================
+   Modal Styles (Scenario 6 - Key Value Modal)
+   ============================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: var(--spacing-md);
+}
+
+.modal {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    line-height: 1;
+    border-radius: var(--radius-sm);
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-accent);
+}
+
+.modal-close:focus {
+    outline: 2px solid var(--color-rust-primary);
+    outline-offset: 2px;
+}
+
+.modal-content {
+    padding: var(--spacing-xl);
+}
+
+/* Key Value Modal Specific Styles */
+.key-value-modal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-rust-primary);
+    margin: 0;
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-rust-light);
+}
+
+.key-value-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.key-value-label {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.key-value-display {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.key-name {
+    color: var(--color-rust-primary);
+    font-weight: 500;
+}
+
+.key-value-wrapper {
+    position: relative;
+}
+
+.value-content {
+    margin: 0;
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+    color: var(--color-text-primary);
+}
+
+.copy-value-btn {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: var(--font-primary);
+    transition: all 0.2s;
+}
+
+.copy-value-btn:hover {
+    background-color: var(--color-rust-lighter);
+    border-color: var(--color-rust-secondary);
+    color: var(--color-rust-primary);
+}
+
+.copy-value-btn:focus {
+    outline: 2px solid var(--color-rust-primary);
+    outline-offset: 2px;
+}
+
+.copy-value-btn.copied {
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.copy-icon {
+    font-size: 1rem;
+}
+
+/* Metadata Grid */
+.metadata-section {
+    background-color: var(--color-bg-accent);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+}
+
+.metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.metadata-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.meta-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: var(--font-mono);
+}
+
+/* Modal Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--spacing-md);
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.btn:focus {
+    outline: 2px solid var(--color-rust-primary);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background-color: var(--color-rust-primary);
+    color: white;
+    border-color: var(--color-rust-primary);
+}
+
+.btn-primary:hover {
+    background-color: #CC4700;
+    border-color: #CC4700;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-bg-primary);
+    border-color: var(--color-text-muted);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+/* ============================================
+   Toast Notifications
+   ============================================ */
+.toast {
+    position: fixed;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-xl);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--color-dark-primary);
+    color: white;
+    font-size: 0.875rem;
+    box-shadow: var(--shadow-lg);
+    z-index: 1100;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.toast-visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast-success {
+    background-color: var(--color-success);
+}
+
+.toast-error {
+    background-color: #dc3545;
+}
+
+.toast-info {
+    background-color: var(--color-rust-primary);
+}
+
+/* ============================================
+   Confirm Dialog
+   ============================================ */
+.confirm-dialog {
+    text-align: center;
+}
+
+.confirm-dialog p {
+    margin-bottom: var(--spacing-lg);
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+
+.confirm-buttons {
+    justify-content: center;
+}
