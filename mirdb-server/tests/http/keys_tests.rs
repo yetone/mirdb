@@ -1099,7 +1099,7 @@ mod key_browser_css_tests {
             .expect("Failed to read main.css");
 
         assert!(
-            main_css.contains(".search-input") || main_css.contains("#key-search-input"),
+            main_css.contains(".key-search-input") || main_css.contains(".search-input"),
             "CSS should have search input styles"
         );
     }
