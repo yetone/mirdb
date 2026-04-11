@@ -169,11 +169,19 @@ hello</code></pre>
     </main>
 
     <!-- Footer: Owner - Scenario 10 -->
-    <footer class="footer">
+    <footer class="footer" data-testid="footer">
         <div class="footer-content">
-            <p class="footer-copyright">&copy; 2024 MirDB Project. Licensed under MIT.</p>
-            <div class="footer-links">
-                <a href="https://github.com/yetone/mirdb" class="footer-link">GitHub</a>
+            <div class="footer-docs" data-testid="footer-docs">
+                <h3 class="footer-heading">Documentation</h3>
+                <nav class="footer-nav" aria-label="Documentation links">
+                    <a href="https://github.com/yetone/mirdb#readme" class="footer-link" data-testid="readme-link">README</a>
+                    <a href="https://github.com/yetone/mirdb" class="footer-link" data-testid="github-link">GitHub</a>
+                    <a href="/api-docs" class="footer-link" data-testid="api-docs-link">API Documentation</a>
+                </nav>
+            </div>
+            <div class="footer-info">
+                <p class="footer-copyright">&copy; 2024 MirDB Project. Licensed under <a href="https://opensource.org/licenses/MIT" class="footer-link" data-testid="license-link">MIT</a>.</p>
+                <p class="footer-version" data-testid="version-number">Version <span id="app-version">1.0.0</span></p>
             </div>
         </div>
     </footer>
