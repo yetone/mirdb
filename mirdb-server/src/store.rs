@@ -184,6 +184,12 @@ impl Store {
             }
         }
     }
+
+    /// List all keys in the store with pagination
+    /// Returns (keys with payloads, total count)
+    pub fn list_keys(&self, skip: usize, limit: usize) -> crate::error::MyResult<(Vec<(StoreKey, StorePayload)>, usize)> {
+        self.data.list_keys(skip, limit)
+    }
 }
 
 #[cfg(test)]

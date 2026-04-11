@@ -30,6 +30,11 @@ function initApp() {
     // Initialize smooth scrolling
     initSmoothScroll();
 
+    // Initialize Key Browser (Scenario 4)
+    if (typeof MirDBKeys !== 'undefined' && MirDBKeys.initKeyBrowser) {
+        MirDBKeys.initKeyBrowser();
+    }
+
     // Initialize auto-refresh
     initAutoRefresh();
 

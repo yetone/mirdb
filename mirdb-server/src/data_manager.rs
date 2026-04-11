@@ -237,6 +237,78 @@ impl DataManager {
         Ok(r)
     }
 
+    /// List all keys in the store with pagination
+    /// Returns a vector of (key, payload) tuples
+    pub fn list_keys(&self, skip: usize, limit: usize) -> MyResult<(Vec<(StoreKey, StorePayload)>, usize)> {
+        use std::collections::BTreeMap;
+
+        let mut all_keys: BTreeMap<StoreKey, StorePayload> = BTreeMap::new();
+
+        // Collect keys from mutable memtable
+        {
+            let muttable = read_lock(&self.mut_);
+            for (k, v) in muttable.iter() {
+                if let Ok(payload) = deserialize::<Option<StorePayload>>(v.borrow()) {
+                    if let Some(p) = payload {
+                        if !p.is_expired() {
+                            all_keys.insert(k.clone(), p);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Collect keys from immutable memtables
+        {
+            let immuttable = read_lock(&self.imm_);
+            for table in immuttable.tables_iter() {
+                for (k, v) in table.iter() {
+                    let key = k.clone();
+                    if !all_keys.contains_key(&key) {
+                        if let Ok(payload) = deserialize::<Option<StorePayload>>(v.borrow()) {
+                            if let Some(p) = payload {
+                                if !p.is_expired() {
+                                    all_keys.insert(key, p);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Collect keys from sstables
+        {
+            let readers = read_lock(&self.readers_);
+            for level in 0..self.opt_.max_level {
+                for reader in readers.get_readers(level) {
+                    let mut iter = reader.iter();
+                    while let Some((k, v)) = iter.next() {
+                        let key = Slice::from(k);
+                        if !all_keys.contains_key(&key) {
+                            if let Ok(payload) = deserialize::<Option<StorePayload>>(&v) {
+                                if let Some(p) = payload {
+                                    if !p.is_expired() {
+                                        all_keys.insert(key, p);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        let total = all_keys.len();
+        let keys: Vec<(StoreKey, StorePayload)> = all_keys
+            .into_iter()
+            .skip(skip)
+            .take(limit)
+            .collect();
+
+        Ok((keys, total))
+    }
+
     fn minor_compaction(&self) -> MyResult<()> {
         let imm = read_lock(&self.imm_);
         let c = imm.table_count();

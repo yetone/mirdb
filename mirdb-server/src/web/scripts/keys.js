@@ -15,11 +15,68 @@
 var MirDBKeys = (function() {
     'use strict';
 
+    // State variables
+    var currentPage = 1;
+    var pageSize = 10;
+    var totalKeys = 0;
+    var allKeysCache = [];
+    var currentFilter = '';
+
     /**
      * Initialize key browser
      */
     function initKeyBrowser() {
-        // Placeholder - to be implemented by Scenario 4
+        var keyBrowser = document.getElementById('key-browser');
+        if (!keyBrowser) return;
+
+        // Build the key browser UI
+        keyBrowser.innerHTML = '';
+
+        // Create toolbar with search and add button
+        var toolbar = document.createElement('div');
+        toolbar.className = 'key-browser-toolbar';
+
+        // Search input
+        var searchWrapper = document.createElement('div');
+        searchWrapper.className = 'key-search-wrapper';
+        var searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.id = 'key-search-input';
+        searchInput.className = 'key-search-input';
+        searchInput.placeholder = 'Search keys...';
+        searchInput.setAttribute('aria-label', 'Search keys');
+        searchInput.addEventListener('input', function(e) {
+            filterKeys(e.target.value);
+        });
+        searchWrapper.appendChild(searchInput);
+        toolbar.appendChild(searchWrapper);
+
+        // Add key button (placeholder for Scenario 5)
+        var addBtn = document.createElement('button');
+        addBtn.className = 'btn btn-primary add-key-btn';
+        addBtn.textContent = '+ Add Key';
+        addBtn.setAttribute('aria-label', 'Add new key');
+        addBtn.onclick = function() {
+            showSetKeyForm();
+        };
+        toolbar.appendChild(addBtn);
+
+        keyBrowser.appendChild(toolbar);
+
+        // Create table container
+        var tableContainer = document.createElement('div');
+        tableContainer.className = 'key-table-container';
+        tableContainer.id = 'key-table-container';
+        keyBrowser.appendChild(tableContainer);
+
+        // Create pagination container
+        var paginationContainer = document.createElement('div');
+        paginationContainer.className = 'key-pagination';
+        paginationContainer.id = 'key-pagination';
+        keyBrowser.appendChild(paginationContainer);
+
+        // Load initial keys
+        loadKeys(1);
     }
 
     /**
@@ -27,7 +84,170 @@ var MirDBKeys = (function() {
      * @param {number} page - Page number
      */
     function loadKeys(page) {
-        // Placeholder - to be implemented by Scenario 4
+        currentPage = page || 1;
+        var tableContainer = document.getElementById('key-table-container');
+        if (!tableContainer) return;
+
+        // Show loading state
+        tableContainer.innerHTML = '<div class="loading-state">Loading keys...</div>';
+
+        MirDBApi.fetchKeys(currentPage, pageSize)
+            .then(function(response) {
+                allKeysCache = response.keys || [];
+                totalKeys = response.total || 0;
+                currentFilter = '';
+
+                // Clear search input
+                var searchInput = document.getElementById('key-search-input');
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+
+                renderKeyTable(allKeysCache);
+                renderPagination(totalKeys, currentPage, pageSize);
+            })
+            .catch(function(error) {
+                tableContainer.innerHTML = '<div class="error-state">Failed to load keys: ' + error.message + '</div>';
+            });
+    }
+
+    /**
+     * Render the key table
+     * @param {Array} keys - Array of key objects
+     */
+    function renderKeyTable(keys) {
+        var tableContainer = document.getElementById('key-table-container');
+        if (!tableContainer) return;
+
+        if (!keys || keys.length === 0) {
+            tableContainer.innerHTML = '<div class="empty-state">No keys found</div>';
+            return;
+        }
+
+        var table = document.createElement('table');
+        table.className = 'key-table';
+        table.setAttribute('role', 'grid');
+
+        // Table header
+        var thead = document.createElement('thead');
+        var headerRow = document.createElement('tr');
+
+        var headers = ['Key', 'Size', 'TTL', 'Actions'];
+        headers.forEach(function(headerText) {
+            var th = document.createElement('th');
+            th.textContent = headerText;
+            th.setAttribute('scope', 'col');
+            headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Table body
+        var tbody = document.createElement('tbody');
+        keys.forEach(function(keyInfo) {
+            var row = document.createElement('tr');
+            row.className = 'key-row';
+            row.setAttribute('data-key', keyInfo.key);
+
+            // Key name cell
+            var keyCell = document.createElement('td');
+            keyCell.className = 'key-name-cell';
+            keyCell.textContent = keyInfo.key;
+            row.appendChild(keyCell);
+
+            // Size cell
+            var sizeCell = document.createElement('td');
+            sizeCell.className = 'key-size-cell';
+            sizeCell.textContent = formatBytes(keyInfo.size);
+            row.appendChild(sizeCell);
+
+            // TTL cell
+            var ttlCell = document.createElement('td');
+            ttlCell.className = 'key-ttl-cell';
+            ttlCell.textContent = keyInfo.ttl === 0 ? 'No expiration' : keyInfo.ttl + 's';
+            row.appendChild(ttlCell);
+
+            // Actions cell
+            var actionsCell = document.createElement('td');
+            actionsCell.className = 'key-actions-cell';
+
+            var viewBtn = document.createElement('button');
+            viewBtn.className = 'btn btn-secondary btn-sm view-key-btn';
+            viewBtn.textContent = 'View';
+            viewBtn.setAttribute('aria-label', 'View key ' + keyInfo.key);
+            viewBtn.onclick = function(e) {
+                e.stopPropagation();
+                showKeyValue(keyInfo.key);
+            };
+            actionsCell.appendChild(viewBtn);
+
+            var deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-danger btn-sm delete-key-btn';
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.setAttribute('aria-label', 'Delete key ' + keyInfo.key);
+            deleteBtn.onclick = function(e) {
+                e.stopPropagation();
+                deleteKey(keyInfo.key);
+            };
+            actionsCell.appendChild(deleteBtn);
+
+            row.appendChild(actionsCell);
+
+            // Click row to view
+            row.onclick = function() {
+                showKeyValue(keyInfo.key);
+            };
+            row.style.cursor = 'pointer';
+
+            tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+        tableContainer.innerHTML = '';
+        tableContainer.appendChild(table);
+    }
+
+    /**
+     * Render pagination controls
+     * @param {number} total - Total number of keys
+     * @param {number} page - Current page
+     * @param {number} limit - Items per page
+     */
+    function renderPagination(total, page, limit) {
+        var paginationContainer = document.getElementById('key-pagination');
+        if (!paginationContainer) return;
+
+        paginationContainer.innerHTML = '';
+
+        var totalPages = Math.ceil(total / limit);
+        if (totalPages <= 1) return;
+
+        // Previous button
+        var prevBtn = document.createElement('button');
+        prevBtn.className = 'btn btn-secondary pagination-btn';
+        prevBtn.textContent = '< Prev';
+        prevBtn.disabled = page <= 1;
+        prevBtn.onclick = function() {
+            if (page > 1) loadKeys(page - 1);
+        };
+        paginationContainer.appendChild(prevBtn);
+
+        // Page info
+        var pageInfo = document.createElement('span');
+        pageInfo.className = 'pagination-info';
+        pageInfo.textContent = 'Page ' + page + ' of ' + totalPages + ' (' + total + ' keys)';
+        paginationContainer.appendChild(pageInfo);
+
+        // Next button
+        var nextBtn = document.createElement('button');
+        nextBtn.className = 'btn btn-secondary pagination-btn';
+        nextBtn.textContent = 'Next >';
+        nextBtn.disabled = page >= totalPages;
+        nextBtn.onclick = function() {
+            if (page < totalPages) loadKeys(page + 1);
+        };
+        paginationContainer.appendChild(nextBtn);
     }
 
     /**
@@ -229,7 +449,26 @@ var MirDBKeys = (function() {
      * @param {string} query - Search query
      */
     function filterKeys(query) {
-        // Placeholder - to be implemented by Scenario 4
+        currentFilter = (query || '').toLowerCase().trim();
+
+        if (!currentFilter) {
+            // Show all cached keys
+            renderKeyTable(allKeysCache);
+            return;
+        }
+
+        // Filter keys client-side
+        var filteredKeys = allKeysCache.filter(function(keyInfo) {
+            return keyInfo.key.toLowerCase().indexOf(currentFilter) !== -1;
+        });
+
+        renderKeyTable(filteredKeys);
+
+        // Update pagination info to show filtered count
+        var paginationContainer = document.getElementById('key-pagination');
+        if (paginationContainer && currentFilter) {
+            paginationContainer.innerHTML = '<span class="pagination-info">Showing ' + filteredKeys.length + ' of ' + allKeysCache.length + ' keys (filtered)</span>';
+        }
     }
 
     return {
