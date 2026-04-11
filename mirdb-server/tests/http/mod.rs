@@ -4,6 +4,7 @@
 //! Re-exports test modules for HTTP functionality
 
 pub mod config_tests;
+pub mod error_handling_tests;
 pub mod keys_tests;
 pub mod server_tests;
 pub mod status_tests;
