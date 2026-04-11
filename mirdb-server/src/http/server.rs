@@ -13,11 +13,13 @@
 use std::net::SocketAddr;
 use std::sync::Arc;
 
-use futures::future::{self, Future};
+use futures::future::{self, Either, Future};
 use futures::Stream;
 use hyper::rt;
 use hyper::service::service_fn;
 use hyper::{Body, Method, Request, Response, Server, StatusCode};
+
+use super::handlers::keys::ErrorResponse;
 
 use crate::options::Options;
 use crate::store::Store;
@@ -74,12 +76,12 @@ fn handle_request(
         Method::POST => RouteMethod::Post,
         Method::DELETE => RouteMethod::Delete,
         _ => {
-            return future::ok(
+            return Either::A(future::ok(
                 Response::builder()
                     .status(StatusCode::METHOD_NOT_ALLOWED)
                     .body(Body::from("Method not allowed"))
                     .unwrap(),
-            );
+            ));
         }
     };
 
@@ -89,14 +91,14 @@ fn handle_request(
     match route {
         Route::ApiStatus => {
             let status_json = status_handler::handle_status_json(&ctx.options.work_dir);
-            future::ok(
+            Either::A(future::ok(
                 Response::builder()
                     .status(StatusCode::OK)
                     .header("Content-Type", "application/json")
                     .header("Access-Control-Allow-Origin", "*")
                     .body(Body::from(status_json))
                     .unwrap(),
-            )
+            ))
         }
         Route::ApiKeysList => {
             let result = keys_handler::handle_list_keys(ctx.store.clone(), 1, 100);
@@ -108,18 +110,18 @@ fn handle_request(
                     serde_json::to_string(&err).unwrap_or_else(|_| r#"{"error":"unknown"}"#.to_string())
                 }
             };
-            future::ok(
+            Either::A(future::ok(
                 Response::builder()
                     .status(StatusCode::OK)
                     .header("Content-Type", "application/json")
                     .header("Access-Control-Allow-Origin", "*")
                     .body(Body::from(json))
                     .unwrap(),
-            )
+            ))
         }
         Route::ApiKeysGet(key) => {
             let result = keys_handler::handle_get_key(ctx.store.clone(), key);
-            match result {
+            Either::A(match result {
                 keys_handler::GetKeyResult::Found(response) => {
                     let json = serde_json::to_string(&response).unwrap_or_else(|_| "null".to_string());
                     future::ok(
@@ -131,13 +133,17 @@ fn handle_request(
                             .unwrap(),
                     )
                 }
-                keys_handler::GetKeyResult::NotFound(_) => future::ok(
-                    Response::builder()
-                        .status(StatusCode::NOT_FOUND)
-                        .header("Access-Control-Allow-Origin", "*")
-                        .body(Body::from("Key not found"))
-                        .unwrap(),
-                ),
+                keys_handler::GetKeyResult::NotFound(err) => {
+                    let json = serde_json::to_string(&err).unwrap_or_else(|_| r#"{"error":"Key not found"}"#.to_string());
+                    future::ok(
+                        Response::builder()
+                            .status(StatusCode::NOT_FOUND)
+                            .header("Content-Type", "application/json")
+                            .header("Access-Control-Allow-Origin", "*")
+                            .body(Body::from(json))
+                            .unwrap(),
+                    )
+                }
                 keys_handler::GetKeyResult::Error(err) => {
                     let json = serde_json::to_string(&err).unwrap_or_else(|_| r#"{"error":"unknown"}"#.to_string());
                     future::ok(
@@ -149,11 +155,11 @@ fn handle_request(
                             .unwrap(),
                     )
                 }
-            }
+            })
         }
         Route::ApiKeysDelete(key) => {
             let result = keys_handler::handle_delete_key(ctx.store.clone(), key);
-            match result {
+            Either::A(match result {
                 keys_handler::DeleteKeyResult::Deleted(response) => {
                     let json = serde_json::to_string(&response).unwrap_or_else(|_| r#"{"success":true}"#.to_string());
                     future::ok(
@@ -165,13 +171,17 @@ fn handle_request(
                             .unwrap(),
                     )
                 }
-                keys_handler::DeleteKeyResult::NotFound(_) => future::ok(
-                    Response::builder()
-                        .status(StatusCode::NOT_FOUND)
-                        .header("Access-Control-Allow-Origin", "*")
-                        .body(Body::from("Key not found"))
-                        .unwrap(),
-                ),
+                keys_handler::DeleteKeyResult::NotFound(err) => {
+                    let json = serde_json::to_string(&err).unwrap_or_else(|_| r#"{"error":"Key not found"}"#.to_string());
+                    future::ok(
+                        Response::builder()
+                            .status(StatusCode::NOT_FOUND)
+                            .header("Content-Type", "application/json")
+                            .header("Access-Control-Allow-Origin", "*")
+                            .body(Body::from(json))
+                            .unwrap(),
+                    )
+                }
                 keys_handler::DeleteKeyResult::Error(err) => {
                     let json = serde_json::to_string(&err).unwrap_or_else(|_| r#"{"error":"unknown"}"#.to_string());
                     future::ok(
@@ -183,37 +193,114 @@ fn handle_request(
                             .unwrap(),
                     )
                 }
-            }
+            })
         }
         Route::ApiConfig => {
             // Extract port from context (default 12333)
             let port = 12333u16;
             let config_json = config_handler::handle_config_json(&ctx.options, port);
-            future::ok(
+            Either::A(future::ok(
                 Response::builder()
                     .status(StatusCode::OK)
                     .header("Content-Type", "application/json")
                     .header("Access-Control-Allow-Origin", "*")
                     .body(Body::from(config_json))
                     .unwrap(),
-            )
+            ))
         }
         Route::ApiKeysSet => {
-            // POST requests need body parsing - return placeholder for now
-            // Body parsing will be handled by the keys handler scenario
-            future::ok(
-                Response::builder()
-                    .status(StatusCode::OK)
-                    .header("Content-Type", "application/json")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .body(Body::from(r#"{"status":"ok"}"#))
-                    .unwrap(),
-            )
+            // Parse request body asynchronously
+            let store = ctx.store.clone();
+            return Either::B(
+                req.into_body()
+                    .concat2()
+                    .map_err(|e| {
+                        eprintln!("Body read error: {}", e);
+                        e
+                    })
+                    .and_then(move |body| {
+                        let body_bytes = body.to_vec();
+
+                        // Parse JSON body
+                        let parse_result: Result<keys_handler::SetKeyRequest, _> =
+                            serde_json::from_slice(&body_bytes);
+
+                        match parse_result {
+                            Ok(set_request) => {
+                                // Validate required fields
+                                if set_request.key.is_empty() {
+                                    let err = ErrorResponse {
+                                        error: "validation_error".to_string(),
+                                        message: "Missing required field: 'key' cannot be empty".to_string(),
+                                    };
+                                    let json = serde_json::to_string(&err)
+                                        .unwrap_or_else(|_| r#"{"error":"validation_error","message":"Missing required field: 'key'"}"#.to_string());
+                                    return Ok(Response::builder()
+                                        .status(StatusCode::BAD_REQUEST)
+                                        .header("Content-Type", "application/json")
+                                        .header("Access-Control-Allow-Origin", "*")
+                                        .body(Body::from(json))
+                                        .unwrap());
+                                }
+
+                                // Process the set key request
+                                let result = keys_handler::handle_set_key(store, set_request);
+                                match result {
+                                    keys_handler::SetKeyResult::Stored(response) => {
+                                        let json = serde_json::to_string(&response)
+                                            .unwrap_or_else(|_| r#"{"success":true}"#.to_string());
+                                        Ok(Response::builder()
+                                            .status(StatusCode::OK)
+                                            .header("Content-Type", "application/json")
+                                            .header("Access-Control-Allow-Origin", "*")
+                                            .body(Body::from(json))
+                                            .unwrap())
+                                    }
+                                    keys_handler::SetKeyResult::BadRequest(err) => {
+                                        let json = serde_json::to_string(&err)
+                                            .unwrap_or_else(|_| r#"{"error":"bad_request"}"#.to_string());
+                                        Ok(Response::builder()
+                                            .status(StatusCode::BAD_REQUEST)
+                                            .header("Content-Type", "application/json")
+                                            .header("Access-Control-Allow-Origin", "*")
+                                            .body(Body::from(json))
+                                            .unwrap())
+                                    }
+                                    keys_handler::SetKeyResult::Error(err) => {
+                                        let json = serde_json::to_string(&err)
+                                            .unwrap_or_else(|_| r#"{"error":"internal_error"}"#.to_string());
+                                        Ok(Response::builder()
+                                            .status(StatusCode::INTERNAL_SERVER_ERROR)
+                                            .header("Content-Type", "application/json")
+                                            .header("Access-Control-Allow-Origin", "*")
+                                            .body(Body::from(json))
+                                            .unwrap())
+                                    }
+                                }
+                            }
+                            Err(e) => {
+                                // JSON parsing error
+                                let err = ErrorResponse {
+                                    error: "invalid_json".to_string(),
+                                    message: format!("Invalid JSON in request body: {}", e),
+                                };
+                                let json = serde_json::to_string(&err)
+                                    .unwrap_or_else(|_| r#"{"error":"invalid_json","message":"Invalid JSON in request body"}"#.to_string());
+                                Ok(Response::builder()
+                                    .status(StatusCode::BAD_REQUEST)
+                                    .header("Content-Type", "application/json")
+                                    .header("Access-Control-Allow-Origin", "*")
+                                    .body(Body::from(json))
+                                    .unwrap())
+                            }
+                        }
+                    })
+            );
         }
         Route::Static(file_path) => {
             // Serve static files from the web directory
             let content = serve_static_file(&file_path);
-            match content {
+            Either::A(match content {
                 Some((data, mime_type)) => future::ok(
                     Response::builder()
                         .status(StatusCode::OK)
@@ -228,14 +315,14 @@ fn handle_request(
                         .body(Body::from("File not found"))
                         .unwrap(),
                 ),
-            }
+            })
         }
-        Route::NotFound => future::ok(
+        Route::NotFound => Either::A(future::ok(
             Response::builder()
                 .status(StatusCode::NOT_FOUND)
                 .body(Body::from("Not found"))
                 .unwrap(),
-        ),
+        )),
     }
 }
 
