@@ -5,3 +5,4 @@
 
 pub mod keys_tests;
 pub mod status_tests;
+pub mod config_tests;
