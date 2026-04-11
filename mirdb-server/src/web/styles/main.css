@@ -759,12 +759,12 @@ body {
 }
 
 /* ============================================
-   Footer
+   Footer - Owner: Scenario 10
    ============================================ */
 .footer {
     background-color: var(--color-dark-primary);
     color: var(--color-text-muted);
-    padding: var(--spacing-lg) var(--spacing-xl);
+    padding: var(--spacing-xl) var(--spacing-xl);
     margin-top: auto;
 }
 
@@ -772,19 +772,46 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.footer-docs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.footer-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-rust-secondary);
+    margin: 0;
+}
+
+.footer-nav {
+    display: flex;
+    gap: var(--spacing-lg);
     flex-wrap: wrap;
-    gap: var(--spacing-md);
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-dark-tertiary);
 }
 
 .footer-copyright {
     font-size: 0.875rem;
+    margin: 0;
 }
 
-.footer-links {
-    display: flex;
-    gap: var(--spacing-md);
+.footer-version {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin: 0;
 }
 
 .footer-link {
@@ -796,6 +823,12 @@ body {
 
 .footer-link:hover {
     color: var(--color-rust-secondary);
+    text-decoration: underline;
+}
+
+.footer-link:focus {
+    outline: 2px solid var(--color-rust-primary);
+    outline-offset: 2px;
 }
 
 /* ============================================
@@ -859,8 +892,19 @@ body {
     }
 
     .footer-content {
-        flex-direction: column;
         text-align: center;
+    }
+
+    .footer-docs {
+        align-items: center;
+    }
+
+    .footer-nav {
+        justify-content: center;
+    }
+
+    .footer-info {
+        align-items: center;
     }
 }
 
