@@ -61,10 +61,27 @@ pub struct ErrorResponse {
     pub message: String,
 }
 
+/// Success response for delete operation
+#[derive(Debug, Serialize)]
+pub struct DeleteResponse {
+    pub success: bool,
+    pub message: String,
+}
+
 /// Result of handle_get_key operation
 pub enum GetKeyResult {
     /// Key found with value and metadata
     Found(KeyValueResponse),
+    /// Key not found
+    NotFound(ErrorResponse),
+    /// Internal error occurred
+    Error(ErrorResponse),
+}
+
+/// Result of handle_delete_key operation
+pub enum DeleteKeyResult {
+    /// Key successfully deleted
+    Deleted(DeleteResponse),
     /// Key not found
     NotFound(ErrorResponse),
     /// Internal error occurred
@@ -133,6 +150,64 @@ pub fn handle_get_key(store: Arc<Store>, key: String) -> GetKeyResult {
             }
         }
         Err(e) => GetKeyResult::Error(ErrorResponse {
+            error: "internal_error".to_string(),
+            message: format!("Store error: {:?}", e),
+        }),
+    }
+}
+
+/// Handle DELETE /api/keys/{key} request
+/// Deletes a key from the store
+///
+/// # Arguments
+/// * `store` - Arc reference to the Store
+/// * `key` - The key name to delete
+///
+/// # Returns
+/// * `DeleteKeyResult::Deleted` - Key was successfully deleted
+/// * `DeleteKeyResult::NotFound` - Key does not exist
+/// * `DeleteKeyResult::Error` - Internal error occurred
+pub fn handle_delete_key(store: Arc<Store>, key: String) -> DeleteKeyResult {
+    let start = Instant::now();
+
+    // Create a Slice from the key string
+    let key_slice = Slice::from(key.as_str());
+
+    // Create a delete request
+    let request = Request::Deleter {
+        key: key_slice,
+        no_reply: false,
+    };
+
+    // Apply the request to the store
+    match store.apply(request) {
+        Ok(response) => {
+            match response {
+                crate::response::Response::Deleted => {
+                    let elapsed = start.elapsed();
+                    log::debug!(
+                        "DELETE key '{}' completed in {:?}",
+                        key,
+                        elapsed
+                    );
+                    DeleteKeyResult::Deleted(DeleteResponse {
+                        success: true,
+                        message: format!("Key '{}' deleted successfully", key),
+                    })
+                }
+                crate::response::Response::NotFound => {
+                    DeleteKeyResult::NotFound(ErrorResponse {
+                        error: "not_found".to_string(),
+                        message: format!("Key '{}' not found", key),
+                    })
+                }
+                _ => DeleteKeyResult::Error(ErrorResponse {
+                    error: "internal_error".to_string(),
+                    message: "Unexpected response type".to_string(),
+                }),
+            }
+        }
+        Err(e) => DeleteKeyResult::Error(ErrorResponse {
             error: "internal_error".to_string(),
             message: format!("Store error: {:?}", e),
         }),
@@ -224,6 +299,89 @@ mod tests {
         assert!(
             elapsed.as_millis() < 500,
             "Get operation took {}ms, expected < 500ms",
+            elapsed.as_millis()
+        );
+    }
+
+    #[test]
+    fn test_delete_existing_key() {
+        let store = create_test_store();
+
+        // First, set a key
+        let key = Slice::from("delete_test_key");
+        let value = Slice::from("delete_test_value");
+        let set_request = Request::Setter {
+            setter: SetterType::Set,
+            key: key.clone(),
+            flags: 0,
+            ttl: 0,
+            bytes: value.len(),
+            payload: value,
+            no_reply: false,
+        };
+        store.apply(set_request).unwrap();
+
+        // Delete the key
+        let result = handle_delete_key(Arc::clone(&store), "delete_test_key".to_string());
+
+        match result {
+            DeleteKeyResult::Deleted(response) => {
+                assert!(response.success);
+                assert!(response.message.contains("delete_test_key"));
+            }
+            _ => panic!("Expected Deleted result"),
+        }
+
+        // Verify the key is no longer accessible
+        let get_result = handle_get_key(store, "delete_test_key".to_string());
+        match get_result {
+            GetKeyResult::NotFound(_) => {}
+            _ => panic!("Expected key to be not found after deletion"),
+        }
+    }
+
+    #[test]
+    fn test_delete_nonexistent_key() {
+        let store = create_test_store();
+
+        let result = handle_delete_key(store, "nonexistent_key".to_string());
+
+        match result {
+            DeleteKeyResult::NotFound(error) => {
+                assert_eq!(error.error, "not_found");
+                assert!(error.message.contains("nonexistent_key"));
+            }
+            _ => panic!("Expected NotFound result"),
+        }
+    }
+
+    #[test]
+    fn test_delete_key_performance() {
+        let store = create_test_store();
+
+        // Set a key
+        let key = Slice::from("delete_perf_test");
+        let value = Slice::from("performance_test_value");
+        let set_request = Request::Setter {
+            setter: SetterType::Set,
+            key,
+            flags: 0,
+            ttl: 0,
+            bytes: value.len(),
+            payload: value,
+            no_reply: false,
+        };
+        store.apply(set_request).unwrap();
+
+        // Measure delete performance
+        let start = Instant::now();
+        let _result = handle_delete_key(store, "delete_perf_test".to_string());
+        let elapsed = start.elapsed();
+
+        // Should complete within 500ms
+        assert!(
+            elapsed.as_millis() < 500,
+            "Delete operation took {}ms, expected < 500ms",
             elapsed.as_millis()
         );
     }

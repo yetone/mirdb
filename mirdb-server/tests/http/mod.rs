@@ -4,3 +4,4 @@
 //! Re-exports test modules for HTTP functionality
 
 pub mod status_tests;
+pub mod keys_tests;

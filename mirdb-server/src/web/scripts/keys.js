@@ -221,7 +221,36 @@ var MirDBKeys = (function() {
      * @param {string} key - Key name
      */
     function deleteKey(key) {
-        // Placeholder - to be implemented by Scenario 7
+        // Show confirmation dialog before deleting
+        MirDBUI.showConfirm(
+            'Are you sure you want to delete the key "' + key + '"? This action cannot be undone.',
+            function() {
+                // User confirmed - proceed with deletion
+                performDeleteKey(key);
+            },
+            function() {
+                // User cancelled - do nothing
+                MirDBUI.showToast('Delete cancelled', 'info');
+            }
+        );
+    }
+
+    /**
+     * Perform the actual key deletion after confirmation
+     * @param {string} key - Key name to delete
+     */
+    function performDeleteKey(key) {
+        MirDBApi.deleteKey(key)
+            .then(function(response) {
+                MirDBUI.showToast('Key "' + key + '" deleted successfully', 'success');
+                // Refresh the key list to reflect the deletion
+                if (typeof loadKeys === 'function') {
+                    loadKeys(1); // Reload first page
+                }
+            })
+            .catch(function(error) {
+                MirDBUI.showToast('Failed to delete key: ' + error.message, 'error');
+            });
     }
 
     /**
