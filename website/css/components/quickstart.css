@@ -61,6 +61,13 @@
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   color: var(--color-code-text);
+  line-height: 1.6;
+}
+
+/* Syntax highlighting for bash/shell */
+.code-block[data-language="bash"] code,
+.language-bash {
+  color: #9cdcfe;
 }
 
 .copy-btn {
