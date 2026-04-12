@@ -1,14 +1,10 @@
 /**
- * Responsive Design - Mobile Tests
- * Owner: Scenario 7 - Responsive Design - Mobile
+ * Responsive Design Tests
+ * Owner: Scenarios 7, 8 - Responsive Design (Mobile & Tablet)
  *
- * Tests for mobile responsiveness:
- * - No horizontal overflow at mobile viewport
- * - Touch targets are at least 44x44px
- * - Hero section is visible and readable on mobile
- * - Code blocks scroll horizontally without breaking layout
- * - All sections are accessible on mobile
- * - Navigation works with touch on mobile
+ * Tests for mobile and tablet responsiveness as specified in NFR-1:
+ * - Mobile: No horizontal overflow, touch targets, readable content
+ * - Tablet: 2-column feature grid, proper image sizing, layout adaptation
  */
 
 import { test, expect } from '@playwright/test';
@@ -17,6 +13,9 @@ import { test, expect } from '@playwright/test';
 const MOBILE_VIEWPORT = { width: 375, height: 667 };
 const MIN_TOUCH_TARGET = 44;
 
+// ============================
+// Mobile Tests (Scenario 7)
+// ============================
 test.describe('Responsive Design - Mobile', () => {
   test.beforeEach(async ({ page }) => {
     // Set mobile viewport
@@ -277,5 +276,190 @@ test.describe('Responsive Design - Mobile', () => {
         expect(box.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET);
       }
     }
+  });
+});
+
+// ============================
+// Tablet Tests (Scenario 8)
+// ============================
+test.describe('Responsive Design - Tablet (768x1024)', () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
+
+  test('page renders with appropriate tablet layout', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify page loads successfully
+    await expect(page).toHaveTitle(/MirDB/);
+
+    // Verify body is visible and fills viewport width
+    const body = page.locator('body');
+    await expect(body).toBeVisible();
+
+    // Verify no horizontal scrollbar (content fits within viewport)
+    const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(documentWidth).toBeLessThanOrEqual(viewportWidth);
+
+    // Verify main sections are visible
+    await expect(page.locator('#hero')).toBeVisible();
+    await expect(page.locator('#features')).toBeVisible();
+    await expect(page.locator('#quickstart')).toBeVisible();
+    await expect(page.locator('#usage')).toBeVisible();
+    await expect(page.locator('footer')).toBeVisible();
+  });
+
+  test('feature cards display in 2-column grid layout', async ({ page }) => {
+    await page.goto('/');
+
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await featuresSection.scrollIntoViewIfNeeded();
+    await expect(featuresSection).toBeVisible();
+
+    // Get the features grid
+    const featuresGrid = page.locator('.features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Verify grid-template-columns is set for 2 columns
+    const gridStyle = await featuresGrid.evaluate((el) => {
+      return window.getComputedStyle(el).gridTemplateColumns;
+    });
+
+    // Should have 2 columns (pattern: "XXXpx XXXpx")
+    const columnCount = gridStyle.split(' ').length;
+    expect(columnCount).toBe(2);
+
+    // Verify all 4 feature cards are present
+    const featureCards = page.locator('.feature-card');
+    await expect(featureCards).toHaveCount(4);
+
+    // Verify each card is visible
+    for (let i = 0; i < 4; i++) {
+      await expect(featureCards.nth(i)).toBeVisible();
+    }
+  });
+
+  test('logo and usage.gif are properly sized and visible', async ({ page }) => {
+    await page.goto('/');
+
+    // Check hero logo
+    const heroLogo = page.locator('.hero-logo');
+    await expect(heroLogo).toBeVisible();
+
+    // Verify logo dimensions are appropriate for tablet
+    const logoBox = await heroLogo.boundingBox();
+    expect(logoBox).not.toBeNull();
+    if (logoBox) {
+      // Logo should be reasonably sized (not too small, not overflowing)
+      expect(logoBox.width).toBeGreaterThan(50);
+      expect(logoBox.width).toBeLessThanOrEqual(768); // Should not exceed viewport
+    }
+
+    // Navigate to usage section
+    const usageSection = page.locator('#usage');
+    await usageSection.scrollIntoViewIfNeeded();
+    await expect(usageSection).toBeVisible();
+
+    // Check usage.gif
+    const usageImage = page.locator('.usage-figure img');
+    await expect(usageImage).toBeVisible();
+
+    // Verify usage image has proper alt text
+    await expect(usageImage).toHaveAttribute('alt', /MirDB usage/);
+
+    // Verify usage image is within viewport bounds
+    const usageBox = await usageImage.boundingBox();
+    expect(usageBox).not.toBeNull();
+    if (usageBox) {
+      // Image should not exceed viewport width
+      expect(usageBox.width).toBeLessThanOrEqual(768);
+      expect(usageBox.width).toBeGreaterThan(100); // Should be reasonably sized
+    }
+  });
+
+  test('all content sections are fully visible without overlap', async ({ page }) => {
+    await page.goto('/');
+
+    // Test each major section for proper visibility
+    const sections = ['#hero', '#features', '#quickstart', '#usage', 'footer'];
+
+    for (const sectionSelector of sections) {
+      const section = page.locator(sectionSelector);
+      await section.scrollIntoViewIfNeeded();
+      await expect(section).toBeVisible();
+
+      // Verify section has non-zero dimensions
+      const box = await section.boundingBox();
+      expect(box).not.toBeNull();
+      if (box) {
+        expect(box.width).toBeGreaterThan(0);
+        expect(box.height).toBeGreaterThan(0);
+        // Section should not exceed viewport width
+        expect(box.width).toBeLessThanOrEqual(768);
+      }
+    }
+  });
+
+  test('quickstart code blocks are properly displayed', async ({ page }) => {
+    await page.goto('/');
+
+    // Navigate to quickstart section
+    const quickstartSection = page.locator('#quickstart');
+    await quickstartSection.scrollIntoViewIfNeeded();
+    await expect(quickstartSection).toBeVisible();
+
+    // Verify code blocks are visible
+    const codeBlocks = page.locator('.code-block');
+    const count = await codeBlocks.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Each code block should be visible and fit within viewport
+    for (let i = 0; i < count; i++) {
+      const block = codeBlocks.nth(i);
+      await expect(block).toBeVisible();
+
+      const blockBox = await block.boundingBox();
+      expect(blockBox).not.toBeNull();
+      if (blockBox) {
+        // Code block should not overflow viewport
+        expect(blockBox.width).toBeLessThanOrEqual(768);
+      }
+    }
+  });
+
+  test('navigation is appropriately displayed for tablet', async ({ page }) => {
+    await page.goto('/');
+
+    // Verify header navigation exists
+    const header = page.locator('header');
+    await expect(header).toBeVisible();
+
+    // Check nav logo
+    const navLogo = page.locator('.nav-logo');
+    await expect(navLogo).toBeVisible();
+
+    // Nav links should still be visible on tablet (768px)
+    const navLinks = page.locator('.nav-links');
+    // Based on responsive.css, nav-links are hidden only below 576px
+    // At 768px they should be visible
+    await expect(navLinks).toBeVisible();
+  });
+
+  test('footer displays correctly on tablet', async ({ page }) => {
+    await page.goto('/');
+
+    // Scroll to footer
+    const footer = page.locator('footer');
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+
+    // Footer should contain copyright and links
+    await expect(footer).toContainText('MirDB');
+    await expect(footer).toContainText('2024');
+
+    // Footer links should be visible
+    const footerLinks = page.locator('.footer-links a');
+    const linksCount = await footerLinks.count();
+    expect(linksCount).toBeGreaterThan(0);
   });
 });
