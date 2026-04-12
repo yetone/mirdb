@@ -1,0 +1,90 @@
+/**
+ * Quickstart Section Styles
+ * Owner: Scenario 3 - Quickstart Installation Section
+ *
+ * Styles for:
+ * - Code block styling
+ * - Copy button positioning
+ * - Numbered steps list
+ */
+
+.quickstart h2 {
+  text-align: center;
+}
+
+.quickstart-steps {
+  max-width: 700px;
+  margin: var(--spacing-2xl) auto 0;
+}
+
+.step {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-full);
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+}
+
+.code-block {
+  position: relative;
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+}
+
+.code-block pre {
+  margin: 0;
+}
+
+.code-block code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-code-text);
+  line-height: 1.6;
+}
+
+/* Syntax highlighting for bash/shell */
+.code-block[data-language="bash"] code,
+.language-bash {
+  color: #9cdcfe;
+}
+
+.copy-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-secondary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity var(--duration-fast);
+}
+
+.copy-btn:hover {
+  opacity: 1;
+}

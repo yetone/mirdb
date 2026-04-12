@@ -1,0 +1,55 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Styles for:
+ * - Hero container layout
+ * - Logo positioning
+ * - Headline typography
+ * - Subheadline styling
+ * - CTA button
+ */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-3xl) 0;
+}
+
+.hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.hero-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero h1 {
+  font-size: var(--font-size-4xl);
+  max-width: var(--max-width-text);
+  color: var(--color-text-primary);
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-badges {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero-badges img {
+  height: 24px;
+}

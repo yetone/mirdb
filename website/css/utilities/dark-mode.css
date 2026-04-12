@@ -1,0 +1,24 @@
+/**
+ * Dark Mode Styles
+ * Owner: Scenario 13 - Dark Mode Support
+ *
+ * Uses prefers-color-scheme media query.
+ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-surface-elevated: #334155;
+
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #cbd5e1;
+    --color-text-muted: #64748b;
+
+    --color-border: #334155;
+    --color-border-strong: #475569;
+
+    --color-code-bg: #0f172a;
+    --color-code-text: #e2e8f0;
+  }
+}

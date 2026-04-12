@@ -1,0 +1,58 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 2 - Feature Overview Section
+ *
+ * Styles for:
+ * - Feature cards/list layout
+ * - Card visual separation
+ * - Feature descriptions
+ * - Grid/flex layout for cards
+ *
+ * Requirements:
+ * - 4 features: tokio/memcached, memtable/skiplist, minor compaction, major compaction
+ * - Clear visual separation between features
+ * - Responsive grid layout
+ */
+
+.features {
+  background-color: var(--color-surface);
+}
+
+.features h2 {
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-2xl);
+}
+
+.feature-card {
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: box-shadow var(--duration-normal) var(--easing-default),
+              transform var(--duration-normal) var(--easing-default);
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.feature-title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-description {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
