@@ -6,10 +6,18 @@
  * - Mobile (< 576px)
  * - Tablet (576px - 992px)
  * - Desktop (> 992px)
+ *
+ * Requirements:
+ * - No horizontal scrolling on mobile
+ * - Touch targets minimum 44x44px
+ * - Code blocks scroll horizontally or wrap
+ * - Appropriate grid layouts per breakpoint
  */
 
-/* Mobile */
+/* Mobile-first touch target sizing */
+/* Ensures all interactive elements meet 44x44px minimum touch target size */
 @media (max-width: 575px) {
+  /* Typography scaling */
   h1 {
     font-size: var(--font-size-2xl);
   }
@@ -22,22 +30,128 @@
     font-size: var(--font-size-2xl);
   }
 
+  /* Navigation hidden on mobile */
   .nav-links {
     display: none;
   }
 
+  /* Feature grid - single column on mobile */
   .features-grid {
+    display: grid;
     grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
   }
 
+  /* Quickstart steps stack vertically */
   .step {
     flex-direction: column;
     gap: var(--spacing-md);
   }
 
+  /* Footer stacks vertically and centers */
   .footer .container {
     flex-direction: column;
     text-align: center;
+  }
+
+  /* Touch target sizing for links and buttons - minimum 44x44px */
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Nav logo special handling */
+  .nav-logo {
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* CTA button touch target */
+  .btn, .btn-primary {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+
+  /* Copy button touch target */
+  .copy-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Footer links touch target */
+  .footer-links {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer-links a {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hero badges touch target */
+  .hero-badges a {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-sm);
+  }
+
+  /* Resource links touch target */
+  .resource-link {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md);
+  }
+
+  /* Resources grid - single column on mobile */
+  .resources-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  /* Container padding adjustment for mobile */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Hero section adjustments */
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero-logo {
+    max-width: 150px;
+  }
+
+  /* Code block horizontal scrolling */
+  .code-block {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .code-block pre {
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Section padding reduction */
+  section {
+    padding: var(--spacing-2xl) 0;
   }
 }
 
@@ -45,6 +159,16 @@
 @media (min-width: 576px) and (max-width: 991px) {
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Touch targets still important on tablet */
+  a, button {
+    min-height: 44px;
+  }
+
+  .copy-btn {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
