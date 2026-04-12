@@ -1,0 +1,91 @@
+/**
+ * Main Stylesheet
+ * Owner: First builder (shared resource)
+ *
+ * Imports all component and utility styles in the correct order.
+ */
+
+/* Utilities - Load first */
+@import url('./utilities/reset.css');
+@import url('./utilities/variables.css');
+
+/* Components */
+@import url('./components/hero.css');
+@import url('./components/features.css');
+@import url('./components/quickstart.css');
+@import url('./components/usage.css');
+@import url('./components/footer.css');
+@import url('./components/responsive.css');
+
+/* Dark mode - Load last to override */
+@import url('./utilities/dark-mode.css');
+
+/* Base styles */
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  line-height: var(--line-height-normal);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+section {
+  padding: var(--spacing-4xl) 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-bold);
+}
+
+h1 {
+  font-size: var(--font-size-5xl);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+a {
+  color: var(--color-primary);
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-default);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  color: white;
+}

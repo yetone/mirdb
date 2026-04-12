@@ -1,0 +1,34 @@
+/**
+ * Usage Examples Section Styles
+ * Owner: Scenario 4 - Usage Examples Section
+ *
+ * Styles for:
+ * - GIF/image container
+ * - Figure/figcaption layout
+ */
+
+.usage {
+  background-color: var(--color-surface);
+}
+
+.usage h2 {
+  text-align: center;
+}
+
+.usage-figure {
+  max-width: 800px;
+  margin: var(--spacing-2xl) auto 0;
+  text-align: center;
+}
+
+.usage-figure img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.usage-figure figcaption {
+  margin-top: var(--spacing-lg);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}

@@ -1,0 +1,41 @@
+/**
+ * Footer Section Styles
+ * Owner: Scenario 6 - Footer Section
+ *
+ * Styles for:
+ * - Footer layout
+ * - Footer links
+ */
+
+.footer {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-xl) 0;
+}
+
+.footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.footer p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.footer-links a {
+  color: var(--color-code-text);
+  font-size: var(--font-size-sm);
+}
+
+.footer-links a:hover {
+  color: var(--color-primary);
+}

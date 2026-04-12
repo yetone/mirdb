@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A Persistent Key-Value Store with Memcached Protocol. Painless as using memcached.">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <a href="#" class="nav-logo">MirDB</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quickstart">Quickstart</a></li>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+      <div class="container">
+        <img src="assets/logo.gif" alt="MirDB Logo" class="hero-logo">
+        <h1>MirDB: A Persistent Key-Value Store with Memcached Protocol</h1>
+        <p class="hero-subtitle">It is painless as using memcached</p>
+        <div class="hero-badges">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener">
+            <img src="https://atompunk.yetone.fun/github/yetone/mirdb?v=2" alt="CircleCI Build Status">
+          </a>
+        </div>
+        <a href="#quickstart" class="btn btn-primary">Get Started</a>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card">
+            <h3 class="feature-title">Tokio with Memcached Protocol</h3>
+            <p class="feature-description">Built on Tokio's async runtime with full Memcached protocol support, enabling seamless integration with existing Memcached clients and infrastructure.</p>
+          </article>
+          <article class="feature-card">
+            <h3 class="feature-title">Memtable with Skiplist</h3>
+            <p class="feature-description">In-memory storage using efficient skiplist data structures for fast writes and ordered key traversal with O(log n) complexity.</p>
+          </article>
+          <article class="feature-card">
+            <h3 class="feature-title">Minor Compaction</h3>
+            <p class="feature-description">Automatically flushes memtable data to disk as sorted string tables (SSTables), ensuring data durability while maintaining write performance.</p>
+          </article>
+          <article class="feature-card">
+            <h3 class="feature-title">Major Compaction</h3>
+            <p class="feature-description">Periodically merges and compacts SSTables to reclaim space, remove deleted entries, and optimize read performance over time.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quickstart Section (Scenario 3) -->
+    <section id="quickstart" class="quickstart">
+      <div class="container">
+        <h2>Quickstart</h2>
+        <div class="quickstart-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h3>Clone the repository</h3>
+              <div class="code-block">
+                <pre><code>git clone https://github.com/yetone/mirdb.git</code></pre>
+                <button class="copy-btn" aria-label="Copy to clipboard">Copy</button>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h3>Build the project</h3>
+              <div class="code-block">
+                <pre><code>cd mirdb && cargo build --release</code></pre>
+                <button class="copy-btn" aria-label="Copy to clipboard">Copy</button>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h3>Run MirDB</h3>
+              <div class="code-block">
+                <pre><code>./target/release/mirdb</code></pre>
+                <button class="copy-btn" aria-label="Copy to clipboard">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Usage Section (Scenario 4) -->
+    <section id="usage" class="usage">
+      <div class="container">
+        <h2>Usage Example</h2>
+        <figure class="usage-figure">
+          <img src="assets/usage.gif" alt="MirDB usage demonstration showing key-value operations via Memcached protocol">
+          <figcaption>Interact with MirDB using any Memcached client. Set, get, and delete keys just like you would with Memcached.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- External Links Section (Scenario 5) -->
+    <section id="resources" class="resources">
+      <div class="container">
+        <h2>Resources</h2>
+        <div class="resources-grid">
+          <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener" class="resource-link">
+            <span class="resource-icon">📦</span>
+            <span>GitHub Repository</span>
+          </a>
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener" class="resource-link">
+            <span class="resource-icon">🔄</span>
+            <span>Build Status</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 6) -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 MirDB. All rights reserved.</p>
+      <nav class="footer-links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>

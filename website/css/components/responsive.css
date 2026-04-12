@@ -1,0 +1,56 @@
+/**
+ * Responsive Styles
+ * Owner: Scenarios 7, 8 - Responsive Design
+ *
+ * Contains media queries for:
+ * - Mobile (< 576px)
+ * - Tablet (576px - 992px)
+ * - Desktop (> 992px)
+ */
+
+/* Mobile */
+@media (max-width: 575px) {
+  h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .hero h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .step {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer .container {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Tablet */
+@media (min-width: 576px) and (max-width: 991px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
