@@ -4,6 +4,7 @@
 import { Features } from './components/Features';
 import { QuickStart } from './components/QuickStart/QuickStart';
 import { StatusBadge } from './components/Badges';
+import { Demo } from './components/Demo';
 import { PRODUCT_NAME, TAGLINE, GITHUB_URL, CIRCLECI_URL, CIRCLECI_BADGE_URL } from './utils/constants';
 import './styles/globals.css';
 import './styles/responsive.css';
@@ -51,6 +52,9 @@ function App() {
 
         {/* Quick Start Section - Scenario 3 */}
         <QuickStart />
+
+        {/* Demo Section - Scenario 6 */}
+        <Demo />
       </main>
     </>
   );
