@@ -125,6 +125,87 @@ test.describe('Features Section', () => {
 });
 
 /**
+ * Rust Language Highlight E2E Tests
+ * Owner: Scenario 18 - Rust Language Highlight
+ *
+ * Tests:
+ * - Rust keyword appears on the page
+ * - Features section includes 'Written in Rust' or similar
+ * - Rust is mentioned as a feature/benefit (not incidentally)
+ */
+test.describe('Rust Language Highlight', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('should display Rust keyword on the page', async ({ page }) => {
+    // Search for 'Rust' text anywhere on the page
+    const rustMention = page.locator('text=Rust');
+    await expect(rustMention.first()).toBeVisible();
+  });
+
+  test('should display "Written in Rust" in features section', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Check for Rust feature title
+    const rustTitle = page.locator('.feature-title', { hasText: /Written in Rust|Rust/i });
+    await expect(rustTitle).toBeVisible();
+
+    // Check feature card contains Rust-related content
+    const rustCard = page.locator('[data-testid="feature-card"]', { hasText: /Rust/i });
+    await expect(rustCard).toBeVisible();
+    await expect(rustCard.locator('.feature-description')).toBeVisible();
+  });
+
+  test('should mention Rust as a feature/benefit with context', async ({ page }) => {
+    // Navigate to features section
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Find the Rust feature card
+    const rustCard = page.locator('[data-testid="feature-card"]', { hasText: /Rust/i });
+    await expect(rustCard).toBeVisible();
+
+    // Verify Rust is mentioned in context of benefits (performance, safety, reliability)
+    const description = rustCard.locator('.feature-description');
+    await expect(description).toBeVisible();
+
+    // Check that the description mentions Rust benefits (memory safety, performance, reliability)
+    const descriptionText = await description.textContent();
+    expect(descriptionText).toBeTruthy();
+
+    // Verify it contains at least one benefit keyword
+    const hasBenefitContext =
+      /memory safety|performance|reliability|safe|fast|efficient/i.test(descriptionText || '');
+    expect(hasBenefitContext).toBe(true);
+  });
+
+  test('should have Rust feature with icon and proper structure', async ({ page }) => {
+    const featuresSection = page.locator('#features');
+    await expect(featuresSection).toBeVisible();
+
+    // Find the Rust feature card
+    const rustCard = page.locator('[data-testid="feature-card"]', { hasText: /Rust/i });
+    await expect(rustCard).toBeVisible();
+
+    // Verify it has the expected structure (title + description)
+    const title = rustCard.locator('.feature-title');
+    const description = rustCard.locator('.feature-description');
+
+    await expect(title).toBeVisible();
+    await expect(description).toBeVisible();
+
+    // Check for Rust crab emoji icon (🦀)
+    const icon = rustCard.locator('.feature-icon');
+    if (await icon.count() > 0) {
+      await expect(icon).toContainText('🦀');
+    }
+  });
+});
+
+/**
  * Roadmap Section E2E Tests
  * Owner: Scenario 7 - Planned Features Section
  *
