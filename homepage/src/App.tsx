@@ -6,6 +6,7 @@ import { QuickStart } from './components/QuickStart/QuickStart';
 import { StatusBadge } from './components/Badges';
 import { Demo } from './components/Demo';
 import { Roadmap } from './components/Roadmap';
+import { Footer } from './components/Footer';
 import { PRODUCT_NAME, TAGLINE, GITHUB_URL, CIRCLECI_URL, CIRCLECI_BADGE_URL } from './utils/constants';
 import './styles/globals.css';
 import './styles/responsive.css';
@@ -60,6 +61,9 @@ function App() {
         {/* Roadmap Section - Scenario 7 */}
         <Roadmap />
       </main>
+
+      {/* Footer Section - Scenario 17 */}
+      <Footer />
     </>
   );
 }
