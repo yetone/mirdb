@@ -1,0 +1,179 @@
+/**
+ * Roadmap Section Styles
+ * Owner: Scenario 7 - Planned Features Section
+ *
+ * Provides visual distinction between completed and planned features.
+ */
+
+.roadmap-section {
+  background-color: var(--color-background);
+}
+
+.roadmap-title {
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.roadmap-subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Two-column layout for completed vs planned */
+.roadmap-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.roadmap-column {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.roadmap-column--completed {
+  border-top: 4px solid #10b981; /* Green for completed */
+}
+
+.roadmap-column--planned {
+  border-top: 4px solid var(--color-primary); /* Blue for planned */
+}
+
+.roadmap-column-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.roadmap-column-icon {
+  font-size: 1.25rem;
+}
+
+.roadmap-column--completed .roadmap-column-icon {
+  color: #10b981;
+}
+
+.roadmap-column--planned .roadmap-column-icon {
+  color: var(--color-primary);
+}
+
+/* List styling */
+.roadmap-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Individual item styling */
+.roadmap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.roadmap-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.roadmap-item:first-child {
+  padding-top: 0;
+}
+
+/* Status indicator icons */
+.roadmap-status-indicator {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.roadmap-status-indicator--completed {
+  background-color: #10b981;
+  color: white;
+}
+
+.roadmap-status-indicator--planned {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.roadmap-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.roadmap-icon--planned {
+  width: 20px;
+  height: 20px;
+}
+
+/* Item content */
+.roadmap-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.roadmap-item-title {
+  display: block;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.roadmap-item-description {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Status badges */
+.roadmap-item-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+}
+
+.roadmap-item-badge--completed {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.roadmap-item-badge--planned {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--color-primary);
+}
+
+/* Completed items have subtle strikethrough on title */
+.roadmap-item--completed .roadmap-item-title {
+  color: var(--color-text-muted);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 767px) {
+  .roadmap-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-column {
+    padding: var(--spacing-lg);
+  }
+}

@@ -1,0 +1,35 @@
+/**
+ * Badges Component Styles
+ * Owner: Scenario 5 - CI/CD Status Badges
+ */
+
+.status-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm, 0.5rem);
+  justify-content: center;
+  margin-top: var(--spacing-md, 1rem);
+}
+
+.status-badge-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.status-badge-link:hover {
+  opacity: 0.8;
+}
+
+.status-badge-link:focus {
+  outline: 2px solid var(--color-primary, #3b82f6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.status-badge-image {
+  height: 20px;
+  width: auto;
+  vertical-align: middle;
+}

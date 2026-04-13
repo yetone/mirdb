@@ -1,0 +1,185 @@
+/**
+ * Responsive styles for MirDB Homepage.
+ * Owner: Scenarios 8, 9, 10 - Responsive Design
+ */
+
+/* Mobile-first approach - base styles are mobile */
+
+/* ============================================
+ * MOBILE STYLES (base - up to 767px)
+ * Scenario 10 - Mobile Responsive Design
+ * ============================================ */
+
+/* Prevent horizontal overflow on mobile */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Base mobile styles */
+.container {
+  width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  overflow-x: hidden;
+}
+
+section,
+.section {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Ensure readable base font size on mobile (minimum 16px) */
+body {
+  font-size: var(--font-size-base); /* 1rem = 16px */
+}
+
+/* Mobile hero section */
+#hero {
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+#hero h1 {
+  font-size: var(--font-size-2xl); /* 1.5rem = 24px on mobile */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+#hero p {
+  font-size: var(--font-size-base); /* Readable text size */
+}
+
+/* Mobile single-column layout for quick-start - handled in QuickStart.css */
+
+/* Base mobile touch targets - ensure minimum 44x44px */
+a, button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inline text links don't need minimum height */
+p a, .feature-description a, .code-block a {
+  min-height: auto;
+  display: inline;
+}
+
+/* Status badges touch targets on mobile */
+.status-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.status-badges a {
+  min-height: 44px;
+  min-width: 44px;
+  padding: var(--spacing-sm);
+}
+
+/* Code blocks responsive on mobile */
+.code-block,
+.code-block-pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Logo responsive sizing on mobile */
+img[alt*="logo" i],
+img[alt*="MirDB" i],
+.logo {
+  max-width: calc(100vw - 64px); /* Allow for padding */
+  height: auto;
+}
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* Hero section tablet adjustments */
+  #hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  #hero p {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Ensure CTA buttons meet touch target requirements */
+  #hero a[href*="github"] {
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+
+  /* Status badges container */
+  .status-badges {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Tablet-specific styles (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Adjusted container padding for tablet */
+  .container {
+    padding: 0 var(--spacing-xl);
+    max-width: 100%;
+  }
+
+  /* Hero section spacing for tablet */
+  #hero {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  /* Ensure proper text wrapping on tablet */
+  h1 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--spacing-2xl);
+  }
+
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+}
+
+/* Large Desktop (1920px and up) */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-2xl);
+  }
+
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* Ensure content stays within bounds on large screens */
+  body {
+    overflow-x: hidden;
+  }
+
+  main {
+    max-width: 100%;
+  }
+}
