@@ -25,3 +25,9 @@ export interface CodeBlockProps {
   language?: string;
   title?: string;
 }
+
+export interface StatusBadgeProps {
+  src: string;
+  alt: string;
+  href: string;
+}

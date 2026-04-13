@@ -3,7 +3,8 @@
  */
 import { Features } from './components/Features';
 import { QuickStart } from './components/QuickStart/QuickStart';
-import { PRODUCT_NAME, TAGLINE, GITHUB_URL } from './utils/constants';
+import { StatusBadge } from './components/Badges';
+import { PRODUCT_NAME, TAGLINE, GITHUB_URL, CIRCLECI_URL, CIRCLECI_BADGE_URL } from './utils/constants';
 import './styles/globals.css';
 import './styles/responsive.css';
 
@@ -35,6 +36,13 @@ function App() {
             >
               View on GitHub
             </a>
+            <div className="status-badges" style={{ marginTop: '1rem' }}>
+              <StatusBadge
+                src={CIRCLECI_BADGE_URL}
+                alt="Build Status"
+                href={CIRCLECI_URL}
+              />
+            </div>
           </div>
         </section>
 
