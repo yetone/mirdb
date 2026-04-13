@@ -1,8 +1,22 @@
 /**
  * Responsive styles for MirDB Homepage.
+ * Owner: Scenarios 8, 9, 10 - Responsive Design
  */
 
 /* Mobile-first approach - base styles are mobile */
+
+/* Base mobile styles */
+.container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+section,
+.section {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
 
 /* Tablet (768px and up) */
 @media (min-width: 768px) {
@@ -19,5 +33,31 @@
 @media (min-width: 1024px) {
   .container {
     padding: 0 var(--spacing-2xl);
+  }
+
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+}
+
+/* Large Desktop (1920px and up) */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-2xl);
+  }
+
+  .section {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* Ensure content stays within bounds on large screens */
+  body {
+    overflow-x: hidden;
+  }
+
+  main {
+    max-width: 100%;
   }
 }
