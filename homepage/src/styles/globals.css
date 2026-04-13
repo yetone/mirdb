@@ -56,14 +56,14 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Focus styles for accessibility */
+/* Focus styles for accessibility - WCAG 2.1 AA compliant (3:1 minimum) */
 :focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--color-focus-ring-width, 2px) solid var(--color-focus);
+  outline-offset: var(--color-focus-ring-offset, 2px);
 }
 
 /* Skip link for accessibility */
-.skip-link {
+a.skip-link {
   position: absolute;
   top: -40px;
   left: 0;
@@ -74,8 +74,17 @@ a:hover {
   transition: top var(--transition-fast);
 }
 
-.skip-link:focus {
+a.skip-link:focus {
   top: 0;
+  /* White outline for contrast against blue background - WCAG 2.1 AA compliant */
+  outline: 3px solid white !important;
+  outline-offset: 2px;
+}
+
+a.skip-link:focus-visible {
+  /* White outline for contrast against blue background - WCAG 2.1 AA compliant */
+  outline: 3px solid white !important;
+  outline-offset: 2px;
 }
 
 /* Utility classes */

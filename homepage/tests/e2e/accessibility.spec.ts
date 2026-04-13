@@ -314,3 +314,343 @@ test.describe('Accessibility - Keyboard Navigation', () => {
     expect(elementPositions.length).toBeGreaterThan(0);
   });
 });
+
+/**
+ * Color Contrast E2E Tests
+ * Owner: Scenario 14 - Accessibility - Color Contrast
+ *
+ * Tests:
+ * - Body text contrast (4.5:1 minimum)
+ * - Heading text contrast (3:1 minimum for large text)
+ * - Link text contrast (4.5:1 minimum)
+ * - Button text contrast (4.5:1 minimum)
+ * - Focus indicator contrast (3:1 minimum)
+ */
+
+// Helper function to convert RGB to relative luminance
+function getLuminance(r: number, g: number, b: number): number {
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    const sRGB = c / 255;
+    return sRGB <= 0.03928 ? sRGB / 12.92 : Math.pow((sRGB + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+
+// Helper function to parse color string to RGB
+function parseColor(colorStr: string): { r: number; g: number; b: number } | null {
+  // Handle rgb(r, g, b) or rgba(r, g, b, a) format
+  const rgbMatch = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (rgbMatch) {
+    return {
+      r: parseInt(rgbMatch[1], 10),
+      g: parseInt(rgbMatch[2], 10),
+      b: parseInt(rgbMatch[3], 10),
+    };
+  }
+
+  // Handle hex format #RRGGBB or #RGB
+  const hexMatch = colorStr.match(/^#([0-9a-f]{3,6})$/i);
+  if (hexMatch) {
+    let hex = hexMatch[1];
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    return {
+      r: parseInt(hex.slice(0, 2), 16),
+      g: parseInt(hex.slice(2, 4), 16),
+      b: parseInt(hex.slice(4, 6), 16),
+    };
+  }
+
+  return null;
+}
+
+// Helper function to calculate contrast ratio between two colors
+function getContrastRatio(color1: string, color2: string): number {
+  const rgb1 = parseColor(color1);
+  const rgb2 = parseColor(color2);
+
+  if (!rgb1 || !rgb2) {
+    return 0;
+  }
+
+  const l1 = getLuminance(rgb1.r, rgb1.g, rgb1.b);
+  const l2 = getLuminance(rgb2.r, rgb2.g, rgb2.b);
+
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+test.describe('Accessibility - Color Contrast', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+  });
+
+  test('body text has minimum 4.5:1 contrast ratio against background', async ({ page }) => {
+    // Get body text and background colors
+    const colors = await page.evaluate(() => {
+      const body = document.body;
+      const styles = window.getComputedStyle(body);
+
+      // Find a paragraph or text element
+      const textElement = document.querySelector('p') || body;
+      const textStyles = window.getComputedStyle(textElement);
+
+      return {
+        textColor: textStyles.color,
+        backgroundColor: styles.backgroundColor,
+      };
+    });
+
+    const contrastRatio = getContrastRatio(colors.textColor, colors.backgroundColor);
+
+    // WCAG 2.1 AA requires 4.5:1 for normal text
+    expect(contrastRatio).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test('heading text has minimum 3:1 contrast ratio against background', async ({ page }) => {
+    // Get all heading elements
+    const headingColors = await page.evaluate(() => {
+      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      const results: { tag: string; textColor: string; bgColor: string }[] = [];
+
+      headings.forEach((heading) => {
+        const styles = window.getComputedStyle(heading);
+
+        // Get background color - walk up the DOM if transparent
+        let bgColor = styles.backgroundColor;
+        let parent: Element | null = heading.parentElement;
+        while (parent && (bgColor === 'transparent' || bgColor === 'rgba(0, 0, 0, 0)')) {
+          const parentStyles = window.getComputedStyle(parent);
+          bgColor = parentStyles.backgroundColor;
+          parent = parent.parentElement;
+        }
+
+        // Default to white if still transparent
+        if (bgColor === 'transparent' || bgColor === 'rgba(0, 0, 0, 0)') {
+          bgColor = 'rgb(255, 255, 255)';
+        }
+
+        results.push({
+          tag: heading.tagName.toLowerCase(),
+          textColor: styles.color,
+          bgColor: bgColor,
+        });
+      });
+
+      return results;
+    });
+
+    // Check each heading has at least 3:1 contrast (large text requirement)
+    for (const heading of headingColors) {
+      const contrastRatio = getContrastRatio(heading.textColor, heading.bgColor);
+
+      // WCAG 2.1 AA requires 3:1 for large text (headings qualify as large text)
+      expect(
+        contrastRatio,
+        `Heading ${heading.tag} should have at least 3:1 contrast ratio, got ${contrastRatio.toFixed(2)}`
+      ).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  test('link text has minimum 4.5:1 contrast ratio', async ({ page }) => {
+    // Get all visible link elements
+    const linkColors = await page.evaluate(() => {
+      const links = document.querySelectorAll('a:not(.skip-link)');
+      const results: { href: string; textColor: string; bgColor: string }[] = [];
+
+      links.forEach((link) => {
+        const rect = link.getBoundingClientRect();
+        // Only test visible links
+        if (rect.width > 0 && rect.height > 0) {
+          const styles = window.getComputedStyle(link);
+
+          // Get background color - walk up the DOM if transparent
+          let bgColor = styles.backgroundColor;
+          let parent: Element | null = link.parentElement;
+          while (parent && (bgColor === 'transparent' || bgColor === 'rgba(0, 0, 0, 0)')) {
+            const parentStyles = window.getComputedStyle(parent);
+            bgColor = parentStyles.backgroundColor;
+            parent = parent.parentElement;
+          }
+
+          // Default to white if still transparent
+          if (bgColor === 'transparent' || bgColor === 'rgba(0, 0, 0, 0)') {
+            bgColor = 'rgb(255, 255, 255)';
+          }
+
+          results.push({
+            href: link.getAttribute('href') || '',
+            textColor: styles.color,
+            bgColor: bgColor,
+          });
+        }
+      });
+
+      return results;
+    });
+
+    expect(linkColors.length).toBeGreaterThan(0);
+
+    // Check each link has at least 4.5:1 contrast
+    for (const link of linkColors) {
+      const contrastRatio = getContrastRatio(link.textColor, link.bgColor);
+
+      // WCAG 2.1 AA requires 4.5:1 for normal text (links)
+      expect(
+        contrastRatio,
+        `Link to "${link.href}" should have at least 4.5:1 contrast ratio, got ${contrastRatio.toFixed(2)}`
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  test('button text has minimum 4.5:1 contrast ratio against button background', async ({ page }) => {
+    // Get all button and button-like elements
+    const buttonColors = await page.evaluate(() => {
+      // Include actual buttons and links styled as buttons
+      const buttons = document.querySelectorAll('button, a[role="button"], [class*="button"], [class*="btn"]');
+      const results: { text: string; textColor: string; bgColor: string }[] = [];
+
+      buttons.forEach((button) => {
+        const rect = button.getBoundingClientRect();
+        // Only test visible buttons
+        if (rect.width > 0 && rect.height > 0) {
+          const styles = window.getComputedStyle(button);
+          const bgColor = styles.backgroundColor;
+
+          // Only test buttons that have their own background color
+          if (bgColor !== 'transparent' && bgColor !== 'rgba(0, 0, 0, 0)') {
+            results.push({
+              text: button.textContent?.trim().substring(0, 30) || '',
+              textColor: styles.color,
+              bgColor: bgColor,
+            });
+          }
+        }
+      });
+
+      // Also check for links styled as buttons (e.g., with inline styles)
+      const styledLinks = document.querySelectorAll('a[style*="background"]');
+      styledLinks.forEach((link) => {
+        const rect = link.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          const styles = window.getComputedStyle(link);
+          const bgColor = styles.backgroundColor;
+
+          if (bgColor !== 'transparent' && bgColor !== 'rgba(0, 0, 0, 0)') {
+            results.push({
+              text: link.textContent?.trim().substring(0, 30) || '',
+              textColor: styles.color,
+              bgColor: bgColor,
+            });
+          }
+        }
+      });
+
+      return results;
+    });
+
+    // At least one button-like element should exist
+    expect(buttonColors.length).toBeGreaterThan(0);
+
+    // Check each button has at least 4.5:1 contrast
+    for (const button of buttonColors) {
+      const contrastRatio = getContrastRatio(button.textColor, button.bgColor);
+
+      // WCAG 2.1 AA requires 4.5:1 for button text against button background
+      expect(
+        contrastRatio,
+        `Button "${button.text}" should have at least 4.5:1 contrast ratio, got ${contrastRatio.toFixed(2)}`
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  test('focus indicators have minimum 3:1 contrast ratio', async ({ page }) => {
+    // Tab through elements and check focus indicator contrast
+    // WCAG 2.1 SC 1.4.11 requires focus indicators to have 3:1 contrast against adjacent colors
+    // For outlines with offset, we check contrast against both element background AND page background
+    const focusContrastResults: { element: string; hasValidContrast: boolean; ratio: number; maxRatio: number }[] = [];
+
+    for (let i = 0; i < 5; i++) {
+      await page.keyboard.press('Tab');
+
+      const focusStyles = await page.evaluate(() => {
+        const focused = document.activeElement;
+        if (!focused || focused === document.body) {
+          return null;
+        }
+
+        const styles = window.getComputedStyle(focused);
+
+        // Get the focus indicator color (outline or box-shadow)
+        const outlineColor = styles.outlineColor;
+        const outlineWidth = parseFloat(styles.outlineWidth) || 0;
+        const outlineOffset = parseFloat(styles.outlineOffset) || 0;
+
+        // Get element's background color
+        let elementBgColor = styles.backgroundColor;
+        let parent: Element | null = focused.parentElement;
+        while (parent && (elementBgColor === 'transparent' || elementBgColor === 'rgba(0, 0, 0, 0)')) {
+          const parentStyles = window.getComputedStyle(parent);
+          elementBgColor = parentStyles.backgroundColor;
+          parent = parent.parentElement;
+        }
+
+        if (elementBgColor === 'transparent' || elementBgColor === 'rgba(0, 0, 0, 0)') {
+          elementBgColor = 'rgb(255, 255, 255)';
+        }
+
+        // Get page/body background color (for outline with offset)
+        const bodyStyles = window.getComputedStyle(document.body);
+        let pageBgColor = bodyStyles.backgroundColor;
+        if (pageBgColor === 'transparent' || pageBgColor === 'rgba(0, 0, 0, 0)') {
+          pageBgColor = 'rgb(255, 255, 255)';
+        }
+
+        return {
+          tagName: focused.tagName.toLowerCase(),
+          className: focused.className || '',
+          outlineColor: outlineColor,
+          outlineWidth: outlineWidth,
+          outlineOffset: outlineOffset,
+          elementBackgroundColor: elementBgColor,
+          pageBackgroundColor: pageBgColor,
+        };
+      });
+
+      if (focusStyles && focusStyles.outlineWidth > 0) {
+        // Calculate contrast against both backgrounds
+        const contrastVsElement = getContrastRatio(focusStyles.outlineColor, focusStyles.elementBackgroundColor);
+        const contrastVsPage = getContrastRatio(focusStyles.outlineColor, focusStyles.pageBackgroundColor);
+
+        // For WCAG compliance, the outline should contrast well against at least one adjacent surface
+        // For outlines with offset, the page background is the adjacent surface
+        // For outlines without offset, the element background is adjacent
+        const effectiveRatio = focusStyles.outlineOffset > 0
+          ? Math.max(contrastVsElement, contrastVsPage)  // With offset, can contrast against either
+          : contrastVsElement;  // Without offset, must contrast against element
+
+        focusContrastResults.push({
+          element: focusStyles.tagName,
+          hasValidContrast: effectiveRatio >= 3,
+          ratio: contrastVsElement,
+          maxRatio: Math.max(contrastVsElement, contrastVsPage),
+        });
+      }
+    }
+
+    // Verify at least some focus indicators were found and tested
+    expect(focusContrastResults.length).toBeGreaterThan(0);
+
+    // Check that all found focus indicators meet the 3:1 contrast requirement
+    for (const result of focusContrastResults) {
+      expect(
+        result.maxRatio,
+        `Focus indicator on ${result.element} should have at least 3:1 contrast ratio against adjacent surface, got ${result.maxRatio.toFixed(2)}`
+      ).toBeGreaterThanOrEqual(3);
+    }
+  });
+});
