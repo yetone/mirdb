@@ -18,6 +18,20 @@ section,
   overflow-x: hidden;
 }
 
+/* Base mobile touch targets - ensure minimum 44x44px */
+a, button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inline text links don't need minimum height */
+p a, .feature-description a, .code-block a {
+  min-height: auto;
+  display: inline;
+}
+
 /* Tablet (768px and up) */
 @media (min-width: 768px) {
   .container {
@@ -26,6 +40,49 @@ section,
 
   .section {
     padding: var(--spacing-3xl) 0;
+  }
+
+  /* Hero section tablet adjustments */
+  #hero h1 {
+    font-size: var(--font-size-4xl);
+  }
+
+  #hero p {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Ensure CTA buttons meet touch target requirements */
+  #hero a[href*="github"] {
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+
+  /* Status badges container */
+  .status-badges {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Tablet-specific styles (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Adjusted container padding for tablet */
+  .container {
+    padding: 0 var(--spacing-xl);
+    max-width: 100%;
+  }
+
+  /* Hero section spacing for tablet */
+  #hero {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  /* Ensure proper text wrapping on tablet */
+  h1 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }
 
