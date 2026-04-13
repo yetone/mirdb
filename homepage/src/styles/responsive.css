@@ -1,41 +1,23 @@
 /**
- * Responsive CSS styles for MirDB Homepage.
- * Follows mobile-first approach.
+ * Responsive styles for MirDB Homepage.
  */
 
-/* Mobile styles (default) */
-@media screen and (max-width: 767px) {
+/* Mobile-first approach - base styles are mobile */
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
   .container {
-    padding: 0 var(--spacing-md);
+    padding: 0 var(--spacing-xl);
   }
 
-  .section {
-    padding: var(--spacing-2xl) 0;
-  }
-
-  h1 {
-    font-size: var(--font-size-3xl);
-  }
-
-  h2 {
-    font-size: var(--font-size-2xl);
-  }
-
-  h3 {
-    font-size: var(--font-size-xl);
-  }
-}
-
-/* Tablet styles */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-  .container {
-    padding: 0 var(--spacing-lg);
-  }
-}
-
-/* Desktop styles */
-@media screen and (min-width: 1024px) {
   .section {
     padding: var(--spacing-3xl) 0;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--spacing-2xl);
   }
 }

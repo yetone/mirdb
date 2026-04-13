@@ -4,7 +4,7 @@
  */
 
 .features-section {
-  background-color: var(--color-background-alt);
+  background-color: var(--color-surface);
 }
 
 .features-title {
@@ -14,7 +14,7 @@
 
 .features-subtitle {
   text-align: center;
-  color: var(--color-text-light);
+  color: var(--color-text-muted);
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-2xl);
 }
@@ -28,7 +28,7 @@
 .feature-card {
   background-color: var(--color-background);
   padding: var(--spacing-xl);
-  border-radius: var(--radius-lg);
+  border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-sm);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
@@ -51,7 +51,7 @@
 }
 
 .feature-description {
-  color: var(--color-text-light);
+  color: var(--color-text-muted);
   font-size: var(--font-size-base);
   line-height: 1.6;
   margin-bottom: 0;

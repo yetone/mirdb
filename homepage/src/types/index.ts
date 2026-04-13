@@ -19,3 +19,9 @@ export interface ExternalLinkProps {
   children: React.ReactNode;
   className?: string;
 }
+
+export interface CodeBlockProps {
+  code: string;
+  language?: string;
+  title?: string;
+}

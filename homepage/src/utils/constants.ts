@@ -42,24 +42,32 @@ export const FEATURES: Feature[] = [
 ];
 
 export const ROADMAP_ITEMS: RoadmapItem[] = [
-  {
-    title: 'Core Storage Engine',
-    status: 'completed',
-    description: 'LSM-tree based storage with SSTable persistence',
-  },
-  {
-    title: 'Memcached Protocol Support',
-    status: 'completed',
-    description: 'Full Memcached protocol compatibility',
-  },
-  {
-    title: 'Write-Ahead Logging',
-    status: 'completed',
-    description: 'WAL for durability and crash recovery',
-  },
-  {
-    title: 'Raft Consensus',
-    status: 'planned',
-    description: 'Distributed consensus for high availability',
-  },
+  { title: 'Tokio-based async networking', status: 'completed' },
+  { title: 'Memtable with skip list', status: 'completed' },
+  { title: 'Minor compaction', status: 'completed' },
+  { title: 'Major compaction', status: 'completed' },
+  { title: 'Raft consensus', status: 'planned', description: 'Distributed operation support' },
 ];
+
+export const QUICK_START = {
+  installation: `# Clone and build
+git clone ${GITHUB_URL}
+cd mirdb
+cargo build --release
+
+# Run MirDB server
+./target/release/mirdb`,
+  usage: `# Connect with any memcached client (e.g., telnet)
+telnet localhost 12333
+
+# Set a value
+set mykey 0 0 5
+hello
+STORED
+
+# Get the value
+get mykey
+VALUE mykey 0 5
+hello
+END`,
+};

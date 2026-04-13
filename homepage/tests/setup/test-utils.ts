@@ -1,11 +1,5 @@
 /**
- * Test utilities and helpers for MirDB Homepage tests.
+ * Test utilities and helpers for MirDB Homepage.
  */
-import '@testing-library/jest-dom';
-import { cleanup } from '@testing-library/react';
-import { afterEach } from 'vitest';
 
-// Cleanup after each test
-afterEach(() => {
-  cleanup();
-});
+import '@testing-library/jest-dom';
