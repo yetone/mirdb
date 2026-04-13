@@ -5,6 +5,7 @@ import { Features } from './components/Features';
 import { QuickStart } from './components/QuickStart/QuickStart';
 import { StatusBadge } from './components/Badges';
 import { Demo } from './components/Demo';
+import { Roadmap } from './components/Roadmap';
 import { PRODUCT_NAME, TAGLINE, GITHUB_URL, CIRCLECI_URL, CIRCLECI_BADGE_URL } from './utils/constants';
 import './styles/globals.css';
 import './styles/responsive.css';
@@ -55,6 +56,9 @@ function App() {
 
         {/* Demo Section - Scenario 6 */}
         <Demo />
+
+        {/* Roadmap Section - Scenario 7 */}
+        <Roadmap />
       </main>
     </>
   );

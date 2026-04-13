@@ -123,3 +123,129 @@ test.describe('Features Section', () => {
     await expect(section).toHaveAttribute('aria-labelledby', 'features-heading');
   });
 });
+
+/**
+ * Roadmap Section E2E Tests
+ * Owner: Scenario 7 - Planned Features Section
+ *
+ * Tests:
+ * - Project status/roadmap section exists
+ * - Completed features have visual indicators
+ * - Raft is listed as planned/upcoming
+ * - Visual distinction between completed and planned
+ */
+test.describe('Roadmap Section', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('should display project status/roadmap section', async ({ page }) => {
+    // Section with heading containing 'Status', 'Roadmap', or 'Features' exists
+    const roadmapSection = page.locator('#roadmap');
+    await expect(roadmapSection).toBeVisible();
+
+    // Check for heading
+    const heading = page.locator('#roadmap-heading');
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText(/Status|Roadmap|Features/i);
+  });
+
+  test('should display completed features with visual indicators', async ({ page }) => {
+    const roadmapSection = page.locator('#roadmap');
+    await expect(roadmapSection).toBeVisible();
+
+    // Check for completed features container
+    const completedFeatures = page.locator('[data-testid="completed-features"]');
+    await expect(completedFeatures).toBeVisible();
+
+    // Check that completed items have status indicator
+    const completedItems = completedFeatures.locator('[data-testid="roadmap-item"]');
+    const count = await completedItems.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Each completed item should have visual indicator (checkmark or 'completed' label)
+    for (let i = 0; i < count; i++) {
+      const item = completedItems.nth(i);
+      await expect(item).toHaveAttribute('data-status', 'completed');
+
+      // Check for completed badge or checkmark indicator
+      const badge = item.locator('.roadmap-item-badge--completed');
+      await expect(badge).toBeVisible();
+      await expect(badge).toContainText('Completed');
+    }
+  });
+
+  test('should display Raft consensus as planned/upcoming feature', async ({ page }) => {
+    const roadmapSection = page.locator('#roadmap');
+    await expect(roadmapSection).toBeVisible();
+
+    // Check for planned features container
+    const plannedFeatures = page.locator('[data-testid="planned-features"]');
+    await expect(plannedFeatures).toBeVisible();
+
+    // Find Raft consensus item
+    const raftItem = plannedFeatures.locator('[data-testid="roadmap-item"]', { hasText: /Raft|consensus/i });
+    await expect(raftItem).toBeVisible();
+    await expect(raftItem).toHaveAttribute('data-status', 'planned');
+
+    // Check for planned badge
+    const plannedBadge = raftItem.locator('.roadmap-item-badge--planned');
+    await expect(plannedBadge).toBeVisible();
+    await expect(plannedBadge).toContainText('Planned');
+  });
+
+  test('should have visual distinction between completed and planned features', async ({ page }) => {
+    const roadmapSection = page.locator('#roadmap');
+    await expect(roadmapSection).toBeVisible();
+
+    // Check for separate columns with different styling
+    const completedColumn = page.locator('.roadmap-column--completed');
+    const plannedColumn = page.locator('.roadmap-column--planned');
+
+    await expect(completedColumn).toBeVisible();
+    await expect(plannedColumn).toBeVisible();
+
+    // Verify different border colors (visual distinction)
+    const completedBorderColor = await completedColumn.evaluate((el) =>
+      window.getComputedStyle(el).borderTopColor
+    );
+    const plannedBorderColor = await plannedColumn.evaluate((el) =>
+      window.getComputedStyle(el).borderTopColor
+    );
+
+    // Colors should be different
+    expect(completedBorderColor).not.toBe(plannedBorderColor);
+
+    // Check that completed and planned items have different badge styling
+    const completedBadge = completedColumn.locator('.roadmap-item-badge--completed').first();
+    const plannedBadge = plannedColumn.locator('.roadmap-item-badge--planned').first();
+
+    await expect(completedBadge).toBeVisible();
+    await expect(plannedBadge).toBeVisible();
+
+    // Verify different background colors for badges
+    const completedBadgeBg = await completedBadge.evaluate((el) =>
+      window.getComputedStyle(el).backgroundColor
+    );
+    const plannedBadgeBg = await plannedBadge.evaluate((el) =>
+      window.getComputedStyle(el).backgroundColor
+    );
+
+    expect(completedBadgeBg).not.toBe(plannedBadgeBg);
+  });
+
+  test('should have accessible roadmap section', async ({ page }) => {
+    const roadmapSection = page.locator('#roadmap');
+    await expect(roadmapSection).toBeVisible();
+
+    // Check aria-labelledby
+    await expect(roadmapSection).toHaveAttribute('aria-labelledby', 'roadmap-heading');
+
+    // Check for list structure
+    const completedList = page.locator('[data-testid="completed-features"]');
+    const plannedList = page.locator('[data-testid="planned-features"]');
+
+    await expect(completedList).toHaveRole('list');
+    await expect(plannedList).toHaveRole('list');
+  });
+});
