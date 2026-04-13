@@ -395,3 +395,312 @@ test.describe('Responsive Design - Tablet (768x1024)', () => {
     }
   });
 });
+
+// ============================================
+// MOBILE TESTS (Scenario 10)
+// ============================================
+const MOBILE_VIEWPORT = { width: 375, height: 667 };
+const MIN_BASE_FONT_SIZE = 16; // Minimum readable font size without zooming
+
+test.describe('Responsive Design - Mobile (375x667)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(MOBILE_VIEWPORT);
+    await page.goto('/');
+  });
+
+  test('TC1: Page renders without horizontal scrollbar at 375x667 viewport', async ({ page }) => {
+    // Check that page width doesn't exceed viewport
+    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+
+    // No horizontal overflow
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+
+    // Verify no horizontal scrollbar is visible
+    const hasHorizontalScrollbar = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > window.innerWidth;
+    });
+    expect(hasHorizontalScrollbar).toBe(false);
+
+    // Also verify body doesn't overflow
+    const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth);
+    const viewportWidth = await page.evaluate(() => window.innerWidth);
+    expect(bodyScrollWidth).toBeLessThanOrEqual(viewportWidth);
+  });
+
+  test('TC2: Content displays in single-column layout on mobile', async ({ page }) => {
+    // Check hero section content stacks vertically
+    const heroSection = page.locator('#hero');
+    await expect(heroSection).toBeVisible();
+
+    // Check hero container is full width (single column)
+    const heroContainer = heroSection.locator('.container').first();
+    const heroBox = await heroContainer.boundingBox();
+
+    expect(heroBox).not.toBeNull();
+    if (heroBox) {
+      // Container should span most of the viewport width on mobile
+      expect(heroBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+    }
+
+    // Check features section displays in single column
+    const featuresGrid = page.locator('.features-grid');
+    await expect(featuresGrid).toBeVisible();
+
+    // Get all feature cards
+    const featureCards = page.locator('.feature-card');
+    const cardCount = await featureCards.count();
+
+    if (cardCount >= 2) {
+      const firstCard = featureCards.nth(0);
+      const secondCard = featureCards.nth(1);
+
+      const firstBox = await firstCard.boundingBox();
+      const secondBox = await secondCard.boundingBox();
+
+      expect(firstBox).not.toBeNull();
+      expect(secondBox).not.toBeNull();
+
+      if (firstBox && secondBox) {
+        // In a single-column layout, cards should be stacked vertically
+        // The second card should be below the first card (higher Y value)
+        expect(secondBox.y).toBeGreaterThan(firstBox.y);
+
+        // Each card should span most of the viewport width
+        expect(firstBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+        expect(secondBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+      }
+    }
+
+    // Check quick-start section uses column layout on mobile
+    const quickStartContent = page.locator('.quick-start-content');
+    if (await quickStartContent.count() > 0) {
+      const flexDirection = await quickStartContent.evaluate((el) => {
+        return window.getComputedStyle(el).flexDirection;
+      });
+      expect(flexDirection).toBe('column');
+    }
+  });
+
+  test('TC3: Text is readable without zooming (minimum 16px base font size)', async ({ page }) => {
+    // Check body font size is at least 16px
+    const bodyFontSize = await page.evaluate(() => {
+      return parseFloat(window.getComputedStyle(document.body).fontSize);
+    });
+    expect(bodyFontSize).toBeGreaterThanOrEqual(MIN_BASE_FONT_SIZE);
+
+    // Check h1 is readable but appropriately sized for mobile
+    const h1 = page.locator('h1').first();
+    await expect(h1).toBeVisible();
+
+    const h1FontSize = await h1.evaluate((el) => {
+      return parseFloat(window.getComputedStyle(el).fontSize);
+    });
+    // H1 should still be prominent on mobile
+    expect(h1FontSize).toBeGreaterThanOrEqual(24);
+
+    // Check paragraph text is readable
+    const paragraphs = page.locator('p');
+    const pCount = await paragraphs.count();
+
+    for (let i = 0; i < Math.min(pCount, 5); i++) {
+      const p = paragraphs.nth(i);
+      const isVisible = await p.isVisible();
+
+      if (isVisible) {
+        const fontSize = await p.evaluate((el) => {
+          return parseFloat(window.getComputedStyle(el).fontSize);
+        });
+        // All paragraph text should be readable (at least 14px, ideally 16px)
+        expect(fontSize).toBeGreaterThanOrEqual(14);
+      }
+    }
+
+    // Check line-height for readability
+    const lineHeight = await page.evaluate(() => {
+      const bodyStyle = window.getComputedStyle(document.body);
+      const lh = parseFloat(bodyStyle.lineHeight);
+      const fs = parseFloat(bodyStyle.fontSize);
+      // lineHeight could be in px or unitless
+      return lh >= fs ? lh : lh * fs;
+    });
+    expect(lineHeight).toBeGreaterThanOrEqual(bodyFontSize * 1.4);
+  });
+
+  test('TC4: All buttons and links have minimum 44x44 pixel touch area', async ({ page }) => {
+    // Check primary CTA button in hero
+    const ctaButton = page.locator('#hero a').filter({ hasText: /GitHub/i });
+    await expect(ctaButton).toBeVisible();
+
+    const ctaBox = await ctaButton.boundingBox();
+    expect(ctaBox).not.toBeNull();
+    if (ctaBox) {
+      expect(ctaBox.width).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET);
+      expect(ctaBox.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET);
+    }
+
+    // Check all standalone buttons and links (not inline text links)
+    const standaloneButtons = page.locator('a, button').filter({
+      has: page.locator('text=/View|GitHub|Get Started|Learn|Start|Install/i')
+    });
+    const btnCount = await standaloneButtons.count();
+
+    for (let i = 0; i < btnCount; i++) {
+      const btn = standaloneButtons.nth(i);
+      const isVisible = await btn.isVisible();
+
+      if (isVisible) {
+        const box = await btn.boundingBox();
+        if (box) {
+          // Standalone interactive elements should meet touch target requirements
+          expect(box.width).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET);
+          expect(box.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET);
+        }
+      }
+    }
+
+    // Verify status badges have adequate touch targets
+    const badges = page.locator('.status-badges a');
+    const badgeCount = await badges.count();
+
+    for (let i = 0; i < badgeCount; i++) {
+      const badge = badges.nth(i);
+      const isVisible = await badge.isVisible();
+
+      if (isVisible) {
+        const box = await badge.boundingBox();
+        if (box) {
+          // Badge links should have adequate touch area
+          expect(box.height).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET);
+        }
+      }
+    }
+  });
+
+  test('TC5: Logo is visible and proportionally sized for mobile viewport', async ({ page }) => {
+    // Look for logo in various places
+    const logo = page.locator('img[alt*="logo" i], img[alt*="MirDB" i], .logo, #logo');
+    const logoCount = await logo.count();
+
+    // If there's a logo image
+    if (logoCount > 0) {
+      const firstLogo = logo.first();
+      const isVisible = await firstLogo.isVisible();
+
+      if (isVisible) {
+        const box = await firstLogo.boundingBox();
+        expect(box).not.toBeNull();
+
+        if (box) {
+          // Logo should be visible (reasonable minimum size)
+          expect(box.width).toBeGreaterThan(30);
+          expect(box.height).toBeGreaterThan(20);
+
+          // Logo should fit within mobile viewport width
+          expect(box.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width - 32); // Allow for padding
+        }
+      }
+    } else {
+      // If no explicit logo element, check that h1 (product name) is visible and sized appropriately
+      const productName = page.locator('h1').first();
+      await expect(productName).toBeVisible();
+      await expect(productName).toContainText('MirDB');
+
+      const h1Box = await productName.boundingBox();
+      expect(h1Box).not.toBeNull();
+
+      if (h1Box) {
+        // Product name should fit within mobile viewport
+        expect(h1Box.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+      }
+    }
+  });
+
+  test('All sections fit within mobile viewport width', async ({ page }) => {
+    const sections = page.locator('section, .section');
+    const sectionCount = await sections.count();
+
+    expect(sectionCount).toBeGreaterThan(0);
+
+    for (let i = 0; i < sectionCount; i++) {
+      const section = sections.nth(i);
+      const isVisible = await section.isVisible();
+
+      if (isVisible) {
+        const box = await section.boundingBox();
+        if (box) {
+          // Each section should fit within mobile viewport
+          expect(box.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+        }
+      }
+    }
+  });
+
+  test('Hero section elements stack vertically on mobile', async ({ page }) => {
+    const heroSection = page.locator('#hero');
+    await expect(heroSection).toBeVisible();
+
+    // Check text alignment is centered for mobile
+    const h1 = heroSection.locator('h1');
+    const h1Style = await h1.evaluate((el) => window.getComputedStyle(el).textAlign);
+    expect(h1Style).toBe('center');
+
+    // Check that hero elements don't overflow
+    const heroBox = await heroSection.boundingBox();
+    expect(heroBox).not.toBeNull();
+    if (heroBox) {
+      expect(heroBox.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+    }
+  });
+
+  test('Code blocks are readable and scrollable on mobile', async ({ page }) => {
+    // Check quick-start code blocks
+    const codeBlocks = page.locator('.code-block, pre, code');
+    const codeCount = await codeBlocks.count();
+
+    for (let i = 0; i < Math.min(codeCount, 3); i++) {
+      const codeBlock = codeBlocks.nth(i);
+      const isVisible = await codeBlock.isVisible();
+
+      if (isVisible) {
+        const box = await codeBlock.boundingBox();
+        if (box) {
+          // Code blocks should not overflow viewport (should have overflow-x: auto)
+          expect(box.width).toBeLessThanOrEqual(MOBILE_VIEWPORT.width);
+        }
+
+        // Check that code is scrollable if content is wider than viewport
+        const overflowX = await codeBlock.evaluate((el) => {
+          return window.getComputedStyle(el).overflowX;
+        });
+        // Should either fit or be scrollable
+        expect(['auto', 'scroll', 'visible']).toContain(overflowX);
+      }
+    }
+  });
+
+  test('Container padding is appropriate for mobile viewport', async ({ page }) => {
+    const containers = page.locator('.container');
+    const count = await containers.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < Math.min(count, 3); i++) {
+      const container = containers.nth(i);
+      const isVisible = await container.isVisible();
+
+      if (isVisible) {
+        const paddingLeft = await container.evaluate((el) => {
+          return parseFloat(window.getComputedStyle(el).paddingLeft);
+        });
+        const paddingRight = await container.evaluate((el) => {
+          return parseFloat(window.getComputedStyle(el).paddingRight);
+        });
+
+        // Mobile should have some padding (at least 16px on each side)
+        expect(paddingLeft).toBeGreaterThanOrEqual(16);
+        expect(paddingRight).toBeGreaterThanOrEqual(16);
+      }
+    }
+  });
+});

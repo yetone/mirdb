@@ -5,9 +5,23 @@
 
 /* Mobile-first approach - base styles are mobile */
 
+/* ============================================
+ * MOBILE STYLES (base - up to 767px)
+ * Scenario 10 - Mobile Responsive Design
+ * ============================================ */
+
+/* Prevent horizontal overflow on mobile */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
 /* Base mobile styles */
 .container {
   width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
   overflow-x: hidden;
 }
 
@@ -17,6 +31,28 @@ section,
   max-width: 100vw;
   overflow-x: hidden;
 }
+
+/* Ensure readable base font size on mobile (minimum 16px) */
+body {
+  font-size: var(--font-size-base); /* 1rem = 16px */
+}
+
+/* Mobile hero section */
+#hero {
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+#hero h1 {
+  font-size: var(--font-size-2xl); /* 1.5rem = 24px on mobile */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+#hero p {
+  font-size: var(--font-size-base); /* Readable text size */
+}
+
+/* Mobile single-column layout for quick-start - handled in QuickStart.css */
 
 /* Base mobile touch targets - ensure minimum 44x44px */
 a, button {
@@ -30,6 +66,35 @@ a, button {
 p a, .feature-description a, .code-block a {
   min-height: auto;
   display: inline;
+}
+
+/* Status badges touch targets on mobile */
+.status-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.status-badges a {
+  min-height: 44px;
+  min-width: 44px;
+  padding: var(--spacing-sm);
+}
+
+/* Code blocks responsive on mobile */
+.code-block,
+.code-block-pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Logo responsive sizing on mobile */
+img[alt*="logo" i],
+img[alt*="MirDB" i],
+.logo {
+  max-width: calc(100vw - 64px); /* Allow for padding */
+  height: auto;
 }
 
 /* Tablet (768px and up) */
