@@ -1,0 +1,160 @@
+/**
+ * Status Section Styles
+ * Owner: Scenario 6 - Project Status Section
+ *
+ * Styles for:
+ * - Feature list layout
+ * - Checkmark icons for implemented features
+ * - Pending/planned feature styling
+ * - Visual distinction between status types
+ */
+
+.status {
+  background-color: var(--color-bg-alt, #f8f9fa);
+}
+
+.status-container {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 0 var(--spacing-4, 1rem);
+}
+
+.status-title {
+  font-size: var(--font-size-2xl, 2rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-8, 2rem);
+  color: var(--color-text, #1a1a2e);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-8, 2rem);
+}
+
+.status-column {
+  background-color: var(--color-bg, #ffffff);
+  border-radius: var(--border-radius, 8px);
+  padding: var(--spacing-6, 1.5rem);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.status-column-title {
+  font-size: var(--font-size-lg, 1.25rem);
+  font-weight: 600;
+  margin-bottom: var(--spacing-4, 1rem);
+  padding-bottom: var(--spacing-2, 0.5rem);
+  border-bottom: 2px solid var(--color-border, #e0e0e0);
+  color: var(--color-text, #1a1a2e);
+}
+
+.status-column-title.implemented {
+  color: var(--color-success, #22c55e);
+  border-bottom-color: var(--color-success, #22c55e);
+}
+
+.status-column-title.planned {
+  color: var(--color-warning, #f59e0b);
+  border-bottom-color: var(--color-warning, #f59e0b);
+}
+
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.status-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3, 0.75rem);
+  padding: var(--spacing-3, 0.75rem) 0;
+  border-bottom: 1px solid var(--color-border-light, #f0f0f0);
+}
+
+.status-item:last-child {
+  border-bottom: none;
+}
+
+.status-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.status-icon.implemented {
+  background-color: var(--color-success-bg, #dcfce7);
+  color: var(--color-success, #22c55e);
+}
+
+.status-icon.planned {
+  background-color: var(--color-warning-bg, #fef3c7);
+  color: var(--color-warning, #f59e0b);
+}
+
+.status-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.status-content {
+  flex: 1;
+}
+
+.status-name {
+  font-weight: 500;
+  color: var(--color-text, #1a1a2e);
+  margin-bottom: var(--spacing-1, 0.25rem);
+}
+
+.status-description {
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-text-muted, #6b7280);
+  line-height: 1.4;
+}
+
+.coming-soon-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 500;
+  background-color: var(--color-warning-bg, #fef3c7);
+  color: var(--color-warning-dark, #b45309);
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: var(--spacing-2, 0.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .status {
+    background-color: var(--color-bg-alt-dark, #1e1e2e);
+  }
+
+  .status-column {
+    background-color: var(--color-bg-dark, #2a2a3e);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .status-item {
+    border-bottom-color: var(--color-border-dark, #3a3a4e);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-title {
+    font-size: var(--font-size-xl, 1.5rem);
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "implemented": [
+    {
+      "name": "Memcached protocol",
+      "description": "Full compatibility with standard memcached clients",
+      "completed": true
+    },
+    {
+      "name": "Memtable",
+      "description": "In-memory write buffer with skip list data structure",
+      "completed": true
+    },
+    {
+      "name": "Minor compaction",
+      "description": "Automatic flush of memtable to SSTable on disk",
+      "completed": true
+    },
+    {
+      "name": "Major compaction",
+      "description": "Merge and compact multiple SSTables to reclaim space",
+      "completed": true
+    },
+    {
+      "name": "Tokio async networking",
+      "description": "High-performance async I/O with Tokio runtime",
+      "completed": true
+    },
+    {
+      "name": "WAL (Write-Ahead Log)",
+      "description": "Durability through write-ahead logging",
+      "completed": true
+    },
+    {
+      "name": "Bloom filters",
+      "description": "Fast key existence checks to reduce disk reads",
+      "completed": true
+    },
+    {
+      "name": "Snappy compression",
+      "description": "Efficient data compression for reduced storage",
+      "completed": true
+    }
+  ],
+  "planned": [
+    {
+      "name": "Raft consensus",
+      "description": "Distributed consensus for high availability",
+      "completed": false
+    },
+    {
+      "name": "Cluster mode",
+      "description": "Multi-node deployment with data sharding",
+      "completed": false
+    },
+    {
+      "name": "TTL support",
+      "description": "Time-to-live for automatic key expiration",
+      "completed": false
+    }
+  ]
+}

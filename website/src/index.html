@@ -278,8 +278,146 @@ DELETED</code></pre>
     </section>
 
     <!-- Project Status Section (Scenario 6) -->
-    <section id="status">
-      <!-- Status content will be added by Scenario 6 -->
+    <section id="status" class="status">
+      <div class="status-container container">
+        <h2 class="status-title">Project Status</h2>
+        <div class="status-grid">
+          <!-- Implemented Features -->
+          <div class="status-column" data-status-type="implemented">
+            <h3 class="status-column-title implemented">Implemented Features</h3>
+            <ul class="status-list" id="implemented-features">
+              <li class="status-item" data-feature="memcached-protocol">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Memcached protocol</span>
+                  <p class="status-description">Full compatibility with standard memcached clients</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="memtable">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Memtable</span>
+                  <p class="status-description">In-memory write buffer with skip list data structure</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="minor-compaction">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Minor compaction</span>
+                  <p class="status-description">Automatic flush of memtable to SSTable on disk</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="major-compaction">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Major compaction</span>
+                  <p class="status-description">Merge and compact multiple SSTables to reclaim space</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="tokio-networking">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Tokio async networking</span>
+                  <p class="status-description">High-performance async I/O with Tokio runtime</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="wal">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">WAL (Write-Ahead Log)</span>
+                  <p class="status-description">Durability through write-ahead logging</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="bloom-filters">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Bloom filters</span>
+                  <p class="status-description">Fast key existence checks to reduce disk reads</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="snappy-compression">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Snappy compression</span>
+                  <p class="status-description">Efficient data compression for reduced storage</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="status-column" data-status-type="planned">
+            <h3 class="status-column-title planned">Planned Features</h3>
+            <ul class="status-list" id="planned-features">
+              <li class="status-item" data-feature="raft-consensus">
+                <span class="status-icon planned" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Raft consensus<span class="coming-soon-badge">Coming Soon</span></span>
+                  <p class="status-description">Distributed consensus for high availability</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="cluster-mode">
+                <span class="status-icon planned" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Cluster mode<span class="coming-soon-badge">Coming Soon</span></span>
+                  <p class="status-description">Multi-node deployment with data sharding</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="ttl-support">
+                <span class="status-icon planned" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">TTL support<span class="coming-soon-badge">Coming Soon</span></span>
+                  <p class="status-description">Time-to-live for automatic key expiration</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
