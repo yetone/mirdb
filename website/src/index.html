@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support, built on LSM tree architecture.">
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A persistent key-value store with Memcached protocol support">
+  <meta property="og:type" content="website">
+  <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+  <!-- Skip Link for Keyboard Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!--
+    MirDB Homepage
+    Owner: Scenario 1 - Hero Section Display (initial structure)
+
+    This is the main HTML document containing all page sections.
+    Each section will be populated by its respective scenario.
+
+    Structure:
+    - <header> - Navigation (Scenario 7)
+    - <main>
+      - <section id="hero"> - Hero section (Scenario 1)
+      - <section id="features"> - Features grid (Scenario 2)
+      - <section id="quick-start"> - Quick start guide (Scenario 3)
+      - <section id="architecture"> - Architecture diagram (Scenario 4)
+      - <section id="protocol"> - Protocol reference (Scenario 5)
+      - <section id="status"> - Project status (Scenario 6)
+    - <footer> - Footer links (Scenario 8)
+  -->
+
+  <!-- Navigation (Scenario 7) -->
+  <header class="header" id="site-header">
+    <div class="container header-container">
+      <a href="#" class="header-logo" aria-label="MirDB Home">
+        <span class="logo-text">MirDB</span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#quick-start" class="nav-link">Quick Start</a></li>
+          <li><a href="#architecture" class="nav-link">Architecture</a></li>
+          <li><a href="#protocol" class="nav-link">Protocol</a></li>
+          <li><a href="#status" class="nav-link">Status</a></li>
+        </ul>
+      </nav>
+      <button class="mobile-menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-logo" aria-label="MirDB Logo">
+            <pre class="ascii-logo" aria-hidden="true">
+ __  __ _      ____  ____
+|  \/  (_)_ __|  _ \| __ )
+| |\/| | | '__| | | |  _ \
+| |  | | | |  | |_| | |_) |
+|_|  |_|_|_|  |____/|____/</pre>
+            <h1 class="hero-title">MirDB</h1>
+          </div>
+          <p class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+          <p class="hero-description">
+            Built on LSM tree architecture with Tokio async runtime.
+            Use your existing memcached clients with disk persistence.
+          </p>
+          <div class="hero-cta">
+            <a href="#quick-start" class="cta-primary">Get Started</a>
+            <a href="https://github.com/akiozihao/mirdb" class="cta-secondary" target="_blank" rel="noopener noreferrer">
+              <svg class="icon-github" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="features">
+      <div class="container">
+        <div class="features-header">
+          <h2 class="features-title">Features</h2>
+          <p class="features-subtitle">Powerful capabilities that set MirDB apart from traditional caching solutions</p>
+        </div>
+        <div class="features-grid">
+          <!-- Persistence Feature -->
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"/>
+                <path d="M8 4v3M16 4v3M4 10h16"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Disk Persistence</h3>
+            <p class="feature-description">Unlike memcached, MirDB persists data to disk using SSTables. Your data survives server restarts and system failures.</p>
+          </article>
+
+          <!-- LSM Tree Feature -->
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 12l10 5 10-5"/>
+                <path d="M2 17l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">Built on a Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level SSTable compaction for efficient writes.</p>
+          </article>
+
+          <!-- Memcached Protocol Feature -->
+          <article class="feature-card" data-feature="memcached-protocol">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Full compatibility with the standard memcached text protocol. Use your existing memcached clients without any code changes.</p>
+          </article>
+
+          <!-- Compression Feature -->
+          <article class="feature-card" data-feature="compression">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 14h6m-3-3v6"/>
+                <rect x="14" y="4" width="6" height="6" rx="1"/>
+                <rect x="14" y="14" width="6" height="6" rx="1"/>
+                <rect x="4" y="4" width="6" height="6" rx="1"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Snappy Compression</h3>
+            <p class="feature-description">Data blocks are compressed using Snappy for reduced storage footprint while maintaining fast read and write performance.</p>
+          </article>
+
+          <!-- Bloom Filters Feature -->
+          <article class="feature-card" data-feature="bloom-filters">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Bloom Filters</h3>
+            <p class="feature-description">SSTable-level bloom filters reduce unnecessary disk reads by quickly determining if a key exists in a given file.</p>
+          </article>
+
+          <!-- Async I/O Feature -->
+          <article class="feature-card" data-feature="async-io">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Tokio Async Runtime</h3>
+            <p class="feature-description">Powered by Tokio for high-performance asynchronous I/O, enabling efficient handling of many concurrent connections.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 3) -->
+    <section id="quick-start" class="quick-start">
+      <div class="container">
+        <h2 class="section-title">Quick Start</h2>
+        <p class="section-subtitle">Get up and running with MirDB in minutes</p>
+
+        <!-- Step 1: Installation -->
+        <div class="quick-start-step">
+          <h3 class="step-title"><span class="step-number">1</span> Install MirDB</h3>
+          <p class="step-description">Install MirDB using Cargo or download the pre-built binary.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-header">
+              <span class="code-language">bash</span>
+              <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-content"><code class="language-bash"><span class="token comment"># Install with Cargo</span>
+<span class="token function">cargo</span> install mirdb
+
+<span class="token comment"># Or download pre-built binary</span>
+<span class="token function">curl</span> -L https://github.com/akiozihao/mirdb/releases/latest/download/mirdb <span class="token operator">-o</span> mirdb
+<span class="token function">chmod</span> +x mirdb</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div class="quick-start-step">
+          <h3 class="step-title"><span class="step-number">2</span> Start the Server</h3>
+          <p class="step-description">Run MirDB with your preferred configuration options.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-header">
+              <span class="code-language">bash</span>
+              <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-content"><code class="language-bash"><span class="token comment"># Start with default settings (port 11211, data in ./mirdb-data)</span>
+mirdb
+
+<span class="token comment"># Or configure port and data directory</span>
+mirdb <span class="token parameter">--port</span> 11211 <span class="token parameter">--data-dir</span> /var/lib/mirdb</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 3: Usage -->
+        <div class="quick-start-step">
+          <h3 class="step-title"><span class="step-number">3</span> Connect and Use</h3>
+          <p class="step-description">Use any memcached client to interact with MirDB using standard commands.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-header">
+              <span class="code-language">terminal</span>
+              <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-content"><code class="language-bash"><span class="token comment"># Connect using telnet or nc</span>
+<span class="token function">telnet</span> localhost 11211
+
+<span class="token comment"># SET a key-value pair (flags=0, exptime=0, bytes=5)</span>
+<span class="token command">SET</span> mykey 0 0 5
+hello
+<span class="token output">STORED</span>
+
+<span class="token comment"># GET the value</span>
+<span class="token command">GET</span> mykey
+<span class="token output">VALUE mykey 0 5
+hello
+END</span>
+
+<span class="token comment"># DELETE a key</span>
+<span class="token command">DELETE</span> mykey
+<span class="token output">DELETED</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 4) -->
+    <section id="architecture" class="architecture">
+      <div class="container">
+        <h2 class="section-title">Architecture</h2>
+        <p class="section-subtitle">MirDB uses an LSM tree (Log-Structured Merge Tree) architecture for efficient writes and reads.</p>
+
+        <!-- Mermaid Diagram -->
+        <div class="architecture-diagram">
+          <div class="mermaid">
+graph TD
+    A[Write Request] --> B[WAL]
+    B --> C[Memtable]
+    C --> D{Memtable Full?}
+    D -->|Yes| E[Immutable Memtable]
+    D -->|No| C
+    E --> F[Flush to Disk]
+    F --> G[SSTable L0]
+    G --> H{Compaction Needed?}
+    H -->|Yes| I[Merge SSTables]
+    I --> J[SSTable L1+]
+    H -->|No| G
+    K[Read Request] --> L{In Memtable?}
+    L -->|Yes| M[Return from Memory]
+    L -->|No| N{In Immutable?}
+    N -->|Yes| M
+    N -->|No| O[Search SSTables]
+    O --> P[Use Bloom Filters]
+    P --> Q[Return Data]
+          </div>
+        </div>
+
+        <!-- Component Explanations -->
+        <div class="architecture-components">
+          <div class="component-card" data-component="wal">
+            <h3 class="component-title">Write-Ahead Log (WAL)</h3>
+            <p class="component-description">
+              Every write is first recorded to the WAL for durability. This ensures data isn't lost even if the server crashes before flushing to disk.
+            </p>
+          </div>
+
+          <div class="component-card" data-component="memtable">
+            <h3 class="component-title">Memtable</h3>
+            <p class="component-description">
+              An in-memory sorted data structure (skip list) that holds recent writes. Provides fast reads and writes before data is persisted.
+            </p>
+          </div>
+
+          <div class="component-card" data-component="immutable">
+            <h3 class="component-title">Immutable Memtable</h3>
+            <p class="component-description">
+              When the memtable reaches capacity, it becomes immutable and a new memtable is created. The immutable memtable is then flushed to disk as an SSTable.
+            </p>
+          </div>
+
+          <div class="component-card" data-component="sstable">
+            <h3 class="component-title">Sorted String Tables (SSTables)</h3>
+            <p class="component-description">
+              Immutable, sorted files on disk. Organized in levels (L0, L1, ...) with periodic compaction to merge and optimize storage.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Protocol Reference Section (Scenario 5) -->
+    <section id="protocol" class="protocol">
+      <div class="container">
+        <h2 class="protocol-title">Protocol Reference</h2>
+        <p class="protocol-intro">MirDB implements the memcached text protocol, allowing you to use existing memcached clients. Additionally, MirDB provides custom commands for database management.</p>
+
+        <h3 class="protocol-subtitle">Standard Memcached Commands</h3>
+        <div class="protocol-table-wrapper">
+          <table class="protocol-table" data-testid="command-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Syntax</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-command="SET">
+                <td><code>SET</code></td>
+                <td><code>SET &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                <td>Store data under the specified key</td>
+              </tr>
+              <tr data-command="GET">
+                <td><code>GET</code></td>
+                <td><code>GET &lt;key&gt;</code></td>
+                <td>Retrieve data for the specified key</td>
+              </tr>
+              <tr data-command="DELETE">
+                <td><code>DELETE</code></td>
+                <td><code>DELETE &lt;key&gt;</code></td>
+                <td>Delete the specified key from the store</td>
+              </tr>
+              <tr data-command="ADD">
+                <td><code>ADD</code></td>
+                <td><code>ADD &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                <td>Store data only if the key does not exist</td>
+              </tr>
+              <tr data-command="REPLACE">
+                <td><code>REPLACE</code></td>
+                <td><code>REPLACE &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                <td>Store data only if the key already exists</td>
+              </tr>
+              <tr data-command="FLUSH_ALL">
+                <td><code>FLUSH_ALL</code></td>
+                <td><code>FLUSH_ALL [delay]</code></td>
+                <td>Invalidate all existing items</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="protocol-subtitle mirdb-specific-title">MirDB-Specific Commands</h3>
+        <p class="mirdb-specific-note">These commands are unique to MirDB and not part of the standard memcached protocol.</p>
+        <div class="protocol-table-wrapper">
+          <table class="protocol-table mirdb-specific-table" data-testid="mirdb-command-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Syntax</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-command="INFO" class="mirdb-specific">
+                <td><code>INFO</code><span class="mirdb-badge">MirDB</span></td>
+                <td><code>INFO</code></td>
+                <td>Get server statistics and database information</td>
+              </tr>
+              <tr data-command="MAJOR_COMPACTION" class="mirdb-specific">
+                <td><code>MAJOR_COMPACTION</code><span class="mirdb-badge">MirDB</span></td>
+                <td><code>MAJOR_COMPACTION</code></td>
+                <td>Trigger manual compaction of SSTable files</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="protocol-subtitle">Syntax Examples</h3>
+        <div class="syntax-examples">
+          <div class="syntax-example">
+            <h4>SET Command Example</h4>
+            <pre class="code-block"><code>SET mykey 0 3600 5
+hello
+STORED</code></pre>
+          </div>
+          <div class="syntax-example">
+            <h4>GET Command Example</h4>
+            <pre class="code-block"><code>GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+          <div class="syntax-example">
+            <h4>DELETE Command Example</h4>
+            <pre class="code-block"><code>DELETE mykey
+DELETED</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Status Section (Scenario 6) -->
+    <section id="status" class="status">
+      <div class="status-container container">
+        <h2 class="status-title">Project Status</h2>
+        <div class="status-grid">
+          <!-- Implemented Features -->
+          <div class="status-column" data-status-type="implemented">
+            <h3 class="status-column-title implemented">Implemented Features</h3>
+            <ul class="status-list" id="implemented-features">
+              <li class="status-item" data-feature="memcached-protocol">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Memcached protocol</span>
+                  <p class="status-description">Full compatibility with standard memcached clients</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="memtable">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Memtable</span>
+                  <p class="status-description">In-memory write buffer with skip list data structure</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="minor-compaction">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Minor compaction</span>
+                  <p class="status-description">Automatic flush of memtable to SSTable on disk</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="major-compaction">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Major compaction</span>
+                  <p class="status-description">Merge and compact multiple SSTables to reclaim space</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="tokio-networking">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Tokio async networking</span>
+                  <p class="status-description">High-performance async I/O with Tokio runtime</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="wal">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">WAL (Write-Ahead Log)</span>
+                  <p class="status-description">Durability through write-ahead logging</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="bloom-filters">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Bloom filters</span>
+                  <p class="status-description">Fast key existence checks to reduce disk reads</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="snappy-compression">
+                <span class="status-icon implemented" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Snappy compression</span>
+                  <p class="status-description">Efficient data compression for reduced storage</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Planned Features -->
+          <div class="status-column" data-status-type="planned">
+            <h3 class="status-column-title planned">Planned Features</h3>
+            <ul class="status-list" id="planned-features">
+              <li class="status-item" data-feature="raft-consensus">
+                <span class="status-icon planned" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Raft consensus<span class="coming-soon-badge">Coming Soon</span></span>
+                  <p class="status-description">Distributed consensus for high availability</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="cluster-mode">
+                <span class="status-icon planned" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">Cluster mode<span class="coming-soon-badge">Coming Soon</span></span>
+                  <p class="status-description">Multi-node deployment with data sharding</p>
+                </div>
+              </li>
+              <li class="status-item" data-feature="ttl-support">
+                <span class="status-icon planned" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                </span>
+                <div class="status-content">
+                  <span class="status-name">TTL support<span class="coming-soon-badge">Coming Soon</span></span>
+                  <p class="status-description">Time-to-live for automatic key expiration</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 8) -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="https://github.com/akiozihao/mirdb" class="footer-link footer-link--github" target="_blank" rel="noopener noreferrer" data-testid="github-link">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub Repository
+        </a>
+        <a href="https://github.com/akiozihao/mirdb/issues" class="footer-link" target="_blank" rel="noopener noreferrer" data-testid="issues-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4M12 8h.01"></path>
+          </svg>
+          Report Issues
+        </a>
+        <a href="https://github.com/akiozihao/mirdb/blob/main/CONTRIBUTING.md" class="footer-link" target="_blank" rel="noopener noreferrer" data-testid="contributing-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Contributing
+        </a>
+      </nav>
+      <p class="footer-copyright" data-testid="footer-copyright">
+        Released under the MIT License. Copyright &copy; 2024 MirDB Contributors.
+      </p>
+    </div>
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

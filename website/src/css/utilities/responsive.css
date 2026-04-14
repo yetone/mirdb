@@ -1,0 +1,356 @@
+/**
+ * Responsive Utilities
+ * Owner: Scenario 9 - Responsive Design
+ *
+ * Media queries and responsive utilities:
+ * - Mobile breakpoint (< 768px)
+ * - Tablet breakpoint (768px - 1024px)
+ * - Desktop breakpoint (> 1024px)
+ * - Container max-widths
+ * - Grid adjustments per breakpoint
+ */
+
+/* ==========================================================================
+   Breakpoint Variables (for reference)
+   Mobile: < 768px
+   Tablet: 768px - 1024px
+   Desktop: > 1024px
+   ========================================================================== */
+
+/* ==========================================================================
+   Mobile Styles (default - mobile first approach enhancements)
+   ========================================================================== */
+
+/* Ensure no horizontal overflow on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Container responsive sizing */
+.container {
+  width: 100%;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+/* ==========================================================================
+   Mobile Specific Styles (< 768px)
+   ========================================================================== */
+@media (max-width: 767px) {
+  /* Reduce section padding on mobile */
+  section {
+    padding: var(--spacing-8) 0;
+  }
+
+  /* Typography adjustments for mobile */
+  .section-title,
+  .features-title,
+  .protocol-title,
+  .status-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .section-subtitle,
+  .features-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  /* Navigation hamburger menu container */
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-6);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+
+  .nav-menu.active {
+    transform: translateX(0);
+  }
+
+  .nav-toggle {
+    display: block;
+    z-index: 101;
+  }
+
+  /* Mobile Hero adjustments */
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-12) 0;
+  }
+
+  .hero-content {
+    padding: 0 var(--spacing-2);
+  }
+
+  .ascii-logo {
+    font-size: 0.5rem;
+    transform: scale(0.9);
+  }
+
+  /* Mobile CTA buttons stack vertically */
+  .hero-cta {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    width: 100%;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* Features grid: single column on mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  /* Architecture components: single column */
+  .architecture-components {
+    grid-template-columns: 1fr;
+  }
+
+  /* Mermaid diagram responsiveness */
+  .architecture-diagram {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .architecture-diagram .mermaid {
+    min-width: 300px;
+  }
+
+  /* Status grid: stack columns */
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-8);
+  }
+
+  /* Code blocks: ensure scrollability */
+  .code-block {
+    max-width: 100%;
+  }
+
+  .code-content {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: pre;
+    word-break: normal;
+  }
+
+  .code-content code {
+    display: block;
+    min-width: max-content;
+  }
+
+  /* Protocol tables scroll horizontally */
+  .protocol-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 calc(-1 * var(--spacing-4));
+    padding: 0 var(--spacing-4);
+  }
+
+  .protocol-table {
+    min-width: 500px;
+  }
+
+  /* Syntax examples single column */
+  .syntax-examples {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Tablet Styles (768px - 1024px)
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Container padding for tablet */
+  .container {
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+
+  /* Section padding adjustment */
+  section {
+    padding: var(--spacing-12) 0;
+  }
+
+  /* Hero adjustments for tablet */
+  .hero {
+    min-height: 80vh;
+  }
+
+  .ascii-logo {
+    font-size: 0.875rem;
+  }
+
+  /* Features grid: 2 columns on tablet */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-6);
+  }
+
+  /* Architecture components: 2 columns */
+  .architecture-components {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Status grid: side by side */
+  .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Syntax examples: 2 columns */
+  .syntax-examples {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Navigation visible */
+  .nav-menu {
+    display: flex;
+    position: static;
+    transform: none;
+    flex-direction: row;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Desktop Styles (> 1024px)
+   ========================================================================== */
+@media (min-width: 1025px) {
+  /* Container max-width for desktop */
+  .container {
+    max-width: var(--container-max);
+    padding-left: var(--spacing-8);
+    padding-right: var(--spacing-8);
+  }
+
+  /* Full section padding */
+  section {
+    padding: var(--spacing-16) 0;
+  }
+
+  /* Hero full height on desktop */
+  .hero {
+    min-height: 100vh;
+  }
+
+  .ascii-logo {
+    font-size: 1rem;
+  }
+
+  /* Features grid: 3 columns on desktop */
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Architecture components: 2 or 4 column grid */
+  .architecture-components {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Navigation fully visible */
+  .nav-menu {
+    display: flex;
+    position: static;
+    transform: none;
+    flex-direction: row;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  /* Syntax examples: 3 columns */
+  .syntax-examples {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Large Desktop Styles (> 1440px)
+   ========================================================================== */
+@media (min-width: 1441px) {
+  .container {
+    max-width: 1400px;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+@media print {
+  /* Hide navigation and interactive elements */
+  header,
+  .nav-toggle,
+  .copy-button {
+    display: none !important;
+  }
+
+  /* Reset backgrounds for printing */
+  section {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Ensure content fits on page */
+  .container {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Utility Classes for Responsive Visibility
+   ========================================================================== */
+
+/* Hide on mobile only */
+.hide-mobile {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Show on mobile only */
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .show-mobile {
+    display: block !important;
+  }
+}
+
+/* Hide on tablet only */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* Hide on desktop only */
+@media (min-width: 1025px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}

@@ -1,0 +1,63 @@
+/**
+ * Main CSS Entry Point
+ * Owner: First Builder
+ *
+ * Imports all component and utility stylesheets.
+ * This file should only contain @import statements.
+ */
+
+@import './variables.css';
+@import './components/header.css';
+@import './components/hero.css';
+@import './components/features.css';
+@import './components/quick-start.css';
+@import './components/architecture.css';
+@import './components/protocol.css';
+@import './components/status.css';
+@import './components/footer.css';
+@import './components/code-block.css';
+@import './utilities/responsive.css';
+@import './utilities/accessibility.css';
+
+/* Base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+/* Section base styles */
+section {
+  padding: var(--spacing-16) 0;
+}

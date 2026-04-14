@@ -1,0 +1,211 @@
+/**
+ * Quick Start Section Styles
+ * Owner: Scenario 3 - Quick Start Section
+ *
+ * Styles for:
+ * - Section layout
+ * - Step-by-step presentation
+ * - Terminal-style code blocks
+ * - Installation command styling
+ */
+
+.quick-start {
+  background-color: var(--color-bg-secondary);
+}
+
+.quick-start .section-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--spacing-2);
+}
+
+.quick-start .section-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-12);
+}
+
+/* Step styling */
+.quick-start-step {
+  margin-bottom: var(--spacing-12);
+}
+
+.quick-start-step:last-child {
+  margin-bottom: 0;
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2);
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.step-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-4);
+  margin-left: calc(2rem + var(--spacing-3));
+}
+
+/* Code block styling */
+.code-block {
+  background-color: #1e1e1e;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: #2d2d2d;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.code-language {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: transparent;
+  border: 1px solid #4d4d4d;
+  border-radius: var(--radius-md);
+  color: #a0a0a0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-button:hover {
+  background-color: #3d3d3d;
+  color: #ffffff;
+  border-color: #5d5d5d;
+}
+
+.copy-button:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copy-button.copied {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.copy-button.copied .copy-icon {
+  display: none;
+}
+
+.copy-button.copied .check-icon {
+  display: block !important;
+}
+
+.copy-button.copied .copy-text {
+  content: 'Copied!';
+}
+
+.code-content {
+  margin: 0;
+  padding: var(--spacing-4);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+  color: #d4d4d4;
+}
+
+.code-content code {
+  display: block;
+  font-family: inherit;
+  white-space: pre;
+}
+
+/* Syntax highlighting - Terminal/Bash theme */
+.code-block .token.comment {
+  color: #6a9955;
+}
+
+.code-block .token.function {
+  color: #dcdcaa;
+}
+
+.code-block .token.parameter {
+  color: #9cdcfe;
+}
+
+.code-block .token.operator {
+  color: #d4d4d4;
+}
+
+.code-block .token.command {
+  color: #569cd6;
+  font-weight: 600;
+}
+
+.code-block .token.output {
+  color: #ce9178;
+  font-style: italic;
+}
+
+.code-block .token.string {
+  color: #ce9178;
+}
+
+.code-block .token.keyword {
+  color: #c586c0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .step-description {
+    margin-left: 0;
+  }
+
+  .code-header {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .code-content {
+    padding: var(--spacing-3);
+    font-size: 0.8125rem;
+  }
+
+  .copy-button .copy-text {
+    display: none;
+  }
+
+  .copy-button {
+    padding: var(--spacing-2);
+  }
+}
