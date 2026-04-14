@@ -73,8 +73,102 @@
     </section>
 
     <!-- Quick Start Section (Scenario 3) -->
-    <section id="quick-start">
-      <!-- Quick Start content will be added by Scenario 3 -->
+    <section id="quick-start" class="quick-start">
+      <div class="container">
+        <h2 class="section-title">Quick Start</h2>
+        <p class="section-subtitle">Get up and running with MirDB in minutes</p>
+
+        <!-- Step 1: Installation -->
+        <div class="quick-start-step">
+          <h3 class="step-title"><span class="step-number">1</span> Install MirDB</h3>
+          <p class="step-description">Install MirDB using Cargo or download the pre-built binary.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-header">
+              <span class="code-language">bash</span>
+              <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-content"><code class="language-bash"><span class="token comment"># Install with Cargo</span>
+<span class="token function">cargo</span> install mirdb
+
+<span class="token comment"># Or download pre-built binary</span>
+<span class="token function">curl</span> -L https://github.com/akiozihao/mirdb/releases/latest/download/mirdb <span class="token operator">-o</span> mirdb
+<span class="token function">chmod</span> +x mirdb</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div class="quick-start-step">
+          <h3 class="step-title"><span class="step-number">2</span> Start the Server</h3>
+          <p class="step-description">Run MirDB with your preferred configuration options.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-header">
+              <span class="code-language">bash</span>
+              <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-content"><code class="language-bash"><span class="token comment"># Start with default settings (port 11211, data in ./mirdb-data)</span>
+mirdb
+
+<span class="token comment"># Or configure port and data directory</span>
+mirdb <span class="token parameter">--port</span> 11211 <span class="token parameter">--data-dir</span> /var/lib/mirdb</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 3: Usage -->
+        <div class="quick-start-step">
+          <h3 class="step-title"><span class="step-number">3</span> Connect and Use</h3>
+          <p class="step-description">Use any memcached client to interact with MirDB using standard commands.</p>
+          <div class="code-block" data-language="bash">
+            <div class="code-header">
+              <span class="code-language">terminal</span>
+              <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-content"><code class="language-bash"><span class="token comment"># Connect using telnet or nc</span>
+<span class="token function">telnet</span> localhost 11211
+
+<span class="token comment"># SET a key-value pair (flags=0, exptime=0, bytes=5)</span>
+<span class="token command">SET</span> mykey 0 0 5
+hello
+<span class="token output">STORED</span>
+
+<span class="token comment"># GET the value</span>
+<span class="token command">GET</span> mykey
+<span class="token output">VALUE mykey 0 5
+hello
+END</span>
+
+<span class="token comment"># DELETE a key</span>
+<span class="token command">DELETE</span> mykey
+<span class="token output">DELETED</span></code></pre>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Architecture Section (Scenario 4) -->

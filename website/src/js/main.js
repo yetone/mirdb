@@ -15,6 +15,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize smooth scrolling for anchor links
   initSmoothScrolling();
+  // Initialize code copy functionality
+  initCodeCopy();
 });
 
 /**
@@ -33,6 +35,45 @@ function initSmoothScrolling() {
             block: 'start'
           });
         }
+      }
+    });
+  });
+}
+
+/**
+ * Initialize code copy functionality for code blocks
+ * Adds click handlers to copy buttons that copy code content to clipboard
+ */
+function initCodeCopy() {
+  document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', async () => {
+      const codeBlock = button.closest('.code-block');
+      if (!codeBlock) return;
+
+      const codeContent = codeBlock.querySelector('.code-content code');
+      if (!codeContent) return;
+
+      const text = codeContent.textContent || '';
+
+      try {
+        await navigator.clipboard.writeText(text);
+
+        // Update button state to show success
+        button.classList.add('copied');
+        const copyText = button.querySelector('.copy-text');
+        if (copyText) {
+          copyText.textContent = 'Copied!';
+        }
+
+        // Reset after 2 seconds
+        setTimeout(() => {
+          button.classList.remove('copied');
+          if (copyText) {
+            copyText.textContent = 'Copy';
+          }
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy text:', err);
       }
     });
   });

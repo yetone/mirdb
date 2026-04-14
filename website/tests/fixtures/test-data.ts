@@ -18,9 +18,20 @@ export const SELECTORS = {
   ctaGetStarted: '.cta-primary',
   ctaGitHub: '.cta-secondary',
 
+  // Quick Start section
+  quickStart: '#quick-start',
+  quickStartTitle: '#quick-start .section-title',
+  quickStartStep: '.quick-start-step',
+  stepTitle: '.step-title',
+  stepNumber: '.step-number',
+  codeBlock: '.code-block',
+  codeHeader: '.code-header',
+  codeLanguage: '.code-language',
+  copyButton: '.copy-button',
+  codeContent: '.code-content',
+
   // Other sections (for other scenarios)
   features: '#features',
-  quickStart: '#quick-start',
   architecture: '#architecture',
   protocol: '#protocol',
   status: '#status',
@@ -34,6 +45,14 @@ export const CONTENT = {
   ctaGetStartedText: 'Get Started',
   ctaGitHubText: 'View on GitHub',
   githubUrl: 'https://github.com/akiozihao/mirdb',
+
+  // Quick Start content
+  quickStartTitle: 'Quick Start',
+  installationCommand: 'cargo install mirdb',
+  serverStartCommand: 'mirdb',
+  setCommand: 'SET',
+  getCommand: 'GET',
+  deleteCommand: 'DELETE',
 };
 
 export const VIEWPORTS = {
