@@ -116,3 +116,10 @@ export const VIEWPORTS = {
   tablet: { width: 768, height: 1024 },
   desktop: { width: 1280, height: 720 },
 };
+
+// Accessibility selectors (Scenario 10)
+export const ACCESSIBILITY_SELECTORS = {
+  skipLink: '.skip-link',
+  mainContent: '#main-content',
+  focusableElements: 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+};

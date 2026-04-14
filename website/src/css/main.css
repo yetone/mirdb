@@ -16,6 +16,7 @@
 @import './components/status.css';
 @import './components/footer.css';
 @import './utilities/responsive.css';
+@import './utilities/accessibility.css';
 
 /* Base styles */
 *,

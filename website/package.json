@@ -13,6 +13,7 @@
     "test:all": "npm run test:unit && npm run test:e2e"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.42.0",
     "@types/node": "^20.11.0",
     "jsdom": "^24.0.0",
