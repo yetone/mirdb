@@ -1,0 +1,84 @@
+/**
+ * Footer Styles
+ * Owner: Scenario 8 - Footer with GitHub Links
+ *
+ * Styles for:
+ * - Footer layout
+ * - Link styling
+ * - Copyright text
+ * - Social/GitHub icons
+ */
+
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-8) 0;
+  margin-top: auto;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-6);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-6);
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.footer-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.footer-link--github {
+  font-weight: 500;
+}
+
+.footer-copyright {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.footer-divider {
+  width: 100%;
+  max-width: 200px;
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .footer-links {
+    gap: var(--spacing-8);
+  }
+
+  .footer-divider {
+    display: none;
+  }
+}

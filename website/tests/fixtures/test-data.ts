@@ -46,6 +46,15 @@ export const SELECTORS = {
   header: 'header',
   footer: 'footer',
 
+  // Footer section (Scenario 8)
+  footerContainer: '.footer-container',
+  footerLinks: '.footer-links',
+  footerLink: '.footer-link',
+  footerGithubLink: '[data-testid="github-link"]',
+  footerIssuesLink: '[data-testid="issues-link"]',
+  footerContributingLink: '[data-testid="contributing-link"]',
+  footerCopyright: '[data-testid="footer-copyright"]',
+
   // Architecture section (Scenario 4)
   architectureDiagram: '.architecture-diagram',
   architectureComponents: '.architecture-components',

@@ -13,6 +13,7 @@
 @import './components/architecture.css';
 @import './components/protocol.css';
 @import './components/status.css';
+@import './components/footer.css';
 
 /* Base styles */
 *,
