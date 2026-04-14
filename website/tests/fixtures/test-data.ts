@@ -18,6 +18,15 @@ export const SELECTORS = {
   ctaGetStarted: '.cta-primary',
   ctaGitHub: '.cta-secondary',
 
+  // Features section
+  features: '#features',
+  featuresTitle: '.features-title',
+  featuresGrid: '.features-grid',
+  featureCard: '.feature-card',
+  featureIcon: '.feature-icon',
+  featureTitle: '.feature-title',
+  featureDescription: '.feature-description',
+
   // Quick Start section
   quickStart: '#quick-start',
   quickStartTitle: '#quick-start .section-title',
@@ -31,7 +40,6 @@ export const SELECTORS = {
   codeContent: '.code-content',
 
   // Other sections (for other scenarios)
-  features: '#features',
   architecture: '#architecture',
   protocol: '#protocol',
   status: '#status',
@@ -55,6 +63,10 @@ export const CONTENT = {
   ctaGitHubText: 'View on GitHub',
   githubUrl: 'https://github.com/akiozihao/mirdb',
 
+  // Features content
+  featuresSectionTitle: 'Features',
+  featuresSubtitle: 'Powerful capabilities that set MirDB apart from traditional caching solutions',
+
   // Quick Start content
   quickStartTitle: 'Quick Start',
   installationCommand: 'cargo install mirdb',
@@ -63,6 +75,15 @@ export const CONTENT = {
   getCommand: 'GET',
   deleteCommand: 'DELETE',
 };
+
+export const FEATURES_DATA = [
+  { id: 'persistence', title: 'Disk Persistence' },
+  { id: 'lsm-tree', title: 'LSM Tree Architecture' },
+  { id: 'memcached-protocol', title: 'Memcached Protocol' },
+  { id: 'compression', title: 'Snappy Compression' },
+  { id: 'bloom-filters', title: 'Bloom Filters' },
+  { id: 'async-io', title: 'Tokio Async Runtime' },
+];
 
 export const VIEWPORTS = {
   mobile: { width: 375, height: 667 },

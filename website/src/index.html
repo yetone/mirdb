@@ -68,8 +68,87 @@
     </section>
 
     <!-- Features Section (Scenario 2) -->
-    <section id="features">
-      <!-- Features content will be added by Scenario 2 -->
+    <section id="features" class="features">
+      <div class="container">
+        <div class="features-header">
+          <h2 class="features-title">Features</h2>
+          <p class="features-subtitle">Powerful capabilities that set MirDB apart from traditional caching solutions</p>
+        </div>
+        <div class="features-grid">
+          <!-- Persistence Feature -->
+          <article class="feature-card" data-feature="persistence">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"/>
+                <path d="M8 4v3M16 4v3M4 10h16"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Disk Persistence</h3>
+            <p class="feature-description">Unlike memcached, MirDB persists data to disk using SSTables. Your data survives server restarts and system failures.</p>
+          </article>
+
+          <!-- LSM Tree Feature -->
+          <article class="feature-card" data-feature="lsm-tree">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 12l10 5 10-5"/>
+                <path d="M2 17l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">LSM Tree Architecture</h3>
+            <p class="feature-description">Built on a Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level SSTable compaction for efficient writes.</p>
+          </article>
+
+          <!-- Memcached Protocol Feature -->
+          <article class="feature-card" data-feature="memcached-protocol">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Full compatibility with the standard memcached text protocol. Use your existing memcached clients without any code changes.</p>
+          </article>
+
+          <!-- Compression Feature -->
+          <article class="feature-card" data-feature="compression">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 14h6m-3-3v6"/>
+                <rect x="14" y="4" width="6" height="6" rx="1"/>
+                <rect x="14" y="14" width="6" height="6" rx="1"/>
+                <rect x="4" y="4" width="6" height="6" rx="1"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Snappy Compression</h3>
+            <p class="feature-description">Data blocks are compressed using Snappy for reduced storage footprint while maintaining fast read and write performance.</p>
+          </article>
+
+          <!-- Bloom Filters Feature -->
+          <article class="feature-card" data-feature="bloom-filters">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Bloom Filters</h3>
+            <p class="feature-description">SSTable-level bloom filters reduce unnecessary disk reads by quickly determining if a key exists in a given file.</p>
+          </article>
+
+          <!-- Async I/O Feature -->
+          <article class="feature-card" data-feature="async-io">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Tokio Async Runtime</h3>
+            <p class="feature-description">Powered by Tokio for high-performance asynchronous I/O, enabling efficient handling of many concurrent connections.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
     <!-- Quick Start Section (Scenario 3) -->

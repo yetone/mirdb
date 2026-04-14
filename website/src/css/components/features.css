@@ -1,0 +1,111 @@
+/**
+ * Features Section Styles
+ * Owner: Scenario 2 - Features Section Display
+ *
+ * Styles for:
+ * - Feature grid layout (responsive)
+ * - Feature card design
+ * - Feature icons
+ * - Feature descriptions
+ */
+
+.features {
+  background-color: var(--color-bg-secondary);
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: var(--spacing-12);
+}
+
+.features-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-4);
+}
+
+.features-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Feature Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-6);
+}
+
+/* Feature Card */
+.feature-card {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Feature Icon */
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-4);
+  font-size: 24px;
+}
+
+.feature-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Feature Content */
+.feature-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2);
+}
+
+.feature-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .features-title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

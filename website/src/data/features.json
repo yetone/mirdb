@@ -1,0 +1,38 @@
+[
+  {
+    "id": "persistence",
+    "title": "Disk Persistence",
+    "description": "Unlike memcached, MirDB persists data to disk using SSTables. Your data survives server restarts and system failures.",
+    "icon": "storage"
+  },
+  {
+    "id": "lsm-tree",
+    "title": "LSM Tree Architecture",
+    "description": "Built on a Log-Structured Merge-tree design with memtables, immutable memtables, and multi-level SSTable compaction for efficient writes.",
+    "icon": "tree"
+  },
+  {
+    "id": "memcached-protocol",
+    "title": "Memcached Protocol",
+    "description": "Full compatibility with the standard memcached text protocol. Use your existing memcached clients without any code changes.",
+    "icon": "protocol"
+  },
+  {
+    "id": "compression",
+    "title": "Snappy Compression",
+    "description": "Data blocks are compressed using Snappy for reduced storage footprint while maintaining fast read and write performance.",
+    "icon": "compress"
+  },
+  {
+    "id": "bloom-filters",
+    "title": "Bloom Filters",
+    "description": "SSTable-level bloom filters reduce unnecessary disk reads by quickly determining if a key exists in a given file.",
+    "icon": "filter"
+  },
+  {
+    "id": "async-io",
+    "title": "Tokio Async Runtime",
+    "description": "Powered by Tokio for high-performance asynchronous I/O, enabling efficient handling of many concurrent connections.",
+    "icon": "async"
+  }
+]
