@@ -43,8 +43,17 @@ export const SELECTORS = {
   architecture: '#architecture',
   protocol: '#protocol',
   status: '#status',
-  header: 'header',
+  header: 'header.header',
   footer: 'footer',
+
+  // Navigation section (Scenario 7)
+  headerLogo: '.header-logo',
+  logoText: '.logo-text',
+  nav: 'nav.nav',
+  navList: '.nav-list',
+  navLink: '.nav-link',
+  mobileMenuToggle: '.mobile-menu-toggle',
+  hamburgerLine: '.hamburger-line',
 
   // Footer section (Scenario 8)
   footerContainer: '.footer-container',

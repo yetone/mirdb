@@ -12,11 +12,12 @@
  */
 
 import { initAndRenderMermaid } from './components/mermaid-init.js';
+import { initNavigation } from './components/navigation.js';
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize smooth scrolling for anchor links
-  initSmoothScrolling();
+  // Initialize navigation (smooth scrolling, mobile menu, scroll effects)
+  initNavigation();
   // Initialize code copy functionality
   initCodeCopy();
 
@@ -24,26 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initAndRenderMermaid();
 });
 
-/**
- * Initialize smooth scrolling for internal anchor links
- */
-function initSmoothScrolling() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-      const href = anchor.getAttribute('href');
-      if (href && href !== '#') {
-        const target = document.querySelector(href);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      }
-    });
-  });
-}
 
 /**
  * Initialize code copy functionality for code blocks
