@@ -177,8 +177,104 @@ END</span>
     </section>
 
     <!-- Protocol Reference Section (Scenario 5) -->
-    <section id="protocol">
-      <!-- Protocol content will be added by Scenario 5 -->
+    <section id="protocol" class="protocol">
+      <div class="container">
+        <h2 class="protocol-title">Protocol Reference</h2>
+        <p class="protocol-intro">MirDB implements the memcached text protocol, allowing you to use existing memcached clients. Additionally, MirDB provides custom commands for database management.</p>
+
+        <h3 class="protocol-subtitle">Standard Memcached Commands</h3>
+        <div class="protocol-table-wrapper">
+          <table class="protocol-table" data-testid="command-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Syntax</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-command="SET">
+                <td><code>SET</code></td>
+                <td><code>SET &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                <td>Store data under the specified key</td>
+              </tr>
+              <tr data-command="GET">
+                <td><code>GET</code></td>
+                <td><code>GET &lt;key&gt;</code></td>
+                <td>Retrieve data for the specified key</td>
+              </tr>
+              <tr data-command="DELETE">
+                <td><code>DELETE</code></td>
+                <td><code>DELETE &lt;key&gt;</code></td>
+                <td>Delete the specified key from the store</td>
+              </tr>
+              <tr data-command="ADD">
+                <td><code>ADD</code></td>
+                <td><code>ADD &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                <td>Store data only if the key does not exist</td>
+              </tr>
+              <tr data-command="REPLACE">
+                <td><code>REPLACE</code></td>
+                <td><code>REPLACE &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt;</code></td>
+                <td>Store data only if the key already exists</td>
+              </tr>
+              <tr data-command="FLUSH_ALL">
+                <td><code>FLUSH_ALL</code></td>
+                <td><code>FLUSH_ALL [delay]</code></td>
+                <td>Invalidate all existing items</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="protocol-subtitle mirdb-specific-title">MirDB-Specific Commands</h3>
+        <p class="mirdb-specific-note">These commands are unique to MirDB and not part of the standard memcached protocol.</p>
+        <div class="protocol-table-wrapper">
+          <table class="protocol-table mirdb-specific-table" data-testid="mirdb-command-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Syntax</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-command="INFO" class="mirdb-specific">
+                <td><code>INFO</code><span class="mirdb-badge">MirDB</span></td>
+                <td><code>INFO</code></td>
+                <td>Get server statistics and database information</td>
+              </tr>
+              <tr data-command="MAJOR_COMPACTION" class="mirdb-specific">
+                <td><code>MAJOR_COMPACTION</code><span class="mirdb-badge">MirDB</span></td>
+                <td><code>MAJOR_COMPACTION</code></td>
+                <td>Trigger manual compaction of SSTable files</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="protocol-subtitle">Syntax Examples</h3>
+        <div class="syntax-examples">
+          <div class="syntax-example">
+            <h4>SET Command Example</h4>
+            <pre class="code-block"><code>SET mykey 0 3600 5
+hello
+STORED</code></pre>
+          </div>
+          <div class="syntax-example">
+            <h4>GET Command Example</h4>
+            <pre class="code-block"><code>GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+          <div class="syntax-example">
+            <h4>DELETE Command Example</h4>
+            <pre class="code-block"><code>DELETE mykey
+DELETED</code></pre>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Project Status Section (Scenario 6) -->

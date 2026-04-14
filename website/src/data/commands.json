@@ -1,0 +1,54 @@
+{
+  "standard": [
+    {
+      "command": "SET",
+      "syntax": "SET <key> <flags> <exptime> <bytes>",
+      "description": "Store data under the specified key",
+      "example": "SET mykey 0 3600 5\r\nhello\r\n"
+    },
+    {
+      "command": "GET",
+      "syntax": "GET <key>",
+      "description": "Retrieve data for the specified key",
+      "example": "GET mykey"
+    },
+    {
+      "command": "DELETE",
+      "syntax": "DELETE <key>",
+      "description": "Delete the specified key from the store",
+      "example": "DELETE mykey"
+    },
+    {
+      "command": "ADD",
+      "syntax": "ADD <key> <flags> <exptime> <bytes>",
+      "description": "Store data only if the key does not exist",
+      "example": "ADD newkey 0 0 5\r\nvalue\r\n"
+    },
+    {
+      "command": "REPLACE",
+      "syntax": "REPLACE <key> <flags> <exptime> <bytes>",
+      "description": "Store data only if the key already exists",
+      "example": "REPLACE mykey 0 0 6\r\nupdate\r\n"
+    },
+    {
+      "command": "FLUSH_ALL",
+      "syntax": "FLUSH_ALL [delay]",
+      "description": "Invalidate all existing items",
+      "example": "FLUSH_ALL"
+    }
+  ],
+  "mirdb_specific": [
+    {
+      "command": "INFO",
+      "syntax": "INFO",
+      "description": "Get server statistics and database information",
+      "example": "INFO"
+    },
+    {
+      "command": "MAJOR_COMPACTION",
+      "syntax": "MAJOR_COMPACTION",
+      "description": "Trigger manual compaction of SSTable files",
+      "example": "MAJOR_COMPACTION"
+    }
+  ]
+}

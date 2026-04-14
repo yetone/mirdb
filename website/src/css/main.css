@@ -9,6 +9,7 @@
 @import './variables.css';
 @import './components/hero.css';
 @import './components/quick-start.css';
+@import './components/protocol.css';
 
 /* Base styles */
 *,

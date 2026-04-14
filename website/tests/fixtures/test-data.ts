@@ -37,6 +37,15 @@ export const SELECTORS = {
   status: '#status',
   header: 'header',
   footer: 'footer',
+
+  // Protocol section
+  protocolTitle: '.protocol-title',
+  protocolTable: '.protocol-table',
+  commandTable: '[data-testid="command-table"]',
+  mirdbCommandTable: '[data-testid="mirdb-command-table"]',
+  mirdbBadge: '.mirdb-badge',
+  syntaxExamples: '.syntax-examples',
+  syntaxExample: '.syntax-example',
 };
 
 export const CONTENT = {
