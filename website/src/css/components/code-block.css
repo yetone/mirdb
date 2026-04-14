@@ -1,0 +1,175 @@
+/**
+ * Code Block Styles
+ * Owner: Scenario 14 - Code Copy Functionality
+ *
+ * Styles for:
+ * - Code block containers
+ * - Syntax highlighting theme
+ * - Copy button positioning and appearance
+ * - Copy success feedback animation
+ * - Scrollable code areas
+ */
+
+/* Copy button feedback animations */
+.copy-button {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Success state - green accent */
+.copy-button.copied {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.copy-button.copied:hover {
+  background-color: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+/* Error state - red accent */
+.copy-button.copy-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.copy-button.copy-error:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* Icon transitions */
+.copy-button .copy-icon,
+.copy-button .check-icon {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.copy-button.copied .copy-icon {
+  display: none;
+}
+
+.copy-button.copied .check-icon {
+  display: block !important;
+  animation: checkmark-pop 0.3s ease-out;
+}
+
+/* Checkmark pop animation */
+@keyframes checkmark-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Focus state for accessibility */
+.copy-button:focus-visible {
+  outline: 2px solid var(--color-primary, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* Active/pressed state */
+.copy-button:active {
+  transform: scale(0.95);
+}
+
+/* Tooltip support (for future enhancement) */
+.copy-button[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.copy-button[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* Code block accessibility improvements */
+.code-block {
+  position: relative;
+}
+
+/* Ensure code is scrollable on overflow */
+.code-content {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for code blocks */
+.code-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.code-content::-webkit-scrollbar-track {
+  background: #2d2d2d;
+  border-radius: 4px;
+}
+
+.code-content::-webkit-scrollbar-thumb {
+  background: #4d4d4d;
+  border-radius: 4px;
+}
+
+.code-content::-webkit-scrollbar-thumb:hover {
+  background: #5d5d5d;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .copy-button,
+  .copy-button .copy-icon,
+  .copy-button .check-icon {
+    transition: none;
+  }
+
+  .copy-button.copied .check-icon {
+    animation: none;
+  }
+
+  .copy-button:active {
+    transform: none;
+  }
+}
+
+/* Protocol section code blocks (simpler styling without header) */
+.protocol .code-block,
+.syntax-example .code-block {
+  margin: 0;
+}
+
+.syntax-example .code-block pre {
+  margin: 0;
+  padding: var(--spacing-3, 12px);
+  background-color: #1e1e1e;
+  border-radius: var(--radius-md, 6px);
+  overflow-x: auto;
+}
+
+.syntax-example .code-block code {
+  font-family: var(--font-mono, 'Fira Code', 'Consolas', monospace);
+  font-size: var(--font-size-sm, 0.875rem);
+  color: #d4d4d4;
+  white-space: pre;
+}

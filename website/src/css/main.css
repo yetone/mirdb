@@ -15,6 +15,7 @@
 @import './components/protocol.css';
 @import './components/status.css';
 @import './components/footer.css';
+@import './components/code-block.css';
 @import './utilities/responsive.css';
 @import './utilities/accessibility.css';
 
