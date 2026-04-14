@@ -14,9 +14,13 @@
 import { initAndRenderMermaid } from './components/mermaid-init.js';
 import { initNavigation } from './components/navigation.js';
 import { initCodeCopy } from './components/code-copy.js';
+import { initTheme } from './utils/theme.js';
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
+  // Initialize theme detection (dark mode support)
+  initTheme();
+
   // Initialize navigation (smooth scrolling, mobile menu, scroll effects)
   initNavigation();
 
