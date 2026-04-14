@@ -11,12 +11,17 @@
  * Imports and initializes modules from components/ and utils/
  */
 
+import { initAndRenderMermaid } from './components/mermaid-init.js';
+
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Initialize smooth scrolling for anchor links
   initSmoothScrolling();
   // Initialize code copy functionality
   initCodeCopy();
+
+  // Initialize and render Mermaid diagrams
+  await initAndRenderMermaid();
 });
 
 /**

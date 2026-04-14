@@ -46,6 +46,14 @@ export const SELECTORS = {
   header: 'header',
   footer: 'footer',
 
+  // Architecture section (Scenario 4)
+  architectureDiagram: '.architecture-diagram',
+  architectureComponents: '.architecture-components',
+  componentCard: '.component-card',
+  componentTitle: '.component-title',
+  componentDescription: '.component-description',
+  mermaidDiagram: '.mermaid',
+
   // Protocol section
   protocolTitle: '.protocol-title',
   protocolTable: '.protocol-table',

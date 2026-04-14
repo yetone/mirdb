@@ -251,8 +251,67 @@ END</span>
     </section>
 
     <!-- Architecture Section (Scenario 4) -->
-    <section id="architecture">
-      <!-- Architecture content will be added by Scenario 4 -->
+    <section id="architecture" class="architecture">
+      <div class="container">
+        <h2 class="section-title">Architecture</h2>
+        <p class="section-subtitle">MirDB uses an LSM tree (Log-Structured Merge Tree) architecture for efficient writes and reads.</p>
+
+        <!-- Mermaid Diagram -->
+        <div class="architecture-diagram">
+          <div class="mermaid">
+graph TD
+    A[Write Request] --> B[WAL]
+    B --> C[Memtable]
+    C --> D{Memtable Full?}
+    D -->|Yes| E[Immutable Memtable]
+    D -->|No| C
+    E --> F[Flush to Disk]
+    F --> G[SSTable L0]
+    G --> H{Compaction Needed?}
+    H -->|Yes| I[Merge SSTables]
+    I --> J[SSTable L1+]
+    H -->|No| G
+    K[Read Request] --> L{In Memtable?}
+    L -->|Yes| M[Return from Memory]
+    L -->|No| N{In Immutable?}
+    N -->|Yes| M
+    N -->|No| O[Search SSTables]
+    O --> P[Use Bloom Filters]
+    P --> Q[Return Data]
+          </div>
+        </div>
+
+        <!-- Component Explanations -->
+        <div class="architecture-components">
+          <div class="component-card" data-component="wal">
+            <h3 class="component-title">Write-Ahead Log (WAL)</h3>
+            <p class="component-description">
+              Every write is first recorded to the WAL for durability. This ensures data isn't lost even if the server crashes before flushing to disk.
+            </p>
+          </div>
+
+          <div class="component-card" data-component="memtable">
+            <h3 class="component-title">Memtable</h3>
+            <p class="component-description">
+              An in-memory sorted data structure (skip list) that holds recent writes. Provides fast reads and writes before data is persisted.
+            </p>
+          </div>
+
+          <div class="component-card" data-component="immutable">
+            <h3 class="component-title">Immutable Memtable</h3>
+            <p class="component-description">
+              When the memtable reaches capacity, it becomes immutable and a new memtable is created. The immutable memtable is then flushed to disk as an SSTable.
+            </p>
+          </div>
+
+          <div class="component-card" data-component="sstable">
+            <h3 class="component-title">Sorted String Tables (SSTables)</h3>
+            <p class="component-description">
+              Immutable, sorted files on disk. Organized in levels (L0, L1, ...) with periodic compaction to merge and optimize storage.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Protocol Reference Section (Scenario 5) -->

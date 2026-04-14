@@ -15,9 +15,12 @@
   "devDependencies": {
     "@playwright/test": "^1.42.0",
     "@types/node": "^20.11.0",
+    "jsdom": "^24.0.0",
     "typescript": "^5.3.3",
     "vite": "^5.1.0",
-    "vitest": "^1.2.0",
-    "jsdom": "^24.0.0"
+    "vitest": "^1.2.0"
+  },
+  "dependencies": {
+    "mermaid": "^11.14.0"
   }
 }

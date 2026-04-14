@@ -1,0 +1,120 @@
+/**
+ * Architecture Section Styles
+ * Owner: Scenario 4 - Architecture Section
+ *
+ * Styles for:
+ * - Section layout
+ * - Mermaid diagram container
+ * - Component explanation cards
+ * - Diagram responsiveness
+ */
+
+.architecture {
+  background-color: var(--color-bg-secondary);
+}
+
+.architecture .section-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-4);
+  color: var(--color-text);
+}
+
+.architecture .section-subtitle {
+  font-size: var(--font-size-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+  max-width: 700px;
+  margin: 0 auto var(--spacing-12);
+}
+
+/* Mermaid Diagram Container */
+.architecture-diagram {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-8);
+  margin-bottom: var(--spacing-12);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+}
+
+.architecture-diagram .mermaid {
+  display: flex;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.architecture-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Component Explanation Cards */
+.architecture-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.component-card {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--color-primary);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.component-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.component-card[data-component="wal"] {
+  border-left-color: #f59e0b; /* amber */
+}
+
+.component-card[data-component="memtable"] {
+  border-left-color: #10b981; /* emerald */
+}
+
+.component-card[data-component="immutable"] {
+  border-left-color: #6366f1; /* indigo */
+}
+
+.component-card[data-component="sstable"] {
+  border-left-color: #8b5cf6; /* violet */
+}
+
+.component-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--spacing-3);
+  color: var(--color-text);
+}
+
+.component-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .architecture-diagram {
+    padding: var(--spacing-4);
+  }
+
+  .architecture-diagram .mermaid {
+    min-height: 300px;
+  }
+
+  .architecture-components {
+    grid-template-columns: 1fr;
+  }
+
+  .component-card {
+    padding: var(--spacing-4);
+  }
+}
