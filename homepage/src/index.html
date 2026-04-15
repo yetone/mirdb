@@ -21,20 +21,21 @@
   <link rel="stylesheet" href="./components/QuickStart/QuickStart.css">
   <link rel="stylesheet" href="./components/TechSpecs/TechSpecs.css">
   <link rel="stylesheet" href="./components/Footer/Footer.css">
+  <link rel="stylesheet" href="./components/Header/Header.css">
 </head>
 <body>
   <!-- Skip Navigation -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Header placeholder for other scenarios -->
+  <!-- Header - Scenario 4 -->
   <header id="header" class="header">
-    <nav class="nav container">
-      <a href="/" class="nav__logo">MirDB</a>
-      <ul class="nav__links">
+    <nav class="nav container" aria-label="Main navigation">
+      <a href="/" class="nav__logo" aria-label="MirDB Home">MirDB</a>
+      <ul class="nav__links" role="list">
         <li><a href="#features" class="nav__link">Features</a></li>
         <li><a href="#quickstart" class="nav__link">Quick Start</a></li>
         <li><a href="#techspecs" class="nav__link">Specs</a></li>
-        <li><a href="https://github.com/mirdb/mirdb" class="nav__link" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/mirdb/mirdb" class="nav__link nav__link--external" target="_blank" rel="noopener" aria-label="View MirDB on GitHub">GitHub</a></li>
       </ul>
     </nav>
   </header>
@@ -179,9 +180,9 @@ result = client.<span class="syntax-function">get</span>(<span class="syntax-str
   <footer id="footer" class="footer">
     <div class="container footer__content">
       <p class="footer__copyright">&copy; 2024 MirDB. Open source under MIT License.</p>
-      <nav class="footer__links">
-        <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener">Source Code</a>
-        <a href="https://mirdb.dev/docs" target="_blank" rel="noopener">Documentation</a>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener" aria-label="View source code on GitHub">Source Code</a>
+        <a href="https://mirdb.dev/docs" target="_blank" rel="noopener" aria-label="Read MirDB documentation">Documentation</a>
       </nav>
     </div>
   </footer>

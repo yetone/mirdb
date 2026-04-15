@@ -63,6 +63,22 @@ export const SELECTORS = {
   TECHSPECS: {
     SECTION: '#techspecs',
   },
+  FOOTER: {
+    SECTION: '#footer',
+    LINKS: '.footer__links',
+    COPYRIGHT: '.footer__copyright',
+  },
+  HEADER: {
+    SECTION: '#header',
+    NAV: '.nav',
+    NAV_LINKS: '.nav__links',
+  },
+};
+
+// External URLs
+export const EXTERNAL_URLS = {
+  GITHUB_REPO: 'https://github.com/mirdb/mirdb',
+  DOCUMENTATION: 'https://mirdb.dev/docs',
 };
 
 // Sample code for testing
