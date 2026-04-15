@@ -118,3 +118,14 @@ export const EXPECTED_TEXT = {
   CONNECTION_HOST: 'localhost',
   CONNECTION_PORT: '12333',
 };
+
+// Performance thresholds (Scenario 10)
+export const PERFORMANCE_THRESHOLDS = {
+  MAX_LOAD_TIME_MS: 2000, // 2 seconds max load time
+  MIN_PERFORMANCE_SCORE: 90, // Lighthouse-style score
+  MAX_BUNDLE_SIZE_KB: 200, // 200KB gzipped JS
+  MAX_FCP_MS: 1800, // First Contentful Paint
+  MAX_LCP_MS: 2500, // Largest Contentful Paint
+  MAX_CLS: 0.1, // Cumulative Layout Shift
+  MAX_TBT_MS: 200, // Total Blocking Time
+};
