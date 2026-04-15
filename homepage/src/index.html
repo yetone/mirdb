@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store built with Rust and LSM tree architecture">
+  <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store built for speed and durability">
+  <meta name="keywords" content="MirDB, Memcached, key-value store, database, Rust, LSM tree, persistent storage">
+
+  <!-- Open Graph -->
   <meta property="og:title" content="MirDB - Persistent Memcached-Compatible Key-Value Store">
-  <meta property="og:description" content="High-performance persistent storage with full Memcached protocol support">
+  <meta property="og:description" content="Drop-in replacement for Memcached with disk persistence and LSM tree architecture">
   <meta property="og:type" content="website">
+
   <title>MirDB - Persistent Memcached-Compatible Key-Value Store</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="./styles/variables.css">
   <link rel="stylesheet" href="./styles/base.css">
   <link rel="stylesheet" href="./components/Hero/Hero.css">
@@ -17,36 +23,43 @@
   <link rel="stylesheet" href="./components/Footer/Footer.css">
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to main content</a>
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Header/Navigation placeholder -->
-  <header class="header">
+  <!-- Header placeholder for other scenarios -->
+  <header id="header" class="header">
     <nav class="nav container">
       <a href="/" class="nav__logo">MirDB</a>
       <ul class="nav__links">
         <li><a href="#features" class="nav__link">Features</a></li>
         <li><a href="#quickstart" class="nav__link">Quick Start</a></li>
-        <li><a href="#specs" class="nav__link">Specs</a></li>
+        <li><a href="#techspecs" class="nav__link">Specs</a></li>
         <li><a href="https://github.com/mirdb/mirdb" class="nav__link" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main">
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
+  <main id="main-content">
+    <!-- Hero Section - Scenario 1 -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
       <div class="container hero__content">
-        <h1 class="hero__title">MirDB</h1>
-        <p class="hero__tagline">A persistent Memcached-compatible key-value store</p>
-        <p class="hero__description">
-          Built with Rust and powered by LSM tree architecture for reliable, high-performance storage
-          that speaks the Memcached protocol you already know.
+        <h1 id="hero-title" class="hero__title">
+          <span class="hero__title-accent">MirDB</span>
+        </h1>
+        <p class="hero__headline">
+          A persistent Memcached-compatible key-value store built for speed and durability
         </p>
-        <a href="#quickstart" class="hero__cta">Get Started</a>
+        <p class="hero__description">
+          Drop-in replacement for Memcached with disk persistence, LSM tree architecture,
+          and lightning-fast performance written in Rust.
+        </p>
+        <a href="#quickstart" class="hero__cta" role="button">
+          Get Started
+        </a>
       </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features Section - Scenario 2 -->
     <section id="features" class="features">
       <div class="container">
         <h2 class="features__title">Key Features</h2>
@@ -94,7 +107,7 @@
       </div>
     </section>
 
-    <!-- Quick Start Section -->
+    <!-- Quick Start Section - Scenario 3 -->
     <section id="quickstart" class="quickstart">
       <div class="container">
         <h2 class="quickstart__title">Quick Start</h2>
@@ -128,8 +141,8 @@ result = client.<span class="syntax-function">get</span>(<span class="syntax-str
       </div>
     </section>
 
-    <!-- Technical Specs Section -->
-    <section id="specs" class="techspecs">
+    <!-- Tech Specs Section - Scenario 5 -->
+    <section id="techspecs" class="techspecs">
       <div class="container">
         <h2 class="techspecs__title">Default Configuration</h2>
         <div class="techspecs__grid">
@@ -162,8 +175,8 @@ result = client.<span class="syntax-function">get</span>(<span class="syntax-str
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
+  <!-- Footer - Scenario 4 -->
+  <footer id="footer" class="footer">
     <div class="container footer__content">
       <p class="footer__copyright">&copy; 2024 MirDB. Open source under MIT License.</p>
       <nav class="footer__links">
@@ -173,6 +186,7 @@ result = client.<span class="syntax-function">get</span>(<span class="syntax-str
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script type="module" src="./scripts/main.js"></script>
 </body>
 </html>

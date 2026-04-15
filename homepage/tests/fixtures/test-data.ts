@@ -1,14 +1,31 @@
 /**
  * Shared Test Data and Constants
- * Used across E2E and unit tests.
+ *
+ * Contains test fixtures used across all test files.
  */
 
+// Product information
+export const PRODUCT_NAME = 'MirDB';
+export const PRODUCT_TAGLINE = 'A persistent Memcached-compatible key-value store';
+export const HERO_KEYWORDS = ['persistent', 'Memcached', 'key-value'];
+export const CTA_TEXT = 'Get Started';
+
+// Test configuration
 export const TEST_CONFIG = {
   PORT: 12333,
   HOST: 'localhost',
   DEFAULT_TIMEOUT: 5000,
 };
 
+// Test URLs
+export const TEST_URLS = {
+  HOME: '/',
+  QUICKSTART: '/#quickstart',
+  FEATURES: '/#features',
+  TECHSPECS: '/#techspecs',
+};
+
+// UI Selectors
 export const SELECTORS = {
   // Quick Start section
   QUICK_START_SECTION: '#quickstart',
@@ -28,8 +45,27 @@ export const SELECTORS = {
   // Navigation
   NAV: '.nav',
   NAV_LINK: '.nav__link',
+
+  // Organized by section
+  HERO: {
+    SECTION: '#hero',
+    TITLE: '.hero__title',
+    HEADLINE: '.hero__headline',
+    DESCRIPTION: '.hero__description',
+    CTA: '.hero__cta',
+  },
+  FEATURES: {
+    SECTION: '#features',
+  },
+  QUICKSTART: {
+    SECTION: '#quickstart',
+  },
+  TECHSPECS: {
+    SECTION: '#techspecs',
+  },
 };
 
+// Sample code for testing
 export const SAMPLE_CODE = {
   PYTHON: `from pymemcache.client import base
 
@@ -44,6 +80,7 @@ result = client.get('key')
 print(result)  # b'value'`,
 };
 
+// Expected text content
 export const EXPECTED_TEXT = {
   PRODUCT_NAME: 'MirDB',
   TAGLINE: 'persistent Memcached-compatible key-value store',

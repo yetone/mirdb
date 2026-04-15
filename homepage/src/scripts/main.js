@@ -1,12 +1,14 @@
 /**
  * Main Entry Point
- * Initializes all scripts for the MirDB homepage.
+ *
+ * Initializes all scripts and components on the homepage.
  */
 
 import { initCodeBlock } from '../components/QuickStart/CodeBlock.js';
 
-// Initialize all components when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('MirDB Homepage loaded');
+
   // Initialize code block functionality
   initCodeBlock();
 });

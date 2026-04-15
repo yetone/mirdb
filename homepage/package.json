@@ -19,5 +19,12 @@
     "jsdom": "^23.0.0",
     "vite": "^5.0.0",
     "vitest": "^1.0.0"
-  }
+  },
+  "keywords": [
+    "mirdb",
+    "memcached",
+    "key-value-store",
+    "database"
+  ],
+  "license": "MIT"
 }
