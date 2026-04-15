@@ -14,22 +14,26 @@ export const SELECTORS = {
   header: '.header',
   headerLogo: '.header__logo',
   headerNav: '.header__nav',
+  headerNavLink: '.header__nav-link',
 
   // Hero
   hero: '.hero',
   heroTitle: '.hero__title',
   heroTagline: '.hero__tagline',
   heroCta: '.hero__cta',
+  heroDescription: '.hero__description',
 
   // Features
   features: '.features',
   featuresGrid: '.features__grid',
   featureCard: '.feature-card',
+  featureCardTitle: '.feature-card__title',
 
   // Quick Start
   quickstart: '.quickstart',
   codeBlock: '.code-block',
   copyButton: '.code-block__copy',
+  copyButtonText: '.code-block__copy span',
 
   // Tech Specs
   techspecs: '.techspecs',
@@ -38,6 +42,7 @@ export const SELECTORS = {
   // Footer
   footer: '.footer',
   footerLinks: '.footer__links',
+  footerLink: '.footer__link',
 };
 
 export const THEMES = {
@@ -68,3 +73,11 @@ export const COLORS = {
     text: 'rgb(241, 245, 249)',
   },
 };
+
+// Browser names for cross-browser testing
+export const BROWSERS = {
+  chromium: 'chromium',
+  firefox: 'firefox',
+  webkit: 'webkit',
+  msedge: 'msedge',
+} as const;

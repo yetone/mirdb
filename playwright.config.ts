@@ -16,6 +16,21 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // Edge is Chromium-based and shares the same rendering engine
+    // On Linux/CI environments, we use chromium which validates Edge compatibility
+    // Uncomment below to test Edge specifically on Windows:
+    // {
+    //   name: 'msedge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // },
   ],
   webServer: {
     command: 'npx serve src -p 3000',
