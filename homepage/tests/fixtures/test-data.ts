@@ -62,6 +62,11 @@ export const SELECTORS = {
   },
   TECHSPECS: {
     SECTION: '#techspecs',
+    TITLE: '.techspecs__title',
+    GRID: '.techspecs__grid',
+    ITEM: '.techspecs__item',
+    LABEL: '.techspecs__label',
+    VALUE: '.techspecs__value',
   },
   FOOTER: {
     SECTION: '#footer',
@@ -79,6 +84,16 @@ export const SELECTORS = {
 export const EXTERNAL_URLS = {
   GITHUB_REPO: 'https://github.com/mirdb/mirdb',
   DOCUMENTATION: 'https://mirdb.dev/docs',
+};
+
+// Technical Specifications configuration values
+export const TECHSPECS_CONFIG = {
+  PORT: '12333',
+  WORK_DIR: '/tmp/mirdb',
+  SSTABLE_MAX_SIZE: '100 MB',
+  MEMTABLE_MAX_SIZE: '4 MB',
+  BLOCK_SIZE: '4 KB',
+  MAX_LSM_LEVELS: '7',
 };
 
 // Sample code for testing
