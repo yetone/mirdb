@@ -1,0 +1,29 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A persistent Memcached-compatible key-value store",
+  "type": "module",
+  "scripts": {
+    "dev": "npx http-server src -p 3000 -c-1",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "build": "cp -r src/* dist/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@testing-library/dom": "^9.3.0",
+    "happy-dom": "^12.10.0",
+    "http-server": "^14.1.1",
+    "playwright": "^1.40.0",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "mirdb",
+    "memcached",
+    "key-value-store",
+    "database"
+  ],
+  "license": "MIT"
+}
