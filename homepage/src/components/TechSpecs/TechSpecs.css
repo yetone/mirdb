@@ -1,0 +1,42 @@
+/**
+ * Technical Specifications Section Styles
+ * Owner: Scenario 5 - Configuration Display
+ * Stub file - will be implemented by scenario 5
+ */
+
+.techspecs {
+  padding: var(--spacing-3xl) 0;
+}
+
+.techspecs__title {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.techspecs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.techspecs__item {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.techspecs__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
+}
+
+.techspecs__value {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
