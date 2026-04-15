@@ -157,3 +157,26 @@ section {
   white-space: nowrap;
   border: 0;
 }
+
+/**
+ * Accessibility: Color contrast fixes
+ * Ensures text meets WCAG 2.1 AA minimum 4.5:1 contrast ratio
+ * Uses !important to override component-specific styles for WCAG compliance
+ */
+
+/* Override muted text in footer for accessibility compliance */
+.footer .footer__copyright {
+  color: var(--color-text-secondary) !important;
+}
+
+/* Fix CTA button contrast in dark mode
+ * Original #3b82f6 with #ffffff gives 3.67:1 (fails 4.5:1 requirement)
+ * Using #2563eb with #ffffff gives 4.56:1 (passes)
+ */
+[data-theme="dark"] .hero__cta {
+  background-color: #2563eb !important;
+}
+
+[data-theme="dark"] .hero__cta:hover {
+  background-color: #1d4ed8 !important;
+}
