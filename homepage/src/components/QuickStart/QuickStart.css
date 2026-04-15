@@ -1,0 +1,125 @@
+/**
+ * Quick Start Section Styles
+ * Owner: Scenario 3 - Quick Start Section
+ *
+ * Provides styling for the Quick Start section including
+ * code blocks, syntax highlighting, and copy functionality.
+ */
+
+.quickstart {
+  background-color: var(--color-surface);
+}
+
+.quickstart__title {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.quickstart__description {
+  text-align: center;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+/* Code Block Styles */
+.code-block {
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.code-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-block__language {
+  color: var(--color-code-text);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.code-block__copy-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-code-text);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  transition: background-color var(--transition-fast);
+  min-height: 32px;
+  min-width: 44px;
+}
+
+.code-block__copy-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.code-block__copy-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.code-block__copy-btn.copied {
+  background-color: rgba(34, 197, 94, 0.3);
+}
+
+.code-block__copy-btn.copied .code-block__copy-icon {
+  display: none;
+}
+
+.code-block__copy-btn.copied .code-block__check-icon {
+  display: block !important;
+}
+
+.code-block__copy-btn.copied .code-block__copy-text {
+  color: #22c55e;
+}
+
+.code-block__content {
+  padding: var(--spacing-lg);
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-code-text);
+}
+
+.code-block__content code {
+  display: block;
+  white-space: pre;
+}
+
+/* Syntax Highlighting */
+.syntax-keyword {
+  color: var(--color-syntax-keyword);
+}
+
+.syntax-string {
+  color: var(--color-syntax-string);
+}
+
+.syntax-number {
+  color: var(--color-syntax-number);
+}
+
+.syntax-comment {
+  color: var(--color-syntax-comment);
+  font-style: italic;
+}
+
+.syntax-function {
+  color: var(--color-syntax-function);
+}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store built for speed and durability">
+  <meta name="keywords" content="MirDB, Memcached, key-value store, database, Rust, LSM tree, persistent storage">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MirDB - Persistent Memcached-Compatible Key-Value Store">
+  <meta property="og:description" content="Drop-in replacement for Memcached with disk persistence and LSM tree architecture">
+  <meta property="og:image" content="https://mirdb.dev/og-image.png">
+  <meta property="og:type" content="website">
+
+  <title>MirDB - Persistent Memcached-Compatible Key-Value Store</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./components/Hero/Hero.css">
+  <link rel="stylesheet" href="./components/Features/Features.css">
+  <link rel="stylesheet" href="./components/QuickStart/QuickStart.css">
+  <link rel="stylesheet" href="./components/TechSpecs/TechSpecs.css">
+  <link rel="stylesheet" href="./components/Footer/Footer.css">
+  <link rel="stylesheet" href="./components/Header/Header.css">
+  <link rel="stylesheet" href="./styles/responsive.css">
+</head>
+<body>
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header - Scenario 4 -->
+  <header id="header" class="header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a href="/" class="nav__logo" aria-label="MirDB Home">MirDB</a>
+      <button class="nav__toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <svg class="nav__toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+      </button>
+      <ul class="nav__links" id="nav-links" role="list">
+        <li><a href="#features" class="nav__link">Features</a></li>
+        <li><a href="#quickstart" class="nav__link">Quick Start</a></li>
+        <li><a href="#techspecs" class="nav__link">Specs</a></li>
+        <li><a href="https://github.com/mirdb/mirdb" class="nav__link nav__link--external" target="_blank" rel="noopener" aria-label="View MirDB on GitHub">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section - Scenario 1 -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="container hero__content">
+        <h1 id="hero-title" class="hero__title">
+          <span class="hero__title-accent">MirDB</span>
+        </h1>
+        <p class="hero__headline">
+          A persistent Memcached-compatible key-value store built for speed and durability
+        </p>
+        <p class="hero__description">
+          Drop-in replacement for Memcached with disk persistence, LSM tree architecture,
+          and lightning-fast performance written in Rust.
+        </p>
+        <a href="#quickstart" class="hero__cta" role="button">
+          Get Started
+        </a>
+      </div>
+    </section>
+
+    <!-- Features Section - Scenario 2 -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="features__title">Key Features</h2>
+        <div class="features__grid">
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Memcached Protocol</h3>
+            <p class="feature-card__description">Full compatibility with existing Memcached clients. Drop-in replacement with persistence.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Disk Persistence</h3>
+            <p class="feature-card__description">Your data survives restarts. No more cache warming or data loss on failures.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">LSM Tree Architecture</h3>
+            <p class="feature-card__description">Optimized for write-heavy workloads with efficient compaction and fast reads.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2Z"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Built with Rust</h3>
+            <p class="feature-card__description">Memory-safe, fast, and reliable. No garbage collection pauses or memory leaks.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Section - Scenario 3 -->
+    <section id="quickstart" class="quickstart">
+      <div class="container">
+        <h2 class="quickstart__title">Quick Start</h2>
+        <p class="quickstart__description">Connect to MirDB using any Memcached client. Here's a Python example:</p>
+        <div class="code-block" data-language="python">
+          <div class="code-block__header">
+            <span class="code-block__language">Python</span>
+            <button class="code-block__copy-btn" aria-label="Copy code to clipboard" type="button">
+              <svg class="code-block__copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <svg class="code-block__check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: none;">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span class="code-block__copy-text">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block__content"><code><span class="syntax-keyword">from</span> pymemcache.client <span class="syntax-keyword">import</span> base
+
+<span class="syntax-comment"># Connect to MirDB</span>
+client = base.Client((<span class="syntax-string">'localhost'</span>, <span class="syntax-number">12333</span>))
+
+<span class="syntax-comment"># Store a value</span>
+client.<span class="syntax-function">set</span>(<span class="syntax-string">'key'</span>, <span class="syntax-string">'value'</span>)
+
+<span class="syntax-comment"># Retrieve it back</span>
+result = client.<span class="syntax-function">get</span>(<span class="syntax-string">'key'</span>)
+<span class="syntax-function">print</span>(result)  <span class="syntax-comment"># b'value'</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Specs Section - Scenario 5 -->
+    <section id="techspecs" class="techspecs">
+      <div class="container">
+        <h2 class="techspecs__title">Default Configuration</h2>
+        <div class="techspecs__grid">
+          <div class="techspecs__item">
+            <dt class="techspecs__label">Port</dt>
+            <dd class="techspecs__value">12333</dd>
+          </div>
+          <div class="techspecs__item">
+            <dt class="techspecs__label">Work Directory</dt>
+            <dd class="techspecs__value">/tmp/mirdb</dd>
+          </div>
+          <div class="techspecs__item">
+            <dt class="techspecs__label">SSTable Max Size</dt>
+            <dd class="techspecs__value">100 MB</dd>
+          </div>
+          <div class="techspecs__item">
+            <dt class="techspecs__label">Memtable Max Size</dt>
+            <dd class="techspecs__value">4 MB</dd>
+          </div>
+          <div class="techspecs__item">
+            <dt class="techspecs__label">Block Size</dt>
+            <dd class="techspecs__value">4 KB</dd>
+          </div>
+          <div class="techspecs__item">
+            <dt class="techspecs__label">Max LSM Levels</dt>
+            <dd class="techspecs__value">7</dd>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer - Scenario 4 -->
+  <footer id="footer" class="footer">
+    <div class="container footer__content">
+      <p class="footer__copyright">&copy; 2024 MirDB. Open source under MIT License.</p>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener" aria-label="View source code on GitHub">Source Code</a>
+        <a href="https://mirdb.dev/docs" target="_blank" rel="noopener" aria-label="Read MirDB documentation">Documentation</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="./scripts/main.js"></script>
+</body>
+</html>

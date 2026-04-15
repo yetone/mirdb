@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB Homepage - A modern, responsive static website for MirDB",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve src -p 3000",
+    "build": "mkdir -p dist && cp -r src/* dist/",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:e2e": "playwright test",
+    "test:all": "npm run test:unit && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.40.0",
+    "jsdom": "^23.0.0",
+    "serve": "^14.0.0",
+    "vitest": "^1.0.0"
+  }
+}

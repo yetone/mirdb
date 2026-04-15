@@ -1,0 +1,68 @@
+/**
+ * Theme Toggle Component Styles
+ * Owner: Scenario 8 - Theme Switching
+ */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: var(--spacing-sm);
+  background-color: var(--theme-toggle-bg);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--theme-toggle-fg);
+  transition: opacity var(--transition-fast), transform var(--transition-base);
+}
+
+/* Light mode: show sun, hide moon */
+[data-theme="light"] .theme-toggle__icon--light {
+  display: flex;
+}
+
+[data-theme="light"] .theme-toggle__icon--dark {
+  display: none;
+}
+
+/* Dark mode: show moon, hide sun */
+[data-theme="dark"] .theme-toggle__icon--light {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle__icon--dark {
+  display: flex;
+}
+
+/* Animation on toggle */
+.theme-toggle[aria-pressed="true"] .theme-toggle__icon {
+  animation: theme-toggle-spin 0.3s ease-out;
+}
+
+@keyframes theme-toggle-spin {
+  0% {
+    transform: rotate(0deg) scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+  }
+}

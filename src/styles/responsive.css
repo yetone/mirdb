@@ -1,0 +1,57 @@
+/**
+ * Responsive Styles
+ * Owner: Scenarios 6 & 7 - Responsive Design
+ *
+ * Mobile breakpoint styles (max-width: 767px)
+ * Tablet breakpoint styles (768px - 1023px)
+ * Desktop breakpoint styles (1024px+)
+ * Touch target minimum sizes (44x44px)
+ */
+
+/* Mobile styles (default - mobile first) */
+@media (max-width: 767px) {
+  .header__nav {
+    display: none;
+  }
+
+  .hero__title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .techspecs__table {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+  .features__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Ensure minimum touch target size */
+button,
+a,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Small inline links can be smaller */
+p a,
+.footer__copyright a {
+  min-height: auto;
+  min-width: auto;
+}

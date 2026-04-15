@@ -1,0 +1,55 @@
+/**
+ * Light Theme Variables
+ * Owner: Scenario 8 - Theme Switching
+ *
+ * Light mode color values for CSS custom properties.
+ * Applied when html[data-theme="light"]
+ */
+
+:root,
+[data-theme="light"] {
+  /* Primary colors */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-light: #dbeafe;
+
+  /* Background colors */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+
+  /* Text colors */
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+
+  /* Border colors */
+  --color-border: #e2e8f0;
+  --color-border-hover: #cbd5e1;
+
+  /* Code block */
+  --color-code-bg: #f1f5f9;
+  --color-code-text: #0f172a;
+
+  /* Card */
+  --color-card-bg: #ffffff;
+  --color-card-border: #e2e8f0;
+
+  /* Table */
+  --color-table-header-bg: #f8fafc;
+  --color-table-row-hover: #f1f5f9;
+  --color-table-border: #e2e8f0;
+
+  /* Button */
+  --color-button-bg: #2563eb;
+  --color-button-text: #ffffff;
+  --color-button-hover: #1d4ed8;
+
+  /* Success/Error states */
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+
+  /* Theme toggle specific */
+  --theme-toggle-bg: #e2e8f0;
+  --theme-toggle-fg: #f59e0b;
+}
