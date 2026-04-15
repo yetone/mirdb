@@ -1,0 +1,44 @@
+/**
+ * Footer Styles
+ */
+
+.footer {
+  padding: var(--spacing-2xl) 0;
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.footer__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  text-align: center;
+}
+
+.footer__links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.footer__link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: var(--color-primary);
+}
+
+.footer__copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-bottom: 0;
+}

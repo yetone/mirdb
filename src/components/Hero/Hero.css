@@ -1,0 +1,50 @@
+/**
+ * Hero Section Styles
+ */
+
+.hero {
+  padding: var(--spacing-3xl) 0;
+  text-align: center;
+  background-color: var(--color-bg-secondary);
+  transition: background-color var(--transition-base);
+}
+
+.hero__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.hero__title {
+  font-size: var(--font-size-5xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.hero__tagline {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero__description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.hero__cta {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.hero__cta:hover {
+  background-color: var(--color-button-hover);
+  color: var(--color-button-text);
+}

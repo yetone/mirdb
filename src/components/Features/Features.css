@@ -1,0 +1,56 @@
+/**
+ * Features Section Styles
+ */
+
+.features {
+  padding: var(--spacing-3xl) 0;
+  background-color: var(--color-bg);
+  transition: background-color var(--transition-base);
+}
+
+.features__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.features__title {
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  color: var(--color-text);
+}
+
+.features__grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.feature-card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-card__icon {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-card__title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.feature-card__description {
+  color: var(--color-text-secondary);
+  margin-bottom: 0;
+}

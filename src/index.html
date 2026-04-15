@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB - A persistent Memcached-compatible key-value store built with Rust and LSM tree architecture">
+  <meta name="keywords" content="MirDB, Memcached, key-value store, Rust, LSM tree, database">
+  <title>MirDB - Persistent Memcached-Compatible Key-Value Store</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/themes/light.css">
+  <link rel="stylesheet" href="styles/themes/dark.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="components/Header/Header.css">
+  <link rel="stylesheet" href="components/Hero/Hero.css">
+  <link rel="stylesheet" href="components/Features/Features.css">
+  <link rel="stylesheet" href="components/QuickStart/QuickStart.css">
+  <link rel="stylesheet" href="components/TechSpecs/TechSpecs.css">
+  <link rel="stylesheet" href="components/Footer/Footer.css">
+  <link rel="stylesheet" href="components/ThemeToggle/ThemeToggle.css">
+
+  <!-- Preload theme script to prevent flash -->
+  <script src="scripts/theme.js"></script>
+</head>
+<body>
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- Header with Navigation -->
+  <header class="header" id="header">
+    <div class="header__container">
+      <a href="#" class="header__logo">MirDB</a>
+      <nav class="header__nav" aria-label="Main navigation">
+        <ul class="header__nav-list">
+          <li><a href="#features" class="header__nav-link">Features</a></li>
+          <li><a href="#quickstart" class="header__nav-link">Quick Start</a></li>
+          <li><a href="#techspecs" class="header__nav-link">Tech Specs</a></li>
+        </ul>
+      </nav>
+      <div class="header__actions">
+        <!-- Theme Toggle -->
+        <button
+          class="theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-label="Toggle dark mode"
+          aria-pressed="false"
+        >
+          <span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </span>
+          <span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero__container">
+        <h1 class="hero__title">MirDB</h1>
+        <p class="hero__tagline">A persistent Memcached-compatible key-value store</p>
+        <p class="hero__description">
+          Built with Rust for performance and reliability. MirDB combines the simplicity
+          of the Memcached protocol with durable disk persistence using LSM tree architecture.
+        </p>
+        <a href="#quickstart" class="hero__cta">Get Started</a>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <div class="features__container">
+        <h2 class="features__title">Key Features</h2>
+        <div class="features__grid">
+          <div class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Memcached Protocol</h3>
+            <p class="feature-card__description">Full compatibility with existing Memcached clients. Drop-in replacement for your caching layer.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Disk Persistence</h3>
+            <p class="feature-card__description">Data survives restarts. Never lose your cached data with durable storage to disk.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">LSM Tree Architecture</h3>
+            <p class="feature-card__description">Optimized for write-heavy workloads with efficient compaction and sorted string tables.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Built with Rust</h3>
+            <p class="feature-card__description">Memory-safe and blazingly fast. Zero-cost abstractions for maximum performance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section class="quickstart" id="quickstart">
+      <div class="quickstart__container">
+        <h2 class="quickstart__title">Quick Start</h2>
+        <p class="quickstart__description">Connect using any Memcached client. Here's an example using Python:</p>
+        <div class="code-block">
+          <button class="code-block__copy" type="button" aria-label="Copy code to clipboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy</span>
+          </button>
+          <pre><code class="language-python">from pymemcache.client import base
+
+# Connect to MirDB (default port: 12333)
+client = base.Client(('localhost', 12333))
+
+# Set a value
+client.set('hello', 'world')
+
+# Get the value back
+result = client.get('hello')
+print(result)  # b'world'</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Specs Section -->
+    <section class="techspecs" id="techspecs">
+      <div class="techspecs__container">
+        <h2 class="techspecs__title">Default Configuration</h2>
+        <div class="techspecs__table-wrapper">
+          <table class="techspecs__table">
+            <thead>
+              <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col">Default Value</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Port</td>
+                <td><code>12333</code></td>
+                <td>Default listening port</td>
+              </tr>
+              <tr>
+                <td>Work Directory</td>
+                <td><code>./mirdb-data</code></td>
+                <td>Data storage path</td>
+              </tr>
+              <tr>
+                <td>SSTable Max Size</td>
+                <td><code>100 MB</code></td>
+                <td>Maximum size per SSTable file</td>
+              </tr>
+              <tr>
+                <td>Memtable Max Size</td>
+                <td><code>4 MB</code></td>
+                <td>In-memory buffer size</td>
+              </tr>
+              <tr>
+                <td>Block Size</td>
+                <td><code>4 KB</code></td>
+                <td>SSTable block size</td>
+              </tr>
+              <tr>
+                <td>Max LSM Levels</td>
+                <td><code>7</code></td>
+                <td>Maximum compaction levels</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="footer__container">
+      <div class="footer__links">
+        <a href="https://github.com/example/mirdb" class="footer__link" target="_blank" rel="noopener noreferrer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          Source Code
+        </a>
+        <a href="https://github.com/example/mirdb/wiki" class="footer__link" target="_blank" rel="noopener noreferrer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          Documentation
+        </a>
+      </div>
+      <p class="footer__copyright">&copy; 2024 MirDB. Open source under MIT License.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="scripts/main.js" type="module"></script>
+  <script src="components/ThemeToggle/ThemeToggle.js" type="module"></script>
+</body>
+</html>
