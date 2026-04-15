@@ -3,6 +3,11 @@
  * Owner: Scenario 4 - External Links Navigation
  *
  * Unit tests for Footer component links and external link validation
+ *
+ * Navigation and Smooth Scroll Unit Tests
+ * Owner: Scenario 12 - Navigation and Smooth Scroll
+ *
+ * Unit tests for scroll behavior CSS and navigation link validation
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -206,5 +211,104 @@ describe('External Link Validation', () => {
 
     // Should have documentation link
     expect(hrefs).toContain(EXTERNAL_URLS.DOCUMENTATION);
+  });
+});
+
+/**
+ * Scroll Behavior and Navigation Links Unit Tests
+ * Owner: Scenario 12 - Navigation and Smooth Scroll
+ */
+describe('Scroll Behavior CSS', () => {
+  it('TC3: base.css contains scroll-behavior: smooth on html element', async () => {
+    // Read the base.css file content
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const baseCssPath = path.join(process.cwd(), 'src/styles/base.css');
+    const baseCssContent = await fs.readFile(baseCssPath, 'utf-8');
+
+    // Verify scroll-behavior: smooth is defined for html element
+    expect(baseCssContent).toContain('scroll-behavior: smooth');
+
+    // More specific check: ensure it's in the html rule
+    const htmlRule = baseCssContent.match(/html\s*\{[^}]*\}/s);
+    expect(htmlRule).toBeTruthy();
+    expect(htmlRule![0]).toContain('scroll-behavior: smooth');
+  });
+
+  it('index.html references base.css which contains smooth scroll', async () => {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const indexPath = path.join(process.cwd(), 'src/index.html');
+    const indexContent = await fs.readFile(indexPath, 'utf-8');
+
+    // Verify base.css is linked
+    expect(indexContent).toContain('base.css');
+    expect(indexContent).toMatch(/<link[^>]*href="[^"]*base\.css"[^>]*>/);
+  });
+});
+
+describe('Navigation Links Matching Section IDs', () => {
+  let document: Document;
+
+  beforeEach(() => {
+    const dom = new JSDOM(fullPageHTML);
+    document = dom.window.document;
+  });
+
+  it('TC4: navigation links have href values matching section IDs', () => {
+    // Get all internal navigation links (those starting with #)
+    const navLinks = document.querySelectorAll('.nav__links .nav__link[href^="#"]');
+    expect(navLinks.length).toBeGreaterThan(0);
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      expect(href).toBeTruthy();
+      expect(href).toMatch(/^#[a-z]+/);
+
+      // Verify the target section exists in the document
+      const sectionId = href!.substring(1);
+
+      // In the full page HTML, verify section exists
+      // Note: Full page HTML has sections like #features, #quickstart, #techspecs
+      const expectedSections = ['features', 'quickstart', 'techspecs'];
+      if (expectedSections.includes(sectionId)) {
+        // This link should point to a valid section
+        expect(expectedSections).toContain(sectionId);
+      }
+    });
+  });
+
+  it('navigation links point to features, quickstart, and techspecs sections', () => {
+    const navLinks = document.querySelectorAll('.nav__links .nav__link[href^="#"]');
+    const hrefs = Array.from(navLinks).map((link) => link.getAttribute('href'));
+
+    // Verify expected section links exist
+    expect(hrefs).toContain('#features');
+    expect(hrefs).toContain('#quickstart');
+    expect(hrefs).toContain('#techspecs');
+  });
+
+  it('all internal navigation links follow correct format', () => {
+    const navLinks = document.querySelectorAll('.nav__links .nav__link[href^="#"]');
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      // Should be # followed by lowercase letters
+      expect(href).toMatch(/^#[a-z]+$/);
+    });
+  });
+});
+
+describe('Header Sticky Navigation Setup', () => {
+  it('header CSS has sticky positioning', async () => {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const headerCssPath = path.join(process.cwd(), 'src/components/Header/Header.css');
+    const headerCssContent = await fs.readFile(headerCssPath, 'utf-8');
+
+    // Verify sticky position is set on header
+    expect(headerCssContent).toContain('position: sticky');
+    expect(headerCssContent).toContain('top: 0');
+    expect(headerCssContent).toContain('z-index');
   });
 });

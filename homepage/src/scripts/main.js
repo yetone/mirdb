@@ -5,6 +5,8 @@
  */
 
 import { initCodeBlock } from '../components/QuickStart/CodeBlock.js';
+import { initNavigation } from '../components/Header/Navigation.js';
+import { initSmoothScroll } from './smooth-scroll.js';
 
 /**
  * Initialize mobile navigation toggle
@@ -38,4 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize mobile navigation
   initMobileNav();
+
+  // Initialize navigation (sticky nav, active section highlighting)
+  initNavigation();
+
+  // Initialize smooth scroll behavior
+  initSmoothScroll();
 });
