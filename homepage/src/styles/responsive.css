@@ -1,0 +1,360 @@
+/**
+ * Responsive Styles
+ * Owner: Scenarios 6 & 7 - Responsive Design
+ *
+ * Contains mobile and tablet breakpoint styles.
+ * Mobile: max-width 767px
+ * Tablet: 768px - 1023px
+ * Desktop: 1024px+
+ *
+ * Requirements: REQ-7 (responsive design)
+ */
+
+/* =================================================================
+   MOBILE STYLES (max-width: 767px)
+   Scenario 6 - Responsive Design - Mobile
+   ================================================================= */
+
+@media (max-width: 767px) {
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Reduce container padding on mobile */
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+
+  /* =================================================================
+     HEADER / NAVIGATION - Mobile
+     Hamburger menu for mobile navigation
+     ================================================================= */
+  .header {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .nav {
+    position: relative;
+    flex-wrap: wrap;
+  }
+
+  .nav__logo {
+    font-size: var(--font-size-base);
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Mobile hamburger toggle button */
+  .nav__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--color-text);
+  }
+
+  .nav__toggle-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Mobile navigation links - collapsible menu */
+  .nav__links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+    padding: var(--spacing-md) 0;
+    margin-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav__links.nav__links--open {
+    display: flex;
+  }
+
+  .nav__links li {
+    width: 100%;
+  }
+
+  .nav__link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--spacing-sm) 0;
+    font-size: var(--font-size-base);
+  }
+
+  /* =================================================================
+     HERO SECTION - Mobile
+     Single column, smaller fonts
+     ================================================================= */
+  .hero {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero__content {
+    padding: 0;
+  }
+
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__headline,
+  .hero__tagline {
+    font-size: var(--font-size-base);
+  }
+
+  .hero__description {
+    font-size: var(--font-size-sm);
+  }
+
+  .hero__cta {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+  }
+
+  /* =================================================================
+     FEATURES SECTION - Mobile
+     Single column layout
+     ================================================================= */
+  .features__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card__icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .feature-card__title {
+    font-size: var(--font-size-base);
+  }
+
+  .feature-card__description {
+    font-size: var(--font-size-sm);
+  }
+
+  /* =================================================================
+     QUICKSTART SECTION - Mobile
+     Full width code block
+     ================================================================= */
+  .quickstart {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .quickstart__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .quickstart__description {
+    font-size: var(--font-size-sm);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .code-block {
+    border-radius: var(--radius-md);
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .code-block__header {
+    padding: var(--spacing-sm);
+  }
+
+  .code-block__copy-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-sm);
+  }
+
+  .code-block__content {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+
+  /* =================================================================
+     TECHSPECS SECTION - Mobile
+     Single column or 2-column grid
+     ================================================================= */
+  .techspecs {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .techspecs__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .techspecs__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .techspecs__item {
+    padding: var(--spacing-md);
+  }
+
+  .techspecs__label {
+    font-size: var(--font-size-xs);
+  }
+
+  .techspecs__value {
+    font-size: var(--font-size-base);
+  }
+
+  /* =================================================================
+     FOOTER - Mobile
+     Stack layout
+     ================================================================= */
+  .footer {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .footer__content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-md);
+  }
+
+  .footer__links {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .footer__links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  /* =================================================================
+     TOUCH TARGETS - Minimum 44x44px
+     WCAG 2.1 Level AAA Success Criterion 2.5.5
+     ================================================================= */
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  /* Links that are inline should not have minimum height */
+  p a,
+  li a:not(.nav__link):not(.footer__links a) {
+    min-height: auto;
+    padding: var(--spacing-xs) 0;
+  }
+
+  /* Ensure interactive elements have proper touch target sizing */
+  .btn,
+  .hero__cta,
+  .code-block__copy-btn,
+  .nav__link,
+  .footer__links a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* =================================================================
+     TYPOGRAPHY ADJUSTMENTS - Mobile
+     ================================================================= */
+  h1 { font-size: var(--font-size-3xl); }
+  h2 { font-size: var(--font-size-2xl); }
+  h3 { font-size: var(--font-size-xl); }
+  h4 { font-size: var(--font-size-lg); }
+
+  /* Section spacing */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+}
+
+/* =================================================================
+   TABLET STYLES (768px - 1023px)
+   Scenario 7 - Responsive Design - Tablet
+   ================================================================= */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+  }
+
+  /* Navigation visible on tablet */
+  .nav__toggle {
+    display: none;
+  }
+
+  .nav__links {
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* Hero adjustments */
+  .hero__title {
+    font-size: var(--font-size-4xl);
+  }
+
+  /* Features grid - 2 columns on tablet */
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Tech specs - 3 columns on tablet */
+  .techspecs__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* =================================================================
+   DESKTOP STYLES (1024px+)
+   ================================================================= */
+
+@media (min-width: 1024px) {
+  /* Hide mobile toggle on desktop */
+  .nav__toggle {
+    display: none;
+  }
+
+  /* Show full navigation on desktop */
+  .nav__links {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+/* =================================================================
+   UTILITY: Hide mobile toggle by default (shown via JS when needed)
+   ================================================================= */
+.nav__toggle {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .nav__toggle {
+    display: flex;
+  }
+}
