@@ -5,7 +5,7 @@
  * Composes all homepage sections and integrates with AuthContext.
  */
 import { useAuth } from '../contexts/AuthContext';
-import { HeroSection } from '../components/homepage';
+import { HeroSection, FeaturesSection } from '../components/homepage';
 
 export default function Home() {
   const { isAuthenticated, username } = useAuth();
@@ -16,8 +16,9 @@ export default function Home() {
         isAuthenticated={isAuthenticated}
         username={username ?? undefined}
       />
+      <FeaturesSection />
       {/* Additional sections will be added by other scenarios */}
-      <div id="features" />
+      <div id="demo" />
     </main>
   );
 }
