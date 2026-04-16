@@ -8,7 +8,7 @@ import BackgroundEffect from './components/BackgroundEffect';
 
 function App() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <BackgroundEffect />
       <Navbar />
       <Routes>
