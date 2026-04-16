@@ -1,14 +1,15 @@
 /**
  * Unit Test Setup for Homepage Components.
  *
- * Expected exports:
- * - renderWithProviders: Wrapper that includes context providers
- * - Custom matchers and test utilities
+ * Provides utilities for testing homepage components with proper context providers.
  */
 
 import '@testing-library/jest-dom';
 import { render, RenderOptions } from '@testing-library/react';
-import React from 'react';
+import React, { ReactNode } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from '../../../src/contexts/AuthContext';
+import { ThemeProvider } from '../../../src/contexts/ThemeContext';
 
 // Mock IntersectionObserver for Framer Motion's viewport features
 class MockIntersectionObserver implements IntersectionObserver {
@@ -48,6 +49,22 @@ class MockIntersectionObserver implements IntersectionObserver {
 
 global.IntersectionObserver = MockIntersectionObserver;
 
+interface WrapperProps {
+  children: ReactNode;
+}
+
+function AllProviders({ children }: WrapperProps) {
+  return (
+    <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  );
+}
+
 /**
  * Custom render function that wraps components with providers
  */
@@ -55,11 +72,24 @@ export function renderWithProviders(
   ui: React.ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) {
-  function Wrapper({ children }: { children: React.ReactNode }) {
-    return <>{children}</>;
-  }
+  return render(ui, { wrapper: AllProviders, ...options });
+}
 
-  return render(ui, { wrapper: Wrapper, ...options });
+interface MockAuthContextValue {
+  isAuthenticated: boolean;
+  username: string | null;
+  login: () => void;
+  logout: () => void;
+}
+
+export function mockAuthContext(overrides?: Partial<MockAuthContextValue>): MockAuthContextValue {
+  return {
+    isAuthenticated: false,
+    username: null,
+    login: () => {},
+    logout: () => {},
+    ...overrides,
+  };
 }
 
 export * from '@testing-library/react';
