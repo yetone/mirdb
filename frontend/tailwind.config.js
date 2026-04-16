@@ -9,6 +9,19 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["light", "dark", "cyberpunk", "synthwave"],
+    themes: [
+      "light",
+      {
+        dark: {
+          ...require("daisyui/src/theming/themes")["dark"],
+          // Fix primary button contrast for WCAG AA compliance (4.5:1 ratio)
+          // Darker primary color with white text achieves better contrast
+          primary: "#4a50c7",
+          "primary-content": "#ffffff",
+        },
+      },
+      "cyberpunk",
+      "synthwave",
+    ],
   },
 }

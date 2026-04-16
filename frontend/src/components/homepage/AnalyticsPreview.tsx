@@ -69,7 +69,7 @@ export const AnalyticsPreview: React.FC = () => {
         </h2>
         <p
           data-testid="analytics-preview-description"
-          className="text-base-content/70 text-center mb-12 max-w-2xl mx-auto"
+          className="text-base-content/80 text-center mb-12 max-w-2xl mx-auto"
         >
           Track every click with detailed insights. See where your audience comes
           from and understand how they engage with your links.
