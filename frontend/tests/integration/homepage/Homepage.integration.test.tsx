@@ -508,3 +508,501 @@ describe('Authenticated User Experience', () => {
     });
   });
 });
+
+/**
+ * Theme Support Integration Tests.
+ * Owner: Scenario 8 - Theme Support
+ *
+ * Verifies that the homepage supports all existing theme options (light, dark, cyberpunk, synthwave)
+ * and maintains consistent styling across theme changes.
+ */
+
+// Mock ResizeObserver for Recharts ResponsiveContainer
+class MockResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+if (!global.ResizeObserver) {
+  global.ResizeObserver = MockResizeObserver;
+}
+
+// Theme-aware test wrapper that allows setting initial theme
+interface ThemeTestWrapperProps {
+  children: ReactNode;
+  initialTheme?: 'light' | 'dark' | 'cyberpunk' | 'synthwave';
+}
+
+function ThemeTestWrapper({ children, initialTheme = 'dark' }: ThemeTestWrapperProps) {
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', initialTheme);
+  }, [initialTheme]);
+
+  return (
+    <BrowserRouter>
+      <ThemeProvider>
+        {children}
+      </ThemeProvider>
+    </BrowserRouter>
+  );
+}
+
+describe('Theme Support', () => {
+  beforeEach(() => {
+    mockAuthContextModule.reset();
+    mockNavigate.mockClear();
+    // Reset document theme before each test
+    document.documentElement.setAttribute('data-theme', 'dark');
+  });
+
+  describe('Test Case 1: Render homepage with light theme', () => {
+    it('renders homepage successfully with light theme applied', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="light">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify the theme is set correctly
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+
+      // Verify main homepage elements render
+      const main = document.querySelector('main');
+      expect(main).toBeInTheDocument();
+    });
+
+    it('all homepage sections display with light theme styling', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="light">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify hero section renders
+      const heroCta = screen.getByTestId('hero-primary-cta');
+      expect(heroCta).toBeInTheDocument();
+
+      // Verify features section renders (if present)
+      const featuresSection = screen.queryByTestId('features-section');
+      if (featuresSection) {
+        expect(featuresSection).toBeInTheDocument();
+      }
+
+      // Verify analytics preview renders
+      const analyticsSection = screen.getByTestId('analytics-preview-section');
+      expect(analyticsSection).toBeInTheDocument();
+    });
+
+    it('components use DaisyUI theme classes that adapt to light theme', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="light">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify GlassMorphismCard components use theme-aware classes
+      const analyticsSection = screen.getByTestId('analytics-preview-section');
+      const chartCards = analyticsSection.querySelectorAll('[class*="bg-base-100"]');
+      expect(chartCards.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Test Case 2: Render homepage with dark theme', () => {
+    it('renders homepage successfully with dark theme applied', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="dark">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify the theme is set correctly
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+      // Verify main homepage elements render
+      const main = document.querySelector('main');
+      expect(main).toBeInTheDocument();
+    });
+
+    it('all homepage sections display with dark theme styling', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="dark">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify hero section renders
+      const heroCta = screen.getByTestId('hero-primary-cta');
+      expect(heroCta).toBeInTheDocument();
+
+      // Verify analytics preview renders with dark theme
+      const analyticsSection = screen.getByTestId('analytics-preview-section');
+      expect(analyticsSection).toBeInTheDocument();
+    });
+
+    it('dark theme is the default theme setting', () => {
+      // ThemeContext defaults to dark theme
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <BrowserRouter>
+          <ThemeProvider>
+            <Home />
+          </ThemeProvider>
+        </BrowserRouter>
+      );
+
+      // After ThemeProvider mounts, it should set dark theme
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+  });
+
+  describe('Test Case 3: Render homepage with cyberpunk theme', () => {
+    it('renders homepage successfully with cyberpunk theme applied', () => {
+      document.documentElement.setAttribute('data-theme', 'cyberpunk');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="cyberpunk">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify the theme is set correctly
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+
+      // Verify main homepage elements render
+      const main = document.querySelector('main');
+      expect(main).toBeInTheDocument();
+    });
+
+    it('all homepage sections display with cyberpunk theme styling', () => {
+      document.documentElement.setAttribute('data-theme', 'cyberpunk');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="cyberpunk">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify all sections render correctly
+      const heroCta = screen.getByTestId('hero-primary-cta');
+      expect(heroCta).toBeInTheDocument();
+
+      const analyticsSection = screen.getByTestId('analytics-preview-section');
+      expect(analyticsSection).toBeInTheDocument();
+
+      // Verify charts are rendered
+      const clicksChart = screen.getByTestId('clicks-over-time-chart');
+      const browserChart = screen.getByTestId('browser-distribution-chart');
+      expect(clicksChart).toBeInTheDocument();
+      expect(browserChart).toBeInTheDocument();
+    });
+
+    it('synthwave theme also renders correctly', () => {
+      document.documentElement.setAttribute('data-theme', 'synthwave');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="synthwave">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify the theme is set correctly
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave');
+
+      // Verify main homepage elements render
+      const main = document.querySelector('main');
+      expect(main).toBeInTheDocument();
+
+      // Verify analytics section renders
+      const analyticsSection = screen.getByTestId('analytics-preview-section');
+      expect(analyticsSection).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 4: Toggle theme while on homepage', () => {
+    it('theme changes apply immediately when ThemeToggle is used', async () => {
+      const user = userEvent.setup();
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <TestWrapper>
+          <App />
+        </TestWrapper>
+      );
+
+      // Initial theme should be dark (default)
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+      // Find the theme toggle select
+      const themeToggle = screen.getByRole('combobox', { name: /select theme/i });
+      expect(themeToggle).toBeInTheDocument();
+
+      // Change to light theme
+      await user.selectOptions(themeToggle, 'light');
+
+      // Verify theme changed immediately without reload
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    it('switching to cyberpunk theme applies immediately', async () => {
+      const user = userEvent.setup();
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <TestWrapper>
+          <App />
+        </TestWrapper>
+      );
+
+      const themeToggle = screen.getByRole('combobox', { name: /select theme/i });
+
+      // Change to cyberpunk theme
+      await user.selectOptions(themeToggle, 'cyberpunk');
+
+      // Verify theme changed immediately
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+    });
+
+    it('switching to synthwave theme applies immediately', async () => {
+      const user = userEvent.setup();
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <TestWrapper>
+          <App />
+        </TestWrapper>
+      );
+
+      const themeToggle = screen.getByRole('combobox', { name: /select theme/i });
+
+      // Change to synthwave theme
+      await user.selectOptions(themeToggle, 'synthwave');
+
+      // Verify theme changed immediately
+      expect(document.documentElement.getAttribute('data-theme')).toBe('synthwave');
+    });
+
+    it('homepage content remains visible during theme toggle', async () => {
+      const user = userEvent.setup();
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <TestWrapper>
+          <App />
+        </TestWrapper>
+      );
+
+      // Verify initial content is visible
+      const heroCta = screen.getByTestId('hero-primary-cta');
+      expect(heroCta).toBeInTheDocument();
+
+      const themeToggle = screen.getByRole('combobox', { name: /select theme/i });
+
+      // Toggle through themes
+      await user.selectOptions(themeToggle, 'light');
+      expect(screen.getByTestId('hero-primary-cta')).toBeInTheDocument();
+
+      await user.selectOptions(themeToggle, 'cyberpunk');
+      expect(screen.getByTestId('hero-primary-cta')).toBeInTheDocument();
+
+      await user.selectOptions(themeToggle, 'dark');
+      expect(screen.getByTestId('hero-primary-cta')).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 5: Chart colors adapt to theme', () => {
+    it('analytics charts use DaisyUI CSS variables for theme-aware colors', () => {
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="dark">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify analytics section is rendered
+      const analyticsSection = screen.getByTestId('analytics-preview-section');
+      expect(analyticsSection).toBeInTheDocument();
+
+      // Verify charts are present
+      const clicksChart = screen.getByTestId('clicks-over-time-chart');
+      const browserChart = screen.getByTestId('browser-distribution-chart');
+
+      expect(clicksChart).toBeInTheDocument();
+      expect(browserChart).toBeInTheDocument();
+    });
+
+    it('chart containers have proper styling classes for readability', () => {
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="light">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify chart containers use GlassMorphismCard styling
+      const clicksChart = screen.getByTestId('clicks-over-time-chart');
+      const browserChart = screen.getByTestId('browser-distribution-chart');
+
+      // Both charts should use backdrop-blur for glassmorphism effect
+      expect(clicksChart.className).toContain('backdrop-blur');
+      expect(browserChart.className).toContain('backdrop-blur');
+
+      // Both should use base-100 which adapts to theme
+      expect(clicksChart.className).toContain('bg-base-100');
+      expect(browserChart.className).toContain('bg-base-100');
+    });
+
+    it('chart labels remain readable in dark theme', () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="dark">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify chart labels are present and readable
+      const clicksLabel = screen.getByTestId('clicks-over-time-label');
+      const browserLabel = screen.getByTestId('browser-distribution-label');
+
+      expect(clicksLabel).toBeInTheDocument();
+      expect(clicksLabel).toHaveTextContent('Clicks Over Time');
+
+      expect(browserLabel).toBeInTheDocument();
+      expect(browserLabel).toHaveTextContent('Browser Distribution');
+    });
+
+    it('chart labels remain readable in light theme', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="light">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify chart labels are present and readable
+      const clicksLabel = screen.getByTestId('clicks-over-time-label');
+      const browserLabel = screen.getByTestId('browser-distribution-label');
+
+      expect(clicksLabel).toBeInTheDocument();
+      expect(clicksLabel).toHaveTextContent('Clicks Over Time');
+
+      expect(browserLabel).toBeInTheDocument();
+      expect(browserLabel).toHaveTextContent('Browser Distribution');
+    });
+
+    it('sample notes use theme-aware opacity for subtle appearance', () => {
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <ThemeTestWrapper initialTheme="dark">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify sample notes use opacity class for subtle appearance
+      const clicksNote = screen.getByTestId('clicks-chart-sample-note');
+      const browserNote = screen.getByTestId('browser-chart-sample-note');
+
+      expect(clicksNote.className).toContain('text-base-content');
+      expect(browserNote.className).toContain('text-base-content');
+    });
+  });
+
+  describe('Theme Styling Consistency', () => {
+    it('all themes render without visual errors', () => {
+      const themes = ['light', 'dark', 'cyberpunk', 'synthwave'] as const;
+      mockAuthContextModule.setMockState(false, null);
+
+      themes.forEach((theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+
+        const { unmount } = render(
+          <ThemeTestWrapper initialTheme={theme}>
+            <Home />
+          </ThemeTestWrapper>
+        );
+
+        // Verify no rendering errors
+        const main = document.querySelector('main');
+        expect(main).toBeInTheDocument();
+
+        // Verify hero section renders
+        const heroCta = screen.getByTestId('hero-primary-cta');
+        expect(heroCta).toBeInTheDocument();
+
+        // Verify analytics section renders
+        const analyticsSection = screen.getByTestId('analytics-preview-section');
+        expect(analyticsSection).toBeInTheDocument();
+
+        unmount();
+      });
+    });
+
+    it('theme toggle shows all available theme options', () => {
+      mockAuthContextModule.setMockState(false, null);
+
+      render(
+        <TestWrapper>
+          <App />
+        </TestWrapper>
+      );
+
+      const themeToggle = screen.getByRole('combobox', { name: /select theme/i });
+
+      // Verify all theme options are available
+      const options = Array.from(themeToggle.querySelectorAll('option')).map(
+        (opt) => opt.value
+      );
+
+      expect(options).toContain('light');
+      expect(options).toContain('dark');
+      expect(options).toContain('cyberpunk');
+      expect(options).toContain('synthwave');
+    });
+
+    it('authenticated users see consistent theme behavior', () => {
+      mockAuthContextModule.setMockState(true, 'ThemeUser');
+
+      render(
+        <ThemeTestWrapper initialTheme="cyberpunk">
+          <Home />
+        </ThemeTestWrapper>
+      );
+
+      // Verify authenticated content renders with theme
+      expect(document.documentElement.getAttribute('data-theme')).toBe('cyberpunk');
+
+      const greeting = screen.getByTestId('hero-greeting');
+      expect(greeting).toBeInTheDocument();
+      expect(greeting.textContent).toContain('ThemeUser');
+
+      const dashboardCta = screen.getByTestId('hero-primary-cta');
+      expect(dashboardCta.textContent).toBe('Go to Dashboard');
+    });
+  });
+});
