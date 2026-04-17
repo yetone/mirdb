@@ -88,3 +88,23 @@ export interface UrlShortenerFormProps {
   placeholder?: string
   onSuccess?: (shortUrl: string, originalUrl: string) => void
 }
+
+/**
+ * Social proof statistic data
+ */
+export interface Statistic {
+  id: string
+  value: number
+  label: string
+  suffix?: string
+  prefix?: string
+}
+
+/**
+ * Social proof section props
+ */
+export interface SocialProofSectionProps {
+  className?: string
+  statistics?: Statistic[]
+  testimonials?: Testimonial[]
+}
