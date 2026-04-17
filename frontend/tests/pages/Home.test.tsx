@@ -404,3 +404,288 @@ describe('Home Page Theme Support', () => {
     })
   })
 })
+
+/**
+ * Navigation Integration Tests
+ * Owner: Scenario 11 - Navigation Integration
+ *
+ * Tests navigation between homepage and other pages including authentication flow.
+ * Tests link rendering, href attributes, and auth-aware navigation elements.
+ *
+ * Test cases:
+ * - TC1: Click 'Get Started Free' CTA button → links to /register
+ * - TC2: Click login link/button from homepage → links to /login
+ * - TC3: Visit homepage with valid JWT → shows dashboard link
+ * - TC4: Click dashboard link as authenticated user → links to /dashboard
+ * - TC5: Footer navigation links → correct href attributes
+ * - TC6: Navigation elements are properly structured for routing
+ */
+describe('Navigation Integration - Scenario 11', () => {
+  beforeEach(() => {
+    document.documentElement.removeAttribute('data-theme')
+    vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    cleanup()
+    document.documentElement.removeAttribute('data-theme')
+  })
+
+  // Helper to render Home with auth state
+  function renderHomeWithAuth(isAuthenticated: boolean) {
+    // Mock localStorage.getItem for token
+    vi.mocked(window.localStorage.getItem).mockImplementation((key: string) => {
+      if (key === 'token') return isAuthenticated ? 'mock-jwt-token' : null
+      if (key === 'theme') return 'dark'
+      return null
+    })
+
+    document.documentElement.removeAttribute('data-theme')
+
+    return render(
+      <MemoryRouter initialEntries={['/']}>
+        <TestThemeProvider initialTheme="dark">
+          <AuthProvider>
+            <Home />
+          </AuthProvider>
+        </TestThemeProvider>
+      </MemoryRouter>
+    )
+  }
+
+  describe('Test Case 1: CTA Button Navigation to Register', () => {
+    it('renders "Get Started Free" CTA that links to /register', async () => {
+      renderHomeWithAuth(false)
+
+      const ctaButton = screen.getByTestId('hero-cta')
+      expect(ctaButton).toBeInTheDocument()
+      expect(ctaButton).toHaveTextContent(/Get Started Free/i)
+      expect(ctaButton).toHaveAttribute('href', '/register')
+    })
+
+    it('CTA button is present and clickable', async () => {
+      renderHomeWithAuth(false)
+
+      const ctaButton = screen.getByTestId('hero-cta')
+      expect(ctaButton).toBeInTheDocument()
+      // Link elements don't have disabled state, verify it's a valid link
+      expect(ctaButton.tagName).toBe('A')
+      expect(ctaButton).toHaveAttribute('href', '/register')
+    })
+  })
+
+  describe('Test Case 2: Login Link Navigation', () => {
+    it('renders login link that navigates to /login for unauthenticated users', async () => {
+      renderHomeWithAuth(false)
+
+      const loginLink = screen.getByTestId('nav-login-link')
+      expect(loginLink).toBeInTheDocument()
+      expect(loginLink).toHaveTextContent(/Login/i)
+      expect(loginLink).toHaveAttribute('href', '/login')
+    })
+
+    it('login link is present in navigation header', async () => {
+      renderHomeWithAuth(false)
+
+      const navHeader = screen.getByTestId('navigation-header')
+      expect(navHeader).toBeInTheDocument()
+
+      const loginLink = screen.getByTestId('nav-login-link')
+      expect(loginLink).toBeInTheDocument()
+      expect(loginLink.tagName).toBe('A')
+    })
+  })
+
+  describe('Test Case 3: Authenticated User Shows Dashboard Link', () => {
+    it('shows dashboard link for authenticated users', async () => {
+      renderHomeWithAuth(true)
+
+      // Wait for auth state to reflect
+      await waitFor(() => {
+        const dashboardLink = screen.queryByTestId('nav-dashboard-link')
+        expect(dashboardLink).toBeInTheDocument()
+      })
+
+      const dashboardLink = screen.getByTestId('nav-dashboard-link')
+      expect(dashboardLink).toHaveTextContent(/Go to Dashboard/i)
+    })
+
+    it('hides login/signup links for authenticated users', async () => {
+      renderHomeWithAuth(true)
+
+      await waitFor(() => {
+        const dashboardLink = screen.queryByTestId('nav-dashboard-link')
+        expect(dashboardLink).toBeInTheDocument()
+      })
+
+      // Login and register links should not be visible
+      const loginLink = screen.queryByTestId('nav-login-link')
+      const registerLink = screen.queryByTestId('nav-register-link')
+
+      expect(loginLink).not.toBeInTheDocument()
+      expect(registerLink).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 4: Dashboard Link for Authenticated Users', () => {
+    it('dashboard link navigates to /dashboard route', async () => {
+      renderHomeWithAuth(true)
+
+      await waitFor(() => {
+        const dashboardLink = screen.queryByTestId('nav-dashboard-link')
+        expect(dashboardLink).toBeInTheDocument()
+      })
+
+      const dashboardLink = screen.getByTestId('nav-dashboard-link')
+      expect(dashboardLink).toHaveAttribute('href', '/dashboard')
+    })
+
+    it('dashboard link has proper styling', async () => {
+      renderHomeWithAuth(true)
+
+      await waitFor(() => {
+        const dashboardLink = screen.queryByTestId('nav-dashboard-link')
+        expect(dashboardLink).toBeInTheDocument()
+      })
+
+      const dashboardLink = screen.getByTestId('nav-dashboard-link')
+      expect(dashboardLink.className).toContain('btn')
+      expect(dashboardLink.className).toContain('btn-primary')
+    })
+  })
+
+  describe('Test Case 5: Footer Navigation Links', () => {
+    it('footer renders with all navigation links', async () => {
+      renderHomeWithAuth(false)
+
+      const footer = screen.getByTestId('footer')
+      expect(footer).toBeInTheDocument()
+
+      // Check for presence of footer navigation links
+      const homeLink = screen.getByTestId('footer-link-home')
+      expect(homeLink).toBeInTheDocument()
+      expect(homeLink).toHaveAttribute('href', '/')
+
+      const featuresLink = screen.getByTestId('footer-link-features')
+      expect(featuresLink).toBeInTheDocument()
+      expect(featuresLink).toHaveAttribute('href', '/#features')
+
+      const pricingLink = screen.getByTestId('footer-link-pricing')
+      expect(pricingLink).toBeInTheDocument()
+      expect(pricingLink).toHaveAttribute('href', '/pricing')
+
+      const aboutLink = screen.getByTestId('footer-link-about')
+      expect(aboutLink).toBeInTheDocument()
+      expect(aboutLink).toHaveAttribute('href', '/about')
+
+      const contactLink = screen.getByTestId('footer-link-contact')
+      expect(contactLink).toBeInTheDocument()
+      expect(contactLink).toHaveAttribute('href', '/contact')
+    })
+
+    it('footer renders with legal links', async () => {
+      renderHomeWithAuth(false)
+
+      const privacyLink = screen.getByTestId('footer-link-privacy-policy')
+      expect(privacyLink).toBeInTheDocument()
+      expect(privacyLink).toHaveAttribute('href', '/privacy')
+
+      const termsLink = screen.getByTestId('footer-link-terms-of-service')
+      expect(termsLink).toBeInTheDocument()
+      expect(termsLink).toHaveAttribute('href', '/terms')
+    })
+  })
+
+  describe('Test Case 6: Navigation Structure and History Support', () => {
+    it('navigation links use React Router Link components', async () => {
+      renderHomeWithAuth(false)
+
+      // Hero CTA should be a Link
+      const ctaButton = screen.getByTestId('hero-cta')
+      expect(ctaButton.tagName).toBe('A')
+      expect(ctaButton).toHaveAttribute('href', '/register')
+
+      // Login link should be a Link
+      const loginLink = screen.getByTestId('nav-login-link')
+      expect(loginLink.tagName).toBe('A')
+      expect(loginLink).toHaveAttribute('href', '/login')
+
+      // Register link should be a Link
+      const registerLink = screen.getByTestId('nav-register-link')
+      expect(registerLink.tagName).toBe('A')
+      expect(registerLink).toHaveAttribute('href', '/register')
+    })
+
+    it('navigation header contains logo link to home', async () => {
+      renderHomeWithAuth(false)
+
+      const logoLink = screen.getByTestId('nav-logo')
+      expect(logoLink).toBeInTheDocument()
+      expect(logoLink.tagName).toBe('A')
+      expect(logoLink).toHaveAttribute('href', '/')
+      expect(logoLink).toHaveTextContent('LinkShort')
+    })
+
+    it('navigation header has proper structure for unauthenticated users', async () => {
+      renderHomeWithAuth(false)
+
+      const navHeader = screen.getByTestId('navigation-header')
+      expect(navHeader).toBeInTheDocument()
+      expect(navHeader.tagName).toBe('HEADER')
+
+      // Contains nav element
+      const nav = navHeader.querySelector('nav')
+      expect(nav).toBeInTheDocument()
+
+      // Contains login and register links
+      const loginLink = screen.getByTestId('nav-login-link')
+      const registerLink = screen.getByTestId('nav-register-link')
+      expect(loginLink).toBeInTheDocument()
+      expect(registerLink).toBeInTheDocument()
+    })
+
+    it('navigation header has proper structure for authenticated users', async () => {
+      renderHomeWithAuth(true)
+
+      await waitFor(() => {
+        const dashboardLink = screen.queryByTestId('nav-dashboard-link')
+        expect(dashboardLink).toBeInTheDocument()
+      })
+
+      const navHeader = screen.getByTestId('navigation-header')
+      expect(navHeader).toBeInTheDocument()
+
+      // Contains dashboard link
+      const dashboardLink = screen.getByTestId('nav-dashboard-link')
+      expect(dashboardLink).toBeInTheDocument()
+    })
+  })
+
+  describe('Auth State Transition', () => {
+    it('shows correct nav elements for unauthenticated state', async () => {
+      renderHomeWithAuth(false)
+
+      // Should show login and register
+      expect(screen.getByTestId('nav-login-link')).toBeInTheDocument()
+      expect(screen.getByTestId('nav-register-link')).toBeInTheDocument()
+
+      // Should not show dashboard
+      expect(screen.queryByTestId('nav-dashboard-link')).not.toBeInTheDocument()
+    })
+
+    it('shows correct nav elements for authenticated state', async () => {
+      renderHomeWithAuth(true)
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('nav-dashboard-link')).toBeInTheDocument()
+      })
+
+      // Should show dashboard
+      expect(screen.getByTestId('nav-dashboard-link')).toBeInTheDocument()
+
+      // Should not show login and register
+      expect(screen.queryByTestId('nav-login-link')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('nav-register-link')).not.toBeInTheDocument()
+    })
+  })
+})
