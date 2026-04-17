@@ -285,3 +285,336 @@ test.describe('Responsive Design - Touch Target Validation', () => {
     }
   })
 })
+
+/**
+ * Responsive Design E2E Tests - Tablet and Desktop
+ * Owner: Scenario 9 - Responsive Design Tablet and Desktop
+ *
+ * Tests responsive layout on tablet (768px) and desktop (1920px) viewports.
+ * Validates proper column structures, max-width constraints, multi-column grids,
+ * horizontal layouts, and ultra-wide scaling.
+ *
+ * Related requirements: REQ-10, NFR-3
+ */
+
+// Standard viewport dimensions
+const TABLET_VIEWPORT = { width: 768, height: 1024 }
+const LAPTOP_VIEWPORT = { width: 1024, height: 768 }
+const DESKTOP_VIEWPORT = { width: 1920, height: 1080 }
+const ULTRAWIDE_VIEWPORT = { width: 2560, height: 1440 }
+
+test.describe('Responsive Design - Tablet Viewport (768px)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(TABLET_VIEWPORT)
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+  })
+
+  // Test Case 1: Render homepage at 768px tablet viewport - Layout adapts with appropriate column structure
+  test('layout adapts with appropriate column structure at 768px tablet viewport', async ({
+    page,
+  }) => {
+    // Verify the homepage renders correctly
+    const homePage = page.getByTestId('home-page')
+    await expect(homePage).toBeVisible()
+
+    // Check hero section is visible and centered
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+    const heroBox = await heroSection.boundingBox()
+    expect(heroBox).not.toBeNull()
+    if (heroBox) {
+      // Hero should span full width
+      expect(heroBox.width).toBeGreaterThanOrEqual(TABLET_VIEWPORT.width - 50)
+    }
+
+    // Check features section uses 2-column grid at tablet (md breakpoint)
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    const featureCards = page.getByTestId('feature-card')
+    const cardCount = await featureCards.count()
+    expect(cardCount).toBeGreaterThanOrEqual(3)
+
+    // Get first two cards and verify they are side by side (2-column layout)
+    const card1Box = await featureCards.nth(0).boundingBox()
+    const card2Box = await featureCards.nth(1).boundingBox()
+    expect(card1Box).not.toBeNull()
+    expect(card2Box).not.toBeNull()
+
+    if (card1Box && card2Box) {
+      // Cards should be on the same row (similar Y positions)
+      expect(Math.abs(card1Box.y - card2Box.y)).toBeLessThan(20)
+      // Card 2 should be to the right of Card 1
+      expect(card2Box.x).toBeGreaterThan(card1Box.x + card1Box.width - 20)
+    }
+
+    // Check How It Works uses 3-column layout at tablet
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await howItWorksSection.scrollIntoViewIfNeeded()
+    await expect(howItWorksSection).toBeVisible()
+
+    const stepCards = page.getByTestId('step-card')
+    await expect(stepCards).toHaveCount(3)
+
+    const step1Box = await stepCards.nth(0).boundingBox()
+    const step2Box = await stepCards.nth(1).boundingBox()
+    const step3Box = await stepCards.nth(2).boundingBox()
+
+    if (step1Box && step2Box && step3Box) {
+      // All steps should be on same row (horizontal layout)
+      expect(Math.abs(step1Box.y - step2Box.y)).toBeLessThan(20)
+      expect(Math.abs(step2Box.y - step3Box.y)).toBeLessThan(20)
+    }
+  })
+
+  test('no horizontal scrollbar appears at 768px tablet viewport', async ({ page }) => {
+    const hasHorizontalScroll = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth
+    })
+    expect(hasHorizontalScroll).toBe(false)
+  })
+})
+
+test.describe('Responsive Design - Desktop Viewport (1920px)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(DESKTOP_VIEWPORT)
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+  })
+
+  // Test Case 2: Render homepage at 1920px desktop viewport - Content is centered with appropriate max-width constraints
+  test('content is centered with appropriate max-width constraints at 1920px', async ({
+    page,
+  }) => {
+    // Hero section content should be centered with max-width
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    const heroHeadline = page.getByTestId('hero-headline')
+    await expect(heroHeadline).toBeVisible()
+    const headlineBox = await heroHeadline.boundingBox()
+    expect(headlineBox).not.toBeNull()
+
+    if (headlineBox) {
+      // Headline should be centered (not starting from 0 or extending to viewport width)
+      expect(headlineBox.x).toBeGreaterThan(100)
+      expect(headlineBox.x + headlineBox.width).toBeLessThan(DESKTOP_VIEWPORT.width - 100)
+
+      // Calculate center offset - should be roughly centered
+      const headlineCenter = headlineBox.x + headlineBox.width / 2
+      const viewportCenter = DESKTOP_VIEWPORT.width / 2
+      expect(Math.abs(headlineCenter - viewportCenter)).toBeLessThan(200)
+    }
+
+    // Features section should have max-width constraint (max-w-6xl = 1152px)
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    const featureCards = page.getByTestId('feature-card')
+    const firstCard = await featureCards.nth(0).boundingBox()
+    const lastCard = await featureCards.nth((await featureCards.count()) - 1).boundingBox()
+
+    if (firstCard && lastCard) {
+      // The total width of cards container should be constrained (not full 1920px)
+      const containerWidth = lastCard.x + lastCard.width - firstCard.x
+      expect(containerWidth).toBeLessThan(1300) // max-w-6xl + gaps
+    }
+  })
+
+  // Test Case 4: Check How It Works at 1920px viewport - Steps display in horizontal row layout
+  test('How It Works steps display in horizontal row layout at 1920px', async ({ page }) => {
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await howItWorksSection.scrollIntoViewIfNeeded()
+    await expect(howItWorksSection).toBeVisible()
+
+    const stepCards = page.getByTestId('step-card')
+    await expect(stepCards).toHaveCount(3)
+
+    const step1Box = await stepCards.nth(0).boundingBox()
+    const step2Box = await stepCards.nth(1).boundingBox()
+    const step3Box = await stepCards.nth(2).boundingBox()
+
+    expect(step1Box).not.toBeNull()
+    expect(step2Box).not.toBeNull()
+    expect(step3Box).not.toBeNull()
+
+    if (step1Box && step2Box && step3Box) {
+      // All three steps should be on the same horizontal row
+      expect(Math.abs(step1Box.y - step2Box.y)).toBeLessThan(20)
+      expect(Math.abs(step2Box.y - step3Box.y)).toBeLessThan(20)
+
+      // Steps should be arranged left-to-right
+      expect(step2Box.x).toBeGreaterThan(step1Box.x)
+      expect(step3Box.x).toBeGreaterThan(step2Box.x)
+
+      // Steps should have equal widths (grid layout)
+      const widthDiff12 = Math.abs(step1Box.width - step2Box.width)
+      const widthDiff23 = Math.abs(step2Box.width - step3Box.width)
+      expect(widthDiff12).toBeLessThan(50)
+      expect(widthDiff23).toBeLessThan(50)
+    }
+  })
+
+  test('desktop layout has no horizontal scrollbar', async ({ page }) => {
+    const hasHorizontalScroll = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth
+    })
+    expect(hasHorizontalScroll).toBe(false)
+  })
+})
+
+test.describe('Responsive Design - Laptop Viewport (1024px)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(LAPTOP_VIEWPORT)
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+  })
+
+  // Test Case 3: Check feature cards grid at 1024px viewport - Feature cards display in multi-column grid layout
+  test('feature cards display in 3-column grid layout at 1024px', async ({ page }) => {
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    const featureCards = page.getByTestId('feature-card')
+    const cardCount = await featureCards.count()
+    expect(cardCount).toBeGreaterThanOrEqual(3)
+
+    // Get first three cards to verify 3-column layout
+    const card1Box = await featureCards.nth(0).boundingBox()
+    const card2Box = await featureCards.nth(1).boundingBox()
+    const card3Box = await featureCards.nth(2).boundingBox()
+
+    expect(card1Box).not.toBeNull()
+    expect(card2Box).not.toBeNull()
+    expect(card3Box).not.toBeNull()
+
+    if (card1Box && card2Box && card3Box) {
+      // All three cards should be on the same row (lg breakpoint = 3 columns)
+      expect(Math.abs(card1Box.y - card2Box.y)).toBeLessThan(20)
+      expect(Math.abs(card2Box.y - card3Box.y)).toBeLessThan(20)
+
+      // Cards should be arranged left-to-right
+      expect(card2Box.x).toBeGreaterThan(card1Box.x)
+      expect(card3Box.x).toBeGreaterThan(card2Box.x)
+
+      // Verify multi-column grid (cards not stacked vertically)
+      // Each card should take approximately 1/3 of the container width
+      const cardWidthRatio = card1Box.width / LAPTOP_VIEWPORT.width
+      expect(cardWidthRatio).toBeLessThan(0.5) // Each card should be less than 50% width
+    }
+  })
+})
+
+test.describe('Responsive Design - Ultra-Wide Viewport (2560px)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(ULTRAWIDE_VIEWPORT)
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+  })
+
+  // Test Case 5: Verify hero section scaling at 2560px viewport - Hero section maintains visual appeal at ultra-wide resolutions
+  test('hero section maintains visual appeal at ultra-wide resolutions', async ({ page }) => {
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    const heroBox = await heroSection.boundingBox()
+    expect(heroBox).not.toBeNull()
+
+    if (heroBox) {
+      // Hero section should span full width
+      expect(heroBox.width).toBeGreaterThanOrEqual(ULTRAWIDE_VIEWPORT.width - 10)
+
+      // Hero should have adequate height
+      expect(heroBox.height).toBeGreaterThanOrEqual(400)
+    }
+
+    // Check headline is visible and properly constrained
+    const heroHeadline = page.getByTestId('hero-headline')
+    await expect(heroHeadline).toBeVisible()
+    const headlineBox = await heroHeadline.boundingBox()
+    expect(headlineBox).not.toBeNull()
+
+    if (headlineBox) {
+      // Content should be centered (max-w-4xl constraint)
+      // max-w-4xl = 896px, content should not span full 2560px
+      expect(headlineBox.width).toBeLessThan(1200)
+
+      // Should be horizontally centered
+      const headlineCenter = headlineBox.x + headlineBox.width / 2
+      const viewportCenter = ULTRAWIDE_VIEWPORT.width / 2
+      expect(Math.abs(headlineCenter - viewportCenter)).toBeLessThan(200)
+    }
+
+    // Check subheadline is also constrained and centered
+    const subheadline = page.getByTestId('hero-subheadline')
+    await expect(subheadline).toBeVisible()
+    const subBox = await subheadline.boundingBox()
+
+    if (subBox) {
+      // Subheadline has max-w-2xl (672px) constraint
+      expect(subBox.width).toBeLessThan(900)
+
+      // Should be centered
+      const subCenter = subBox.x + subBox.width / 2
+      const viewportCenter = ULTRAWIDE_VIEWPORT.width / 2
+      expect(Math.abs(subCenter - viewportCenter)).toBeLessThan(200)
+    }
+
+    // CTA button should be visible and centered
+    const ctaButton = page.getByTestId('hero-cta')
+    await expect(ctaButton).toBeVisible()
+    const ctaBox = await ctaButton.boundingBox()
+
+    if (ctaBox) {
+      // CTA should be centered
+      const ctaCenter = ctaBox.x + ctaBox.width / 2
+      const viewportCenter = ULTRAWIDE_VIEWPORT.width / 2
+      expect(Math.abs(ctaCenter - viewportCenter)).toBeLessThan(200)
+    }
+  })
+
+  test('content containers maintain max-width constraints at ultra-wide', async ({ page }) => {
+    // Check features section maintains max-width
+    const featuresSection = page.getByTestId('features-section')
+    await featuresSection.scrollIntoViewIfNeeded()
+    await expect(featuresSection).toBeVisible()
+
+    const featureCards = page.getByTestId('feature-card')
+    const firstCard = await featureCards.nth(0).boundingBox()
+    const lastCard = await featureCards.nth((await featureCards.count()) - 1).boundingBox()
+
+    if (firstCard && lastCard) {
+      // Container should not span full ultra-wide width
+      const containerSpan = lastCard.x + lastCard.width - firstCard.x
+      expect(containerSpan).toBeLessThan(1400)
+
+      // Content should be reasonably centered (allow for padding and layout variations)
+      const containerCenter = firstCard.x + containerSpan / 2
+      expect(Math.abs(containerCenter - ULTRAWIDE_VIEWPORT.width / 2)).toBeLessThan(250)
+    }
+
+    // Check How It Works section
+    const howItWorks = page.getByTestId('how-it-works-section')
+    await howItWorks.scrollIntoViewIfNeeded()
+
+    const stepCards = page.getByTestId('step-card')
+    const firstStep = await stepCards.nth(0).boundingBox()
+    const lastStep = await stepCards.nth(2).boundingBox()
+
+    if (firstStep && lastStep) {
+      const stepsSpan = lastStep.x + lastStep.width - firstStep.x
+      expect(stepsSpan).toBeLessThan(1400)
+    }
+  })
+
+  test('no horizontal scrollbar at ultra-wide viewport', async ({ page }) => {
+    const hasHorizontalScroll = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > document.documentElement.clientWidth
+    })
+    expect(hasHorizontalScroll).toBe(false)
+  })
+})
