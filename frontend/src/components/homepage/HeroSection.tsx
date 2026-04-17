@@ -68,14 +68,20 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Link
-              to="/register"
-              className="btn btn-primary btn-lg gap-2"
-              data-testid="hero-cta"
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
-              Get Started Free
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+              <Link
+                to="/register"
+                className="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                data-testid="hero-cta"
+              >
+                Get Started Free
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </motion.div>
           </motion.div>
 
           {/* Trust Indicator */}

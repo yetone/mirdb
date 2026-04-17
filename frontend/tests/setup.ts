@@ -56,6 +56,14 @@ mockResizeObserver.mockReturnValue({
 })
 window.ResizeObserver = mockResizeObserver
 
+// Mock clipboard API
+Object.assign(navigator, {
+  clipboard: {
+    writeText: vi.fn().mockResolvedValue(undefined),
+    readText: vi.fn().mockResolvedValue(''),
+  },
+})
+
 // Cleanup after each test
 afterEach(() => {
   cleanup()
