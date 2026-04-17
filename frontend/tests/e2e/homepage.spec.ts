@@ -73,6 +73,189 @@ test.describe('Theme Compatibility', () => {
   })
 })
 
+/**
+ * Theme Support E2E Tests
+ * Owner: Scenario 7 - Theme Support and Consistency
+ *
+ * Tests theme navigation inheritance and theme toggling.
+ */
+test.describe('Theme Support - Scenario 7', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear localStorage before each test
+    await page.goto('/')
+    await page.evaluate(() => localStorage.clear())
+  })
+
+  // Test Case 5: Navigate from dashboard (with theme) to homepage
+  test('homepage inherits theme when navigating from dashboard', async ({ page }) => {
+    // Set synthwave theme via localStorage (simulating dashboard selection)
+    await page.evaluate(() => {
+      localStorage.setItem('theme', 'synthwave')
+    })
+
+    // Navigate to homepage
+    await page.goto('/')
+
+    // Wait for theme to be applied
+    await page.waitForFunction(() => {
+      return document.documentElement.getAttribute('data-theme') === 'synthwave'
+    })
+
+    // Verify the theme is applied
+    const html = page.locator('html')
+    await expect(html).toHaveAttribute('data-theme', 'synthwave')
+
+    // Verify homepage sections are visible with theme
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await expect(howItWorksSection).toBeVisible()
+  })
+
+  test('theme persists across page navigation', async ({ page }) => {
+    // Set cyberpunk theme
+    await page.evaluate(() => {
+      localStorage.setItem('theme', 'cyberpunk')
+    })
+
+    // Navigate to homepage
+    await page.goto('/')
+
+    // Wait for theme application
+    await page.waitForFunction(() => {
+      return document.documentElement.getAttribute('data-theme') === 'cyberpunk'
+    })
+
+    // Navigate to register and back
+    const ctaButton = page.getByTestId('hero-cta')
+    await ctaButton.click()
+    await expect(page).toHaveURL('/register')
+
+    // Go back to homepage
+    await page.goto('/')
+
+    // Theme should still be cyberpunk
+    const html = page.locator('html')
+    await expect(html).toHaveAttribute('data-theme', 'cyberpunk')
+  })
+
+  // Test Case 6: Toggle theme using ThemeToggle component on homepage
+  test('theme changes are immediately reflected across all sections', async ({ page }) => {
+    await page.goto('/')
+
+    // Wait for page to load
+    const themeToggle = page.getByTestId('theme-toggle')
+    await expect(themeToggle).toBeVisible()
+
+    // Get initial theme
+    const html = page.locator('html')
+    const initialTheme = await html.getAttribute('data-theme')
+
+    // Open theme menu and click to change theme
+    await themeToggle.click()
+
+    // Wait for menu to be visible
+    const themeMenu = page.getByTestId('theme-menu')
+    await expect(themeMenu).toBeVisible()
+
+    // Select a different theme (synthwave if not already)
+    const targetTheme = initialTheme === 'synthwave' ? 'cyberpunk' : 'synthwave'
+    const themeOption = page.getByTestId(`theme-option-${targetTheme}`)
+    await themeOption.click()
+
+    // Verify theme changed
+    await expect(html).toHaveAttribute('data-theme', targetTheme)
+
+    // Verify all sections are still visible and rendered correctly
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    const howItWorksSection = page.getByTestId('how-it-works-section')
+    await expect(howItWorksSection).toBeVisible()
+
+    const featuresSection = page.getByTestId('features-section')
+    await expect(featuresSection).toBeVisible()
+
+    const socialProofSection = page.getByTestId('social-proof-section')
+    await expect(socialProofSection).toBeVisible()
+
+    const footer = page.getByTestId('footer')
+    await expect(footer).toBeVisible()
+  })
+
+  test('all four themes render correctly on homepage', async ({ page }) => {
+    const themes = ['light', 'dark', 'cyberpunk', 'synthwave']
+
+    for (const theme of themes) {
+      // Set theme via localStorage
+      await page.evaluate((t) => {
+        localStorage.setItem('theme', t)
+      }, theme)
+
+      // Reload page to apply theme
+      await page.goto('/')
+
+      // Wait for theme application
+      await page.waitForFunction((t) => {
+        return document.documentElement.getAttribute('data-theme') === t
+      }, theme)
+
+      // Verify theme is applied
+      const html = page.locator('html')
+      await expect(html).toHaveAttribute('data-theme', theme)
+
+      // Verify hero section renders
+      const heroSection = page.getByTestId('hero-section')
+      await expect(heroSection).toBeVisible()
+
+      // Verify hero gradient (theme-aware)
+      const heroGradient = page.getByTestId('hero-gradient')
+      await expect(heroGradient).toBeVisible()
+
+      // Verify CTA button
+      const ctaButton = page.getByTestId('hero-cta')
+      await expect(ctaButton).toBeVisible()
+    }
+  })
+
+  test('theme toggle dropdown shows all theme options', async ({ page }) => {
+    await page.goto('/')
+
+    // Open theme toggle
+    const themeToggle = page.getByTestId('theme-toggle')
+    await themeToggle.click()
+
+    // Verify all theme options are present
+    await expect(page.getByTestId('theme-option-light')).toBeVisible()
+    await expect(page.getByTestId('theme-option-dark')).toBeVisible()
+    await expect(page.getByTestId('theme-option-cyberpunk')).toBeVisible()
+    await expect(page.getByTestId('theme-option-synthwave')).toBeVisible()
+  })
+
+  test('active theme is indicated in theme menu', async ({ page }) => {
+    // Set dark theme
+    await page.evaluate(() => {
+      localStorage.setItem('theme', 'dark')
+    })
+
+    await page.goto('/')
+
+    // Wait for theme
+    await page.waitForFunction(() => {
+      return document.documentElement.getAttribute('data-theme') === 'dark'
+    })
+
+    // Open theme toggle
+    const themeToggle = page.getByTestId('theme-toggle')
+    await themeToggle.click()
+
+    // Verify dark theme option shows as active
+    const darkOption = page.getByTestId('theme-option-dark')
+    await expect(darkOption).toContainText('Active')
+  })
+})
+
 // Test Case 6: How It Works Section - Steps arranged left-to-right on desktop
 test.describe('How It Works Section', () => {
   test.beforeEach(async ({ page }) => {
