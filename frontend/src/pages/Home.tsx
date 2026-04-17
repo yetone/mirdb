@@ -19,6 +19,7 @@ import {
   FeaturesSection,
   SocialProofSection,
   Footer,
+  UrlShortenerForm,
 } from '../components/homepage'
 import { ThemeToggle } from '../components/ThemeToggle'
 
@@ -35,6 +36,16 @@ export default function Home() {
 
       {/* Hero Section - Above the fold */}
       <HeroSection />
+
+      {/* URL Shortener Demo Section - Scenario 2 */}
+      <section className="py-16 px-4 bg-base-200/50" data-testid="url-shortener-section">
+        <div className="container mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-base-content">
+            Try it now - no account needed
+          </h2>
+          <UrlShortenerForm />
+        </div>
+      </section>
 
       {/* Features Section */}
       <FeaturesSection />
