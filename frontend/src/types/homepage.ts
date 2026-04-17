@@ -108,3 +108,20 @@ export interface SocialProofSectionProps {
   statistics?: Statistic[]
   testimonials?: Testimonial[]
 }
+
+/**
+ * Step card props for How It Works section
+ */
+export interface StepCardProps {
+  stepNumber: number
+  icon: React.ReactNode
+  title: string
+  description: string
+}
+
+/**
+ * How It Works section props
+ */
+export interface HowItWorksSectionProps {
+  className?: string
+}
