@@ -1,24 +1,20 @@
-import { FeaturesSection } from './components/homepage';
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Dashboard from './pages/Dashboard'
 
 function App() {
   return (
     <div className="min-h-screen bg-base-100">
-      {/* Hero placeholder */}
-      <section className="hero min-h-[60vh] bg-base-200">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Shorten Links. Track Success.</h1>
-            <p className="py-6">
-              Free URL shortener with powerful analytics. Create short links, QR codes, and track every click.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <FeaturesSection />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
