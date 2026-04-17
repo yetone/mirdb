@@ -79,3 +79,12 @@ export interface HeroSectionProps {
   className?: string
   onShortenUrl?: (url: string) => Promise<ShortenedUrlResponse>
 }
+
+/**
+ * URL Shortener form props
+ */
+export interface UrlShortenerFormProps {
+  className?: string
+  placeholder?: string
+  onSuccess?: (shortUrl: string, originalUrl: string) => void
+}
