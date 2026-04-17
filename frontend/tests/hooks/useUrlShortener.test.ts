@@ -142,7 +142,8 @@ describe('useUrlShortener', () => {
       })
 
       expect(result.current.isLoading).toBe(false)
-      expect(result.current.error).toBe('Network error')
+      // User-friendly error message for network errors
+      expect(result.current.error).toBe('Unable to connect. Please check your internet connection and try again.')
       expect(result.current.shortenedUrl).toBeNull()
     })
 

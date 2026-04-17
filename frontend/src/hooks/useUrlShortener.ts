@@ -16,7 +16,7 @@
 
 import { useState, useCallback } from 'react'
 import { shortenUrl as apiShortenUrl, ShortenUrlResponse } from '../api'
-import { validateUrlWithMessage, sanitizeUrl } from '../utils/validation'
+import { validateUrlWithMessage, sanitizeUrl, getApiErrorMessage } from '../utils/validation'
 
 export interface UseUrlShortenerState {
   isLoading: boolean
@@ -81,8 +81,7 @@ export function useUrlShortener(): UseUrlShortenerReturn {
 
       return response
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to shorten URL. Please try again.'
+      const errorMessage = getApiErrorMessage(err)
 
       setState((prev) => ({
         ...prev,

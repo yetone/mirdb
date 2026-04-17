@@ -1,6 +1,7 @@
 /**
  * UrlShortenerForm Component Tests
  * Owner: Scenario 2 - Inline URL Shortening Demo
+ * Enhanced: Scenario 15 - Error States and Edge Cases
  *
  * Test cases:
  * 1. Unit: Input field exists with placeholder text
@@ -10,6 +11,15 @@
  * 5. Integration: Enter key submits form
  * 6. Integration: API error shows error message
  * 7. Unit: Empty URL shows validation error
+ *
+ * Scenario 15 Edge Cases:
+ * - TC1: Network offline error handling
+ * - TC2: Malicious URL schemes (javascript:)
+ * - TC3: URLs with invalid characters (spaces)
+ * - TC4: Extremely long URLs
+ * - TC5: Rate limiting feedback
+ * - TC6: Special characters in URL
+ * - TC7: Server 500 error handling
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -277,7 +287,8 @@ describe('UrlShortenerForm', () => {
       await waitFor(() => {
         const errorMessage = screen.getByTestId('error-message')
         expect(errorMessage).toBeInTheDocument()
-        expect(errorMessage).toHaveTextContent('Network error')
+        // User-friendly error message for network errors
+        expect(errorMessage).toHaveTextContent('Unable to connect')
       })
     })
 
@@ -370,6 +381,410 @@ describe('UrlShortenerForm', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('success-state')).not.toBeInTheDocument()
         expect(screen.getByTestId('url-input')).toHaveValue('')
+      })
+    })
+  })
+
+  /**
+   * Scenario 15 - Error States and Edge Cases
+   */
+
+  /**
+   * TC1: Network offline error handling
+   * Input: Submit URL when network is offline
+   * Expected: Error message indicates network/connection issue
+   */
+  describe('TC1 (Scenario 15): Network offline error handling', () => {
+    it('should show user-friendly message for network errors', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('Network Error'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toBeInTheDocument()
+        expect(errorMessage).toHaveTextContent('Unable to connect')
+      })
+    })
+
+    it('should show user-friendly message for fetch failures', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('Failed to fetch'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toHaveTextContent('Unable to connect')
+        expect(errorMessage).toHaveTextContent('check your internet connection')
+      })
+    })
+  })
+
+  /**
+   * TC2: Malicious URL schemes
+   * Input: Submit URL 'javascript:alert(1)'
+   * Expected: Validation rejects potentially malicious URL schemes
+   */
+  describe('TC2 (Scenario 15): Malicious URL scheme rejection', () => {
+    it('should reject javascript: URLs with error message', async () => {
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'javascript:alert(1)' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toBeInTheDocument()
+        expect(errorMessage).toHaveTextContent('unsafe protocol')
+      })
+
+      // API should not be called
+      expect(api.shortenUrl).not.toHaveBeenCalled()
+    })
+
+    it('should reject data: URLs with error message', async () => {
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'data:text/html,<h1>test</h1>' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toHaveTextContent('unsafe protocol')
+      })
+
+      expect(api.shortenUrl).not.toHaveBeenCalled()
+    })
+  })
+
+  /**
+   * TC3: URLs with spaces
+   * Input: Submit URL with spaces 'https://exa mple.com'
+   * Expected: Validation error indicates invalid URL format
+   */
+  describe('TC3 (Scenario 15): URL with invalid characters', () => {
+    it('should show error for URL with spaces in domain', async () => {
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://exa mple.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toBeInTheDocument()
+        expect(errorMessage).toHaveTextContent('invalid characters')
+      })
+
+      expect(api.shortenUrl).not.toHaveBeenCalled()
+    })
+
+    it('should show error for URL with spaces in path', async () => {
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com/path with spaces' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toHaveTextContent('invalid characters')
+      })
+
+      expect(api.shortenUrl).not.toHaveBeenCalled()
+    })
+  })
+
+  /**
+   * TC4: Extremely long URLs (>2000 characters)
+   * Input: Submit extremely long URL
+   * Expected: System handles gracefully with appropriate error or success
+   */
+  describe('TC4 (Scenario 15): Extremely long URL handling', () => {
+    it('should reject URLs exceeding maximum length', async () => {
+      const longUrl = 'https://example.com/' + 'a'.repeat(2100)
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: longUrl } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toBeInTheDocument()
+        expect(errorMessage).toHaveTextContent('exceeds maximum length')
+      })
+
+      expect(api.shortenUrl).not.toHaveBeenCalled()
+    })
+
+    it('should accept URLs at or near the limit', async () => {
+      const mockResponse = {
+        shortCode: 'abc123',
+        shortUrl: 'https://short.url/abc123',
+        originalUrl: 'https://example.com/longpath',
+        createdAt: new Date().toISOString(),
+      }
+
+      vi.mocked(api.shortenUrl).mockResolvedValueOnce(mockResponse)
+
+      const baseUrl = 'https://example.com/'
+      const url = baseUrl + 'a'.repeat(2000)
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: url } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(api.shortenUrl).toHaveBeenCalled()
+      })
+    })
+  })
+
+  /**
+   * TC5: Rate limiting
+   * Input: Submit 10 URLs within 10 seconds
+   * Expected: Rate limiting feedback is shown if applicable
+   */
+  describe('TC5 (Scenario 15): Rate limiting feedback', () => {
+    it('should show rate limit error message when API returns rate limit error', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('Rate limit exceeded'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toBeInTheDocument()
+        expect(errorMessage).toHaveTextContent('Too many requests')
+        expect(errorMessage).toHaveTextContent('wait a moment')
+      })
+    })
+
+    it('should show rate limit error for "too many requests" message', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('Too many requests'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toHaveTextContent('Too many requests')
+      })
+    })
+  })
+
+  /**
+   * TC6: Special characters in URL path
+   * Input: Submit URL with special characters in path
+   * Expected: URL is properly encoded and shortened successfully
+   */
+  describe('TC6 (Scenario 15): Special characters in URL', () => {
+    it('should successfully shorten URL with encoded special characters', async () => {
+      const mockResponse = {
+        shortCode: 'abc123',
+        shortUrl: 'https://short.url/abc123',
+        originalUrl: 'https://example.com/path%20with%20spaces',
+        createdAt: new Date().toISOString(),
+      }
+
+      vi.mocked(api.shortenUrl).mockResolvedValueOnce(mockResponse)
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com/path%20with%20spaces' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('success-state')).toBeInTheDocument()
+      })
+    })
+
+    it('should successfully shorten URL with query parameters', async () => {
+      const mockResponse = {
+        shortCode: 'abc123',
+        shortUrl: 'https://short.url/abc123',
+        originalUrl: 'https://example.com/path?key=value&foo=bar',
+        createdAt: new Date().toISOString(),
+      }
+
+      vi.mocked(api.shortenUrl).mockResolvedValueOnce(mockResponse)
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com/path?key=value&foo=bar' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('success-state')).toBeInTheDocument()
+        expect(api.shortenUrl).toHaveBeenCalledWith({ url: 'https://example.com/path?key=value&foo=bar' })
+      })
+    })
+
+    it('should successfully shorten URL with fragment identifier', async () => {
+      const mockResponse = {
+        shortCode: 'abc123',
+        shortUrl: 'https://short.url/abc123',
+        originalUrl: 'https://example.com/path#section',
+        createdAt: new Date().toISOString(),
+      }
+
+      vi.mocked(api.shortenUrl).mockResolvedValueOnce(mockResponse)
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com/path#section' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('success-state')).toBeInTheDocument()
+      })
+    })
+  })
+
+  /**
+   * TC7: Server 500 error
+   * Input: Submit URL that returns 500 error from API
+   * Expected: User-friendly error message is displayed, not raw error
+   */
+  describe('TC7 (Scenario 15): Server error handling', () => {
+    it('should show user-friendly message for 500 errors', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('500 Internal Server Error'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toBeInTheDocument()
+        expect(errorMessage).toHaveTextContent('Something went wrong on our end')
+        expect(errorMessage).toHaveTextContent('try again later')
+      })
+    })
+
+    it('should show user-friendly message for internal server errors', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('Internal server error'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toHaveTextContent('Something went wrong on our end')
+      })
+    })
+
+    it('should not expose raw error details to user', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('500: Database connection failed at pool.js:142'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        // Should show user-friendly message, not raw database error
+        expect(errorMessage).toHaveTextContent('Something went wrong on our end')
+        expect(errorMessage).not.toHaveTextContent('Database')
+        expect(errorMessage).not.toHaveTextContent('pool.js')
+      })
+    })
+  })
+
+  /**
+   * Additional error state tests
+   */
+  describe('Error state accessibility', () => {
+    it('should have proper error role and aria attributes', async () => {
+      vi.mocked(api.shortenUrl).mockRejectedValueOnce(new Error('Network Error'))
+
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'https://example.com' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        const errorMessage = screen.getByTestId('error-message')
+        expect(errorMessage).toHaveAttribute('role', 'alert')
+      })
+    })
+
+    it('should mark input as invalid when error occurs', async () => {
+      render(<UrlShortenerForm />)
+
+      const input = screen.getByTestId('url-input')
+      const button = screen.getByTestId('shorten-button')
+
+      fireEvent.change(input, { target: { value: 'javascript:alert(1)' } })
+      fireEvent.click(button)
+
+      await waitFor(() => {
+        expect(input).toHaveAttribute('aria-invalid', 'true')
       })
     })
   })
