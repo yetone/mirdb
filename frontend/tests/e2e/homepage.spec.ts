@@ -340,3 +340,216 @@ test.describe('How It Works Section', () => {
     await expect(stepTitles.nth(2)).toContainText(/share|track/i)
   })
 })
+
+/**
+ * Navigation Integration E2E Tests
+ * Owner: Scenario 11 - Navigation Integration
+ *
+ * Tests navigation between homepage and other pages including authentication flow.
+ * Covers: registration CTA, login link, dashboard link, footer nav, and browser history.
+ */
+test.describe('Navigation Integration - Scenario 11', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear localStorage and cookies before each test
+    await page.goto('/')
+    await page.evaluate(() => {
+      localStorage.clear()
+      sessionStorage.clear()
+    })
+  })
+
+  // Test Case 1: Click 'Get Started Free' CTA button → navigates to /register
+  test('clicking "Get Started Free" CTA navigates to /register', async ({ page }) => {
+    await page.goto('/')
+
+    // Find and click the hero CTA button
+    const ctaButton = page.getByTestId('hero-cta')
+    await expect(ctaButton).toBeVisible()
+    await expect(ctaButton).toContainText('Get Started Free')
+
+    await ctaButton.click()
+
+    // Verify navigation to /register
+    await expect(page).toHaveURL('/register')
+  })
+
+  // Test Case 2: Click login link/button from homepage → navigates to /login
+  test('clicking login link navigates to /login', async ({ page }) => {
+    await page.goto('/')
+
+    // Find the login link in the navigation header
+    const loginLink = page.getByTestId('nav-login-link')
+    await expect(loginLink).toBeVisible()
+    await expect(loginLink).toContainText('Login')
+
+    await loginLink.click()
+
+    // Verify navigation to /login
+    await expect(page).toHaveURL('/login')
+  })
+
+  // Test Case 3: Visit homepage with valid JWT in localStorage → CTA changes to 'Go to Dashboard'
+  test('authenticated user sees dashboard link instead of login/signup', async ({ page }) => {
+    // Set up authentication by adding a token to localStorage
+    await page.goto('/')
+    await page.evaluate(() => {
+      localStorage.setItem('token', 'mock-jwt-token-for-testing')
+    })
+
+    // Reload to apply auth state
+    await page.reload()
+
+    // Verify dashboard link is visible (authenticated state)
+    const dashboardLink = page.getByTestId('nav-dashboard-link')
+    await expect(dashboardLink).toBeVisible()
+    await expect(dashboardLink).toContainText('Go to Dashboard')
+
+    // Verify login and signup links are NOT visible
+    const loginLink = page.getByTestId('nav-login-link')
+    await expect(loginLink).not.toBeVisible()
+
+    const signupLink = page.getByTestId('nav-register-link')
+    await expect(signupLink).not.toBeVisible()
+  })
+
+  // Test Case 4: Click dashboard link as authenticated user → navigates to /dashboard
+  test('authenticated user can navigate to dashboard', async ({ page }) => {
+    // Set up authentication
+    await page.goto('/')
+    await page.evaluate(() => {
+      localStorage.setItem('token', 'mock-jwt-token-for-testing')
+    })
+    await page.reload()
+
+    // Click dashboard link
+    const dashboardLink = page.getByTestId('nav-dashboard-link')
+    await expect(dashboardLink).toBeVisible()
+    await dashboardLink.click()
+
+    // Verify navigation to /dashboard
+    await expect(page).toHaveURL('/dashboard')
+  })
+
+  // Test Case 5: Click footer navigation links → each link navigates to correct route
+  test('footer navigation links work correctly', async ({ page }) => {
+    await page.goto('/')
+
+    // Test Home link
+    const homeLink = page.getByTestId('footer-link-home')
+    await expect(homeLink).toBeVisible()
+    await expect(homeLink).toHaveAttribute('href', '/')
+
+    // Test Features link (anchor link to features section)
+    const featuresLink = page.getByTestId('footer-link-features')
+    await expect(featuresLink).toBeVisible()
+    await expect(featuresLink).toHaveAttribute('href', '/#features')
+
+    // Test Pricing link
+    const pricingLink = page.getByTestId('footer-link-pricing')
+    await expect(pricingLink).toBeVisible()
+    await expect(pricingLink).toHaveAttribute('href', '/pricing')
+
+    // Test About link
+    const aboutLink = page.getByTestId('footer-link-about')
+    await expect(aboutLink).toBeVisible()
+    await expect(aboutLink).toHaveAttribute('href', '/about')
+
+    // Test Contact link
+    const contactLink = page.getByTestId('footer-link-contact')
+    await expect(contactLink).toBeVisible()
+    await expect(contactLink).toHaveAttribute('href', '/contact')
+
+    // Test Privacy Policy link
+    const privacyLink = page.getByTestId('footer-link-privacy-policy')
+    await expect(privacyLink).toBeVisible()
+    await expect(privacyLink).toHaveAttribute('href', '/privacy')
+
+    // Test Terms of Service link
+    const termsLink = page.getByTestId('footer-link-terms-of-service')
+    await expect(termsLink).toBeVisible()
+    await expect(termsLink).toHaveAttribute('href', '/terms')
+  })
+
+  // Test Case 6: Navigate from homepage to register and back → browser history works
+  test('browser history navigation works correctly', async ({ page }) => {
+    // Start on homepage
+    await page.goto('/')
+    await expect(page).toHaveURL('/')
+
+    // Navigate to register using the hero CTA
+    const ctaButton = page.getByTestId('hero-cta')
+    await ctaButton.click()
+    await expect(page).toHaveURL('/register')
+
+    // Use browser back button
+    await page.goBack()
+    await expect(page).toHaveURL('/')
+
+    // Verify homepage content is visible
+    const heroSection = page.getByTestId('hero-section')
+    await expect(heroSection).toBeVisible()
+
+    // Navigate forward
+    await page.goForward()
+    await expect(page).toHaveURL('/register')
+  })
+
+  // Additional test: Navigation header is present and properly structured
+  test('navigation header is visible and contains expected elements', async ({ page }) => {
+    await page.goto('/')
+
+    // Verify navigation header exists
+    const navHeader = page.getByTestId('navigation-header')
+    await expect(navHeader).toBeVisible()
+
+    // Verify logo/brand link
+    const logoLink = page.getByTestId('nav-logo')
+    await expect(logoLink).toBeVisible()
+    await expect(logoLink).toContainText('LinkShort')
+
+    // Verify unauthenticated navigation (login + signup)
+    const loginLink = page.getByTestId('nav-login-link')
+    const signupLink = page.getByTestId('nav-register-link')
+    await expect(loginLink).toBeVisible()
+    await expect(signupLink).toBeVisible()
+
+    // Verify theme toggle is present
+    const themeToggle = page.getByTestId('theme-toggle')
+    await expect(themeToggle).toBeVisible()
+  })
+
+  // Test: Login link in nav navigates correctly
+  test('clicking nav register link navigates to /register', async ({ page }) => {
+    await page.goto('/')
+
+    const signupLink = page.getByTestId('nav-register-link')
+    await expect(signupLink).toBeVisible()
+    await signupLink.click()
+
+    await expect(page).toHaveURL('/register')
+  })
+
+  // Test: Navigation maintains theme across route changes
+  test('theme persists when navigating between pages', async ({ page }) => {
+    // Set theme to cyberpunk
+    await page.goto('/')
+    await page.evaluate(() => {
+      localStorage.setItem('theme', 'cyberpunk')
+    })
+    await page.reload()
+
+    // Wait for theme to apply
+    await page.waitForFunction(() => {
+      return document.documentElement.getAttribute('data-theme') === 'cyberpunk'
+    })
+
+    // Navigate to register
+    const ctaButton = page.getByTestId('hero-cta')
+    await ctaButton.click()
+    await expect(page).toHaveURL('/register')
+
+    // Theme should still be cyberpunk
+    const html = page.locator('html')
+    await expect(html).toHaveAttribute('data-theme', 'cyberpunk')
+  })
+})
