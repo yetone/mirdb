@@ -137,7 +137,7 @@ impl<K: Ord, V> SkipList<K, V> {
         for i in 0..=height {
             let update = &mut updates[i];
             unsafe {
-                *((*node_ptr).nexts_.get_unchecked_mut(i)) = *(update.nexts_.get_unchecked_mut(i));
+                *(&mut (*node_ptr).nexts_).get_unchecked_mut(i) = *(update.nexts_.get_unchecked_mut(i));
                 *(update.nexts_.get_unchecked_mut(i)) = node_ptr;
             }
         }

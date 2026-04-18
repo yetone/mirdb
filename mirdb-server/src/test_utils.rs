@@ -11,7 +11,11 @@ use rand::Rng;
 use crate::options::Options;
 
 pub fn get_test_opt() -> Options {
-    let rand_string: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
+    let rand_string: String = thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(30)
+        .map(char::from)
+        .collect();
     let mut opt = Options::default();
     opt.work_dir = "/tmp/mirdbtest/".to_string() + &rand_string;
     if Path::new(&opt.work_dir).exists() {
