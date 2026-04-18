@@ -98,9 +98,107 @@ pub fn set_key_handler(store: &Arc<Store>, body: &str) -> Result<String, String>
     }
 }
 
-// Placeholder for Scenario 1: Server Status Display
-pub fn status_handler(_store: &Arc<Store>) -> Result<String, String> {
-    Err(r#"{"error":"Not implemented"}"#.to_string())
+/// Scenario 1: Server Status Display
+///
+/// Handles GET /api/status requests to retrieve server status.
+///
+/// Response: StatusResponse { levels, memory, compaction }
+///           ErrorResponse { error: "..." } on failure
+pub fn status_handler(store: &Arc<Store>) -> Result<String, String> {
+    use super::types::{LevelInfo, MemoryInfo, StatusResponse};
+    use crate::request::Request;
+
+    // Get the INFO response from the store
+    let info_response = match store.apply(Request::Info) {
+        Ok(crate::response::Response::Info(info)) => info,
+        Ok(_) => return Err(r#"{"error":"Unexpected response type"}"#.to_string()),
+        Err(e) => {
+            let error = ErrorResponse::new(format!("Store error: {}", e.msg));
+            return Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Store error"}"#.to_string()
+            ));
+        }
+    };
+
+    // Parse the info string to extract level counts
+    // Format: "Level0 (count):\n\tfiles..."
+    let levels = parse_level_info(&info_response);
+
+    // Memory info - estimate based on available data
+    // For now, return placeholder values as the current codebase
+    // doesn't expose detailed memory tracking
+    let memory = MemoryInfo {
+        used_bytes: 0,
+        percentage: 0.0,
+    };
+
+    // Compaction status - "idle" when no active compaction
+    // The current implementation doesn't expose compaction state directly,
+    // so we default to "idle"
+    let compaction = "idle".to_string();
+
+    let status = StatusResponse {
+        levels,
+        memory,
+        compaction,
+    };
+
+    serde_json::to_string(&status).map_err(|e| {
+        let error = ErrorResponse::new(format!("Serialization error: {}", e));
+        serde_json::to_string(&error).unwrap_or_else(|_|
+            r#"{"error":"Serialization error"}"#.to_string()
+        )
+    })
+}
+
+/// Parse the INFO string output to extract level file counts
+fn parse_level_info(info: &str) -> Vec<super::types::LevelInfo> {
+    use super::types::LevelInfo;
+    use std::collections::HashMap;
+
+    let mut levels: HashMap<usize, usize> = HashMap::new();
+
+    // Parse lines like "Level0 (5):" to extract level and file count
+    for line in info.lines() {
+        let line = line.trim();
+        if line.starts_with("Level") && line.contains('(') && line.contains(')') {
+            // Extract level number and file count
+            if let Some(level_end) = line.find('(') {
+                if let Some(count_end) = line.find(')') {
+                    let level_str = &line[5..level_end].trim();
+                    let count_str = &line[level_end + 1..count_end];
+
+                    if let (Ok(level), Ok(count)) = (level_str.parse::<usize>(), count_str.parse::<usize>()) {
+                        levels.insert(level, count);
+                    }
+                }
+            }
+        }
+    }
+
+    // Convert to sorted vector of LevelInfo
+    let mut result: Vec<LevelInfo> = levels
+        .into_iter()
+        .map(|(level, files)| LevelInfo { level, files })
+        .collect();
+    result.sort_by_key(|l| l.level);
+
+    // Ensure we always have at least Level 0 and Level 1
+    if result.is_empty() {
+        result.push(LevelInfo { level: 0, files: 0 });
+        result.push(LevelInfo { level: 1, files: 0 });
+    } else {
+        // Fill in missing levels up to the max level found
+        let max_level = result.iter().map(|l| l.level).max().unwrap_or(0);
+        for level in 0..=max_level {
+            if !result.iter().any(|l| l.level == level) {
+                result.push(LevelInfo { level, files: 0 });
+            }
+        }
+        result.sort_by_key(|l| l.level);
+    }
+
+    result
 }
 
 /// Scenario 2: GET Key Operation
@@ -314,6 +412,106 @@ mod tests {
         assert!(result.is_err(), "Expected Err for invalid JSON");
         let error = result.unwrap_err();
         assert!(error.contains("Invalid JSON"), "Expected invalid JSON error, got {}", error);
+    }
+
+    // =============================================================
+    // Scenario 1: Server Status Display tests
+    // =============================================================
+
+    #[test]
+    fn test_status_handler_returns_json() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        let result = status_handler(&store);
+        assert!(result.is_ok(), "Expected Ok, got {:?}", result);
+
+        let json = result.unwrap();
+        assert!(json.contains("\"levels\""), "Expected levels field in response");
+        assert!(json.contains("\"memory\""), "Expected memory field in response");
+        assert!(json.contains("\"compaction\""), "Expected compaction field in response");
+    }
+
+    #[test]
+    fn test_status_handler_levels_array() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        let result = status_handler(&store);
+        assert!(result.is_ok());
+
+        let json = result.unwrap();
+
+        // Parse the response to verify structure
+        let status: serde_json::Value = serde_json::from_str(&json).unwrap();
+        assert!(status["levels"].is_array(), "levels should be an array");
+
+        // Should have at least level 0 and level 1
+        let levels = status["levels"].as_array().unwrap();
+        assert!(levels.len() >= 2, "Should have at least 2 levels");
+    }
+
+    #[test]
+    fn test_status_handler_memory_fields() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        let result = status_handler(&store);
+        assert!(result.is_ok());
+
+        let json = result.unwrap();
+        let status: serde_json::Value = serde_json::from_str(&json).unwrap();
+
+        assert!(status["memory"]["used_bytes"].is_number(), "memory.used_bytes should be a number");
+        assert!(status["memory"]["percentage"].is_number(), "memory.percentage should be a number");
+    }
+
+    #[test]
+    fn test_status_handler_compaction_field() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        let result = status_handler(&store);
+        assert!(result.is_ok());
+
+        let json = result.unwrap();
+        let status: serde_json::Value = serde_json::from_str(&json).unwrap();
+
+        assert!(status["compaction"].is_string(), "compaction should be a string");
+    }
+
+    #[test]
+    fn test_parse_level_info_empty() {
+        let info = "";
+        let levels = parse_level_info(info);
+
+        // Should have default levels 0 and 1
+        assert!(levels.len() >= 2);
+        assert_eq!(levels[0].level, 0);
+        assert_eq!(levels[0].files, 0);
+    }
+
+    #[test]
+    fn test_parse_level_info_with_data() {
+        let info = "Next file number: 5\n\nLevel0 (3):\n\t0.sst, 1.sst, 2.sst\nLevel1 (2):\n\t3.sst, 4.sst";
+        let levels = parse_level_info(info);
+
+        assert!(levels.len() >= 2);
+        assert_eq!(levels[0].level, 0);
+        assert_eq!(levels[0].files, 3);
+        assert_eq!(levels[1].level, 1);
+        assert_eq!(levels[1].files, 2);
+    }
+
+    #[test]
+    fn test_parse_level_info_multiple_levels() {
+        let info = "Level0 (1):\nLevel1 (5):\nLevel2 (10):";
+        let levels = parse_level_info(info);
+
+        assert_eq!(levels.len(), 3);
+        assert_eq!(levels[0].files, 1);
+        assert_eq!(levels[1].files, 5);
+        assert_eq!(levels[2].files, 10);
     }
 
     // =============================================================
