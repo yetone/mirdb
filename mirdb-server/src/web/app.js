@@ -51,17 +51,31 @@ function validateSetKeyForm() {
     const keyError = document.getElementById('set-key-error');
     const key = keyInput.value.trim();
 
+    let isValid = true;
+
+    // Validate key
     if (!key) {
         keyInput.classList.add('error');
         keyError.textContent = 'Key is required';
         keyInput.setAttribute('aria-invalid', 'true');
-        return false;
+        isValid = false;
+    } else {
+        keyInput.classList.remove('error');
+        keyError.textContent = '';
+        keyInput.setAttribute('aria-invalid', 'false');
     }
 
-    keyInput.classList.remove('error');
-    keyError.textContent = '';
-    keyInput.setAttribute('aria-invalid', 'false');
-    return true;
+    // Validate TTL
+    if (!validateTTLField()) {
+        isValid = false;
+    }
+
+    // Validate flags
+    if (!validateFlagsField()) {
+        isValid = false;
+    }
+
+    return isValid;
 }
 
 function validateGetKeyForm() {
@@ -80,6 +94,76 @@ function validateGetKeyForm() {
     keyError.textContent = '';
     keyInput.setAttribute('aria-invalid', 'false');
     return true;
+}
+
+// Validate TTL field (must be non-negative number)
+function validateTTLField() {
+    const ttlInput = document.getElementById('set-ttl-input');
+    const ttlError = document.getElementById('set-ttl-error');
+    const ttlValue = ttlInput.value.trim();
+
+    // Empty is valid (defaults to 0)
+    if (ttlValue === '') {
+        clearFieldError(ttlInput, ttlError);
+        return true;
+    }
+
+    const ttl = parseInt(ttlValue, 10);
+
+    if (isNaN(ttl)) {
+        setFieldError(ttlInput, ttlError, 'TTL must be a number');
+        return false;
+    }
+
+    if (ttl < 0) {
+        setFieldError(ttlInput, ttlError, 'TTL must be 0 or greater');
+        return false;
+    }
+
+    clearFieldError(ttlInput, ttlError);
+    return true;
+}
+
+// Validate flags field (must be non-negative integer)
+function validateFlagsField() {
+    const flagsInput = document.getElementById('set-flags-input');
+    const flagsError = document.getElementById('set-flags-error');
+    const flagsValue = flagsInput.value.trim();
+
+    // Empty is valid (defaults to 0)
+    if (flagsValue === '') {
+        clearFieldError(flagsInput, flagsError);
+        return true;
+    }
+
+    const flags = parseInt(flagsValue, 10);
+
+    if (isNaN(flags)) {
+        setFieldError(flagsInput, flagsError, 'Flags must be a number');
+        return false;
+    }
+
+    if (flags < 0) {
+        setFieldError(flagsInput, flagsError, 'Flags must be 0 or greater');
+        return false;
+    }
+
+    clearFieldError(flagsInput, flagsError);
+    return true;
+}
+
+// Helper to set field error state
+function setFieldError(input, errorEl, message) {
+    input.classList.add('error');
+    errorEl.textContent = message;
+    input.setAttribute('aria-invalid', 'true');
+}
+
+// Helper to clear field error state
+function clearFieldError(input, errorEl) {
+    input.classList.remove('error');
+    errorEl.textContent = '';
+    input.setAttribute('aria-invalid', 'false');
 }
 
 // Clear validation errors on input
@@ -407,6 +491,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (setKeyForm) {
         setKeyForm.addEventListener('submit', handleSetKeySubmit);
         clearValidationOnInput('set-key-input', 'set-key-error');
+        clearValidationOnInput('set-ttl-input', 'set-ttl-error');
+        clearValidationOnInput('set-flags-input', 'set-flags-error');
     }
 
     // Get Key form

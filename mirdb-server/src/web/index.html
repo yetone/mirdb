@@ -40,7 +40,7 @@
         <!-- Get Key Panel (Scenario 2) -->
         <section id="get-panel" class="panel" aria-label="Get Key">
             <h2>Get Key</h2>
-            <form id="get-key-form" aria-describedby="get-key-help">
+            <form id="get-key-form" aria-describedby="get-key-help" novalidate>
                 <div class="form-group">
                     <label for="get-key-input">Key</label>
                     <input type="text" id="get-key-input" name="key"
@@ -75,7 +75,7 @@
         <!-- Set Key Panel (Scenario 3) -->
         <section id="set-panel" class="panel" aria-label="Set Key">
             <h2>Set Key</h2>
-            <form id="set-key-form" aria-describedby="set-key-help">
+            <form id="set-key-form" aria-describedby="set-key-help" novalidate>
                 <div class="form-group">
                     <label for="set-key-input">Key</label>
                     <input type="text" id="set-key-input" name="key"
@@ -95,12 +95,14 @@
                         <label for="set-flags-input">Flags</label>
                         <input type="number" id="set-flags-input" name="flags"
                                value="0" min="0" aria-describedby="flags-help">
+                        <span id="set-flags-error" class="error-message" role="alert" aria-live="polite"></span>
                         <small id="flags-help" class="help-text">Default: 0</small>
                     </div>
                     <div class="form-group">
                         <label for="set-ttl-input">TTL (seconds)</label>
                         <input type="number" id="set-ttl-input" name="ttl"
                                value="0" min="0" aria-describedby="ttl-help">
+                        <span id="set-ttl-error" class="error-message" role="alert" aria-live="polite"></span>
                         <small id="ttl-help" class="help-text">0 = no expiry</small>
                     </div>
                 </div>
