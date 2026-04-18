@@ -10,6 +10,9 @@ const BLOCK_MAX_SIZE: usize = 4 * KB;
 const BLOCK_CACHE_CAPACITY: usize = 8 * MB;
 const WRITE_BUFFER_SIZE: usize = 4 * MB;
 
+/// Default HTTP server port
+pub const DEFAULT_HTTP_PORT: u16 = 8080;
+
 #[derive(Clone)]
 pub struct Options {
     pub max_level: usize,
@@ -24,6 +27,12 @@ pub struct Options {
     pub thread_sleep_ms: usize,
 
     pub table_opt: TableOptions,
+
+    /// HTTP server port (default: 8080)
+    pub http_port: u16,
+
+    /// Enable HTTP server (default: true)
+    pub http_enabled: bool,
 }
 
 impl Options {
@@ -51,6 +60,9 @@ impl Default for Options {
             thread_sleep_ms: 500,
 
             table_opt,
+
+            http_port: DEFAULT_HTTP_PORT,
+            http_enabled: true,
         }
     }
 }

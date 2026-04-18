@@ -8,8 +8,37 @@ use toml;
 use crate::error::err;
 use crate::error::MyResult;
 use crate::error::StatusCode;
-use crate::options::{Options, GB, KB, MB, TB};
+use crate::options::{Options, GB, KB, MB, TB, DEFAULT_HTTP_PORT};
 use crate::parser_util::macros::{digit, space, usize_parser, IRResult};
+
+/// HTTP server configuration
+#[derive(Debug, Deserialize, Clone)]
+pub struct HttpConfig {
+    /// Enable HTTP server (default: true)
+    #[serde(default = "default_http_enabled")]
+    pub enabled: bool,
+
+    /// HTTP server port (default: 8080)
+    #[serde(default = "default_http_port")]
+    pub port: u16,
+}
+
+fn default_http_enabled() -> bool {
+    true
+}
+
+fn default_http_port() -> u16 {
+    DEFAULT_HTTP_PORT
+}
+
+impl Default for HttpConfig {
+    fn default() -> Self {
+        HttpConfig {
+            enabled: true,
+            port: DEFAULT_HTTP_PORT,
+        }
+    }
+}
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -27,6 +56,10 @@ pub struct Config {
     pub l0_compaction_trigger: usize,
 
     pub thread_sleep_ms: usize,
+
+    /// HTTP server configuration (optional, defaults if not present)
+    #[serde(default)]
+    pub http: HttpConfig,
 }
 
 impl Config {
@@ -42,7 +75,19 @@ impl Config {
         opt.table_opt.block_restart_interval = self.block_restart_interval;
         opt.l0_compaction_trigger = self.l0_compaction_trigger;
         opt.thread_sleep_ms = self.thread_sleep_ms;
+        opt.http_port = self.http.port;
+        opt.http_enabled = self.http.enabled;
         Ok(opt)
+    }
+
+    /// Get the HTTP server port
+    pub fn http_port(&self) -> u16 {
+        self.http.port
+    }
+
+    /// Check if HTTP server is enabled
+    pub fn http_enabled(&self) -> bool {
+        self.http.enabled
     }
 }
 
@@ -132,6 +177,154 @@ thread_sleep_ms = 500
         assert_eq!(16, opt.table_opt.block_restart_interval);
         assert_eq!(4, opt.l0_compaction_trigger);
         assert_eq!(500, opt.thread_sleep_ms);
+        // HTTP config defaults when not specified
+        assert_eq!(DEFAULT_HTTP_PORT, opt.http_port);
+        assert_eq!(true, opt.http_enabled);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_parse_with_http_config() -> MyResult<()> {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdbs"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500
+
+[http]
+enabled = true
+port = 9000
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        println!("{:#?}", config);
+        let opt = config.to_options()?;
+        assert_eq!(9000, opt.http_port);
+        assert_eq!(true, opt.http_enabled);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_parse_http_disabled() -> MyResult<()> {
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+
+max_level = 7
+work_dir = "/tmp/mirdbs"
+
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+
+imm_mem_table_max_count = 16
+
+block_size = "4K"
+block_restart_interval = 16
+
+l0_compaction_trigger = 4
+
+thread_sleep_ms = 500
+
+[http]
+enabled = false
+port = 8080
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        let opt = config.to_options()?;
+        assert_eq!(8080, opt.http_port);
+        assert_eq!(false, opt.http_enabled);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_http_config_defaults() {
+        // Test that HttpConfig has correct defaults
+        let http_config = HttpConfig::default();
+        assert_eq!(true, http_config.enabled);
+        assert_eq!(DEFAULT_HTTP_PORT, http_config.port);
+    }
+
+    #[test]
+    fn test_http_port_configurable() -> MyResult<()> {
+        // Test case 2: Start server with http_port=9000
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+
+[http]
+enabled = true
+port = 9000
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert_eq!(9000, config.http_port());
+        assert_eq!(true, config.http_enabled());
+
+        let opt = config.to_options()?;
+        assert_eq!(9000, opt.http_port);
+        assert_eq!(true, opt.http_enabled);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_memcached_and_http_ports_independent() -> MyResult<()> {
+        // Test case 4: Both memcached and HTTP ports configured independently
+        let toml_str = r#"
+addr = "0.0.0.0:12333"
+max_level = 7
+work_dir = "/tmp/mirdbs"
+sst_max_size = "100M"
+mem_table_max_size = "4M"
+mem_table_max_height = 32
+imm_mem_table_max_count = 16
+block_size = "4K"
+block_restart_interval = 16
+l0_compaction_trigger = 4
+thread_sleep_ms = 500
+
+[http]
+enabled = true
+port = 8080
+"#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        // Memcached address includes port 12333
+        assert_eq!("0.0.0.0:12333", config.addr);
+        // HTTP port is 8080 (separate from memcached)
+        assert_eq!(8080, config.http_port());
+        // Both are enabled
+        assert_eq!(true, config.http_enabled());
+
+        // Verify they are different
+        let memcached_port: u16 = config.addr.split(':').last().unwrap().parse().unwrap();
+        assert_ne!(memcached_port, config.http_port());
 
         Ok(())
     }
