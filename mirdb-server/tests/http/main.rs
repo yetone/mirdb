@@ -7,5 +7,6 @@
 //! - `error_handling_tests` - Scenario 6
 
 pub mod compaction_tests;
+pub mod error_handling_tests;
 pub mod key_operations_tests;
 pub mod status_tests;

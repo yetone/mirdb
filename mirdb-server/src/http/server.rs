@@ -132,6 +132,48 @@ fn route_request(store: Arc<Store>, req: Request<Body>) -> Response<Body> {
             }
         }
 
+        // ======================================================
+        // Scenario 6: HTTP API Error Handling
+        // ======================================================
+
+        // Handle 405 Method Not Allowed for /api/key with unsupported methods
+        (Method::PUT, path) if path.starts_with("/api/key") => {
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "application/json")
+                .header("Allow", "GET, POST, DELETE")
+                .body(Body::from(r#"{"error":"Method not allowed. Supported methods: GET, POST, DELETE"}"#))
+                .unwrap()
+        }
+        (Method::PATCH, path) if path.starts_with("/api/key") => {
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "application/json")
+                .header("Allow", "GET, POST, DELETE")
+                .body(Body::from(r#"{"error":"Method not allowed. Supported methods: GET, POST, DELETE"}"#))
+                .unwrap()
+        }
+
+        // Handle 405 for /api/status with unsupported methods
+        (_, "/api/status") => {
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "application/json")
+                .header("Allow", "GET")
+                .body(Body::from(r#"{"error":"Method not allowed. Supported methods: GET"}"#))
+                .unwrap()
+        }
+
+        // Handle 405 for /api/operations/compact with unsupported methods
+        (_, "/api/operations/compact") => {
+            Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .header("Content-Type", "application/json")
+                .header("Allow", "POST")
+                .body(Body::from(r#"{"error":"Method not allowed. Supported methods: POST"}"#))
+                .unwrap()
+        }
+
         // 404 for unknown routes
         _ => {
             Response::builder()
