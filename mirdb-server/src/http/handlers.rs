@@ -310,9 +310,77 @@ fn percent_decode(input: &str) -> String {
     result
 }
 
-// Placeholder for Scenario 4: DELETE Key Operation
-pub fn delete_key_handler(_store: &Arc<Store>, _key: &str) -> Result<String, String> {
-    Err(r#"{"error":"Not implemented"}"#.to_string())
+/// Scenario 4: DELETE Key Operation
+///
+/// Handles DELETE /api/key/{key} requests to remove a key from the store.
+///
+/// Path parameter: key - The key to delete (URL-encoded)
+/// Response: SuccessResponse { success: true } on success (idempotent - both existing and non-existing keys)
+///           ErrorResponse { error: "..." } on failure (invalid key format)
+///
+/// Note: DELETE is idempotent per REST principles - deleting a non-existent key
+/// returns success rather than an error.
+pub fn delete_key_handler(store: &Arc<Store>, key: &str) -> Result<String, String> {
+    // Validate key is not empty
+    if key.is_empty() {
+        let error = ErrorResponse::new("Invalid key format: key cannot be empty");
+        return Err(serde_json::to_string(&error).unwrap_or_else(|_|
+            r#"{"error":"Invalid key format: key cannot be empty"}"#.to_string()
+        ));
+    }
+
+    // URL decode the key (simple percent-decoding)
+    let decoded_key = percent_decode(key);
+
+    // Create the memcached-style delete request
+    let key_slice = Slice::from(decoded_key.as_bytes().to_vec());
+    let store_request = Request::Deleter {
+        key: key_slice,
+        no_reply: false,
+    };
+
+    // Apply the request to the store
+    match store.apply(store_request) {
+        Ok(Response::Deleted) => {
+            // Key existed and was deleted
+            let success = SuccessResponse::new(true);
+            Ok(serde_json::to_string(&success).unwrap_or_else(|_|
+                r#"{"success":true}"#.to_string()
+            ))
+        }
+        Ok(Response::NotFound) => {
+            // Key didn't exist - return success for idempotent delete
+            // This follows REST best practices where DELETE is idempotent
+            let success = SuccessResponse::new(true);
+            Ok(serde_json::to_string(&success).unwrap_or_else(|_|
+                r#"{"success":true}"#.to_string()
+            ))
+        }
+        Ok(Response::ClientError(msg)) => {
+            let error = ErrorResponse::new(msg);
+            Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Client error"}"#.to_string()
+            ))
+        }
+        Ok(Response::ServerError(msg)) => {
+            let error = ErrorResponse::new(msg);
+            Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Server error"}"#.to_string()
+            ))
+        }
+        Ok(_) => {
+            let error = ErrorResponse::new("Unexpected response");
+            Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Unexpected response"}"#.to_string()
+            ))
+        }
+        Err(e) => {
+            let error = ErrorResponse::new(format!("Store error: {}", e.msg));
+            Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Store error"}"#.to_string()
+            ))
+        }
+    }
 }
 
 // Placeholder for Scenario 5: Manual Compaction
@@ -672,5 +740,173 @@ mod tests {
         assert_eq!(percent_decode("hello+world"), "hello world");
         assert_eq!(percent_decode("normal"), "normal");
         assert_eq!(percent_decode("%2F"), "/");
+    }
+
+    // =============================================================
+    // Scenario 4: DELETE Key Tests
+    // =============================================================
+
+    /// Test Case 1: DELETE /api/key/existing-key
+    /// Expected: JSON response with {success: true}
+    #[test]
+    fn test_delete_key_existing() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        // First, set a key
+        let set_body = r#"{"key":"delete-me","value":"test_value","flags":0,"ttl":0}"#;
+        let set_result = set_key_handler(&store, set_body);
+        assert!(set_result.is_ok(), "SET should succeed: {:?}", set_result);
+
+        // Verify the key exists
+        let get_result = get_key_handler(&store, "delete-me");
+        assert!(get_result.is_ok(), "GET should succeed before delete: {:?}", get_result);
+
+        // Delete the key
+        let result = delete_key_handler(&store, "delete-me");
+        assert!(result.is_ok(), "DELETE should succeed for existing key: {:?}", result);
+
+        let response = result.unwrap();
+        assert!(response.contains(r#""success":true"#), "Expected success:true, got {}", response);
+
+        // Parse the response to verify structure
+        let parsed: SuccessResponse = serde_json::from_str(&response)
+            .expect("Response should be valid SuccessResponse JSON");
+        assert!(parsed.success, "Success field should be true");
+    }
+
+    /// Test Case 2: DELETE /api/key/nonexistent-key
+    /// Expected: JSON response with {success: true} (idempotent delete)
+    #[test]
+    fn test_delete_key_nonexistent() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        // Delete a key that doesn't exist - should still return success (idempotent)
+        let result = delete_key_handler(&store, "nonexistent-key");
+        assert!(result.is_ok(), "DELETE should succeed for non-existent key (idempotent): {:?}", result);
+
+        let response = result.unwrap();
+        assert!(response.contains(r#""success":true"#), "Expected success:true for idempotent delete, got {}", response);
+
+        let parsed: SuccessResponse = serde_json::from_str(&response)
+            .expect("Response should be valid SuccessResponse JSON");
+        assert!(parsed.success, "Success field should be true for idempotent delete");
+    }
+
+    /// Test Case 3: GET /api/key/deleted-key after deletion
+    /// Expected: 404 response indicating key not found
+    #[test]
+    fn test_get_key_after_deletion() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        // Set a key
+        let set_body = r#"{"key":"to-be-deleted","value":"temp_value","flags":1,"ttl":0}"#;
+        let set_result = set_key_handler(&store, set_body);
+        assert!(set_result.is_ok(), "SET should succeed: {:?}", set_result);
+
+        // Verify it exists
+        let get_result = get_key_handler(&store, "to-be-deleted");
+        assert!(get_result.is_ok(), "GET should succeed before delete");
+
+        // Delete the key
+        let delete_result = delete_key_handler(&store, "to-be-deleted");
+        assert!(delete_result.is_ok(), "DELETE should succeed");
+
+        // Try to GET the deleted key - should return error (key not found)
+        let result = get_key_handler(&store, "to-be-deleted");
+        assert!(result.is_err(), "GET should fail for deleted key");
+
+        let error = result.unwrap_err();
+        assert!(error.contains("Key not found"), "Error should indicate key not found: {}", error);
+    }
+
+    /// Test: DELETE key with empty key
+    /// Expected: Error response indicating invalid key format
+    #[test]
+    fn test_delete_key_empty() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        // DELETE with empty key
+        let result = delete_key_handler(&store, "");
+
+        assert!(result.is_err(), "DELETE should fail for empty key");
+        let error = result.unwrap_err();
+        assert!(error.contains("Invalid key format"), "Error should indicate invalid key format: {}", error);
+    }
+
+    /// Test: DELETE key with URL-encoded characters
+    #[test]
+    fn test_delete_key_url_encoded() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        // Set a key with a space in it
+        let set_body = r#"{"key":"key with space","value":"space_value","flags":0,"ttl":0}"#;
+        let set_result = set_key_handler(&store, set_body);
+        assert!(set_result.is_ok(), "SET should succeed: {:?}", set_result);
+
+        // Delete the key using URL encoding (%20 for space)
+        let result = delete_key_handler(&store, "key%20with%20space");
+        assert!(result.is_ok(), "DELETE should decode URL-encoded key: {:?}", result);
+
+        let response = result.unwrap();
+        assert!(response.contains(r#""success":true"#), "Expected success:true");
+
+        // Verify the key is deleted
+        let get_result = get_key_handler(&store, "key%20with%20space");
+        assert!(get_result.is_err(), "GET should fail after delete");
+    }
+
+    /// Test: DELETE key with special characters (colons)
+    #[test]
+    fn test_delete_key_special_characters() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        // Set a key with colons
+        let set_body = r#"{"key":"user:session:123","value":"session_data","flags":0,"ttl":0}"#;
+        let set_result = set_key_handler(&store, set_body);
+        assert!(set_result.is_ok(), "SET should succeed: {:?}", set_result);
+
+        // Delete the key
+        let result = delete_key_handler(&store, "user:session:123");
+        assert!(result.is_ok(), "DELETE should succeed for key with colons: {:?}", result);
+
+        let response = result.unwrap();
+        assert!(response.contains(r#""success":true"#), "Expected success:true");
+
+        // Verify the key is deleted
+        let get_result = get_key_handler(&store, "user:session:123");
+        assert!(get_result.is_err(), "GET should fail after delete");
+    }
+
+    /// Test: DELETE is idempotent - multiple deletes should all succeed
+    #[test]
+    fn test_delete_key_idempotent() {
+        let opt = get_test_opt();
+        let store = Arc::new(Store::new(opt).unwrap());
+
+        // Set a key
+        let set_body = r#"{"key":"idempotent-key","value":"test","flags":0,"ttl":0}"#;
+        let set_result = set_key_handler(&store, set_body);
+        assert!(set_result.is_ok(), "SET should succeed");
+
+        // First delete
+        let result1 = delete_key_handler(&store, "idempotent-key");
+        assert!(result1.is_ok(), "First DELETE should succeed");
+        assert!(result1.unwrap().contains(r#""success":true"#));
+
+        // Second delete (key no longer exists)
+        let result2 = delete_key_handler(&store, "idempotent-key");
+        assert!(result2.is_ok(), "Second DELETE should succeed (idempotent)");
+        assert!(result2.unwrap().contains(r#""success":true"#));
+
+        // Third delete
+        let result3 = delete_key_handler(&store, "idempotent-key");
+        assert!(result3.is_ok(), "Third DELETE should succeed (idempotent)");
+        assert!(result3.unwrap().contains(r#""success":true"#));
     }
 }
