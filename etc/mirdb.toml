@@ -15,3 +15,13 @@ block_restart_interval = 16
 l0_compaction_trigger = 4
 
 thread_sleep_ms = 500
+
+# HTTP Server Configuration
+# The HTTP server provides a web-based dashboard and JSON API
+# for key-value operations and system monitoring.
+[http]
+# Enable HTTP server (default: true)
+enabled = true
+# HTTP server port (default: 8080)
+# This port is independent of the memcached protocol port
+port = 8080

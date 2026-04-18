@@ -104,13 +104,38 @@ fn main() -> MyResult<()> {
                 .help("Sets a custom config file")
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("http-port")
+                .long("http-port")
+                .value_name("PORT")
+                .help("Override HTTP server port (default: 8080)")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("no-http")
+                .long("no-http")
+                .help("Disable HTTP server")
+                .takes_value(false),
+        )
         .get_matches();
 
     let conf_path = matches.value_of("config").unwrap_or("default.conf");
     let conf = config::from_path(conf_path)?;
 
     let addr = conf.addr.parse().unwrap();
-    let opt = conf.to_options()?;
+    let mut opt = conf.to_options()?;
+
+    // Override HTTP port from CLI if provided
+    if let Some(http_port_str) = matches.value_of("http-port") {
+        if let Ok(port) = http_port_str.parse::<u16>() {
+            opt.http_port = port;
+        }
+    }
+
+    // Disable HTTP server if --no-http flag is set
+    if matches.is_present("no-http") {
+        opt.http_enabled = false;
+    }
 
     let store = Store::new(opt.clone())?;
     let store = Arc::new(store);
@@ -128,6 +153,20 @@ Welcome to MirDB!
         .trim_matches('\n')
     );
 
+    // Start HTTP server in a separate thread if enabled
+    if opt.http_enabled {
+        let http_store = store.clone();
+        let http_port = opt.http_port;
+        std::thread::spawn(move || {
+            http::server::start_http_server(http_store, http_port);
+        });
+        println!("HTTP server enabled on port {}", opt.http_port);
+    } else {
+        println!("HTTP server disabled");
+    }
+
+    // Start memcached protocol server (blocking)
+    println!("Memcached protocol server listening on {}", addr);
     serve(addr, move || Ok(Server::new(store.clone())));
 
     Ok(())
