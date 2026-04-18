@@ -8,4 +8,5 @@ mod http;
 pub use http::compaction_tests;
 pub use http::error_handling_tests;
 pub use http::key_operations_tests;
+pub use http::static_assets_tests;
 pub use http::status_tests;
