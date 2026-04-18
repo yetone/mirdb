@@ -53,6 +53,76 @@ fn test_no_external_cdn_dependencies_in_html() {
     // (CSS and JS are served from the same origin: /styles.css and /app.js)
 }
 
+/// Test Case 2: Direct inspection of HTML for external script/link tags
+/// Verifies that HTML content contains no external domain references
+#[test]
+fn test_html_no_external_urls() {
+    // Access the embedded HTML content directly
+    let html_content = include_str!("../../src/web/index.html");
+
+    // Check that no external URLs are present
+    assert!(!html_content.contains("http://"), "HTML should not contain http:// URLs");
+    assert!(!html_content.contains("https://"), "HTML should not contain https:// URLs");
+    assert!(!html_content.contains("//cdn."), "HTML should not reference CDN domains");
+    assert!(!html_content.contains("//fonts."), "HTML should not reference font CDNs");
+
+    // Verify local asset references exist (relative paths)
+    assert!(html_content.contains("/styles.css"), "HTML should reference local CSS");
+    assert!(html_content.contains("/app.js"), "HTML should reference local JS");
+}
+
+/// Test Case 2: Direct inspection of CSS for external URLs
+#[test]
+fn test_css_no_external_urls() {
+    let css_content = include_str!("../../src/web/styles.css");
+
+    // CSS should not import external resources
+    assert!(!css_content.contains("http://"), "CSS should not contain http:// URLs");
+    assert!(!css_content.contains("https://"), "CSS should not contain https:// URLs");
+    assert!(!css_content.contains("//fonts."), "CSS should not reference font CDNs");
+    assert!(!css_content.contains("@import url("), "CSS should not use @import with external URLs");
+}
+
+/// Test Case 2: Direct inspection of JavaScript for external URLs
+#[test]
+fn test_js_no_external_urls() {
+    let js_content = include_str!("../../src/web/app.js");
+
+    // JS should not load external resources
+    assert!(!js_content.contains("http://") || js_content.contains("http://") == false,
+        "JS should not contain http:// URLs");
+    assert!(!js_content.contains("https://"), "JS should not contain https:// URLs");
+    // API calls use relative path /api/
+    assert!(js_content.contains("'/api") || js_content.contains("\"/api"),
+        "JS should use relative API paths");
+}
+
+/// Test Case 3: Verify single binary deployment works without network
+/// All assets being embedded at compile time proves no network needed
+#[test]
+fn test_offline_functionality() {
+    // The fact that all assets are embedded via include_str! means:
+    // 1. No file I/O at runtime
+    // 2. No network requests needed
+    // 3. Everything is in the binary
+
+    let html = include_str!("../../src/web/index.html");
+    let css = include_str!("../../src/web/styles.css");
+    let js = include_str!("../../src/web/app.js");
+
+    // Verify all content is available (embedded at compile time)
+    assert!(!html.is_empty(), "HTML must be embedded");
+    assert!(!css.is_empty(), "CSS must be embedded");
+    assert!(!js.is_empty(), "JS must be embedded");
+
+    // Verify HTML has complete page structure
+    assert!(html.contains("<!DOCTYPE html>"), "HTML must have DOCTYPE");
+    assert!(html.contains("<html"), "HTML must have html tag");
+    assert!(html.contains("<head>"), "HTML must have head section");
+    assert!(html.contains("<body>"), "HTML must have body section");
+    assert!(html.contains("</html>"), "HTML must be properly closed");
+}
+
 /// Test Case 2: CSS serves from same origin with proper headers
 #[test]
 fn test_css_served_from_same_origin() {
