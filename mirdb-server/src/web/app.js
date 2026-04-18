@@ -207,6 +207,9 @@ function handleSetKeySubmit(event) {
         });
 }
 
+// Current key being viewed (for delete operation)
+let currentViewedKey = null;
+
 // Get Key Form Handler (Scenario 2)
 function handleGetKeySubmit(event) {
     event.preventDefault();
@@ -218,22 +221,90 @@ function handleGetKeySubmit(event) {
     const button = document.getElementById('lookup-btn');
     const keyInput = document.getElementById('get-key-input');
     const resultBox = document.getElementById('get-result');
+    const deleteAction = document.getElementById('delete-action');
     const key = keyInput.value.trim();
 
     setLoading(button, true);
     resultBox.textContent = 'Loading...';
+    deleteAction.style.display = 'none';
+    currentViewedKey = null;
 
     getKey(key)
         .then((data) => {
             resultBox.innerHTML = `<strong>Value:</strong> ${escapeHtml(data.value)}
 <strong>Flags:</strong> ${data.flags}    <strong>TTL:</strong> ${data.ttl}    <strong>Bytes:</strong> ${data.bytes}`;
+            // Show delete button after successful lookup (Scenario 4)
+            currentViewedKey = key;
+            deleteAction.style.display = 'block';
         })
         .catch((error) => {
             resultBox.textContent = `Error: ${error.message}`;
+            deleteAction.style.display = 'none';
+            currentViewedKey = null;
         })
         .finally(() => {
             setLoading(button, false);
         });
+}
+
+// Delete Key Handlers (Scenario 4)
+
+// Show delete confirmation dialog
+function showDeleteConfirmDialog() {
+    if (!currentViewedKey) {
+        showToast('No key selected for deletion', 'error');
+        return;
+    }
+
+    const dialog = document.getElementById('delete-confirm-dialog');
+    const message = document.getElementById('delete-confirm-message');
+    message.textContent = `Are you sure you want to delete key "${currentViewedKey}"?`;
+    dialog.style.display = 'flex';
+
+    // Focus the cancel button for safety
+    document.getElementById('delete-cancel-btn').focus();
+}
+
+// Hide delete confirmation dialog
+function hideDeleteConfirmDialog() {
+    const dialog = document.getElementById('delete-confirm-dialog');
+    dialog.style.display = 'none';
+}
+
+// Handle delete confirmation
+function handleDeleteConfirm() {
+    if (!currentViewedKey) {
+        hideDeleteConfirmDialog();
+        return;
+    }
+
+    const confirmBtn = document.getElementById('delete-confirm-btn');
+    setLoading(confirmBtn, true);
+
+    const keyToDelete = currentViewedKey;
+
+    deleteKey(keyToDelete)
+        .then(() => {
+            showToast(`Key "${keyToDelete}" deleted successfully`, 'success');
+            // Clear the result and hide delete button
+            const resultBox = document.getElementById('get-result');
+            resultBox.textContent = 'Key deleted. Enter a new key to lookup.';
+            document.getElementById('delete-action').style.display = 'none';
+            currentViewedKey = null;
+            hideDeleteConfirmDialog();
+        })
+        .catch((error) => {
+            showToast(error.message, 'error');
+            hideDeleteConfirmDialog();
+        })
+        .finally(() => {
+            setLoading(confirmBtn, false);
+        });
+}
+
+// Handle delete button click (shows confirmation)
+function handleDeleteClick() {
+    showDeleteConfirmDialog();
 }
 
 // Refresh Status Handler (Scenario 1)
@@ -307,6 +378,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (compactBtn) {
         compactBtn.addEventListener('click', handleCompact);
     }
+
+    // Delete button (Scenario 4)
+    const deleteBtn = document.getElementById('delete-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', handleDeleteClick);
+    }
+
+    // Delete confirmation buttons (Scenario 4)
+    const deleteConfirmBtn = document.getElementById('delete-confirm-btn');
+    if (deleteConfirmBtn) {
+        deleteConfirmBtn.addEventListener('click', handleDeleteConfirm);
+    }
+
+    const deleteCancelBtn = document.getElementById('delete-cancel-btn');
+    if (deleteCancelBtn) {
+        deleteCancelBtn.addEventListener('click', hideDeleteConfirmDialog);
+    }
+
+    // Close dialog on Escape key (Scenario 4 - accessibility)
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            const dialog = document.getElementById('delete-confirm-dialog');
+            if (dialog && dialog.style.display === 'flex') {
+                hideDeleteConfirmDialog();
+            }
+        }
+    });
 
     // Initial status fetch
     handleRefreshStatus();

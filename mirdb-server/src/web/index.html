@@ -50,6 +50,23 @@
             <div id="get-result" class="result-box" aria-live="polite">
                 <!-- Result will be displayed here -->
             </div>
+            <!-- Delete button (Scenario 4) - shown after successful lookup -->
+            <div id="delete-action" class="delete-action" style="display: none;">
+                <button type="button" id="delete-btn" class="delete-btn" aria-label="Delete this key">
+                    Delete Key
+                </button>
+            </div>
+            <!-- Delete confirmation dialog (Scenario 4) -->
+            <div id="delete-confirm-dialog" class="confirm-dialog" style="display: none;" role="dialog" aria-labelledby="delete-dialog-title" aria-modal="true">
+                <div class="dialog-content">
+                    <h3 id="delete-dialog-title">Confirm Deletion</h3>
+                    <p id="delete-confirm-message">Are you sure you want to delete this key?</p>
+                    <div class="dialog-buttons">
+                        <button type="button" id="delete-confirm-btn" class="confirm-btn">Delete</button>
+                        <button type="button" id="delete-cancel-btn" class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Set Key Panel (Scenario 3) -->

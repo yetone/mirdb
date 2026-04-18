@@ -281,6 +281,78 @@ button.loading::after {
     }
 }
 
+/* Delete action button (Scenario 4) */
+.delete-action {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.delete-btn {
+    background-color: var(--error-color);
+}
+
+.delete-btn:hover {
+    background-color: #b91c1c;
+}
+
+/* Confirmation dialog (Scenario 4) */
+.confirm-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.dialog-content {
+    background-color: var(--panel-bg);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-content h3 {
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.dialog-content p {
+    margin: 0 0 var(--spacing-lg) 0;
+    color: var(--text-color);
+}
+
+.dialog-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+.confirm-btn {
+    background-color: var(--error-color);
+}
+
+.confirm-btn:hover {
+    background-color: #b91c1c;
+}
+
+.cancel-btn {
+    background-color: var(--text-muted);
+}
+
+.cancel-btn:hover {
+    background-color: #475569;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     main {
@@ -303,5 +375,13 @@ button.loading::after {
         left: var(--spacing-md);
         right: var(--spacing-md);
         bottom: var(--spacing-md);
+    }
+
+    .dialog-buttons {
+        flex-direction: column;
+    }
+
+    .dialog-buttons button {
+        width: 100%;
     }
 }
