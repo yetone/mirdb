@@ -78,3 +78,10 @@ impl ErrorResponse {
         Self { error: error.into() }
     }
 }
+
+/// Compaction response (Scenario 5)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CompactResponse {
+    pub success: bool,
+    pub message: String,
+}

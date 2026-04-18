@@ -383,9 +383,48 @@ pub fn delete_key_handler(store: &Arc<Store>, key: &str) -> Result<String, Strin
     }
 }
 
-// Placeholder for Scenario 5: Manual Compaction
-pub fn compact_handler(_store: &Arc<Store>) -> Result<String, String> {
-    Err(r#"{"error":"Not implemented"}"#.to_string())
+/// Scenario 5: Manual Compaction Trigger
+///
+/// Handles POST /api/operations/compact requests to trigger major compaction.
+///
+/// Response: CompactResponse { success: true, message: "..." } on success
+///           ErrorResponse { error: "..." } on failure
+pub fn compact_handler(store: &Arc<Store>) -> Result<String, String> {
+    use super::types::CompactResponse;
+
+    // Trigger major compaction via the store
+    match store.apply(Request::MajorCompaction) {
+        Ok(Response::Ok) => {
+            let response = CompactResponse {
+                success: true,
+                message: "Compaction initiated".to_string(),
+            };
+            serde_json::to_string(&response).map_err(|e| {
+                let error = ErrorResponse::new(format!("Serialization error: {}", e));
+                serde_json::to_string(&error).unwrap_or_else(|_|
+                    r#"{"error":"Serialization error"}"#.to_string()
+                )
+            })
+        }
+        Ok(Response::ServerError(msg)) => {
+            let error = ErrorResponse::new(msg);
+            Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Server error"}"#.to_string()
+            ))
+        }
+        Ok(_) => {
+            let error = ErrorResponse::new("Unexpected response from compaction");
+            Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Unexpected response"}"#.to_string()
+            ))
+        }
+        Err(e) => {
+            let error = ErrorResponse::new(format!("Compaction error: {}", e.msg));
+            Err(serde_json::to_string(&error).unwrap_or_else(|_|
+                r#"{"error":"Compaction error"}"#.to_string()
+            ))
+        }
+    }
 }
 
 #[cfg(test)]
