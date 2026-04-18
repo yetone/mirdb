@@ -353,35 +353,204 @@ button.loading::after {
     background-color: #475569;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
+/* Responsive design - Desktop (1920px+) */
+@media (min-width: 1200px) {
+    main {
+        max-width: 1000px;
+        padding: var(--spacing-lg) calc(var(--spacing-lg) * 2);
+    }
+
+    .status-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    header h1 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Responsive design - Tablet (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+    main {
+        max-width: 100%;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .status-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Ensure touch-friendly targets on tablet */
+    button {
+        min-height: 44px;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        min-height: 44px;
+        padding: var(--spacing-md);
+    }
+}
+
+/* Responsive design - Mobile (under 768px) */
+@media (max-width: 767px) {
+    header {
+        padding: var(--spacing-md);
+    }
+
+    header h1 {
+        font-size: 1.25rem;
+    }
+
     main {
         padding: var(--spacing-md);
+        gap: var(--spacing-md);
     }
 
     .panel {
         padding: var(--spacing-md);
     }
 
+    .panel h2 {
+        font-size: 1rem;
+    }
+
     .form-row {
         grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
     }
 
     .status-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-sm);
     }
 
+    .status-item {
+        padding: var(--spacing-sm);
+    }
+
+    .status-label {
+        font-size: 0.75rem;
+    }
+
+    .status-value {
+        font-size: 1rem;
+    }
+
+    /* Touch-friendly targets - minimum 44px tap target */
+    button {
+        min-height: 48px;
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        min-height: 48px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: var(--spacing-md);
+    }
+
+    /* Toast positioning for mobile */
     #toast-container {
         left: var(--spacing-md);
         right: var(--spacing-md);
         bottom: var(--spacing-md);
     }
 
+    .toast {
+        text-align: center;
+    }
+
+    /* Dialog adaptations for mobile */
+    .dialog-content {
+        width: calc(100% - var(--spacing-lg) * 2);
+        max-width: none;
+        margin: var(--spacing-md);
+    }
+
     .dialog-buttons {
         flex-direction: column;
+        gap: var(--spacing-sm);
     }
 
     .dialog-buttons button {
         width: 100%;
+    }
+
+    /* Result box adjustments */
+    .result-box {
+        font-size: 0.8125rem;
+        padding: var(--spacing-sm);
+        min-height: 80px;
+    }
+
+    /* Delete action section */
+    .delete-action {
+        margin-top: var(--spacing-sm);
+        padding-top: var(--spacing-sm);
+    }
+}
+
+/* Extra small mobile (under 375px) */
+@media (max-width: 374px) {
+    main {
+        padding: var(--spacing-sm);
+    }
+
+    .panel {
+        padding: var(--spacing-sm);
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 1.125rem;
+    }
+}
+
+/* Prevent horizontal overflow on all screen sizes */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+main, .panel, .form-group, .form-row {
+    max-width: 100%;
+}
+
+/* Ensure inputs don't cause overflow */
+input[type="text"],
+input[type="number"],
+textarea {
+    max-width: 100%;
+}
+
+/* Focus visible for keyboard navigation (accessibility) */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-e2e-tests",
+  "version": "1.0.0",
+  "description": "E2E tests for MirDB Web Dashboard",
+  "scripts": {
+    "serve": "http-server ../../src/web -p 8080 -c-1",
+    "test": "npx playwright test",
+    "test:responsive": "BASE_URL=http://localhost:8080 npx playwright test responsive-design.spec.ts"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "playwright",
+    "mirdb"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "http-server": "^14.1.1"
+  }
+}
