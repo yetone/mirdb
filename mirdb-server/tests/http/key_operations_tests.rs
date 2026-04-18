@@ -10,15 +10,11 @@
 //! - Error cases (not found, invalid input)
 //! - Edge cases (empty values, special characters)
 
-use std::sync::Arc;
-
 // These tests use the handler functions directly for unit testing
 // without requiring a running HTTP server
 
 #[cfg(test)]
 mod set_key_tests {
-    use super::*;
-
     // Note: Tests are in mirdb-server/src/http/handlers.rs
     // as they need access to internal types.
     // This file can contain additional integration tests
@@ -34,19 +30,21 @@ mod set_key_tests {
 
 #[cfg(test)]
 mod get_key_tests {
-    use super::*;
+    // Note: GET key tests are in mirdb-server/src/http/handlers.rs
+    // as they need access to internal types.
+    // This file can contain additional integration tests
+    // when the full HTTP server is available.
 
     #[test]
-    fn test_get_key_placeholder() {
-        // Scenario 2 will implement these tests
+    fn test_get_key_integration_placeholder() {
+        // This test verifies the test infrastructure is working
+        // Real integration tests are in handlers.rs module tests
         assert!(true);
     }
 }
 
 #[cfg(test)]
 mod delete_key_tests {
-    use super::*;
-
     #[test]
     fn test_delete_key_placeholder() {
         // Scenario 4 will implement these tests
