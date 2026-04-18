@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "http-server ../../src/web -p 8080 -c-1",
     "test": "npx playwright test",
-    "test:responsive": "BASE_URL=http://localhost:8080 npx playwright test responsive-design.spec.ts"
+    "test:responsive": "BASE_URL=http://localhost:8080 npx playwright test responsive-design.spec.ts",
+    "test:accessibility": "npx playwright test accessibility.spec.js"
   },
   "keywords": [
     "e2e",
@@ -15,7 +16,9 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "@axe-core/playwright": "^4.8.0",
     "@playwright/test": "^1.59.1",
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "serve": "^14.2.6"
   }
 }

@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <header>
+    <!-- Skip navigation link for keyboard accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
         <h1>MirDB Web Dashboard</h1>
     </header>
 
-    <main>
+    <main id="main-content" role="main">
         <!-- Server Status Panel (Scenario 1) -->
         <section id="status-panel" class="panel" aria-label="Server Status">
             <h2>Server Status</h2>

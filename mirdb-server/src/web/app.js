@@ -249,12 +249,18 @@ function handleGetKeySubmit(event) {
 
 // Delete Key Handlers (Scenario 4)
 
+// Store the element that opened the dialog for focus restoration
+let dialogTriggerElement = null;
+
 // Show delete confirmation dialog
 function showDeleteConfirmDialog() {
     if (!currentViewedKey) {
         showToast('No key selected for deletion', 'error');
         return;
     }
+
+    // Store the triggering element for focus restoration (Scenario 12 - Accessibility)
+    dialogTriggerElement = document.activeElement;
 
     const dialog = document.getElementById('delete-confirm-dialog');
     const message = document.getElementById('delete-confirm-message');
@@ -263,12 +269,55 @@ function showDeleteConfirmDialog() {
 
     // Focus the cancel button for safety
     document.getElementById('delete-cancel-btn').focus();
+
+    // Set up focus trap within dialog (Scenario 12 - Accessibility)
+    setupDialogFocusTrap(dialog);
 }
 
 // Hide delete confirmation dialog
 function hideDeleteConfirmDialog() {
     const dialog = document.getElementById('delete-confirm-dialog');
     dialog.style.display = 'none';
+
+    // Restore focus to the element that opened the dialog (Scenario 12 - Accessibility)
+    if (dialogTriggerElement && typeof dialogTriggerElement.focus === 'function') {
+        dialogTriggerElement.focus();
+    }
+    dialogTriggerElement = null;
+}
+
+// Set up focus trap within dialog for accessibility (Scenario 12)
+function setupDialogFocusTrap(dialog) {
+    const focusableElements = dialog.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    // Remove existing trap listener if any
+    if (dialog._focusTrapHandler) {
+        dialog.removeEventListener('keydown', dialog._focusTrapHandler);
+    }
+
+    dialog._focusTrapHandler = function (e) {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+            // Shift + Tab: if on first element, wrap to last
+            if (document.activeElement === firstFocusable) {
+                e.preventDefault();
+                lastFocusable.focus();
+            }
+        } else {
+            // Tab: if on last element, wrap to first
+            if (document.activeElement === lastFocusable) {
+                e.preventDefault();
+                firstFocusable.focus();
+            }
+        }
+    };
+
+    dialog.addEventListener('keydown', dialog._focusTrapHandler);
 }
 
 // Handle delete confirmation
