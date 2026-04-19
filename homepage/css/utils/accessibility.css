@@ -289,21 +289,21 @@ body {
 }
 
 /**
- * Fix footer text contrast - footer has dark background (#12121f)
- * Need light text colors for WCAG AA compliance
+ * Fix footer text contrast - ensure WCAG AA compliance
+ * Uses dark text on light background for proper contrast
  */
 .footer__copyright {
-  color: #e2e8f0 !important;
+  color: #475569 !important;
 }
 
 .footer a,
 .footer__links a {
-  color: #93c5fd !important;
+  color: #1d4ed8 !important;
 }
 
 .footer a:hover,
 .footer__links a:hover {
-  color: #bfdbfe !important;
+  color: #1e40af !important;
 }
 
 /**
