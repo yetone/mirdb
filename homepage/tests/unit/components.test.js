@@ -2,6 +2,7 @@
  * Component Unit Tests
  * Owner: Scenario 1 - Hero Section Display (hero portion)
  * Contributor: Scenario 3 - Quick Start and Installation Section
+ * Contributor: Scenario 7 - Navigation and GitHub Links
  *
  * Unit tests for component rendering and functionality.
  * Other scenarios will add their component tests to this file.
@@ -278,5 +279,145 @@ describe('FeatureCard Component', () => {
   test('features section has accessibility attributes', () => {
     expect(html).toContain('aria-labelledby="features-title"');
     expect(html).toContain('id="features-title"');
+  });
+});
+
+// Scenario 7 - Header Component Tests
+describe('Header Component', () => {
+  let html;
+
+  beforeAll(() => {
+    const htmlPath = join(process.cwd(), 'index.html');
+    html = readFileSync(htmlPath, 'utf-8');
+  });
+
+  // Test Case 6: Render Header component
+  test('TC-6: Header renders logo, navigation links, and GitHub button', () => {
+    // Check header exists
+    expect(html).toContain('class="header"');
+    expect(html).toContain('class="header__container"');
+
+    // Check logo exists
+    expect(html).toContain('class="header__logo"');
+    expect(html).toContain('MiRDB');
+
+    // Check navigation exists
+    expect(html).toContain('class="header__nav"');
+
+    // Check for navigation links
+    expect(html).toContain('class="header__link"');
+
+    // Check for GitHub link/button
+    expect(html).toContain('class="header__github"');
+    expect(html).toContain('https://github.com/yetone/mirdb');
+  });
+
+  test('Header GitHub link has proper attributes', () => {
+    // Extract header section
+    const headerMatch = html.match(/<header class="header"[\s\S]*?<\/header>/);
+    expect(headerMatch).not.toBeNull();
+    const headerHtml = headerMatch[0];
+
+    // Check GitHub link has target="_blank"
+    expect(headerHtml).toContain('target="_blank"');
+
+    // Check GitHub link has rel="noopener noreferrer"
+    expect(headerHtml).toContain('rel="noopener noreferrer"');
+
+    // Check for external link icon
+    expect(headerHtml).toContain('external-link-icon');
+  });
+
+  test('Header has accessibility attributes', () => {
+    // Check for aria-label on navigation
+    expect(html).toContain('aria-label="Main navigation"');
+
+    // Check GitHub button has aria-label mentioning new tab
+    expect(html).toContain('aria-label="View on GitHub (opens in new tab)"');
+  });
+
+  test('Header contains documentation link', () => {
+    // Check for Features or Docs link
+    const headerMatch = html.match(/<header class="header"[\s\S]*?<\/header>/);
+    expect(headerMatch).not.toBeNull();
+    const headerHtml = headerMatch[0];
+
+    // Should have Features and Docs links
+    const hasFeatures = headerHtml.includes('href="#features"');
+    const hasDocs = headerHtml.includes('Docs');
+
+    expect(hasFeatures || hasDocs).toBe(true);
+  });
+});
+
+// Scenario 7 - Footer Component Tests
+describe('Footer Component', () => {
+  let html;
+
+  beforeAll(() => {
+    const htmlPath = join(process.cwd(), 'index.html');
+    html = readFileSync(htmlPath, 'utf-8');
+  });
+
+  // Test Case 7: Render Footer component
+  test('TC-7: Footer renders links, license, and contact information', () => {
+    // Check footer exists
+    expect(html).toContain('class="footer"');
+    expect(html).toContain('class="footer__container"');
+
+    // Check for copyright/project info
+    expect(html).toContain('class="footer__copyright"');
+    expect(html).toContain('MiRDB');
+
+    // Check for footer links
+    expect(html).toContain('class="footer__links"');
+
+    // Check for GitHub link
+    expect(html).toContain('https://github.com/yetone/mirdb');
+
+    // Check for license information (MIT)
+    const footerMatch = html.match(/<footer class="footer"[\s\S]*?<\/footer>/);
+    expect(footerMatch).not.toBeNull();
+    const footerHtml = footerMatch[0];
+
+    const hasLicense = footerHtml.toLowerCase().includes('license') ||
+                       footerHtml.toLowerCase().includes('mit');
+    expect(hasLicense).toBe(true);
+  });
+
+  test('Footer external links have proper security attributes', () => {
+    // Extract footer section
+    const footerMatch = html.match(/<footer class="footer"[\s\S]*?<\/footer>/);
+    expect(footerMatch).not.toBeNull();
+    const footerHtml = footerMatch[0];
+
+    // Check external links have target="_blank"
+    expect(footerHtml).toContain('target="_blank"');
+
+    // Check external links have rel="noopener noreferrer"
+    expect(footerHtml).toContain('rel="noopener noreferrer"');
+  });
+
+  test('Footer external links have visual indicators', () => {
+    // Extract footer section
+    const footerMatch = html.match(/<footer class="footer"[\s\S]*?<\/footer>/);
+    expect(footerMatch).not.toBeNull();
+    const footerHtml = footerMatch[0];
+
+    // Check for external link icons
+    expect(footerHtml).toContain('external-link-icon');
+  });
+
+  test('Footer has accessibility attributes', () => {
+    // Check for aria-label on footer navigation
+    expect(html).toContain('aria-label="Footer navigation"');
+
+    // Check footer links have aria-labels mentioning new tab
+    const footerMatch = html.match(/<footer class="footer"[\s\S]*?<\/footer>/);
+    expect(footerMatch).not.toBeNull();
+    const footerHtml = footerMatch[0];
+
+    const hasNewTabAria = footerHtml.includes('opens in new tab');
+    expect(hasNewTabAria).toBe(true);
   });
 });

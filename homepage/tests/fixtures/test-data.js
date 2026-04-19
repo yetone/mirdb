@@ -85,6 +85,21 @@ export const STATUS_ITEMS = [];
 // Code Examples - Scenario 4 will extend
 export const CODE_EXAMPLES = [];
 
+// Navigation Data - Scenario 7
+export const NAVIGATION_DATA = {
+  githubUrl: 'https://github.com/yetone/mirdb',
+  licenseUrl: 'https://github.com/yetone/mirdb/blob/master/LICENSE',
+  licenseType: 'MIT',
+  headerLinks: [
+    { label: 'Features', href: '#features' },
+    { label: 'Docs', href: '#quickstart' },
+  ],
+  footerLinks: [
+    { label: 'GitHub', href: 'https://github.com/yetone/mirdb', external: true },
+    { label: 'MIT License', href: 'https://github.com/yetone/mirdb/blob/master/LICENSE', external: true },
+  ],
+};
+
 // Export all for convenience
 export default {
   HERO_DATA,
@@ -94,4 +109,5 @@ export default {
   CONFIG_VALUES,
   STATUS_ITEMS,
   CODE_EXAMPLES,
+  NAVIGATION_DATA,
 };
