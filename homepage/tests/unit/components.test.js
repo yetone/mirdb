@@ -7,7 +7,7 @@
  * Other scenarios will add their component tests to this file.
  */
 
-import { HERO_DATA } from '../fixtures/test-data.js';
+import { HERO_DATA, CONFIG_VALUES } from '../fixtures/test-data.js';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -278,5 +278,109 @@ describe('FeatureCard Component', () => {
   test('features section has accessibility attributes', () => {
     expect(html).toContain('aria-labelledby="features-title"');
     expect(html).toContain('id="features-title"');
+  });
+});
+
+// Scenario 6 - ConfigSection Component Tests
+describe('ConfigSection Component', () => {
+  let html;
+
+  beforeAll(() => {
+    const htmlPath = join(process.cwd(), 'index.html');
+    html = readFileSync(htmlPath, 'utf-8');
+  });
+
+  // Test Case 5: Render ConfigSection component with configuration data
+  test('TC-5: ConfigSection renders configuration table with all default values', () => {
+    // Verify configuration section exists
+    expect(html).toContain('id="configuration"');
+    expect(html).toContain('class="config"');
+
+    // Verify configuration table exists
+    expect(html).toContain('class="config__table"');
+
+    // Extract configuration section content
+    const sectionMatch = html.match(/<section id="configuration"[\s\S]*?<!-- END: Scenario 6/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Verify all configuration values from CONFIG_VALUES are present
+    CONFIG_VALUES.forEach(config => {
+      // Check that the key is present
+      expect(sectionContent).toContain(config.key);
+      // Check that the value is present (handle different formats)
+      const valueToCheck = config.value.replace('0.0.0.0:', '');
+      expect(sectionContent.includes(config.value) || sectionContent.includes(valueToCheck)).toBe(true);
+    });
+
+    // Verify configuration rows exist
+    const configRows = sectionContent.match(/data-config="/g);
+    expect(configRows).not.toBeNull();
+    expect(configRows.length).toBeGreaterThanOrEqual(5);
+  });
+
+  test('configuration section has port 12333 documented', () => {
+    expect(html).toContain('12333');
+    expect(html).toContain('addr');
+    expect(html).toContain('data-config="port"');
+  });
+
+  test('configuration section has work directory /tmp/mirdb documented', () => {
+    expect(html).toContain('/tmp/mirdb');
+    expect(html).toContain('work_dir');
+    expect(html).toContain('data-config="work_dir"');
+  });
+
+  test('configuration section has max levels 7 documented', () => {
+    expect(html).toContain('max_level');
+    expect(html).toContain('data-config="max_level"');
+    // The value 7 should be in the config value cell
+    const sectionMatch = html.match(/<tr[^>]*data-config="max_level"[\s\S]*?<\/tr>/);
+    expect(sectionMatch).not.toBeNull();
+    expect(sectionMatch[0]).toContain('>7<');
+  });
+
+  test('configuration section has SSTable max size 100MB documented', () => {
+    expect(html).toContain('sst_max_size');
+    expect(html).toContain('100MB');
+    expect(html).toContain('data-config="sst_max_size"');
+  });
+
+  test('configuration section has memtable max size 4MB documented', () => {
+    expect(html).toContain('mem_table_max_size');
+    expect(html).toContain('4MB');
+    expect(html).toContain('data-config="mem_table_max_size"');
+  });
+
+  test('configuration table has proper structure', () => {
+    // Check table headers
+    expect(html).toContain('class="config__header"');
+    expect(html).toContain('Parameter');
+    expect(html).toContain('Default Value');
+    expect(html).toContain('Description');
+
+    // Check for table rows with proper classes
+    expect(html).toContain('class="config__row"');
+    expect(html).toContain('class="config__key"');
+    expect(html).toContain('class="config__value"');
+    expect(html).toContain('class="config__description"');
+  });
+
+  test('configuration section has accessibility attributes', () => {
+    expect(html).toContain('aria-labelledby="config-heading"');
+    expect(html).toContain('id="config-heading"');
+    expect(html).toContain('aria-label="Configuration options"');
+  });
+
+  test('configuration section has example code block', () => {
+    expect(html).toContain('class="config__example"');
+    expect(html).toContain('class="config__code"');
+    expect(html).toContain('mirdb.toml');
+  });
+
+  test('configuration section has usage note', () => {
+    expect(html).toContain('class="config__note"');
+    expect(html).toContain('mirdb -c');
+    expect(html).toContain('config.toml');
   });
 });

@@ -222,8 +222,74 @@ END</code></pre>
     <!-- END: Scenario 14 - Project Status Section -->
 
     <!-- BEGIN: Scenario 6 - Configuration Section -->
-    <section id="configuration">
-      <!-- Scenario 6 will implement -->
+    <section id="configuration" class="config" aria-labelledby="config-heading">
+      <div class="config__container">
+        <h2 id="config-heading" class="config__title">Configuration</h2>
+        <p class="config__intro">MiRDB can be configured using a TOML configuration file. Below are the key configuration options and their default values.</p>
+
+        <div class="config__table-wrapper">
+          <table class="config__table" role="table" aria-label="Configuration options">
+            <thead>
+              <tr>
+                <th scope="col" class="config__header">Parameter</th>
+                <th scope="col" class="config__header">Default Value</th>
+                <th scope="col" class="config__header">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="config__row" data-config="port">
+                <td class="config__key"><code>addr</code></td>
+                <td class="config__value"><code>0.0.0.0:12333</code></td>
+                <td class="config__description">Server listen address and port</td>
+              </tr>
+              <tr class="config__row" data-config="work_dir">
+                <td class="config__key"><code>work_dir</code></td>
+                <td class="config__value"><code>/tmp/mirdb</code></td>
+                <td class="config__description">Data directory path for storage files</td>
+              </tr>
+              <tr class="config__row" data-config="max_level">
+                <td class="config__key"><code>max_level</code></td>
+                <td class="config__value"><code>7</code></td>
+                <td class="config__description">Maximum LSM tree levels</td>
+              </tr>
+              <tr class="config__row" data-config="sst_max_size">
+                <td class="config__key"><code>sst_max_size</code></td>
+                <td class="config__value"><code>100MB</code></td>
+                <td class="config__description">Maximum SSTable file size</td>
+              </tr>
+              <tr class="config__row" data-config="mem_table_max_size">
+                <td class="config__key"><code>mem_table_max_size</code></td>
+                <td class="config__value"><code>4MB</code></td>
+                <td class="config__description">Maximum memtable size before flush</td>
+              </tr>
+              <tr class="config__row" data-config="block_size">
+                <td class="config__key"><code>block_size</code></td>
+                <td class="config__value"><code>4KB</code></td>
+                <td class="config__description">Data block size for SSTables</td>
+              </tr>
+              <tr class="config__row" data-config="l0_compaction_trigger">
+                <td class="config__key"><code>l0_compaction_trigger</code></td>
+                <td class="config__value"><code>4</code></td>
+                <td class="config__description">Level 0 files count before compaction</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="config__example">
+          <h3 class="config__example-title">Example Configuration</h3>
+          <pre class="config__code"><code># mirdb.toml
+addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+max_level = 7
+sst_max_size = "100M"
+mem_table_max_size = "4M"</code></pre>
+        </div>
+
+        <p class="config__note">
+          <strong>Note:</strong> Configuration can be specified via command line: <code>mirdb -c /path/to/config.toml</code>
+        </p>
+      </div>
     </section>
     <!-- END: Scenario 6 - Configuration Section -->
   </main>
