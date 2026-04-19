@@ -43,11 +43,11 @@ test.describe('Desktop Layout (1920x1080)', () => {
 
     // Navigation links should be visible
     const featuresLink = page.locator('.header__link', { hasText: 'Features' });
-    const quickstartLink = page.locator('.header__link', { hasText: 'Quick Start' });
+    const docsLink = page.locator('.header__link', { hasText: 'Docs' });
     const githubLink = page.locator('.header__github');
 
     await expect(featuresLink).toBeVisible();
-    await expect(quickstartLink).toBeVisible();
+    await expect(docsLink).toBeVisible();
     await expect(githubLink).toBeVisible();
   });
 
@@ -188,11 +188,11 @@ test.describe('Mobile Navigation', () => {
 
     // Check all navigation options are present
     const featuresLink = page.locator('.header__nav .header__link', { hasText: 'Features' });
-    const quickstartLink = page.locator('.header__nav .header__link', { hasText: 'Quick Start' });
+    const docsLink = page.locator('.header__nav .header__link', { hasText: 'Docs' });
     const githubLink = page.locator('.header__nav .header__github');
 
     await expect(featuresLink).toBeVisible();
-    await expect(quickstartLink).toBeVisible();
+    await expect(docsLink).toBeVisible();
     await expect(githubLink).toBeVisible();
   });
 
