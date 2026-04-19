@@ -12,8 +12,8 @@
 /* 2. Reset/normalize */
 @import url('./utils/reset.css');
 
-/* 3. Accessibility utilities - Scenario 9 will create */
-/* @import './utils/accessibility.css'; */
+/* 3. Accessibility utilities */
+@import url('./utils/accessibility.css');
 
 /* 4. Component styles */
 @import url('./components/hero.css');
