@@ -12,23 +12,29 @@
  * - CodeBlock component rendering
  */
 
-import { jest } from '@jest/globals';
-
 // Mock the clipboard API
 const mockClipboard = {
   writeText: jest.fn(),
   readText: jest.fn()
 };
 
-// Mock navigator.clipboard
+// Mock navigator.clipboard before importing
 Object.defineProperty(global.navigator, 'clipboard', {
   value: mockClipboard,
   writable: true,
   configurable: true
 });
 
-// Import after mocking
-const { copyToClipboard, initCopyButtons } = await import('../../js/components/copy-button.js');
+// Variables to hold imported functions
+let copyToClipboard;
+let initCopyButtons;
+
+beforeAll(async () => {
+  // Dynamic import after mocking
+  const module = await import('../../js/components/copy-button.js');
+  copyToClipboard = module.copyToClipboard;
+  initCopyButtons = module.initCopyButtons;
+});
 
 describe('Copy Button Module', () => {
   beforeEach(() => {
