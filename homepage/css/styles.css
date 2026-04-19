@@ -3,8 +3,27 @@
  * Owner: Scenario 1 - Hero Section Display
  *
  * This file imports all component and utility stylesheets.
+ * Do not add styles directly here - use component files.
  */
 
+/* 1. Variables (custom properties) */
 @import url('./variables.css');
+
+/* 2. Reset/normalize */
 @import url('./utils/reset.css');
+
+/* 3. Accessibility utilities - Scenario 9 will create */
+/* @import './utils/accessibility.css'; */
+
+/* 4. Component styles */
+@import url('./components/hero.css');
 @import url('./components/quickstart.css');
+/* @import './components/features.css'; - Scenario 2 */
+/* @import './components/codeblock.css'; - Scenario 4 */
+/* @import './components/techspecs.css'; - Scenario 5 */
+/* @import './components/config.css'; - Scenario 6 */
+/* @import './components/header.css'; - Scenario 7 */
+/* @import './components/footer.css'; - Scenario 7 */
+
+/* 5. Responsive utilities - Scenario 8 will create */
+/* @import './utils/responsive.css'; */
