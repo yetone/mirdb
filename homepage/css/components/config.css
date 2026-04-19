@@ -1,0 +1,191 @@
+/**
+ * Configuration Section Styles
+ * Owner: Scenario 6 - Configuration Documentation Section
+ *
+ * Styles for the configuration documentation table and examples.
+ */
+
+.config {
+  padding: var(--spacing-3xl) 0;
+  background-color: var(--color-surface);
+}
+
+.config__container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.config__title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.config__intro {
+  text-align: center;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-2xl);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Table Wrapper for horizontal scroll on mobile */
+.config__table-wrapper {
+  overflow-x: auto;
+  margin-bottom: var(--spacing-2xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Configuration Table */
+.config__table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-background);
+  font-size: var(--font-size-sm);
+}
+
+.config__header {
+  background-color: var(--color-surface-elevated);
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.config__row {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+}
+
+.config__row:last-child {
+  border-bottom: none;
+}
+
+.config__row:hover {
+  background-color: var(--color-surface);
+}
+
+.config__key,
+.config__value,
+.config__description {
+  padding: var(--spacing-md) var(--spacing-lg);
+  vertical-align: middle;
+}
+
+.config__key {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.config__key code {
+  background-color: var(--color-surface-elevated);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-dark);
+}
+
+.config__value {
+  white-space: nowrap;
+}
+
+.config__value code {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}
+
+.config__description {
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+}
+
+/* Example Configuration Block */
+.config__example {
+  background-color: var(--color-background);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-xl);
+}
+
+.config__example-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.config__code {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.config__code code {
+  font-family: inherit;
+}
+
+/* Note Section */
+.config__note {
+  background-color: var(--color-warning-bg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.config__note strong {
+  color: var(--color-warning);
+}
+
+.config__note code {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .config {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .config__table {
+    font-size: var(--font-size-xs);
+  }
+
+  .config__header,
+  .config__key,
+  .config__value,
+  .config__description {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .config__example {
+    padding: var(--spacing-lg);
+  }
+
+  .config__code {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+}

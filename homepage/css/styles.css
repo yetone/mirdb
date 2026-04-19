@@ -21,7 +21,7 @@
 @import url('./components/quickstart.css');
 @import url('./components/codeblock.css');
 /* @import './components/techspecs.css'; - Scenario 5 */
-/* @import './components/config.css'; - Scenario 6 */
+@import url('./components/config.css');
 @import url('./components/header.css');
 @import url('./components/footer.css');
 

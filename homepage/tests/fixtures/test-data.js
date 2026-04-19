@@ -76,8 +76,45 @@ export const FEATURES = [
   },
 ];
 
-// Configuration Values - Scenario 6 will extend
-export const CONFIG_VALUES = [];
+// Configuration Values - Scenario 6
+export const CONFIG_VALUES = [
+  {
+    key: 'addr',
+    value: '0.0.0.0:12333',
+    description: 'Server listen address and port',
+    port: 12333,
+  },
+  {
+    key: 'work_dir',
+    value: '/tmp/mirdb',
+    description: 'Data directory path for storage files',
+  },
+  {
+    key: 'max_level',
+    value: '7',
+    description: 'Maximum LSM tree levels',
+  },
+  {
+    key: 'sst_max_size',
+    value: '100MB',
+    description: 'Maximum SSTable file size',
+  },
+  {
+    key: 'mem_table_max_size',
+    value: '4MB',
+    description: 'Maximum memtable size before flush',
+  },
+  {
+    key: 'block_size',
+    value: '4KB',
+    description: 'Data block size for SSTables',
+  },
+  {
+    key: 'l0_compaction_trigger',
+    value: '4',
+    description: 'Level 0 files count before compaction',
+  },
+];
 
 // Project Status Items - Scenario 14 will extend
 export const STATUS_ITEMS = [];
