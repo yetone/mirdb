@@ -9,7 +9,7 @@
  * Other scenarios will add their component tests to this file.
  */
 
-import { HERO_DATA, CONFIG_VALUES } from '../fixtures/test-data.js';
+import { HERO_DATA, CONFIG_VALUES, STATUS_ITEMS } from '../fixtures/test-data.js';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -524,5 +524,168 @@ describe('Footer Component', () => {
 
     const hasNewTabAria = footerHtml.includes('opens in new tab');
     expect(hasNewTabAria).toBe(true);
+  });
+});
+
+// Scenario 14 - ProjectStatus Component Tests
+describe('ProjectStatus Component', () => {
+  let html;
+
+  beforeAll(() => {
+    const htmlPath = join(process.cwd(), 'index.html');
+    html = readFileSync(htmlPath, 'utf-8');
+  });
+
+  // Test Case 6: Render ProjectStatus component with feature data
+  test('TC-6: ProjectStatus correctly categorizes features by status', () => {
+    // Verify project status section exists
+    expect(html).toContain('id="project-status"');
+    expect(html).toContain('class="project-status"');
+
+    // Extract project status section content
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Verify all STATUS_ITEMS are present in the section
+    STATUS_ITEMS.forEach(item => {
+      expect(sectionContent).toContain(`data-feature="${item.id}"`);
+      expect(sectionContent).toContain(item.name);
+      expect(sectionContent).toContain(`data-status="${item.status}"`);
+    });
+
+    // Count completed items (should be 4)
+    const completedMatches = sectionContent.match(/data-status="completed"/g);
+    expect(completedMatches).not.toBeNull();
+    expect(completedMatches.length).toBe(4);
+
+    // Count planned items (should be 1)
+    const plannedMatches = sectionContent.match(/data-status="planned"/g);
+    expect(plannedMatches).not.toBeNull();
+    expect(plannedMatches.length).toBe(1);
+  });
+
+  test('completed features have checkmark indicator', () => {
+    // Extract project status section
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Check for completed indicator class
+    expect(sectionContent).toContain('project-status__indicator--completed');
+
+    // Check for checkmark path in SVG (the checkmark icon path)
+    expect(sectionContent).toContain('M19.916 4.626');
+
+    // Check for completed label
+    expect(sectionContent).toContain('project-status__label--completed');
+    expect(sectionContent).toContain('>Completed<');
+  });
+
+  test('planned features have clock indicator', () => {
+    // Extract project status section
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Check for planned indicator class
+    expect(sectionContent).toContain('project-status__indicator--planned');
+
+    // Check for clock icon path (circle with clock hands)
+    expect(sectionContent).toContain('M12 2.25c-5.385');
+
+    // Check for planned label
+    expect(sectionContent).toContain('project-status__label--planned');
+    expect(sectionContent).toContain('>Planned<');
+  });
+
+  test('Tokio/Proto is marked as completed', () => {
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Find tokio-proto item
+    const tokioMatch = sectionContent.match(/<li[^>]*data-feature="tokio-proto"[\s\S]*?<\/li>/);
+    expect(tokioMatch).not.toBeNull();
+    const tokioItem = tokioMatch[0];
+
+    expect(tokioItem).toContain('data-status="completed"');
+    expect(tokioItem).toContain('Tokio/Proto');
+    expect(tokioItem).toContain('project-status__indicator--completed');
+  });
+
+  test('Skip List is marked as completed', () => {
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Find skip-list item
+    const skipListMatch = sectionContent.match(/<li[^>]*data-feature="skip-list"[\s\S]*?<\/li>/);
+    expect(skipListMatch).not.toBeNull();
+    const skipListItem = skipListMatch[0];
+
+    expect(skipListItem).toContain('data-status="completed"');
+    expect(skipListItem).toContain('Skip List');
+    expect(skipListItem).toContain('project-status__indicator--completed');
+  });
+
+  test('Minor Compaction is marked as completed', () => {
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Find minor-compaction item
+    const minorMatch = sectionContent.match(/<li[^>]*data-feature="minor-compaction"[\s\S]*?<\/li>/);
+    expect(minorMatch).not.toBeNull();
+    const minorItem = minorMatch[0];
+
+    expect(minorItem).toContain('data-status="completed"');
+    expect(minorItem).toContain('Minor Compaction');
+    expect(minorItem).toContain('project-status__indicator--completed');
+  });
+
+  test('Major Compaction is marked as completed', () => {
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Find major-compaction item
+    const majorMatch = sectionContent.match(/<li[^>]*data-feature="major-compaction"[\s\S]*?<\/li>/);
+    expect(majorMatch).not.toBeNull();
+    const majorItem = majorMatch[0];
+
+    expect(majorItem).toContain('data-status="completed"');
+    expect(majorItem).toContain('Major Compaction');
+    expect(majorItem).toContain('project-status__indicator--completed');
+  });
+
+  test('Raft is marked as planned', () => {
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    // Find raft item
+    const raftMatch = sectionContent.match(/<li[^>]*data-feature="raft"[\s\S]*?<\/li>/);
+    expect(raftMatch).not.toBeNull();
+    const raftItem = raftMatch[0];
+
+    expect(raftItem).toContain('data-status="planned"');
+    expect(raftItem).toContain('>Raft<');
+    expect(raftItem).toContain('project-status__indicator--planned');
+  });
+
+  test('project status section has accessibility attributes', () => {
+    expect(html).toContain('aria-labelledby="project-status-heading"');
+    expect(html).toContain('id="project-status-heading"');
+    expect(html).toContain('aria-label="Feature implementation status"');
+  });
+
+  test('status labels have aria-label for accessibility', () => {
+    const sectionMatch = html.match(/<section id="project-status"[\s\S]*?<!-- END: Scenario 14/);
+    expect(sectionMatch).not.toBeNull();
+    const sectionContent = sectionMatch[0];
+
+    expect(sectionContent).toContain('aria-label="Status: Completed"');
+    expect(sectionContent).toContain('aria-label="Status: Planned"');
   });
 });

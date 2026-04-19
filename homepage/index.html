@@ -10,6 +10,90 @@
   <meta property="og:type" content="website">
   <title>MiRDB - Persistent Key-Value Store with Memcached Protocol</title>
   <link rel="stylesheet" href="css/styles.css">
+  <!-- Scenario 14 - Project Status Section Styles -->
+  <style>
+    .project-status {
+      padding: var(--spacing-3xl) 0;
+      background-color: var(--color-surface);
+    }
+    .project-status__container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+    .project-status__title {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text);
+    }
+    .project-status__intro {
+      text-align: center;
+      color: var(--color-text-muted);
+      margin-bottom: var(--spacing-2xl);
+    }
+    .project-status__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: var(--spacing-md);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .project-status__item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md) var(--spacing-lg);
+      background-color: var(--color-background);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .project-status__indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+    }
+    .project-status__indicator--completed {
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
+    }
+    .project-status__indicator--planned {
+      background-color: var(--color-planned-bg);
+      color: var(--color-planned);
+    }
+    .project-status__icon {
+      width: 18px;
+      height: 18px;
+    }
+    .project-status__name {
+      flex: 1;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    .project-status__label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-full);
+    }
+    .project-status__label--completed {
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
+    }
+    .project-status__label--planned {
+      background-color: var(--color-planned-bg);
+      color: var(--color-planned);
+    }
+  </style>
 </head>
 <body>
   <!-- Skip link for accessibility -->
@@ -278,8 +362,68 @@ END</code></pre>
     <!-- END: Scenario 5 - Tech Specs Section -->
 
     <!-- BEGIN: Scenario 14 - Project Status Section -->
-    <section id="project-status">
-      <!-- Scenario 14 will implement -->
+    <section id="project-status" class="project-status" aria-labelledby="project-status-heading">
+      <div class="project-status__container">
+        <h2 id="project-status-heading" class="project-status__title">Project Status</h2>
+        <p class="project-status__intro">Track the implementation progress of MiRDB's core features.</p>
+
+        <ul class="project-status__list" role="list" aria-label="Feature implementation status">
+          <!-- Tokio/Proto - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="tokio-proto">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Tokio/Proto</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Skip List - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="skip-list">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Skip List</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Minor Compaction - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="minor-compaction">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Minor Compaction</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Major Compaction - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="major-compaction">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Major Compaction</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Raft - Planned -->
+          <li class="project-status__item" data-status="planned" data-feature="raft">
+            <span class="project-status__indicator project-status__indicator--planned" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Raft</span>
+            <span class="project-status__label project-status__label--planned" aria-label="Status: Planned">Planned</span>
+          </li>
+        </ul>
+      </div>
     </section>
     <!-- END: Scenario 14 - Project Status Section -->
 

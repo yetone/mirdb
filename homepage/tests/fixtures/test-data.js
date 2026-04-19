@@ -116,8 +116,39 @@ export const CONFIG_VALUES = [
   },
 ];
 
-// Project Status Items - Scenario 14 will extend
-export const STATUS_ITEMS = [];
+// Project Status Items - Scenario 14
+export const STATUS_ITEMS = [
+  {
+    id: 'tokio-proto',
+    name: 'Tokio/Proto',
+    description: 'Async networking with memcached protocol',
+    status: 'completed',
+  },
+  {
+    id: 'skip-list',
+    name: 'Skip List',
+    description: 'Memtable with skip list data structure',
+    status: 'completed',
+  },
+  {
+    id: 'minor-compaction',
+    name: 'Minor Compaction',
+    description: 'Memtable to SSTable flush',
+    status: 'completed',
+  },
+  {
+    id: 'major-compaction',
+    name: 'Major Compaction',
+    description: 'SSTable level compaction',
+    status: 'completed',
+  },
+  {
+    id: 'raft',
+    name: 'Raft',
+    description: 'Distributed consensus protocol',
+    status: 'planned',
+  },
+];
 
 // Code Examples - Scenario 4 will extend
 export const CODE_EXAMPLES = [];
