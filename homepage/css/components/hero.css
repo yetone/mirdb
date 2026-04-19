@@ -1,0 +1,125 @@
+/**
+ * Hero Section Styles
+ * Owner: Scenario 1 - Hero Section Display
+ *
+ * Styles for the hero section including logo, tagline, and CTA buttons.
+ */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--spacing-xl);
+  text-align: center;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background) 100%);
+}
+
+.hero__logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero__logo img,
+.hero__logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hero__title {
+  font-size: var(--font-size-5xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+.hero__tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin-bottom: var(--spacing-2xl);
+  line-height: var(--line-height-relaxed);
+}
+
+.hero__cta {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Button Base Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  text-decoration: none;
+  border: 2px solid transparent;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-text-muted);
+}
+
+/* External Link Indicator */
+.btn .external-icon {
+  width: 1em;
+  height: 1em;
+  opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

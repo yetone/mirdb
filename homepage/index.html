@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MiRDB - A persistent key-value store with full Memcached protocol support. Built with Rust for performance and reliability.">
+  <meta name="keywords" content="MiRDB, key-value store, memcached, database, Rust, persistent storage">
+  <meta property="og:title" content="MiRDB - Persistent Key-Value Store">
+  <meta property="og:description" content="A persistent key-value store with full Memcached protocol support">
+  <meta property="og:type" content="website">
+  <title>MiRDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Scenario 14 - Project Status Section Styles -->
+  <style>
+    .project-status {
+      padding: var(--spacing-3xl) 0;
+      background-color: var(--color-surface);
+    }
+    .project-status__container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+    .project-status__title {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text);
+    }
+    .project-status__intro {
+      text-align: center;
+      color: var(--color-text-muted);
+      margin-bottom: var(--spacing-2xl);
+    }
+    .project-status__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: var(--spacing-md);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .project-status__item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md) var(--spacing-lg);
+      background-color: var(--color-background);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .project-status__indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+    }
+    .project-status__indicator--completed {
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
+    }
+    .project-status__indicator--planned {
+      background-color: var(--color-planned-bg);
+      color: var(--color-planned);
+    }
+    .project-status__icon {
+      width: 18px;
+      height: 18px;
+    }
+    .project-status__name {
+      flex: 1;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    .project-status__label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-full);
+    }
+    .project-status__label--completed {
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
+    }
+    .project-status__label--planned {
+      background-color: var(--color-planned-bg);
+      color: var(--color-planned);
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip link for accessibility -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- BEGIN: Scenario 7 - Header Navigation -->
+  <header class="header">
+    <div class="header__container">
+      <div class="header__logo">MiRDB</div>
+      <!-- Mobile hamburger menu button (Scenario 8) -->
+      <button class="header__hamburger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation menu">
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+      </button>
+      <nav class="header__nav" id="mobile-nav" aria-label="Main navigation">
+        <a href="#features" class="header__link">Features</a>
+        <a href="#quickstart" class="header__link">Docs</a>
+        <a href="https://github.com/yetone/mirdb"
+           class="header__github"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="View on GitHub (opens in new tab)">
+          GitHub
+          <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+  <!-- END: Scenario 7 - Header Navigation -->
+
+  <main id="main">
+    <!-- BEGIN: Scenario 1 - Hero Section Display -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero__logo" aria-hidden="true">
+        <img src="images/logo.svg" alt="" width="120" height="120">
+      </div>
+      <h1 id="hero-title" class="hero__title">MiRDB</h1>
+      <p class="hero__tagline">
+        A persistent key-value store with full Memcached protocol support.
+        Built with Rust for blazing-fast performance and reliable data persistence.
+      </p>
+      <div class="hero__cta">
+        <a href="https://github.com/yetone/mirdb"
+           class="btn btn-primary"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="View MiRDB on GitHub (opens in new tab)">
+          View on GitHub
+          <svg class="external-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <a href="#quickstart"
+           class="btn btn-secondary"
+           aria-label="Get started with MiRDB">
+          Get Started
+        </a>
+      </div>
+    </section>
+    <!-- END: Scenario 1 - Hero Section Display -->
+
+    <!-- BEGIN: Scenario 2 - Features Section -->
+    <section id="features" class="features" aria-labelledby="features-title">
+      <h2 id="features-title" class="features__title">Key Features</h2>
+      <div class="features__grid">
+        <!-- Memcached Compatible Feature Card -->
+        <article class="feature-card" data-feature="memcached" data-status="completed">
+          <div class="feature-card__header">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
+              </svg>
+            </div>
+            <span class="status-badge status-badge--completed" aria-label="Feature completed">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+              Completed
+            </span>
+          </div>
+          <h3 class="feature-card__title">Memcached Compatible</h3>
+          <p class="feature-card__description">Full support for the Memcached text protocol. Use any existing Memcached client to connect and interact with MiRDB.</p>
+        </article>
+
+        <!-- Persistent Storage Feature Card -->
+        <article class="feature-card" data-feature="persistence" data-status="completed">
+          <div class="feature-card__header">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 6.375c0 2.692-4.03 4.875-9 4.875S3 9.067 3 6.375 7.03 1.5 12 1.5s9 2.183 9 4.875z" />
+                <path d="M12 12.75c2.685 0 5.19-.586 7.078-1.609a8.283 8.283 0 001.897-1.384c.016.121.025.244.025.368C21 12.817 16.97 15 12 15s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.285 8.285 0 001.897 1.384C6.809 12.164 9.315 12.75 12 12.75z" />
+                <path d="M12 16.5c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 001.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 001.897 1.384C6.809 15.914 9.315 16.5 12 16.5z" />
+                <path d="M12 20.25c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 001.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 001.897 1.384C6.809 19.664 9.315 20.25 12 20.25z" />
+              </svg>
+            </div>
+            <span class="status-badge status-badge--completed" aria-label="Feature completed">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+              Completed
+            </span>
+          </div>
+          <h3 class="feature-card__title">Persistent Storage</h3>
+          <p class="feature-card__description">Data persists across restarts using SSTable-based storage on disk. Never lose your data even after server restarts.</p>
+        </article>
+
+        <!-- LSM Tree Feature Card -->
+        <article class="feature-card" data-feature="lsm-tree" data-status="completed">
+          <div class="feature-card__header">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="status-badge status-badge--completed" aria-label="Feature completed">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+              Completed
+            </span>
+          </div>
+          <h3 class="feature-card__title">LSM Tree Architecture</h3>
+          <p class="feature-card__description">Write-optimized Log-Structured Merge-tree architecture with SSTables for efficient storage and high write throughput.</p>
+        </article>
+
+        <!-- Raft Consensus Feature Card -->
+        <article class="feature-card" data-feature="raft" data-status="planned">
+          <div class="feature-card__header">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="status-badge status-badge--planned" aria-label="Feature planned">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+              </svg>
+              Planned
+            </span>
+          </div>
+          <h3 class="feature-card__title">Raft Consensus</h3>
+          <p class="feature-card__description">Distributed consensus protocol for high availability and fault tolerance. Coming soon to enable cluster deployments.</p>
+        </article>
+      </div>
+    </section>
+    <!-- END: Scenario 2 - Features Section -->
+
+    <!-- BEGIN: Scenario 3 - Quick Start Section -->
+    <section id="quickstart" class="quickstart" aria-labelledby="quickstart-heading">
+      <div class="quickstart__container">
+        <h2 id="quickstart-heading" class="quickstart__title">Quick Start</h2>
+        <p class="quickstart__intro">Get up and running with MiRDB in just a few minutes. Choose your preferred installation method below.</p>
+
+        <div class="quickstart__content">
+          <div class="quickstart__installation">
+            <h3 class="quickstart__subtitle">Installation</h3>
+
+            <ol class="quickstart__steps" role="list" aria-label="Installation steps">
+              <li class="quickstart__step" data-step="1">
+                <span class="quickstart__step-title">Download Pre-built Binary</span>
+                <p class="quickstart__step-desc">Download the latest pre-built binary from the <a href="https://github.com/yetone/mirdb/releases" target="_blank" rel="noopener noreferrer" class="quickstart__link">GitHub Releases</a> page for your platform.</p>
+              </li>
+
+              <li class="quickstart__step" data-step="2">
+                <span class="quickstart__step-title">Or Install via Cargo</span>
+                <p class="quickstart__step-desc">If you have Rust installed, you can build from source:</p>
+                <pre class="quickstart__command"><code>cargo install mirdb</code></pre>
+              </li>
+
+              <li class="quickstart__step" data-step="3">
+                <span class="quickstart__step-title">Run the Server</span>
+                <p class="quickstart__step-desc">Start the MiRDB server with the default configuration:</p>
+                <pre class="quickstart__command"><code>mirdb-server</code></pre>
+              </li>
+
+              <li class="quickstart__step" data-step="4">
+                <span class="quickstart__step-title">Connect with a Client</span>
+                <p class="quickstart__step-desc">Use any memcached-compatible client or telnet to connect:</p>
+                <pre class="quickstart__command"><code>telnet localhost 12333</code></pre>
+              </li>
+            </ol>
+          </div>
+
+          <div class="quickstart__usage">
+            <h3 class="quickstart__subtitle">Basic Usage</h3>
+            <p class="quickstart__usage-desc">Once connected, you can use standard memcached commands:</p>
+            <pre class="quickstart__example"><code># Store a value
+SET mykey 0 0 5
+hello
+STORED
+
+# Retrieve a value
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+
+        <div class="quickstart__next">
+          <p>For more detailed documentation and advanced configuration options, visit the <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
+        </div>
+      </div>
+    </section>
+    <!-- END: Scenario 3 - Quick Start Section -->
+
+    <!-- BEGIN: Scenario 4 - Code Example Section -->
+    <section id="code-example" class="code-example" aria-labelledby="code-example-heading">
+      <div class="code-example__container">
+        <h2 id="code-example-heading" class="code-example__title">Code Examples</h2>
+        <p class="code-example__intro">Connect to MiRDB using the standard memcached protocol. Here's a quick demonstration of basic operations.</p>
+
+        <div class="code-example__blocks">
+          <!-- Connection Example -->
+          <div class="code-block" data-testid="code-block-connection">
+            <div class="code-block__header">
+              <span class="code-block__language">Terminal</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard" data-copy-button>
+                <svg class="code-block__copy-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block__content"><code class="code-block__code" data-code-content>telnet localhost 12333</code></pre>
+          </div>
+
+          <!-- SET/GET Example -->
+          <div class="code-block" data-testid="code-block-commands">
+            <div class="code-block__header">
+              <span class="code-block__language">Memcached Protocol</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard" data-copy-button>
+                <svg class="code-block__copy-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block__content"><code class="code-block__code" data-code-content># Store a value with SET command
+SET mykey 0 0 5
+hello
+STORED
+
+# Retrieve value with GET command
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Scenario 4 - Code Example Section -->
+
+    <!-- BEGIN: Scenario 5 - Tech Specs Section -->
+    <section id="techspecs">
+      <!-- Scenario 5 will implement -->
+    </section>
+    <!-- END: Scenario 5 - Tech Specs Section -->
+
+    <!-- BEGIN: Scenario 14 - Project Status Section -->
+    <section id="project-status" class="project-status" aria-labelledby="project-status-heading">
+      <div class="project-status__container">
+        <h2 id="project-status-heading" class="project-status__title">Project Status</h2>
+        <p class="project-status__intro">Track the implementation progress of MiRDB's core features.</p>
+
+        <ul class="project-status__list" role="list" aria-label="Feature implementation status">
+          <!-- Tokio/Proto - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="tokio-proto">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Tokio/Proto</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Skip List - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="skip-list">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Skip List</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Minor Compaction - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="minor-compaction">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Minor Compaction</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Major Compaction - Completed -->
+          <li class="project-status__item" data-status="completed" data-feature="major-compaction">
+            <span class="project-status__indicator project-status__indicator--completed" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Major Compaction</span>
+            <span class="project-status__label project-status__label--completed" aria-label="Status: Completed">Completed</span>
+          </li>
+
+          <!-- Raft - Planned -->
+          <li class="project-status__item" data-status="planned" data-feature="raft">
+            <span class="project-status__indicator project-status__indicator--planned" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="project-status__icon">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="project-status__name">Raft</span>
+            <span class="project-status__label project-status__label--planned" aria-label="Status: Planned">Planned</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <!-- END: Scenario 14 - Project Status Section -->
+
+    <!-- BEGIN: Scenario 6 - Configuration Section -->
+    <section id="configuration" class="config" aria-labelledby="config-heading">
+      <div class="config__container">
+        <h2 id="config-heading" class="config__title">Configuration</h2>
+        <p class="config__intro">MiRDB can be configured using a TOML configuration file. Below are the key configuration options and their default values.</p>
+
+        <div class="config__table-wrapper">
+          <table class="config__table" role="table" aria-label="Configuration options">
+            <thead>
+              <tr>
+                <th scope="col" class="config__header">Parameter</th>
+                <th scope="col" class="config__header">Default Value</th>
+                <th scope="col" class="config__header">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="config__row" data-config="port">
+                <td class="config__key"><code>addr</code></td>
+                <td class="config__value"><code>0.0.0.0:12333</code></td>
+                <td class="config__description">Server listen address and port</td>
+              </tr>
+              <tr class="config__row" data-config="work_dir">
+                <td class="config__key"><code>work_dir</code></td>
+                <td class="config__value"><code>/tmp/mirdb</code></td>
+                <td class="config__description">Data directory path for storage files</td>
+              </tr>
+              <tr class="config__row" data-config="max_level">
+                <td class="config__key"><code>max_level</code></td>
+                <td class="config__value"><code>7</code></td>
+                <td class="config__description">Maximum LSM tree levels</td>
+              </tr>
+              <tr class="config__row" data-config="sst_max_size">
+                <td class="config__key"><code>sst_max_size</code></td>
+                <td class="config__value"><code>100MB</code></td>
+                <td class="config__description">Maximum SSTable file size</td>
+              </tr>
+              <tr class="config__row" data-config="mem_table_max_size">
+                <td class="config__key"><code>mem_table_max_size</code></td>
+                <td class="config__value"><code>4MB</code></td>
+                <td class="config__description">Maximum memtable size before flush</td>
+              </tr>
+              <tr class="config__row" data-config="block_size">
+                <td class="config__key"><code>block_size</code></td>
+                <td class="config__value"><code>4KB</code></td>
+                <td class="config__description">Data block size for SSTables</td>
+              </tr>
+              <tr class="config__row" data-config="l0_compaction_trigger">
+                <td class="config__key"><code>l0_compaction_trigger</code></td>
+                <td class="config__value"><code>4</code></td>
+                <td class="config__description">Level 0 files count before compaction</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="config__example">
+          <h3 class="config__example-title">Example Configuration</h3>
+          <pre class="config__code"><code># mirdb.toml
+addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+max_level = 7
+sst_max_size = "100M"
+mem_table_max_size = "4M"</code></pre>
+        </div>
+
+        <p class="config__note">
+          <strong>Note:</strong> Configuration can be specified via command line: <code>mirdb -c /path/to/config.toml</code>
+        </p>
+      </div>
+    </section>
+    <!-- END: Scenario 6 - Configuration Section -->
+  </main>
+
+  <!-- BEGIN: Scenario 7 - Footer -->
+  <footer class="footer">
+    <div class="footer__container">
+      <p class="footer__copyright">MiRDB - Open Source Key-Value Store</p>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <a href="https://github.com/yetone/mirdb"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="View on GitHub (opens in new tab)">
+          GitHub
+          <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <span class="footer__separator">|</span>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="View MIT License (opens in new tab)">
+          MIT License
+          <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </footer>
+  <!-- END: Scenario 7 - Footer -->
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

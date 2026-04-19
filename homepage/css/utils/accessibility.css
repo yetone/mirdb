@@ -1,0 +1,392 @@
+/**
+ * Accessibility Styles
+ * Owner: Scenario 9 - Accessibility
+ *
+ * WCAG 2.1 AA Compliance styles:
+ * - .skip-link: Skip to main content link
+ * - .sr-only: Screen reader only text
+ * - :focus-visible: Visible focus indicators
+ * - .focus-ring: Custom focus ring utility
+ */
+
+/* ==========================================================================
+   Skip Link
+   ========================================================================== */
+
+/**
+ * Skip link for keyboard navigation
+ * Hidden off-screen by default, appears on focus
+ */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 3px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Screen Reader Only
+   ========================================================================== */
+
+/**
+ * Visually hidden content for screen readers
+ * Uses clip-path for better browser support
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/**
+ * Allow element to become visible when focused
+ * Useful for skip links within sr-only containers
+ */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: normal;
+}
+
+/* ==========================================================================
+   Focus Indicators
+   ========================================================================== */
+
+/**
+ * Focus visible styles for keyboard navigation
+ * Using :focus-visible to only show focus on keyboard interaction
+ */
+
+/* Remove default outline and add custom focus ring */
+*:focus {
+  outline: none;
+}
+
+/* Apply visible focus indicator only for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Links with focus-visible */
+a:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Buttons with focus-visible */
+button:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Input elements */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 0;
+  border-color: var(--color-border-focus);
+}
+
+/* Custom focus ring utility class */
+.focus-ring:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+}
+
+/* High contrast focus for dark backgrounds */
+.focus-ring--light:focus-visible {
+  outline-color: var(--color-text-inverse);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================================================
+   Interactive Element Focus States
+   ========================================================================== */
+
+/* Header navigation links */
+.header__link:focus-visible,
+.header__github:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Hero CTA buttons */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+  outline: 3px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+/* Feature cards - make the whole card focusable area clear */
+.feature-card:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Code block copy buttons */
+.code-block__copy:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Footer links */
+.footer__links a:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Quickstart links */
+.quickstart__link:focus-visible,
+.quickstart__next a:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+/**
+ * Respect user preference for reduced motion
+ * Disables animations and transitions for users who prefer reduced motion
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+/**
+ * Windows High Contrast Mode support
+ * Ensures elements remain visible in forced colors mode
+ */
+@media (forced-colors: active) {
+  .skip-link:focus {
+    outline: 3px solid CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  *:focus-visible {
+    outline: 3px solid CanvasText;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    border: 2px solid CanvasText;
+  }
+
+  .status-badge {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* ==========================================================================
+   Color Contrast Fixes - WCAG 2.1 AA Compliance
+   ========================================================================== */
+
+/**
+ * High contrast text utility
+ * Ensures text meets WCAG AA 4.5:1 contrast ratio
+ */
+.high-contrast-text {
+  color: var(--color-text);
+}
+
+/**
+ * Ensure body text has sufficient contrast
+ * Using dark text (#0f172a) on light background (#ffffff)
+ * Contrast ratio: ~19.4:1 (exceeds WCAG AAA 7:1)
+ */
+body {
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+/**
+ * Fix button contrast - ensure primary buttons have sufficient contrast
+ * Original may have light text on medium blue, adjust for AA compliance
+ */
+.btn-primary {
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover {
+  background-color: #1e40af !important;
+}
+
+/**
+ * Fix status badge contrast - ensure badges are readable
+ */
+.status-badge--completed {
+  background-color: #166534 !important;
+  color: #ffffff !important;
+}
+
+.status-badge--planned {
+  background-color: #6d28d9 !important;
+  color: #ffffff !important;
+}
+
+/**
+ * Fix code block language label contrast
+ */
+.code-block__language {
+  color: #e2e8f0 !important;
+  background-color: #334155 !important;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+/**
+ * Fix footer text contrast - ensure WCAG AA compliance
+ * Uses dark text on light background for proper contrast
+ */
+.footer__copyright {
+  color: #475569 !important;
+}
+
+.footer a,
+.footer__links a {
+  color: #1d4ed8 !important;
+}
+
+.footer a:hover,
+.footer__links a:hover {
+  color: #1e40af !important;
+}
+
+/**
+ * Fix quickstart links and other inline links
+ */
+.quickstart a,
+.quickstart__link,
+.quickstart__next a {
+  color: var(--color-primary-dark) !important;
+}
+
+.quickstart a:hover,
+.quickstart__link:hover,
+.quickstart__next a:hover {
+  color: var(--color-primary) !important;
+}
+
+/**
+ * Fix config note strong text - warning color on warning background
+ * Original: #f59e0b on #fef3c7 (contrast 1.92)
+ * Fixed: darker warning text for better contrast
+ */
+.config__note strong {
+  color: #92400e !important;
+}
+
+/**
+ * Ensure strong/bold text is visible
+ */
+strong {
+  color: inherit;
+}
+
+/* ==========================================================================
+   Code Block Accessibility
+   ========================================================================== */
+
+/**
+ * Ensure code blocks are properly labeled for screen readers
+ */
+.code-block {
+  position: relative;
+}
+
+.code-block__content {
+  /* Ensure code is scrollable with keyboard */
+  overflow: auto;
+  max-height: 400px;
+}
+
+/* Ensure code content is focusable for keyboard scrolling */
+.code-block__content:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: -3px;
+}
+
+/* ==========================================================================
+   Link Accessibility
+   ========================================================================== */
+
+/**
+ * Ensure links are distinguishable from regular text
+ * Using underline and color difference
+ */
+main a:not(.btn):not(.header__link):not(.header__github) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+main a:not(.btn):hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ==========================================================================
+   Table Accessibility
+   ========================================================================== */
+
+/**
+ * Ensure table cells have proper padding for readability
+ * and focus states are visible
+ */
+.config__table th:focus-visible,
+.config__table td:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: -3px;
+}
