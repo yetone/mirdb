@@ -19,7 +19,7 @@
 @import url('./components/hero.css');
 @import url('./components/features.css');
 @import url('./components/quickstart.css');
-/* @import './components/codeblock.css'; - Scenario 4 */
+@import url('./components/codeblock.css');
 /* @import './components/techspecs.css'; - Scenario 5 */
 @import url('./components/config.css');
 /* @import './components/header.css'; - Scenario 7 */
