@@ -1,0 +1,26 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MiRDB Product Homepage - A Persistent Key-Value Store",
+  "type": "module",
+  "scripts": {
+    "serve": "npx serve -l 3000",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:e2e": "npx playwright test",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config tests/unit/jest.config.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^29.0.2",
+    "serve": "^14.2.0"
+  },
+  "keywords": [
+    "mirdb",
+    "key-value",
+    "memcached",
+    "database"
+  ],
+  "license": "MIT"
+}

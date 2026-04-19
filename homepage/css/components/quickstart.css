@@ -1,0 +1,325 @@
+/**
+ * Quick Start Section Styles
+ * Owner: Scenario 3 - Quick Start and Installation Section
+ *
+ * Styles for:
+ * - .quickstart: Section container
+ * - .quickstart__steps: Ordered list of steps
+ * - .quickstart__step: Individual step item
+ * - .quickstart__command: Inline code for commands
+ */
+
+.quickstart {
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background-color: var(--color-surface);
+}
+
+.quickstart__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.quickstart__title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.quickstart__intro {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto var(--spacing-2xl);
+}
+
+.quickstart__content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-2xl);
+}
+
+@media (min-width: 768px) {
+  .quickstart__content {
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--spacing-3xl);
+  }
+}
+
+.quickstart__subtitle {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.quickstart__steps {
+  list-style: none;
+  counter-reset: step-counter;
+}
+
+.quickstart__step {
+  position: relative;
+  padding-left: var(--spacing-3xl);
+  margin-bottom: var(--spacing-xl);
+  counter-increment: step-counter;
+}
+
+.quickstart__step::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quickstart__step-title {
+  display: block;
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text);
+}
+
+.quickstart__step-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.5;
+}
+
+.quickstart__link {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.quickstart__link:hover {
+  color: var(--color-primary-dark);
+}
+
+.quickstart__command {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  overflow-x: auto;
+  display: block;
+  margin-top: var(--spacing-sm);
+}
+
+.quickstart__command code {
+  background: none;
+  padding: 0;
+}
+
+.quickstart__usage-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.quickstart__example {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  overflow-x: auto;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.quickstart__example code {
+  background: none;
+  padding: 0;
+}
+
+.quickstart__next {
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.quickstart__next p {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+}
+
+.quickstart__next a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* Hero section basic styles needed for layout */
+.hero {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+}
+
+.hero__container {
+  text-align: center;
+  max-width: 800px;
+}
+
+.hero__title {
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero__tagline {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.hero__cta {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-border);
+}
+
+/* Header basic styles */
+.header {
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-md) var(--spacing-lg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__logo {
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+}
+
+.header__nav {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.header__link,
+.header__github {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.header__link:hover,
+.header__github:hover {
+  color: var(--color-primary);
+}
+
+/* Footer basic styles */
+.footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.footer__container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.footer__copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.footer__links {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.footer__links a {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.footer__separator {
+  color: var(--color-border);
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--spacing-md);
+  background: var(--color-primary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+}

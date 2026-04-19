@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MiRDB - A Persistent Key-Value Store with Full Memcached Protocol Support">
+  <title>MiRDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header class="header">
+    <div class="header__container">
+      <div class="header__logo">MiRDB</div>
+      <nav class="header__nav">
+        <a href="#quickstart" class="header__link">Quick Start</a>
+        <a href="https://github.com/yetone/mirdb" class="header__github" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- BEGIN: Scenario 1 - Hero Section -->
+    <section id="hero" class="hero">
+      <div class="hero__container">
+        <h1 class="hero__title">MiRDB</h1>
+        <p class="hero__tagline">A Persistent Key-Value Store with Full Memcached Protocol Support</p>
+        <div class="hero__cta">
+          <a href="https://github.com/yetone/mirdb" class="btn btn-primary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          <a href="#quickstart" class="btn btn-secondary">Get Started</a>
+        </div>
+      </div>
+    </section>
+    <!-- END: Scenario 1 - Hero Section -->
+
+    <!-- BEGIN: Scenario 3 - Quick Start Section -->
+    <section id="quickstart" class="quickstart" aria-labelledby="quickstart-heading">
+      <div class="quickstart__container">
+        <h2 id="quickstart-heading" class="quickstart__title">Quick Start</h2>
+        <p class="quickstart__intro">Get up and running with MiRDB in just a few minutes. Choose your preferred installation method below.</p>
+
+        <div class="quickstart__content">
+          <div class="quickstart__installation">
+            <h3 class="quickstart__subtitle">Installation</h3>
+
+            <ol class="quickstart__steps" role="list" aria-label="Installation steps">
+              <li class="quickstart__step" data-step="1">
+                <span class="quickstart__step-title">Download Pre-built Binary</span>
+                <p class="quickstart__step-desc">Download the latest pre-built binary from the <a href="https://github.com/yetone/mirdb/releases" target="_blank" rel="noopener noreferrer" class="quickstart__link">GitHub Releases</a> page for your platform.</p>
+              </li>
+
+              <li class="quickstart__step" data-step="2">
+                <span class="quickstart__step-title">Or Install via Cargo</span>
+                <p class="quickstart__step-desc">If you have Rust installed, you can build from source:</p>
+                <pre class="quickstart__command"><code>cargo install mirdb</code></pre>
+              </li>
+
+              <li class="quickstart__step" data-step="3">
+                <span class="quickstart__step-title">Run the Server</span>
+                <p class="quickstart__step-desc">Start the MiRDB server with the default configuration:</p>
+                <pre class="quickstart__command"><code>mirdb-server</code></pre>
+              </li>
+
+              <li class="quickstart__step" data-step="4">
+                <span class="quickstart__step-title">Connect with a Client</span>
+                <p class="quickstart__step-desc">Use any memcached-compatible client or telnet to connect:</p>
+                <pre class="quickstart__command"><code>telnet localhost 12333</code></pre>
+              </li>
+            </ol>
+          </div>
+
+          <div class="quickstart__usage">
+            <h3 class="quickstart__subtitle">Basic Usage</h3>
+            <p class="quickstart__usage-desc">Once connected, you can use standard memcached commands:</p>
+            <pre class="quickstart__example"><code># Store a value
+SET mykey 0 0 5
+hello
+STORED
+
+# Retrieve a value
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+
+        <div class="quickstart__next">
+          <p>For more detailed documentation and advanced configuration options, visit the <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
+        </div>
+      </div>
+    </section>
+    <!-- END: Scenario 3 - Quick Start Section -->
+  </main>
+
+  <footer class="footer">
+    <div class="footer__container">
+      <p class="footer__copyright">MiRDB - Open Source Key-Value Store</p>
+      <nav class="footer__links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <span class="footer__separator">|</span>
+        <a href="https://github.com/yetone/mirdb/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>
