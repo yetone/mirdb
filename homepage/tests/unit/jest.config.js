@@ -11,4 +11,5 @@ export default {
   transform: {},
   verbose: true,
   collectCoverage: false,
+  testPathIgnorePatterns: ['/node_modules/', '/tests/e2e/'],
 };

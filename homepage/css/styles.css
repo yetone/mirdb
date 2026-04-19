@@ -17,8 +17,8 @@
 
 /* 4. Component styles */
 @import url('./components/hero.css');
+@import url('./components/features.css');
 @import url('./components/quickstart.css');
-/* @import './components/features.css'; - Scenario 2 */
 /* @import './components/codeblock.css'; - Scenario 4 */
 /* @import './components/techspecs.css'; - Scenario 5 */
 /* @import './components/config.css'; - Scenario 6 */

@@ -29,8 +29,12 @@
 
   /* Status Colors */
   --color-success: #22c55e;
+  --color-success-bg: #dcfce7;
   --color-warning: #f59e0b;
+  --color-warning-bg: #fef3c7;
   --color-error: #ef4444;
+  --color-planned: #8b5cf6;
+  --color-planned-bg: #ede9fe;
 
   /* Border Colors */
   --color-border: #e2e8f0;
@@ -84,6 +88,7 @@
 
   /* Layout */
   --max-width: 1200px;
+  --container-max-width: 1200px;
   --header-height: 4rem;
 
   /* Z-Index Scale */

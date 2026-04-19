@@ -44,8 +44,37 @@ export const EXPECTED_COMMANDS = {
   connect: 'telnet localhost 12333',
 };
 
-// Features Data - Scenario 2 will extend
-export const FEATURES = [];
+// Features Data - Scenario 2
+export const FEATURES = [
+  {
+    id: 'memcached',
+    title: 'Memcached Compatible',
+    description: 'Full support for the Memcached text protocol. Use any existing Memcached client.',
+    status: 'completed',
+    icon: 'memcached.svg',
+  },
+  {
+    id: 'persistence',
+    title: 'Persistent Storage',
+    description: 'Data persists across restarts using SSTable-based storage on disk.',
+    status: 'completed',
+    icon: 'storage.svg',
+  },
+  {
+    id: 'lsm-tree',
+    title: 'LSM Tree Architecture',
+    description: 'Write-optimized Log-Structured Merge-tree for high performance.',
+    status: 'completed',
+    icon: 'performance.svg',
+  },
+  {
+    id: 'raft',
+    title: 'Raft Consensus',
+    description: 'Distributed consensus for high availability and fault tolerance.',
+    status: 'planned',
+    icon: 'clock.svg',
+  },
+];
 
 // Configuration Values - Scenario 6 will extend
 export const CONFIG_VALUES = [];

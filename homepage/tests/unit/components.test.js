@@ -205,3 +205,78 @@ describe('QuickStartSection', () => {
     expect(html).toContain('role="list"');
   });
 });
+
+// Scenario 2 - FeatureCard Component Tests
+describe('FeatureCard Component', () => {
+  let html;
+
+  beforeAll(() => {
+    const htmlPath = join(process.cwd(), 'index.html');
+    html = readFileSync(htmlPath, 'utf-8');
+  });
+
+  // Test Case 5: Render FeatureCard component with status='completed'
+  test('TC-5: FeatureCard with status="completed" displays checkmark indicator', () => {
+    // Find a completed feature card
+    const completedMatch = html.match(/<article[^>]*data-status="completed"[\s\S]*?<\/article>/);
+    expect(completedMatch).not.toBeNull();
+
+    const cardHtml = completedMatch[0];
+
+    // Check for status-badge--completed class
+    expect(cardHtml).toContain('status-badge--completed');
+
+    // Check for Completed text
+    expect(cardHtml).toContain('Completed');
+
+    // Check for aria-label for accessibility
+    expect(cardHtml).toContain('aria-label="Feature completed"');
+  });
+
+  // Test Case 6: Render FeatureCard component with status='planned'
+  test('TC-6: FeatureCard with status="planned" displays planning indicator', () => {
+    // Find a planned feature card
+    const plannedMatch = html.match(/<article[^>]*data-status="planned"[\s\S]*?<\/article>/);
+    expect(plannedMatch).not.toBeNull();
+
+    const cardHtml = plannedMatch[0];
+
+    // Check for status-badge--planned class
+    expect(cardHtml).toContain('status-badge--planned');
+
+    // Check for Planned text
+    expect(cardHtml).toContain('Planned');
+
+    // Check for aria-label for accessibility
+    expect(cardHtml).toContain('aria-label="Feature planned"');
+  });
+
+  test('all feature cards have required structure', () => {
+    // Check that features section exists
+    expect(html).toContain('id="features"');
+    expect(html).toContain('class="features"');
+
+    // Check for feature cards
+    const featureCards = html.match(/<article[^>]*class="feature-card"/g);
+    expect(featureCards).not.toBeNull();
+    expect(featureCards.length).toBe(4);
+
+    // Check for expected features
+    expect(html).toContain('data-feature="memcached"');
+    expect(html).toContain('data-feature="persistence"');
+    expect(html).toContain('data-feature="lsm-tree"');
+    expect(html).toContain('data-feature="raft"');
+  });
+
+  test('feature cards have icons', () => {
+    // Check for feature-card__icon class
+    const iconElements = html.match(/class="feature-card__icon"/g);
+    expect(iconElements).not.toBeNull();
+    expect(iconElements.length).toBe(4);
+  });
+
+  test('features section has accessibility attributes', () => {
+    expect(html).toContain('aria-labelledby="features-title"');
+    expect(html).toContain('id="features-title"');
+  });
+});
