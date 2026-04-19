@@ -19,7 +19,13 @@
   <header class="header">
     <div class="header__container">
       <div class="header__logo">MiRDB</div>
-      <nav class="header__nav" aria-label="Main navigation">
+      <!-- Mobile hamburger menu button (Scenario 8) -->
+      <button class="header__hamburger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation menu">
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+      </button>
+      <nav class="header__nav" id="mobile-nav" aria-label="Main navigation">
         <a href="#features" class="header__link">Features</a>
         <a href="#quickstart" class="header__link">Docs</a>
         <a href="https://github.com/yetone/mirdb"

@@ -10,8 +10,10 @@
 // Import copy button functionality (Scenario 4)
 import { initCopyButtons } from './components/copy-button.js';
 
+// Import mobile navigation (Scenario 8)
+import { initMobileNav } from './components/mobile-nav.js';
+
 // Future imports - will be implemented by other scenarios:
-// import { initMobileNav } from './components/mobile-nav.js';  // Scenario 8
 // import { initTheme } from './utils/theme.js';                // Scenario 10
 // import { initSmoothScroll } from './components/smooth-scroll.js'; // Scenario 15
 
@@ -25,8 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(`Initialized ${copyButtonCount} copy button(s)`);
   }
 
+  // Initialize mobile navigation (Scenario 8)
+  const mobileNavInitialized = initMobileNav();
+  if (mobileNavInitialized) {
+    console.log('Mobile navigation initialized');
+  }
+
   // Future initializations - will be implemented by other scenarios:
-  // - Mobile navigation (Scenario 8)
   // - Theme detection (Scenario 10)
   // - Smooth scroll (Scenario 15)
 });
