@@ -204,8 +204,52 @@ END</code></pre>
     <!-- END: Scenario 3 - Quick Start Section -->
 
     <!-- BEGIN: Scenario 4 - Code Example Section -->
-    <section id="code-example">
-      <!-- Scenario 4 will implement -->
+    <section id="code-example" class="code-example" aria-labelledby="code-example-heading">
+      <div class="code-example__container">
+        <h2 id="code-example-heading" class="code-example__title">Code Examples</h2>
+        <p class="code-example__intro">Connect to MiRDB using the standard memcached protocol. Here's a quick demonstration of basic operations.</p>
+
+        <div class="code-example__blocks">
+          <!-- Connection Example -->
+          <div class="code-block" data-testid="code-block-connection">
+            <div class="code-block__header">
+              <span class="code-block__language">Terminal</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard" data-copy-button>
+                <svg class="code-block__copy-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block__content"><code class="code-block__code" data-code-content>telnet localhost 12333</code></pre>
+          </div>
+
+          <!-- SET/GET Example -->
+          <div class="code-block" data-testid="code-block-commands">
+            <div class="code-block__header">
+              <span class="code-block__language">Memcached Protocol</span>
+              <button class="code-block__copy" type="button" aria-label="Copy code to clipboard" data-copy-button>
+                <svg class="code-block__copy-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="code-block__copy-text">Copy</span>
+              </button>
+            </div>
+            <pre class="code-block__content"><code class="code-block__code" data-code-content># Store a value with SET command
+SET mykey 0 0 5
+hello
+STORED
+
+# Retrieve value with GET command
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          </div>
+        </div>
+      </div>
     </section>
     <!-- END: Scenario 4 - Code Example Section -->
 
