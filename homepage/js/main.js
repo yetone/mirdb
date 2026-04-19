@@ -13,8 +13,10 @@ import { initCopyButtons } from './components/copy-button.js';
 // Import mobile navigation (Scenario 8)
 import { initMobileNav } from './components/mobile-nav.js';
 
+// Import theme detection (Scenario 10)
+import { initTheme } from './utils/theme.js';
+
 // Future imports - will be implemented by other scenarios:
-// import { initTheme } from './utils/theme.js';                // Scenario 10
 // import { initSmoothScroll } from './components/smooth-scroll.js'; // Scenario 15
 
 // Initialize when DOM is ready
@@ -33,8 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Mobile navigation initialized');
   }
 
+  // Initialize theme detection (Scenario 10)
+  const themeInfo = initTheme();
+  console.log(`Current theme: ${themeInfo.theme}`);
+
   // Future initializations - will be implemented by other scenarios:
-  // - Theme detection (Scenario 10)
   // - Smooth scroll (Scenario 15)
 });
 

@@ -96,3 +96,50 @@
   --z-modal: 200;
   --z-tooltip: 300;
 }
+
+/**
+ * Dark Mode Theme (Scenario 10)
+ * Automatically applied when system prefers dark color scheme.
+ * Maintains WCAG 2.1 AA contrast ratios (4.5:1 for normal text).
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Primary Colors - adjusted for dark theme with better contrast for buttons */
+    --color-primary: #2563eb;
+    --color-primary-hover: #1d4ed8;
+    --color-primary-dark: #1e40af;
+    --color-secondary: #818cf8;
+    --color-secondary-hover: #6366f1;
+
+    /* Background Colors - dark surfaces */
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-surface-elevated: #334155;
+    --color-surface-alt: #1e293b;
+    --color-code-bg: #0f172a;
+    --color-code-text: #e2e8f0;
+
+    /* Text Colors - light text on dark background */
+    --color-text: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-text-inverse: #ffffff;
+
+    /* Status Colors - adjusted for dark theme */
+    --color-success: #4ade80;
+    --color-success-bg: #14532d;
+    --color-warning: #fbbf24;
+    --color-warning-bg: #713f12;
+    --color-error: #f87171;
+    --color-planned: #a78bfa;
+    --color-planned-bg: #3730a3;
+
+    /* Border Colors - visible on dark backgrounds */
+    --color-border: #334155;
+    --color-border-focus: #60a5fa;
+
+    /* Shadows - deeper for dark mode */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  }
+}
