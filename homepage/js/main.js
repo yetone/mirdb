@@ -16,8 +16,8 @@ import { initMobileNav } from './components/mobile-nav.js';
 // Import theme detection (Scenario 10)
 import { initTheme } from './utils/theme.js';
 
-// Future imports - will be implemented by other scenarios:
-// import { initSmoothScroll } from './components/smooth-scroll.js'; // Scenario 15
+// Import smooth scroll (Scenario 15)
+import { initSmoothScroll } from './components/smooth-scroll.js';
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -39,8 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeInfo = initTheme();
   console.log(`Current theme: ${themeInfo.theme}`);
 
-  // Future initializations - will be implemented by other scenarios:
-  // - Smooth scroll (Scenario 15)
+  // Initialize smooth scroll (Scenario 15)
+  const smoothScrollCount = initSmoothScroll();
+  if (smoothScrollCount > 0) {
+    console.log(`Initialized smooth scroll for ${smoothScrollCount} anchor link(s)`);
+  }
 });
 
 // Export for module usage
