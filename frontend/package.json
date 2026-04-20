@@ -13,7 +13,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "node scripts/run-e2e.mjs",
     "test:e2e:playwright": "playwright test",
-    "test:e2e:headed": "playwright test --headed"
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:cross-browser": "node scripts/run-cross-browser-tests.mjs"
   },
   "dependencies": {
     "axios": "^1.6.0",
