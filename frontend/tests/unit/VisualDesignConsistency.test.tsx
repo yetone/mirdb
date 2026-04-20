@@ -168,7 +168,8 @@ describe('Visual Design Consistency', () => {
 
       const card = screen.getByRole('article')
       expect(card).toHaveClass('hover:shadow-2xl')
-      expect(card).toHaveClass('transition-shadow')
+      // transition-all includes shadow transitions along with border and transform
+      expect(card).toHaveClass('transition-all')
     })
 
     it('should have duration for shadow transition', () => {

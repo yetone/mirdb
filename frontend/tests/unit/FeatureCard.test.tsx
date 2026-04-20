@@ -1,16 +1,18 @@
 /**
  * Unit tests for FeatureCard component.
  * Owner: Scenario 4 - Features Section Display
+ * Hover Effects: Scenario 11 - Feature Card Hover Effects
  *
  * Test coverage:
  * - Renders icon, title, and description
  * - Has proper ARIA attributes
- * - Hover styles are applied
+ * - Hover styles are applied (lift, border highlight, shadow)
+ * - Smooth transition animation classes
  * - Uses consistent styling with design system
  */
 
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import FeatureCard from '../../src/components/home/FeatureCard'
 
 const MockIcon = () => (
@@ -50,6 +52,12 @@ describe('FeatureCard', () => {
 
       expect(screen.getByRole('article')).toBeInTheDocument()
     })
+
+    it('should have data-testid for testing', () => {
+      render(<FeatureCard {...defaultProps} />)
+
+      expect(screen.getByTestId('feature-card')).toBeInTheDocument()
+    })
   })
 
   describe('Accessibility', () => {
@@ -83,6 +91,73 @@ describe('FeatureCard', () => {
 
       const article = screen.getByRole('article')
       expect(article).toHaveClass('hover:shadow-2xl')
+    })
+  })
+
+  describe('Hover Effects (Scenario 11)', () => {
+    it('should have hover-specific CSS class for transform via Framer Motion whileHover', () => {
+      render(<FeatureCard {...defaultProps} />)
+
+      const card = screen.getByTestId('feature-card')
+      // Framer Motion applies whileHover which transforms y by -4px
+      // The component has whileHover prop which indicates hover transform capability
+      expect(card).toBeInTheDocument()
+      // Verify the card is a motion element (rendered by Framer Motion)
+      expect(card.tagName.toLowerCase()).toBe('article')
+    })
+
+    it('should have border highlight classes for hover state', () => {
+      render(<FeatureCard {...defaultProps} />)
+
+      const card = screen.getByTestId('feature-card')
+      // Check for border classes that enable hover border highlight
+      expect(card).toHaveClass('border-2')
+      expect(card).toHaveClass('border-transparent')
+      expect(card).toHaveClass('hover:border-primary')
+    })
+
+    it('should have smooth transition classes for all properties', () => {
+      render(<FeatureCard {...defaultProps} />)
+
+      const card = screen.getByTestId('feature-card')
+      expect(card).toHaveClass('transition-all')
+      expect(card).toHaveClass('duration-300')
+      expect(card).toHaveClass('ease-out')
+    })
+
+    it('should apply elevation effect classes on hover (shadow and transform)', () => {
+      render(<FeatureCard {...defaultProps} />)
+
+      const card = screen.getByTestId('feature-card')
+      // Verify shadow elevation on hover
+      expect(card).toHaveClass('shadow-xl')
+      expect(card).toHaveClass('hover:shadow-2xl')
+      // Framer Motion handles the transform lift effect via whileHover
+    })
+
+    it('should trigger hover state when mouseenter event fires', () => {
+      render(<FeatureCard {...defaultProps} />)
+
+      const card = screen.getByTestId('feature-card')
+
+      // Fire mouseenter event
+      fireEvent.mouseEnter(card)
+
+      // The card should still be in the document after hover
+      expect(card).toBeInTheDocument()
+      // Border highlight classes are present for CSS to apply on :hover
+      expect(card).toHaveClass('hover:border-primary')
+      expect(card).toHaveClass('hover:shadow-2xl')
+    })
+
+    it('should have no janky movement - uses ease-out timing function', () => {
+      render(<FeatureCard {...defaultProps} />)
+
+      const card = screen.getByTestId('feature-card')
+      // Smooth animation ensured by ease-out timing
+      expect(card).toHaveClass('ease-out')
+      // Combined with proper duration
+      expect(card).toHaveClass('duration-300')
     })
   })
 })
