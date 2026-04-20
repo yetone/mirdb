@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import Home from '../../src/pages/Home'
 
@@ -40,7 +40,9 @@ describe('Home Page', () => {
   it('should render subheadline with URL shortening and analytics info', () => {
     renderHome()
 
-    expect(screen.getByText(/analytics/i)).toBeInTheDocument()
+    // Scope to hero section to avoid matching feature cards
+    const heroSection = screen.getByLabelText(/hero section/i)
+    expect(within(heroSection).getByText(/analytics/i)).toBeInTheDocument()
   })
 
   it('should have a main element as the root', () => {
