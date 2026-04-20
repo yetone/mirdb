@@ -19,6 +19,7 @@ import { toHaveNoViolations } from 'vitest-axe/matchers'
 import Home from '../../src/pages/Home'
 import Navbar from '../../src/components/Navbar'
 import { AuthProvider } from '../../src/contexts/AuthContext'
+import { ThemeProvider } from '../../src/contexts/ThemeContext'
 
 // Extend Vitest matchers with axe accessibility matchers
 expect.extend({ toHaveNoViolations })
@@ -26,12 +27,14 @@ expect.extend({ toHaveNoViolations })
 // Render helper that includes Navbar for full page testing
 const renderHomepage = () => {
   return render(
-    <AuthProvider>
-      <BrowserRouter>
-        <Navbar />
-        <Home />
-      </BrowserRouter>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Home />
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
