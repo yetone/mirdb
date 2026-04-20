@@ -108,4 +108,56 @@ describe('HeroSection', () => {
       expect(loginLink).toBeInTheDocument()
     })
   })
+
+  /**
+   * Scenario 2: Primary Registration CTA Button
+   * Owner: Scenario 2
+   */
+  describe('Scenario 2: Primary Registration CTA Button', () => {
+    describe('Test Case 1: Primary CTA button renders with proper text', () => {
+      it('should render primary CTA button with text containing "Get Started", "Sign Up", or similar', () => {
+        renderHeroSection()
+
+        // Look for primary CTA button with expected text
+        const ctaButton = screen.getByRole('link', { name: /get started/i })
+        expect(ctaButton).toBeInTheDocument()
+        expect(ctaButton.textContent).toMatch(/get started|sign up/i)
+      })
+
+      it('should have primary CTA linking to /register', () => {
+        renderHeroSection()
+
+        const ctaButton = screen.getByRole('link', { name: /get started/i })
+        expect(ctaButton).toHaveAttribute('href', '/register')
+      })
+    })
+
+    describe('Test Case 4: Primary CTA has distinct styling', () => {
+      it('should have btn-primary class for primary styling', () => {
+        renderHeroSection()
+
+        const ctaButton = screen.getByRole('link', { name: /get started/i })
+        expect(ctaButton).toHaveClass('btn-primary')
+      })
+
+      it('should have btn-lg class for larger size', () => {
+        renderHeroSection()
+
+        const ctaButton = screen.getByRole('link', { name: /get started/i })
+        expect(ctaButton).toHaveClass('btn-lg')
+      })
+
+      it('should have distinct styling compared to secondary login button', () => {
+        renderHeroSection()
+
+        const primaryCta = screen.getByRole('link', { name: /get started/i })
+        const secondaryCta = screen.getByRole('link', { name: /login/i })
+
+        // Primary has btn-primary, secondary has btn-outline
+        expect(primaryCta).toHaveClass('btn-primary')
+        expect(secondaryCta).toHaveClass('btn-outline')
+        expect(secondaryCta).not.toHaveClass('btn-primary')
+      })
+    })
+  })
 })
