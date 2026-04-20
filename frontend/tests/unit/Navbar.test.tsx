@@ -1,21 +1,20 @@
 /**
  * Unit tests for Navbar component.
- * Owner: Scenario 3 - Secondary Login CTA Button
+ * Owner: Scenario 7 - Navigation Bar Functionality
  *
  * Test coverage:
  * - Shows Login/Register when unauthenticated
  * - Shows Dashboard when authenticated
  * - Logo links to homepage
  * - Login link navigates to /login
+ * - Theme toggle is present and functional
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { BrowserRouter, MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import Navbar from '../../src/components/Navbar'
-import { AuthProvider } from '../../src/contexts/AuthContext'
-import { ThemeProvider } from '../../src/contexts/ThemeContext'
 
 // Mock useAuth for different auth states
 const mockUseAuth = vi.fn()
@@ -27,12 +26,21 @@ vi.mock('../../src/contexts/AuthContext', async () => {
   }
 })
 
+// Mock useTheme for theme toggle tests
+const mockSetTheme = vi.fn()
+const mockUseTheme = vi.fn()
+vi.mock('../../src/contexts/ThemeContext', async () => {
+  const actual = await vi.importActual('../../src/contexts/ThemeContext')
+  return {
+    ...actual,
+    useTheme: () => mockUseTheme(),
+  }
+})
+
 const renderNavbar = (initialRoute = '/') => {
   return render(
     <MemoryRouter initialEntries={[initialRoute]}>
-      <ThemeProvider>
-        <Navbar />
-      </ThemeProvider>
+      <Navbar />
     </MemoryRouter>
   )
 }
@@ -46,6 +54,12 @@ describe('Navbar', () => {
       login: vi.fn(),
       logout: vi.fn(),
     })
+    // Default theme state
+    mockUseTheme.mockReturnValue({
+      theme: 'dark',
+      setTheme: mockSetTheme,
+    })
+    mockSetTheme.mockClear()
   })
 
   describe('Test Case 1: Login link is present and visible', () => {
@@ -171,6 +185,52 @@ describe('Navbar', () => {
 
       const loginLink = screen.getByRole('link', { name: /login/i })
       expect(loginLink).toBeInTheDocument()
+    })
+  })
+
+  describe('Test Case 6: Theme toggle', () => {
+    it('should render theme toggle button', () => {
+      renderNavbar()
+
+      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      expect(themeToggle).toBeInTheDocument()
+    })
+
+    it('should have accessible label for theme toggle', () => {
+      renderNavbar()
+
+      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      expect(themeToggle).toHaveAttribute('aria-label', 'Toggle theme')
+    })
+
+    it('should toggle theme when clicked', async () => {
+      const user = userEvent.setup()
+      mockUseTheme.mockReturnValue({
+        theme: 'dark',
+        setTheme: mockSetTheme,
+      })
+      renderNavbar()
+
+      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      await user.click(themeToggle)
+
+      // Should toggle from dark to light
+      expect(mockSetTheme).toHaveBeenCalledWith('light')
+    })
+
+    it('should toggle theme from light to dark', async () => {
+      const user = userEvent.setup()
+      mockUseTheme.mockReturnValue({
+        theme: 'light',
+        setTheme: mockSetTheme,
+      })
+      renderNavbar()
+
+      const themeToggle = screen.getByRole('button', { name: /toggle theme/i })
+      await user.click(themeToggle)
+
+      // Should toggle from light to dark
+      expect(mockSetTheme).toHaveBeenCalledWith('dark')
     })
   })
 })
