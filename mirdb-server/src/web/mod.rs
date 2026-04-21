@@ -9,4 +9,4 @@
 pub mod handlers;
 pub mod types;
 
-pub use types::{ApiError, ApiResponse, MetricsResponse};
+pub use types::{ApiError, ApiResponse, ConfigResponse, MetricsResponse};
