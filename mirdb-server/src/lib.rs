@@ -12,8 +12,8 @@ mod utils;
 #[macro_use]
 mod error;
 #[macro_use]
-mod request;
-mod response;
+pub mod request;
+pub mod response;
 #[macro_use]
 mod parser_util;
 mod config;
@@ -25,7 +25,7 @@ mod merger;
 mod options;
 mod parser;
 mod proto;
-mod slice;
+pub mod slice;
 mod sstable_builder;
 mod sstable_reader;
 mod store;

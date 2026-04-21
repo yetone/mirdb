@@ -11,11 +11,12 @@
 //! - GET  /api/kv/get      -> Get value by key (Scenario 6)
 //! - DELETE /api/kv/delete -> Delete key (Scenario 7)
 
-use axum::{routing::get, Router, Json};
+use axum::{routing::{delete, get}, Router, Json};
 use std::sync::Arc;
 
 use crate::config::Config;
 use crate::store::Store;
+use crate::web::handlers::kv::delete_kv;
 use crate::web::handlers::static_files::{serve_homepage, serve_static};
 use crate::web::types::{ApiResponse, HealthResponse};
 
@@ -47,6 +48,7 @@ pub fn create_router_with_state(state: AppState) -> Router {
         .route("/", get(serve_homepage))
         .route("/static/*path", get(serve_static))
         .route("/api/health", get(health_handler))
+        .route("/api/kv/delete", delete(delete_kv))
         .with_state(state)
 }
 

@@ -8,9 +8,9 @@
 //! - health: Handles /api/health endpoint
 
 pub mod config;
+pub mod kv;
 pub mod metrics;
 pub mod static_files;
 
 // Placeholder modules for other scenarios
-// pub mod kv;
 // pub mod health;
