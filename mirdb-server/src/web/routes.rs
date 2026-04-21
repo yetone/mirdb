@@ -11,20 +11,28 @@
 //! - GET  /api/kv/get      -> Get value by key (Scenario 6)
 //! - DELETE /api/kv/delete -> Delete key (Scenario 7)
 
-use axum::{routing::{delete, get}, Router, Json};
+use axum::{
+    extract::State,
+    http::StatusCode,
+    response::IntoResponse,
+    routing::{delete, get, MethodRouter},
+    Json, Router,
+};
 use std::sync::Arc;
 
 use crate::config::Config;
 use crate::store::Store;
+use crate::web::handlers::config::{ConfigState, SharedConfigState};
 use crate::web::handlers::kv::delete_kv;
 use crate::web::handlers::static_files::{serve_homepage, serve_static};
-use crate::web::types::{ApiResponse, HealthResponse};
+use crate::web::types::{ApiError, ApiResponse, ConfigResponse, HealthResponse};
 
 /// Shared application state
 #[derive(Clone)]
 pub struct AppState {
     pub store: Arc<Store>,
     pub config: Config,
+    pub config_state: SharedConfigState,
 }
 
 /// Create the web server router with all routes
@@ -42,14 +50,45 @@ pub fn create_router() -> Router {
     // .route("/api/kv/delete", delete(handlers::kv::delete_kv))
 }
 
-/// Create the router with application state (for health endpoint)
+/// Create the router with application state (for health and config endpoints)
 pub fn create_router_with_state(state: AppState) -> Router {
     Router::new()
         .route("/", get(serve_homepage))
         .route("/static/*path", get(serve_static))
         .route("/api/health", get(health_handler))
+        .route("/api/config", config_route())
         .route("/api/kv/delete", delete(delete_kv))
         .with_state(state)
+}
+
+/// Configuration endpoint route handler
+/// GET /api/config - Returns current configuration
+/// All other methods - Returns 405 Method Not Allowed
+fn config_route() -> MethodRouter<AppState> {
+    get(get_config_handler)
+        .post(config_method_not_allowed)
+        .put(config_method_not_allowed)
+        .delete(config_method_not_allowed)
+        .patch(config_method_not_allowed)
+}
+
+/// Handler for GET /api/config
+async fn get_config_handler(
+    State(state): State<AppState>,
+) -> Json<ApiResponse<ConfigResponse>> {
+    let config_response = state.config_state.get_config();
+    Json(ApiResponse::success(config_response))
+}
+
+/// Handler for non-GET methods on /api/config - returns 405 Method Not Allowed
+async fn config_method_not_allowed() -> impl IntoResponse {
+    (
+        StatusCode::METHOD_NOT_ALLOWED,
+        Json(ApiError::new(
+            "Method Not Allowed. Configuration is read-only.",
+            405,
+        )),
+    )
 }
 
 /// Health check handler

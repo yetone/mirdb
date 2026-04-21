@@ -18,6 +18,7 @@ use tokio::net::TcpListener;
 
 use crate::config::Config;
 use crate::store::Store;
+use crate::web::handlers::config::create_config_state;
 use crate::web::routes::{create_router_with_state, AppState};
 
 /// Start the HTTP web server
@@ -39,9 +40,13 @@ pub async fn start_web_server(
     store: Arc<Store>,
     config: Config,
 ) -> io::Result<()> {
+    // Parse config values to create the config state for the web API
+    let config_state = create_config_state_from_config(&config);
+
     let state = AppState {
         store,
         config,
+        config_state,
     };
 
     let app = create_router_with_state(state);
@@ -50,6 +55,34 @@ pub async fn start_web_server(
     log::info!("HTTP server listening on {}", addr);
 
     serve(listener, app).await
+}
+
+/// Create a ConfigState from the application Config
+fn create_config_state_from_config(
+    config: &Config,
+) -> crate::web::handlers::config::SharedConfigState {
+    // Parse size strings to bytes (simplified parsing)
+    let parse_size = |s: &str| -> usize {
+        let s = s.trim();
+        if s.ends_with('M') {
+            s[..s.len() - 1].parse::<usize>().unwrap_or(0) * 1024 * 1024
+        } else if s.ends_with('K') {
+            s[..s.len() - 1].parse::<usize>().unwrap_or(0) * 1024
+        } else if s.ends_with('G') {
+            s[..s.len() - 1].parse::<usize>().unwrap_or(0) * 1024 * 1024 * 1024
+        } else {
+            s.parse::<usize>().unwrap_or(0)
+        }
+    };
+
+    create_config_state(
+        config.addr.clone(),
+        config.max_level,
+        config.work_dir.clone(),
+        parse_size(&config.sst_max_size),
+        parse_size(&config.mem_table_max_size),
+        parse_size(&config.block_size),
+    )
 }
 
 /// Check if a port is available for binding
