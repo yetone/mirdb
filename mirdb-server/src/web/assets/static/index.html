@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">&#x1F5C4;</span>
+                <h1>MirDB</h1>
+            </div>
+            <nav class="nav">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon">&#x1F319;</span>
+                </button>
+                <a href="https://github.com/yetone/mirdb" class="github-link" target="_blank" rel="noopener noreferrer">
+                    GitHub
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <h2 id="hero-title">Persistent Key-Value Store with Memcached Protocol</h2>
+            <p class="hero-subtitle">Fast, reliable, and easy to use. Built with Rust for performance and safety.</p>
+            <div class="hero-actions">
+                <a href="#dashboard" class="btn btn-primary">Quick Start</a>
+                <a href="#protocol" class="btn btn-secondary">Documentation</a>
+                <a href="#try-it-out" class="btn btn-secondary">Try It Out</a>
+            </div>
+        </section>
+
+        <section class="features" aria-labelledby="features-title">
+            <h3 id="features-title" class="sr-only">Features</h3>
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <div class="feature-icon">&#x1F4BE;</div>
+                    <h4>Disk Persistence</h4>
+                    <p>Data is safely stored on disk with write-ahead logging for durability.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">&#x1F332;</div>
+                    <h4>LSM-tree Architecture</h4>
+                    <p>Efficient write performance with log-structured merge-tree storage.</p>
+                </article>
+                <article class="feature-card">
+                    <div class="feature-icon">&#x1F517;</div>
+                    <h4>Memcached Compatible</h4>
+                    <p>Drop-in replacement for Memcached with persistent storage.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="dashboard" class="dashboard" aria-labelledby="dashboard-title">
+            <h3 id="dashboard-title">Server Dashboard</h3>
+            <div class="metrics-grid">
+                <div class="metric-card" id="memory-card">
+                    <div class="metric-label">Memory Usage</div>
+                    <div class="metric-value" id="memory-value">--</div>
+                </div>
+                <div class="metric-card" id="disk-card">
+                    <div class="metric-label">Disk Usage</div>
+                    <div class="metric-value" id="disk-value">--</div>
+                </div>
+                <div class="metric-card" id="keys-card">
+                    <div class="metric-label">Total Keys</div>
+                    <div class="metric-value" id="keys-value">--</div>
+                </div>
+                <div class="metric-card" id="connections-card">
+                    <div class="metric-label">Connections</div>
+                    <div class="metric-value" id="connections-value">--</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="try-it-out" class="try-it-out" aria-labelledby="try-title">
+            <h3 id="try-title">Try It Out</h3>
+            <div class="operation-forms">
+                <form id="set-form" class="operation-form">
+                    <h4>SET Operation</h4>
+                    <input type="text" name="key" placeholder="Key" required aria-label="Key">
+                    <input type="text" name="value" placeholder="Value" required aria-label="Value">
+                    <button type="submit" class="btn btn-primary">SET</button>
+                </form>
+                <form id="get-form" class="operation-form">
+                    <h4>GET Operation</h4>
+                    <input type="text" name="key" placeholder="Key" required aria-label="Key">
+                    <button type="submit" class="btn btn-primary">GET</button>
+                </form>
+                <form id="delete-form" class="operation-form">
+                    <h4>DELETE Operation</h4>
+                    <input type="text" name="key" placeholder="Key" required aria-label="Key">
+                    <button type="submit" class="btn btn-danger">DELETE</button>
+                </form>
+            </div>
+            <div id="result" class="result" aria-live="polite"></div>
+        </section>
+
+        <section id="protocol" class="protocol-reference" aria-labelledby="protocol-title">
+            <h3 id="protocol-title">Memcached Protocol Reference</h3>
+            <div class="protocol-commands">
+                <div class="command">
+                    <code>SET key flags exptime bytes [noreply]</code>
+                    <p>Store a key-value pair</p>
+                </div>
+                <div class="command">
+                    <code>GET key [key2 key3 ...]</code>
+                    <p>Retrieve one or more values</p>
+                </div>
+                <div class="command">
+                    <code>DELETE key [noreply]</code>
+                    <p>Remove a key from storage</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 MirDB Project. Licensed under MIT.</p>
+    </footer>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>
