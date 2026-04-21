@@ -36,6 +36,13 @@ impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
     pub fn length(&self) -> usize {
         self.map_.length()
     }
+
+    /// Returns approximate memory usage based on max_size
+    pub fn approx_memory_usage(&self) -> usize {
+        // Use the number of elements * estimated per-entry size
+        // Each entry is roughly key + value + skiplist overhead
+        self.map_.length() * 64 // Conservative estimate per entry
+    }
 }
 
 impl Memtable<Slice, Slice> {

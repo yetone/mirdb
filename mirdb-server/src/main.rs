@@ -1,31 +1,23 @@
+//! MirDB Server Binary
+//!
+//! This binary starts the MirDB server with Memcached protocol support.
+
 #![allow(unused_imports, unused_macros, dead_code)]
 
-use std::cell::RefCell;
-use std::error::Error;
 use std::io;
-use std::io::{Error as IOError, ErrorKind, Read, Result, Write};
 use std::net::SocketAddr;
-use std::net::{TcpListener, TcpStream};
-use std::rc::Rc;
-use std::sync::{Arc, RwLock};
+use std::sync::Arc;
 
 use clap::App;
 use clap::Arg;
 use env_logger;
 use futures::{future, Future};
-use tokio::prelude::*;
 use tokio_proto::TcpServer;
 use tokio_service::{NewService, Service};
 
-use crate::error::MyResult;
-use crate::options::Options;
-use crate::parser::parse;
-use crate::proto::Proto;
-use crate::request::Request;
-use crate::response::Response;
-use crate::store::Store;
-use crate::thread_pool::ThreadPool;
-use crate::utils::to_str;
+// Re-export the internal modules from lib (needs to be public in lib.rs)
+// For now, we keep using the original approach with mod declarations
+// since the lib exports aren't fully set up
 
 #[macro_use]
 mod utils;
@@ -53,13 +45,19 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod web;
+
+use crate::error::MyResult;
+use crate::proto::Proto;
+use crate::request::Request;
+use crate::response::Response;
 
 pub struct Server {
-    store: Arc<Store>,
+    store: Arc<store::Store>,
 }
 
 impl Server {
-    fn new(store: Arc<Store>) -> Self {
+    fn new(store: Arc<store::Store>) -> Self {
         Server { store }
     }
 }
@@ -68,7 +66,7 @@ impl Service for Server {
     type Request = Request;
     type Response = Response;
     type Error = io::Error;
-    type Future = Box<Future<Item = Response, Error = io::Error>>;
+    type Future = Box<dyn Future<Item = Response, Error = io::Error>>;
 
     fn call(&self, req: Self::Request) -> Self::Future {
         Box::new(future::done(match self.store.apply(req) {
@@ -111,7 +109,7 @@ fn main() -> MyResult<()> {
     let addr = conf.addr.parse().unwrap();
     let opt = conf.to_options()?;
 
-    let store = Store::new(opt.clone())?;
+    let store = store::Store::new(opt.clone())?;
     let store = Arc::new(store);
 
     println!(

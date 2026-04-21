@@ -48,6 +48,11 @@ impl<K: Ord + Clone, V: Clone> MemtableList<K, V> {
     pub fn table_count(&self) -> usize {
         self.tables_.len()
     }
+
+    /// Returns approximate memory usage across all memtables
+    pub fn approx_memory_usage(&self) -> usize {
+        self.tables_.iter().map(|t| t.approx_memory_usage()).sum()
+    }
 }
 
 impl<K: Ord + Clone, V: Clone> Table<K, V> for MemtableList<K, V> {
