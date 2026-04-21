@@ -12,5 +12,5 @@ mod dashboard_test;
 
 // Other e2e test modules will be added by their respective scenarios:
 // mod try_it_out_test;
-// mod theme_test;
+// mod theme_test: moved to tests/theme_test.rs as standalone test
 // mod responsive_test;
