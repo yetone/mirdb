@@ -88,6 +88,39 @@ function formatBytes(bytes) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
+// Configuration Fetching
+async function fetchConfig() {
+    try {
+        const response = await fetch('/api/config');
+        if (response.ok) {
+            const data = await response.json();
+            updateConfigPanel(data);
+        }
+    } catch (error) {
+        console.error('Failed to fetch config:', error);
+    }
+}
+
+function updateConfigPanel(config) {
+    const listenAddr = document.getElementById('config-listen-addr');
+    const workDir = document.getElementById('config-work-dir');
+    const maxLevel = document.getElementById('config-max-level');
+    const sstMaxSize = document.getElementById('config-sst-max-size');
+
+    if (listenAddr && config.listen_addr !== undefined) {
+        listenAddr.textContent = config.listen_addr;
+    }
+    if (workDir && config.work_dir !== undefined) {
+        workDir.textContent = config.work_dir;
+    }
+    if (maxLevel && config.max_lsm_levels !== undefined) {
+        maxLevel.textContent = config.max_lsm_levels;
+    }
+    if (sstMaxSize && config.sstable_max_size !== undefined) {
+        sstMaxSize.textContent = formatBytes(config.sstable_max_size);
+    }
+}
+
 // Form Handlers
 function showResult(message, isError = false) {
     const resultDiv = document.getElementById('result');
@@ -172,4 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Start metrics polling
     initMetricsPolling();
+
+    // Fetch configuration (only once on page load)
+    fetchConfig();
 });

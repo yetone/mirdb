@@ -318,6 +318,53 @@ body {
     margin-top: 0.5rem;
 }
 
+/* Configuration Panel */
+.config-panel {
+    max-width: 1000px;
+    margin: 2rem auto 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.config-panel h4 {
+    text-align: center;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.config-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+}
+
+.config-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.config-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 0.25rem;
+    word-break: break-all;
+}
+
 /* Try It Out Section */
 .try-it-out {
     padding: 4rem 2rem;

@@ -5,11 +5,12 @@
 //!
 //! Submodules:
 //! - homepage_ui_test: Layout, branding, navigation
+//! - dashboard_test: Metrics cards, configuration panel, auto-refresh
 
 mod homepage_ui_test;
+mod dashboard_test;
 
 // Other e2e test modules will be added by their respective scenarios:
-// mod dashboard_test;
 // mod try_it_out_test;
 // mod theme_test;
 // mod responsive_test;
