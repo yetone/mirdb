@@ -77,6 +77,56 @@ body {
     border: 0;
 }
 
+/* Skip Link - Accessibility for keyboard navigation */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem 2rem;
+    background-color: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    z-index: 1000;
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: 1rem;
+    outline: 3px solid var(--text-primary);
+    outline-offset: 2px;
+}
+
+/* Global Focus Styles - WCAG 2.1 AA Compliance */
+/* Using :focus-visible for keyboard-only focus indicators */
+:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* High contrast focus for dark theme */
+[data-theme="dark"] :focus-visible {
+    outline-color: var(--accent-hover);
+}
+
+/* Ensure all interactive elements have visible focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Form group styling */
+.form-group {
+    width: 100%;
+}
+
 /* Header */
 .header {
     background-color: var(--bg-secondary);
@@ -131,9 +181,11 @@ body {
     background-color: var(--bg-primary);
 }
 
-.theme-toggle:focus {
-    outline: 2px solid var(--accent-color);
+.theme-toggle:focus,
+.theme-toggle:focus-visible {
+    outline: 3px solid var(--accent-color);
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
 }
 
 .github-link {
@@ -151,9 +203,11 @@ body {
     border-color: var(--accent-color);
 }
 
-.github-link:focus {
-    outline: 2px solid var(--accent-color);
+.github-link:focus,
+.github-link:focus-visible {
+    outline: 3px solid var(--accent-color);
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
 }
 
 /* Hero Section */
@@ -198,9 +252,11 @@ body {
     font-size: 1rem;
 }
 
-.btn:focus {
-    outline: 2px solid var(--accent-color);
+.btn:focus,
+.btn:focus-visible {
+    outline: 3px solid var(--accent-color);
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
 }
 
 .btn-primary {
@@ -409,10 +465,12 @@ body {
     font-size: 1rem;
 }
 
-.operation-form input:focus {
-    outline: 2px solid var(--accent-color);
+.operation-form input:focus,
+.operation-form input:focus-visible {
+    outline: 3px solid var(--accent-color);
     outline-offset: -1px;
     border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
 }
 
 .operation-form .btn {
