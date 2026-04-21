@@ -346,7 +346,7 @@ async fn test_html_responsive_structure() {
 
     // Verify semantic HTML elements exist
     assert!(
-        html.contains("<header") && html.contains("<main>") && html.contains("<footer"),
+        html.contains("<header") && html.contains("<main") && html.contains("<footer"),
         "Should have semantic HTML structure"
     );
 

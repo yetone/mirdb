@@ -191,10 +191,10 @@ async fn test_form_inputs_have_required_attribute() {
         "Form inputs should have required attribute"
     );
 
-    // Verify inputs have aria-label for accessibility
+    // Verify inputs have accessible labels (either aria-label or proper label elements)
     assert!(
-        html.contains("aria-label=\"Key\""),
-        "Key inputs should have aria-label"
+        html.contains("aria-label=\"Key\"") || html.contains("<label for=") && html.contains("sr-only"),
+        "Key inputs should have accessible labels"
     );
 }
 

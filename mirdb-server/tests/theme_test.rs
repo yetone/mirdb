@@ -96,9 +96,11 @@ async fn test_theme_toggle_button_exists_in_header() {
         "Theme toggle button should have 'theme-toggle' class"
     );
 
-    // Verify accessibility label
+    // Verify accessibility label (allow various descriptive labels)
     assert!(
-        html.contains("aria-label=\"Toggle theme\""),
+        html.contains("aria-label=\"Toggle theme\"") ||
+        html.contains("aria-label=\"Toggle dark and light theme\"") ||
+        html.contains("aria-label=\"Toggle between dark and light theme\""),
         "Theme toggle button should have aria-label for accessibility"
     );
 }

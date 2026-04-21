@@ -191,7 +191,7 @@ async fn test_homepage_structure_and_accessibility() {
 
     // Verify semantic structure
     assert!(html.contains("<header"), "Should have header element");
-    assert!(html.contains("<main>"), "Should have main element");
+    assert!(html.contains("<main"), "Should have main element");
     assert!(html.contains("<footer"), "Should have footer element");
 
     // Verify aria labels for accessibility

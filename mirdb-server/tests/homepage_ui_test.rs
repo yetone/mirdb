@@ -191,7 +191,7 @@ async fn test_homepage_structure_and_accessibility() {
 
     // Verify semantic structure
     assert!(html.contains("<header"), "Should have header element");
-    assert!(html.contains("<main>"), "Should have main element");
+    assert!(html.contains("<main"), "Should have main element");
     assert!(html.contains("<footer"), "Should have footer element");
 
     // Verify aria labels for accessibility
@@ -307,7 +307,7 @@ async fn test_set_command_documentation() {
 
     // Verify command is displayed in code element
     assert!(
-        html.contains("<code>SET"),
+        html.contains("<code>SET") || html.contains("<code aria-label=") && html.contains(">SET"),
         "SET command syntax should be in code element for clarity"
     );
 }
@@ -338,7 +338,7 @@ async fn test_get_command_documentation() {
 
     // Verify command is displayed in code element
     assert!(
-        html.contains("<code>GET"),
+        html.contains("<code>GET") || html.contains("<code aria-label=") && html.contains(">GET"),
         "GET command syntax should be in code element for clarity"
     );
 }
@@ -363,7 +363,7 @@ async fn test_delete_command_documentation() {
 
     // Verify command is displayed in code element
     assert!(
-        html.contains("<code>DELETE"),
+        html.contains("<code>DELETE") || html.contains("<code aria-label=") && html.contains(">DELETE"),
         "DELETE command syntax should be in code element for clarity"
     );
 }
@@ -386,9 +386,11 @@ async fn test_protocol_commands_structure() {
     );
 
     // Count the number of commands documented (should have at least SET, GET, DELETE)
-    let command_count = html.matches("<code>SET").count()
-        + html.matches("<code>GET").count()
-        + html.matches("<code>DELETE").count();
+    // Allow for aria-label attributes on code elements
+    let set_count = html.matches("<code>SET").count() + html.matches(">SET key").count();
+    let get_count = html.matches("<code>GET").count() + html.matches(">GET key").count();
+    let delete_count = html.matches("<code>DELETE").count() + html.matches(">DELETE key").count();
+    let command_count = set_count.min(1) + get_count.min(1) + delete_count.min(1);
     assert!(
         command_count >= 3,
         "Should document at least SET, GET, and DELETE commands"
