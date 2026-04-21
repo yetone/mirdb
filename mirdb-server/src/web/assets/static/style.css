@@ -485,9 +485,109 @@ body {
 }
 
 /* Media Queries - Responsive Design */
-@media (max-width: 768px) {
+/* Owner: Scenario 14 - Responsive Design */
+
+/* Large Desktop (1200px+): Full layout with horizontal metric cards */
+@media (min-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .operation-forms {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .config-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Small Desktop / Tablet Landscape (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .operation-forms {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .config-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Tablet Portrait (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
     .header {
         padding: 1rem;
+    }
+
+    .header-content {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .hero {
+        padding: 3rem 1.5rem;
+    }
+
+    .hero h2 {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .features,
+    .dashboard,
+    .try-it-out,
+    .protocol-reference {
+        padding: 3rem 1.5rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .operation-forms {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .config-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile Landscape and Large Phones (480px - 767px) */
+@media (min-width: 480px) and (max-width: 767px) {
+    .header {
+        padding: 0.75rem 1rem;
+    }
+
+    .header-content {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .logo h1 {
+        font-size: 1.25rem;
+    }
+
+    .nav {
+        gap: 0.5rem;
+    }
+
+    .github-link {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.9rem;
     }
 
     .hero {
@@ -495,11 +595,22 @@ body {
     }
 
     .hero h2 {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
     }
 
     .hero-subtitle {
-        font-size: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        max-width: 250px;
     }
 
     .features,
@@ -509,23 +620,311 @@ body {
         padding: 2rem 1rem;
     }
 
+    .dashboard h3,
+    .try-it-out h3,
+    .protocol-reference h3 {
+        font-size: 1.5rem;
+    }
+
     .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .metric-card {
+        padding: 1rem;
+    }
+
+    .metric-value {
+        font-size: 1.5rem;
+    }
+
+    .operation-forms {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .operation-form {
+        padding: 1.25rem;
+    }
+
+    .operation-form .btn {
+        padding: 0.65rem 1rem;
+        min-height: 44px; /* Touch-friendly tap target */
+    }
+
+    .operation-form input {
+        min-height: 44px; /* Touch-friendly tap target */
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    .config-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .config-panel {
+        padding: 1rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result {
+        padding: 1rem;
+        min-height: 60px;
     }
 }
 
-@media (max-width: 480px) {
-    .hero-actions {
-        flex-direction: column;
-        align-items: center;
+/* Mobile Portrait / Small Phones (up to 479px) */
+@media (max-width: 479px) {
+    .header {
+        padding: 0.5rem 0.75rem;
     }
 
-    .btn {
+    .header-content {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .logo h1 {
+        font-size: 1.1rem;
+    }
+
+    .logo-icon {
+        font-size: 1.25rem;
+    }
+
+    .nav {
+        gap: 0.5rem;
+    }
+
+    .theme-toggle {
+        padding: 0.4rem;
+        font-size: 1rem;
+    }
+
+    .github-link {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .hero {
+        padding: 1.5rem 1rem;
+    }
+
+    .hero h2 {
+        font-size: 1.35rem;
+        line-height: 1.3;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0 0.5rem;
+    }
+
+    .hero-actions .btn {
         width: 100%;
-        max-width: 200px;
+        padding: 0.75rem 1rem;
+        min-height: 48px; /* Touch-friendly tap target */
+    }
+
+    .features,
+    .dashboard,
+    .try-it-out,
+    .protocol-reference {
+        padding: 1.5rem 0.75rem;
+    }
+
+    .dashboard h3,
+    .try-it-out h3,
+    .protocol-reference h3 {
+        font-size: 1.35rem;
+        margin-bottom: 1.5rem;
     }
 
     .metrics-grid {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .metric-card {
+        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+
+    .metric-label {
+        font-size: 0.8rem;
+    }
+
+    .metric-value {
+        font-size: 1.5rem;
+        margin-top: 0;
+    }
+
+    .operation-forms {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .operation-form {
+        padding: 1rem;
+    }
+
+    .operation-form h4 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .operation-form input {
+        padding: 0.65rem;
+        margin-bottom: 0.5rem;
+        min-height: 48px; /* Touch-friendly tap target */
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    .operation-form .btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        min-height: 48px; /* Touch-friendly tap target */
+        font-size: 1rem;
+    }
+
+    .config-panel {
+        padding: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .config-panel h4 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .config-item {
+        padding: 0.5rem 0.75rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .config-label {
+        font-size: 0.7rem;
+    }
+
+    .config-value {
+        font-size: 0.9rem;
+        text-align: right;
+        max-width: 60%;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .feature-card {
+        padding: 1.25rem;
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+    }
+
+    .feature-card h4 {
+        font-size: 1.1rem;
+    }
+
+    .feature-card p {
+        font-size: 0.9rem;
+    }
+
+    .result {
+        padding: 1rem;
+        min-height: 60px;
+        font-size: 0.9rem;
+    }
+
+    .protocol-commands {
+        gap: 0.75rem;
+    }
+
+    .command {
+        padding: 0.75rem 1rem;
+    }
+
+    .command code {
+        font-size: 0.8rem;
+        word-break: break-all;
+    }
+
+    .command p {
+        font-size: 0.85rem;
+    }
+
+    .footer {
+        padding: 1.5rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Ensure scrollable content on mobile */
+@media (max-width: 767px) {
+    html, body {
+        overflow-x: hidden;
+    }
+
+    .try-it-out,
+    .dashboard,
+    .protocol-reference {
+        overflow-x: hidden;
+    }
+
+    /* Smooth scrolling for all content */
+    main {
+        scroll-behavior: smooth;
+    }
+
+    /* Ensure result area is scrollable if content overflows */
+    .result {
+        overflow-y: auto;
+        max-height: 200px;
+        word-break: break-word;
+    }
+}
+
+/* Print styles for documentation purposes */
+@media print {
+    .header,
+    .hero-actions,
+    .try-it-out,
+    .theme-toggle {
+        display: none;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .protocol-reference {
+        background: white;
     }
 }
