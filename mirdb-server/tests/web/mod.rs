@@ -14,6 +14,6 @@ mod metrics_api_test;
 mod server_test;
 mod static_files_test;
 
+mod concurrency_test;
 // Other test modules will be added by their respective scenarios:
-// mod concurrency_test;
 // mod error_handling_test;
