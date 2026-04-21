@@ -19,10 +19,10 @@ use std::path::PathBuf;
 use std::ptr;
 
 use glob::glob;
-use integer_encoding::FixedInt;
-use memmap::Mmap;
-use snap::Decoder;
-use snap::Encoder;
+use integer_encoding::{FixedInt, FixedIntWriter};
+use memmap2::Mmap;
+use snap::raw::Decoder;
+use snap::raw::Encoder;
 
 use skip_list::SkipList;
 use sstable::RandomAccess;
@@ -86,7 +86,7 @@ impl WALSeg {
 
         let key_size = key_buf.len();
         let value_size = value_buf.len();
-        let size_space = u32::required_space();
+        let size_space = std::mem::size_of::<u32>();
 
         let padding = padding(key_size + value_size);
 
@@ -179,19 +179,20 @@ impl Iterator for WALSegIter {
             return None;
         }
 
-        let size = u32::decode_fixed(&self.mmap[self.offset..self.offset + u32::required_space()])
-            as usize;
+        let size = u32::decode_fixed(&self.mmap[self.offset..self.offset + std::mem::size_of::<u32>()])
+            .expect("Failed to decode size") as usize;
 
         if size == 0 {
             return None;
         }
 
-        let offset = self.offset + u32::required_space();
+        let offset = self.offset + std::mem::size_of::<u32>();
 
         let key_size =
-            u32::decode_fixed(&self.mmap[offset..offset + u32::required_space()]) as usize;
+            u32::decode_fixed(&self.mmap[offset..offset + std::mem::size_of::<u32>()])
+                .expect("Failed to decode key_size") as usize;
 
-        let offset = offset + u32::required_space();
+        let offset = offset + std::mem::size_of::<u32>();
 
         let data = &self.mmap[offset..offset + size];
         let key_data = &data[..key_size];

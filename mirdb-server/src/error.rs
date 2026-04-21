@@ -1,4 +1,4 @@
-use std::error::Error;
+use std::fmt;
 use std::io::ErrorKind;
 
 use snap::Error as SnapError;
@@ -16,6 +16,7 @@ pub enum StatusCode {
     ChecksumError,
     SnapError,
     ConfigError,
+    WebServerError,
 }
 
 #[derive(Debug, PartialEq)]
@@ -35,6 +36,14 @@ impl Status {
     }
 }
 
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.msg)
+    }
+}
+
+impl std::error::Error for Status {}
+
 impl From<sstable::Status> for Status {
     fn from(e: sstable::Status) -> Self {
         Status::new(StatusCode::SstableError(e.code), &e.msg)
@@ -43,15 +52,15 @@ impl From<sstable::Status> for Status {
 
 impl From<bincode::Error> for Status {
     fn from(e: bincode::Error) -> Self {
-        Status::new(StatusCode::BincodeError, e.description())
+        Status::new(StatusCode::BincodeError, &e.to_string())
     }
 }
 
 impl From<::std::io::Error> for Status {
     fn from(e: ::std::io::Error) -> Self {
         match e.kind() {
-            ErrorKind::NotFound => Status::new(StatusCode::NotFound, e.description()),
-            _ => Status::new(StatusCode::IOError, e.description()),
+            ErrorKind::NotFound => Status::new(StatusCode::NotFound, &e.to_string()),
+            _ => Status::new(StatusCode::IOError, &e.to_string()),
         }
     }
 }
@@ -62,9 +71,9 @@ impl From<glob::PatternError> for Status {
     }
 }
 
-impl Into<::std::io::Error> for Status {
-    fn into(self) -> ::std::io::Error {
-        match self.code {
+impl From<Status> for ::std::io::Error {
+    fn from(s: Status) -> Self {
+        match s.code {
             StatusCode::NotFound => ::std::io::ErrorKind::NotFound.into(),
             _ => ::std::io::ErrorKind::Other.into(),
         }
@@ -73,11 +82,7 @@ impl Into<::std::io::Error> for Status {
 
 impl From<SnapError> for Status {
     fn from(e: SnapError) -> Self {
-        let code = match e {
-            SnapError::Checksum { .. } => StatusCode::ChecksumError,
-            _ => StatusCode::SnapError,
-        };
-        Status::new(code, e.description())
+        Status::new(StatusCode::SnapError, &e.to_string())
     }
 }
 

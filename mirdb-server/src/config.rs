@@ -11,9 +11,12 @@ use crate::error::StatusCode;
 use crate::options::{Options, GB, KB, MB, TB};
 use crate::parser_util::macros::{digit, space, usize_parser, IRResult};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Config {
     pub addr: String,
+
+    /// HTTP web server port (default: 8080)
+    pub web_port: Option<u16>,
 
     pub max_level: usize,
     pub work_dir: String,
@@ -52,7 +55,7 @@ fn to_size_unit(x: &[u8]) -> usize {
         b"M" => MB,
         b"G" => GB,
         b"T" => TB,
-        _ => panic!(format!("unknown size unit {:?}", x)),
+        _ => panic!("unknown size unit {:?}", x),
     }
 }
 

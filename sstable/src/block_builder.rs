@@ -2,10 +2,9 @@ use std::io::Seek;
 use std::io::SeekFrom;
 use std::io::Write;
 
-use crc::crc32;
-use crc::crc32::Hasher32;
+use crc::{Crc, CRC_32_ISCSI};
 use integer_encoding::{FixedIntWriter, VarIntWriter};
-use snap::Encoder;
+use snap::raw::Encoder;
 
 use crate::block_handle::BlockHandle;
 use crate::error::MyResult;
@@ -131,11 +130,11 @@ impl BlockBuilder {
         let ctype_buf = [self.opt.compress_type as u8; BLOCK_CTYPE_LEN];
         self.buffer.write_all(&ctype_buf)?;
 
-        let mut digest = crc32::Digest::new(crc32::CASTAGNOLI);
-        digest.write(&self.buffer);
+        let crc = Crc::<u32>::new(&CRC_32_ISCSI);
+        let checksum = crc.checksum(&self.buffer);
 
         // write crc
-        self.buffer.write_fixedint(mask_crc(digest.sum32()))?;
+        self.buffer.write_fixedint(mask_crc(checksum))?;
 
         w.seek(SeekFrom::Start(offset as u64))?;
         w.write_all(&self.buffer)?;

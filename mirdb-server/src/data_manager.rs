@@ -417,6 +417,43 @@ impl DataManager {
         muttable.clear();
         immuttable.clear();
     }
+
+    // Metrics accessor methods for web API
+
+    /// Get the count of SSTables at each level
+    pub fn get_sstable_level_counts(&self) -> Vec<u64> {
+        let readers = read_lock(&self.readers_);
+        let mut counts = Vec::with_capacity(self.opt_.max_level);
+        for level in 0..self.opt_.max_level {
+            let level_readers = readers.get_readers(level);
+            counts.push(level_readers.len() as u64);
+        }
+        counts
+    }
+
+    /// Get approximate memory usage from memtables
+    pub fn get_memory_used_bytes(&self) -> u64 {
+        let muttable = read_lock(&self.mut_);
+        let immuttable = read_lock(&self.imm_);
+        // Approximate memory usage based on memtable sizes
+        (muttable.approx_memory_usage() + immuttable.approx_memory_usage()) as u64
+    }
+
+    /// Get maximum memory available for memtables
+    pub fn get_memory_total_bytes(&self) -> u64 {
+        // Total memory is memtable max size * (1 + imm_mem_table_max_count)
+        (self.opt_.mem_table_max_size * (1 + self.opt_.imm_mem_table_max_count)) as u64
+    }
+
+    /// Get the work directory path
+    pub fn get_work_dir(&self) -> &str {
+        &self.opt_.work_dir
+    }
+
+    /// Get the maximum number of LSM levels
+    pub fn get_max_level(&self) -> usize {
+        self.opt_.max_level
+    }
 }
 
 #[cfg(test)]

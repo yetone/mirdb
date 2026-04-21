@@ -5,8 +5,8 @@ use std::io::Write;
 use bincode::{deserialize, serialize};
 use cuckoofilter::ExportedCuckooFilter;
 use serde::{Deserialize, Serialize};
-use snap::Decoder;
-use snap::Encoder;
+use snap::raw::Decoder;
+use snap::raw::Encoder;
 
 use crate::block_handle::BlockHandle;
 use crate::reader;

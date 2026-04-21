@@ -35,12 +35,12 @@ impl<K, V> SkipListNode<K, V> {
         from_raw(node_ptr)
     }
 
-    pub(crate) fn allocate_dummy(max_height: usize) -> *mut SkipListNode<K, V> {
-        SkipListNode::allocate(
-            unsafe { mem::uninitialized() },
-            unsafe { mem::uninitialized() },
-            max_height,
-        )
+    pub(crate) fn allocate_dummy(max_height: usize) -> *mut SkipListNode<K, V>
+    where
+        K: Default,
+        V: Default,
+    {
+        SkipListNode::allocate(K::default(), V::default(), max_height)
     }
 
     pub(crate) fn allocate(key: K, value: V, height: usize) -> *mut SkipListNode<K, V> {

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MirDB - A persistent key-value store with Memcached protocol support">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Skip link for keyboard navigation - WCAG 2.1 AA compliance -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="header" role="banner">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon" role="img" aria-label="MirDB logo">&#x1F5C4;</span>
+                <h1>MirDB</h1>
+            </div>
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle between dark and light theme" aria-pressed="false">
+                    <span class="theme-icon" aria-hidden="true">&#x1F319;</span>
+                </button>
+                <a href="https://github.com/yetone/mirdb" class="github-link" target="_blank" rel="noopener noreferrer" aria-label="View MirDB on GitHub (opens in new tab)">
+                    GitHub
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" role="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <h2 id="hero-title">Persistent Key-Value Store with Memcached Protocol</h2>
+            <p class="hero-subtitle">Fast, reliable, and easy to use. Built with Rust for performance and safety.</p>
+            <div class="hero-actions">
+                <a href="#dashboard" class="btn btn-primary">Quick Start</a>
+                <a href="#protocol" class="btn btn-secondary">Documentation</a>
+                <a href="#try-it-out" class="btn btn-secondary">Try It Out</a>
+            </div>
+        </section>
+
+        <section class="features" aria-labelledby="features-title" role="region">
+            <h3 id="features-title" class="sr-only">Features</h3>
+            <div class="feature-grid" role="list">
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">&#x1F4BE;</div>
+                    <h4>Disk Persistence</h4>
+                    <p>Data is safely stored on disk with write-ahead logging for durability.</p>
+                </article>
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">&#x1F332;</div>
+                    <h4>LSM-tree Architecture</h4>
+                    <p>Efficient write performance with log-structured merge-tree storage.</p>
+                </article>
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">&#x1F517;</div>
+                    <h4>Memcached Compatible</h4>
+                    <p>Drop-in replacement for Memcached with persistent storage.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="dashboard" class="dashboard" aria-labelledby="dashboard-title" role="region">
+            <h3 id="dashboard-title">Server Dashboard</h3>
+            <div class="metrics-grid" role="list" aria-label="Server metrics">
+                <div class="metric-card" id="memory-card" role="listitem" aria-labelledby="memory-label memory-value">
+                    <div class="metric-label" id="memory-label">Memory Usage</div>
+                    <div class="metric-value" id="memory-value" aria-live="polite">--</div>
+                </div>
+                <div class="metric-card" id="disk-card" role="listitem" aria-labelledby="disk-label disk-value">
+                    <div class="metric-label" id="disk-label">Disk Usage</div>
+                    <div class="metric-value" id="disk-value" aria-live="polite">--</div>
+                </div>
+                <div class="metric-card" id="keys-card" role="listitem" aria-labelledby="keys-label keys-value">
+                    <div class="metric-label" id="keys-label">Total Keys</div>
+                    <div class="metric-value" id="keys-value" aria-live="polite">--</div>
+                </div>
+                <div class="metric-card" id="connections-card" role="listitem" aria-labelledby="connections-label connections-value">
+                    <div class="metric-label" id="connections-label">Connections</div>
+                    <div class="metric-value" id="connections-value" aria-live="polite">--</div>
+                </div>
+            </div>
+            <div class="config-panel" id="config-panel" aria-labelledby="config-title">
+                <h4 id="config-title">Configuration</h4>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <span class="config-label">Listen Addr</span>
+                        <span class="config-value" id="config-listen-addr">--</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Work Dir</span>
+                        <span class="config-value" id="config-work-dir">--</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Max Level</span>
+                        <span class="config-value" id="config-max-level">--</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">SST Max Size</span>
+                        <span class="config-value" id="config-sst-max-size">--</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="try-it-out" class="try-it-out" aria-labelledby="try-title" role="region">
+            <h3 id="try-title">Try It Out</h3>
+            <div class="operation-forms">
+                <form id="set-form" class="operation-form" aria-labelledby="set-form-title">
+                    <h4 id="set-form-title">SET Operation</h4>
+                    <div class="form-group">
+                        <label for="set-key" class="sr-only">Key for SET operation</label>
+                        <input type="text" id="set-key" name="key" placeholder="Key" required aria-required="true" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="set-value" class="sr-only">Value for SET operation</label>
+                        <input type="text" id="set-value" name="value" placeholder="Value" required aria-required="true" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary">SET</button>
+                </form>
+                <form id="get-form" class="operation-form" aria-labelledby="get-form-title">
+                    <h4 id="get-form-title">GET Operation</h4>
+                    <div class="form-group">
+                        <label for="get-key" class="sr-only">Key for GET operation</label>
+                        <input type="text" id="get-key" name="key" placeholder="Key" required aria-required="true" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary">GET</button>
+                </form>
+                <form id="delete-form" class="operation-form" aria-labelledby="delete-form-title">
+                    <h4 id="delete-form-title">DELETE Operation</h4>
+                    <div class="form-group">
+                        <label for="delete-key" class="sr-only">Key for DELETE operation</label>
+                        <input type="text" id="delete-key" name="key" placeholder="Key" required aria-required="true" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-danger">DELETE</button>
+                </form>
+            </div>
+            <div id="result" class="result" role="status" aria-live="polite" aria-atomic="true"></div>
+        </section>
+
+        <section id="protocol" class="protocol-reference" aria-labelledby="protocol-title" role="region">
+            <h3 id="protocol-title">Memcached Protocol Reference</h3>
+            <div class="protocol-commands" role="list" aria-label="Memcached commands">
+                <div class="command" role="listitem">
+                    <code>SET key flags exptime bytes [noreply]</code>
+                    <p>Store a key-value pair</p>
+                </div>
+                <div class="command" role="listitem">
+                    <code>GET key [key2 key3 ...]</code>
+                    <p>Retrieve one or more values</p>
+                </div>
+                <div class="command" role="listitem">
+                    <code>DELETE key [noreply]</code>
+                    <p>Remove a key from storage</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <p>&copy; 2024 MirDB Project. Licensed under MIT.</p>
+    </footer>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>

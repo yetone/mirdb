@@ -29,7 +29,7 @@ impl RandomAccess for BufferBackedFile {
 
 impl RandomAccess for File {
     fn read_at(&self, offset: usize, dst: &mut [u8]) -> MyResult<usize> {
-        Ok((self as &FileExt).read_at(dst, offset as u64)?)
+        Ok((self as &dyn FileExt).read_at(dst, offset as u64)?)
     }
 }
 

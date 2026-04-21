@@ -49,7 +49,8 @@ impl<'a> BlockIter<'a> {
     }
 
     pub fn restart_count(&self) -> usize {
-        let count = u32::decode_fixed(&self.block[self.block.len() - 4..]);
+        let count = u32::decode_fixed(&self.block[self.block.len() - 4..])
+            .expect("Failed to decode restart count");
         count as usize
     }
 
@@ -72,20 +73,24 @@ impl<'a> BlockIter<'a> {
 
     fn get_restart_point_offset(&self, idx: usize) -> usize {
         let restart = self.state.restarts_offset + 4 * idx;
-        u32::decode_fixed(&self.block[restart..restart + 4]) as usize
+        u32::decode_fixed(&self.block[restart..restart + 4])
+            .expect("Failed to decode restart point offset") as usize
     }
 
     fn parse_entry_and_advance(&mut self) -> (usize, usize, usize, usize) {
         let mut i = 0;
 
-        let (shared, shared_len) = usize::decode_var(&self.block[self.state.next_offset..]);
+        let (shared, shared_len) = usize::decode_var(&self.block[self.state.next_offset..])
+            .expect("Failed to decode shared");
         i += shared_len;
 
         let (non_shared, non_shared_len) =
-            usize::decode_var(&self.block[self.state.next_offset + i..]);
+            usize::decode_var(&self.block[self.state.next_offset + i..])
+                .expect("Failed to decode non_shared");
         i += non_shared_len;
 
-        let (val_size, val_size_len) = usize::decode_var(&self.block[self.state.next_offset + i..]);
+        let (val_size, val_size_len) = usize::decode_var(&self.block[self.state.next_offset + i..])
+            .expect("Failed to decode val_size");
         i += val_size_len;
 
         self.state.val_offset = self.state.next_offset + i + non_shared;

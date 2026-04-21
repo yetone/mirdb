@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#![allow(dangerous_implicit_autorefs)]
 
 mod height_generator;
 mod iter;

@@ -1,7 +1,6 @@
-use crc::crc32;
-use crc::crc32::Hasher32;
+use crc::{Crc, CRC_32_ISCSI};
 use integer_encoding::FixedInt;
-use snap::Decoder;
+use snap::raw::Decoder;
 
 use crate::block_builder::BLOCK_CKSUM_LEN;
 use crate::block_builder::BLOCK_CTYPE_LEN;
@@ -46,7 +45,7 @@ impl Block {
         let cksum_buf = &data[data.len() - BLOCK_CKSUM_LEN..];
         if !Block::verify_block(
             &data[..data.len() - BLOCK_CKSUM_LEN],
-            unmask_crc(u32::decode_fixed(&cksum_buf)),
+            unmask_crc(u32::decode_fixed(&cksum_buf).expect("Failed to decode checksum")),
         ) {
             return err!(StatusCode::ChecksumError, "checksum error");
         }
@@ -67,13 +66,13 @@ impl Block {
     }
 
     fn verify_block(data: &[u8], want: u32) -> bool {
-        let mut digest = crc32::Digest::new(crc32::CASTAGNOLI);
-        digest.write(data);
-        digest.sum32() == want
+        let crc = Crc::<u32>::new(&CRC_32_ISCSI);
+        crc.checksum(data) == want
     }
 
     pub fn restarts_offset(&self) -> usize {
-        let restarts = u32::decode_fixed(&self.block[self.block.len() - 4..]);
+        let restarts = u32::decode_fixed(&self.block[self.block.len() - 4..])
+            .expect("Failed to decode restarts");
         self.block.len() - 4 - 4 * restarts as usize
     }
 

@@ -62,17 +62,13 @@ impl<'a> BufferWriter<'a> {
 
 impl<'a> Writer for BufferWriter<'a> {
     fn write(&mut self, data: &[u8]) -> MyResult<()> {
-        self.buf.reserve(data.len());
-        unsafe {
-            self.buf.bytes_mut()[..data.len()].copy_from_slice(data);
-            self.buf.advance_mut(data.len());
-        }
+        self.buf.extend_from_slice(data);
         Ok(())
     }
 }
 
 impl Response {
-    pub fn write(&self, writer: &mut Writer) -> MyResult<()> {
+    pub fn write(&self, writer: &mut dyn Writer) -> MyResult<()> {
         match self {
             Response::Stored => {
                 writer.write(b"STORED\r\n")?;
