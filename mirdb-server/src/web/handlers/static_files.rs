@@ -108,7 +108,7 @@ mod tests {
     use super::*;
 
     fn run_async<F: std::future::Future>(f: F) -> F::Output {
-        tokio_new::runtime::Builder::new_current_thread()
+        tokio::runtime::Builder::new_current_thread()
             .enable_all()
             .build()
             .unwrap()

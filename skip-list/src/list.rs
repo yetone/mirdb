@@ -39,14 +39,22 @@ impl<K, V> SkipList<K, V> {
         SkipListNode::from_raw_mut(self.head_)
     }
 
-    pub fn new(max_height: usize) -> Self {
+    pub fn new(max_height: usize) -> Self
+    where
+        K: Default,
+        V: Default,
+    {
         Self::new_with_height_generator(max_height, Box::new(GenHeight::new()))
     }
 
     pub fn new_with_height_generator(
         max_height: usize,
         height_generator: Box<dyn HeightGenerator + Send>,
-    ) -> Self {
+    ) -> Self
+    where
+        K: Default,
+        V: Default,
+    {
         SkipList {
             head_: SkipListNode::allocate_dummy(max_height),
             length_: 0,
@@ -79,7 +87,11 @@ impl<K, V> SkipList<K, V> {
         }
     }
 
-    pub fn clear(&mut self) {
+    pub fn clear(&mut self)
+    where
+        K: Default,
+        V: Default,
+    {
         self.dispose();
         self.head_ = SkipListNode::allocate_dummy(self.max_height_);
         self.length_ = 0;
@@ -224,6 +236,7 @@ impl<K: Ord, V> SkipList<K, V> {
     where
         K: Borrow<Q>,
         Q: Ord,
+        V: Default,
     {
         let (lower_bound, mut updates) = self.get_lower_bound_and_updates(key);
 
@@ -240,7 +253,8 @@ impl<K: Ord, V> SkipList<K, V> {
                 }
             }
 
-            let old_value = next.replace_value(unsafe { mem::uninitialized() });
+            // Take ownership of the value by replacing with default
+            let old_value = mem::take(&mut next.value_);
             SkipListNode::free(next);
 
             self.length_ -= 1;
@@ -275,7 +289,7 @@ impl<K, V> Debug for SkipList<K, V> {
     }
 }
 
-impl<K: Ord + Clone, V: Clone> Clone for SkipList<K, V> {
+impl<K: Ord + Clone + Default, V: Clone + Default> Clone for SkipList<K, V> {
     fn clone(&self) -> Self {
         let mut copied: SkipList<K, V> = SkipList::new(self.max_height_);
         for (k, v) in self.iter() {
@@ -380,6 +394,12 @@ mod test {
             }
         }
 
+        impl<T: Default + Debug> Default for A<T> {
+            fn default() -> Self {
+                A(T::default())
+            }
+        }
+
         type Key = A<Vec<u8>>;
 
         let mut map: SkipList<Key, i32> = SkipList::new(10);
@@ -416,11 +436,11 @@ mod test {
         let mut seen = HashSet::with_capacity(n);
         let mut kvs = Vec::with_capacity(n);
         for _ in 0..=n {
-            let k = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let k = rng.gen_range(0..=n);
             if seen.contains(&k) {
                 continue;
             }
-            let v = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let v = rng.gen_range(0..=n);
             kvs.push((k, v));
             seen.insert(k);
         }
@@ -447,11 +467,11 @@ mod test {
         let mut seen = HashSet::with_capacity(n);
         let mut kvs = Vec::with_capacity(n);
         for _ in 0..=n {
-            let k = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let k = rng.gen_range(0..=n);
             if seen.contains(&k) {
                 continue;
             }
-            let v = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let v = rng.gen_range(0..=n);
             kvs.push((k, v));
             seen.insert(k);
         }

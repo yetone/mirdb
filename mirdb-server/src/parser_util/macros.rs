@@ -15,7 +15,7 @@ impl<'a, 'b, T: Debug> IRResult<'a, 'b, T> {
     fn unwrap(self) -> (&'a [u8], T) {
         match self {
             IRResult::Ok(v) => v,
-            IRResult::Err(e) => panic!(e.to_owned()),
+            IRResult::Err(e) => panic!("{}", e.to_owned()),
             IRResult::Incomplete(_) => panic!("incomplete!"),
         }
     }

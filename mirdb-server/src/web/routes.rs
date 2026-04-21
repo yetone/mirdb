@@ -11,9 +11,20 @@
 //! - GET  /api/kv/get      -> Get value by key (Scenario 6)
 //! - DELETE /api/kv/delete -> Delete key (Scenario 7)
 
-use axum::{routing::get, Router};
+use axum::{routing::get, Router, Json};
+use std::sync::Arc;
 
+use crate::config::Config;
+use crate::store::Store;
 use crate::web::handlers::static_files::{serve_homepage, serve_static};
+use crate::web::types::{ApiResponse, HealthResponse};
+
+/// Shared application state
+#[derive(Clone)]
+pub struct AppState {
+    pub store: Arc<Store>,
+    pub config: Config,
+}
 
 /// Create the web server router with all routes
 pub fn create_router() -> Router {
@@ -28,6 +39,24 @@ pub fn create_router() -> Router {
     // .route("/api/kv/set", post(handlers::kv::set_kv))
     // .route("/api/kv/get", get(handlers::kv::get_kv))
     // .route("/api/kv/delete", delete(handlers::kv::delete_kv))
+}
+
+/// Create the router with application state (for health endpoint)
+pub fn create_router_with_state(state: AppState) -> Router {
+    Router::new()
+        .route("/", get(serve_homepage))
+        .route("/static/*path", get(serve_static))
+        .route("/api/health", get(health_handler))
+        .with_state(state)
+}
+
+/// Health check handler
+async fn health_handler() -> Json<ApiResponse<HealthResponse>> {
+    Json(ApiResponse::success(HealthResponse {
+        status: "healthy".to_string(),
+        server_running: true,
+        compaction_status: "idle".to_string(),
+    }))
 }
 
 #[cfg(test)]

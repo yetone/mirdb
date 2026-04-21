@@ -19,7 +19,7 @@ use mirdb::web::routes::create_router;
 
 /// Helper function to create a tokio 1.x runtime for tests
 fn run_async<F: std::future::Future>(f: F) -> F::Output {
-    tokio_new::runtime::Builder::new_current_thread()
+    tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
         .unwrap()

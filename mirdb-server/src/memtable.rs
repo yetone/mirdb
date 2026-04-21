@@ -13,13 +13,13 @@ use crate::sstable_builder::skiplist_to_sstable;
 use crate::types::Table;
 
 #[derive(Clone)]
-pub struct Memtable<K: Ord + Clone, V: Clone> {
+pub struct Memtable<K: Ord + Clone + Default, V: Clone + Default> {
     max_size_: usize,
     size_: usize,
     map_: SkipList<K, V>,
 }
 
-impl<K: Ord + Clone, V: Clone> Memtable<K, V> {
+impl<K: Ord + Clone + Default, V: Clone + Default> Memtable<K, V> {
     pub fn new(max_size: usize, max_height: usize) -> Self {
         let map = SkipList::new(max_height);
         Memtable {
@@ -55,7 +55,7 @@ impl Memtable<Slice, Slice> {
     }
 }
 
-impl<K: Ord + Clone, V: Clone> Table<K, V> for Memtable<K, V> {
+impl<K: Ord + Clone + Default, V: Clone + Default> Table<K, V> for Memtable<K, V> {
     fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
     where
         K: Borrow<Q>,

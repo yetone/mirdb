@@ -3,14 +3,10 @@ use std::cmp::Ordering;
 use std::convert::From;
 use std::fmt;
 use std::hash;
-use std::io::Cursor;
 use std::ops::Index;
-use std::ops::Range;
 use std::ops::RangeFull;
 use std::ops::RangeTo;
-use std::slice::SliceIndex;
 
-use bytes::buf;
 use bytes::Bytes;
 use bytes::BytesMut;
 use serde::de::{self, Visitor};
@@ -24,7 +20,9 @@ pub struct Slice {
 impl Default for Slice {
     #[inline]
     fn default() -> Self {
-        Self::with_capacity(0)
+        Self {
+            inner: Bytes::new(),
+        }
     }
 }
 
@@ -36,8 +34,9 @@ impl Slice {
 
     #[inline]
     pub fn with_capacity(cap: usize) -> Self {
+        let buf = BytesMut::with_capacity(cap);
         Self {
-            inner: Bytes::with_capacity(cap),
+            inner: buf.freeze(),
         }
     }
 
@@ -53,19 +52,19 @@ impl Slice {
 
     pub fn slice(&self, begin: usize, end: usize) -> Self {
         Self {
-            inner: self.inner.slice(begin, end),
+            inner: self.inner.slice(begin..end),
         }
     }
 
     pub fn slice_from(&self, begin: usize) -> Self {
         Self {
-            inner: self.inner.slice_from(begin),
+            inner: self.inner.slice(begin..),
         }
     }
 
     pub fn slice_to(&self, end: usize) -> Self {
         Self {
-            inner: self.inner.slice_to(end),
+            inner: self.inner.slice(..end),
         }
     }
 }
@@ -188,19 +187,19 @@ impl Index<RangeTo<usize>> for Slice {
 
 impl IntoIterator for Slice {
     type Item = u8;
-    type IntoIter = buf::Iter<Cursor<Bytes>>;
+    type IntoIter = std::vec::IntoIter<u8>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.inner.into_iter()
+        self.inner.to_vec().into_iter()
     }
 }
 
 impl<'a> IntoIterator for &'a Slice {
-    type Item = u8;
-    type IntoIter = buf::Iter<Cursor<&'a Bytes>>;
+    type Item = &'a u8;
+    type IntoIter = std::slice::Iter<'a, u8>;
 
     fn into_iter(self) -> Self::IntoIter {
-        (&self.inner).into_iter()
+        self.inner.iter()
     }
 }
 
@@ -209,7 +208,9 @@ impl Extend<u8> for Slice {
     where
         T: IntoIterator<Item = u8>,
     {
-        self.inner.extend(iter)
+        let mut buf = BytesMut::from(self.inner.as_ref());
+        buf.extend(iter);
+        self.inner = buf.freeze();
     }
 }
 
@@ -218,7 +219,9 @@ impl<'a> Extend<&'a u8> for Slice {
     where
         T: IntoIterator<Item = &'a u8>,
     {
-        self.inner.extend(iter)
+        let mut buf = BytesMut::from(self.inner.as_ref());
+        buf.extend(iter.into_iter().copied());
+        self.inner = buf.freeze();
     }
 }
 
@@ -228,22 +231,37 @@ impl From<BytesMut> for Slice {
     }
 }
 
-macro_rules! impl_from {
-    ($type:ty) => {
-        impl From<$type> for Slice {
-            fn from(src: $type) -> Self {
-                Self {
-                    inner: From::from(src),
-                }
-            }
+impl From<Vec<u8>> for Slice {
+    fn from(src: Vec<u8>) -> Self {
+        Self {
+            inner: Bytes::from(src),
         }
-    };
+    }
 }
 
-impl_from!(Vec<u8>);
-impl_from!(String);
-impl_from!(&[u8]);
-impl_from!(&str);
+impl From<String> for Slice {
+    fn from(src: String) -> Self {
+        Self {
+            inner: Bytes::from(src),
+        }
+    }
+}
+
+impl From<&[u8]> for Slice {
+    fn from(src: &[u8]) -> Self {
+        Self {
+            inner: Bytes::copy_from_slice(src),
+        }
+    }
+}
+
+impl From<&str> for Slice {
+    fn from(src: &str) -> Self {
+        Self {
+            inner: Bytes::copy_from_slice(src.as_bytes()),
+        }
+    }
+}
 
 #[cfg(test)]
 mod test {

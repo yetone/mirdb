@@ -1,3 +1,4 @@
+use std::num::NonZeroUsize;
 use lru::LruCache;
 
 pub type CacheKey = [u8; 16];
@@ -12,7 +13,7 @@ impl<T> Cache<T> {
     pub fn new(capacity: usize) -> Cache<T> {
         assert!(capacity > 0);
         Cache {
-            inner: LruCache::new(capacity),
+            inner: LruCache::new(NonZeroUsize::new(capacity).unwrap()),
             id: 0,
         }
     }
@@ -29,11 +30,11 @@ impl<T> Cache<T> {
 
     #[inline]
     pub fn cap(&self) -> usize {
-        self.inner.cap()
+        self.inner.cap().into()
     }
 
     pub fn insert(&mut self, key: CacheKey, elem: T) {
-        self.inner.put(key, elem)
+        let _ = self.inner.put(key, elem);
     }
 
     pub fn get(&mut self, key: &CacheKey) -> Option<&T> {

@@ -9,7 +9,9 @@
 pub mod assets;
 pub mod handlers;
 pub mod routes;
+pub mod server;
 pub mod types;
 
 pub use routes::create_router;
+pub use server::start_web_server;
 pub use types::{ApiError, ApiResponse, ConfigResponse, MetricsResponse};

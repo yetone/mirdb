@@ -18,7 +18,7 @@ use tower::ServiceExt;
 use mirdb::web::routes::create_router;
 
 /// Test Case 1: GET / returns HTML with Content-Type: text/html and MirDB branding
-#[tokio_new::test]
+#[tokio::test]
 async fn test_homepage_returns_html_with_mirdb_branding() {
     let app = create_router();
 
@@ -51,7 +51,7 @@ async fn test_homepage_returns_html_with_mirdb_branding() {
 }
 
 /// Test Case 2: GET /static/style.css returns CSS with Cache-Control header >= 3600s
-#[tokio_new::test]
+#[tokio::test]
 async fn test_css_served_with_correct_headers() {
     let app = create_router();
 
@@ -116,7 +116,7 @@ async fn test_css_served_with_correct_headers() {
 }
 
 /// Test Case 3: GET /static/main.js returns JavaScript with correct content-type
-#[tokio_new::test]
+#[tokio::test]
 async fn test_javascript_served_with_correct_headers() {
     let app = create_router();
 
@@ -157,7 +157,7 @@ async fn test_javascript_served_with_correct_headers() {
 }
 
 /// Test Case 4: GET /nonexistent-file.css returns 404 Not Found
-#[tokio_new::test]
+#[tokio::test]
 async fn test_nonexistent_file_returns_404() {
     let app = create_router();
 
@@ -180,7 +180,7 @@ async fn test_nonexistent_file_returns_404() {
 
 /// Test Case 5: Homepage load time performance (NFR-1: within 2 seconds)
 /// Note: This tests that the response is returned quickly, not actual network time
-#[tokio_new::test]
+#[tokio::test]
 async fn test_homepage_load_performance() {
     use std::time::Instant;
 
@@ -218,7 +218,7 @@ async fn test_homepage_load_performance() {
 }
 
 /// Additional test: Verify all static files reference in HTML are available
-#[tokio_new::test]
+#[tokio::test]
 async fn test_all_referenced_assets_available() {
     let app = create_router();
 
@@ -272,7 +272,7 @@ async fn test_all_referenced_assets_available() {
 }
 
 /// Test: Verify HTML structure contains required sections
-#[tokio_new::test]
+#[tokio::test]
 async fn test_homepage_html_structure() {
     let app = create_router();
 
