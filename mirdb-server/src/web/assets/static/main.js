@@ -130,11 +130,29 @@ function showResult(message, isError = false) {
     }
 }
 
+// Form validation helper
+function validateForm(key, requireValue = false, value = null) {
+    if (!key || key.trim() === '') {
+        showResult('Validation Error: Key is required', true);
+        return false;
+    }
+    if (requireValue && (!value || value.trim() === '')) {
+        showResult('Validation Error: Value is required', true);
+        return false;
+    }
+    return true;
+}
+
 async function handleSetForm(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const key = formData.get('key');
     const value = formData.get('value');
+
+    // Validate before submit
+    if (!validateForm(key, true, value)) {
+        return;
+    }
 
     try {
         const response = await fetch('/api/kv/set', {
@@ -143,7 +161,11 @@ async function handleSetForm(event) {
             body: JSON.stringify({ key, value })
         });
         const data = await response.json();
-        showResult(data.success ? `SET ${key} = ${value}` : data.error, !data.success);
+        if (data.success) {
+            showResult(`STORED: ${key} = ${value}`);
+        } else {
+            showResult(data.error || 'SET operation failed', true);
+        }
     } catch (error) {
         showResult('Error: ' + error.message, true);
     }
@@ -154,13 +176,18 @@ async function handleGetForm(event) {
     const formData = new FormData(event.target);
     const key = formData.get('key');
 
+    // Validate before submit
+    if (!validateForm(key)) {
+        return;
+    }
+
     try {
         const response = await fetch(`/api/kv/get?key=${encodeURIComponent(key)}`);
         const data = await response.json();
         if (data.success && data.data) {
             showResult(`GET ${key} = ${data.data.value}`);
         } else {
-            showResult(data.error || 'Key not found', true);
+            showResult(data.error || 'NOT_FOUND', true);
         }
     } catch (error) {
         showResult('Error: ' + error.message, true);
@@ -172,12 +199,21 @@ async function handleDeleteForm(event) {
     const formData = new FormData(event.target);
     const key = formData.get('key');
 
+    // Validate before submit
+    if (!validateForm(key)) {
+        return;
+    }
+
     try {
         const response = await fetch(`/api/kv/delete?key=${encodeURIComponent(key)}`, {
             method: 'DELETE'
         });
         const data = await response.json();
-        showResult(data.success ? `DELETE ${key} successful` : data.error, !data.success);
+        if (data.success) {
+            showResult(data.message || 'DELETED');
+        } else {
+            showResult(data.error || 'DELETE operation failed', true);
+        }
     } catch (error) {
         showResult('Error: ' + error.message, true);
     }
