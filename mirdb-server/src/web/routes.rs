@@ -23,6 +23,7 @@ use std::sync::Arc;
 use crate::config::Config;
 use crate::store::Store;
 use crate::web::handlers::config::{ConfigState, SharedConfigState};
+use crate::web::handlers::health::get_health;
 use crate::web::handlers::kv::delete_kv;
 use crate::web::handlers::static_files::{serve_homepage, serve_static};
 use crate::web::types::{ApiError, ApiResponse, ConfigResponse, HealthResponse};
@@ -55,7 +56,7 @@ pub fn create_router_with_state(state: AppState) -> Router {
     Router::new()
         .route("/", get(serve_homepage))
         .route("/static/*path", get(serve_static))
-        .route("/api/health", get(health_handler))
+        .route("/api/health", get(get_health))
         .route("/api/config", config_route())
         .route("/api/kv/delete", delete(delete_kv))
         .with_state(state)
@@ -89,15 +90,6 @@ async fn config_method_not_allowed() -> impl IntoResponse {
             405,
         )),
     )
-}
-
-/// Health check handler
-async fn health_handler() -> Json<ApiResponse<HealthResponse>> {
-    Json(ApiResponse::success(HealthResponse {
-        status: "healthy".to_string(),
-        server_running: true,
-        compaction_status: "idle".to_string(),
-    }))
 }
 
 #[cfg(test)]
