@@ -45,7 +45,7 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
-mod web;
+pub mod web;
 
 use crate::error::MyResult;
 use crate::proto::Proto;

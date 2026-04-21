@@ -6,7 +6,10 @@
 //!
 //! The web server shares the Tokio runtime with the Memcached protocol server.
 
+pub mod assets;
 pub mod handlers;
+pub mod routes;
 pub mod types;
 
+pub use routes::create_router;
 pub use types::{ApiError, ApiResponse, MetricsResponse};

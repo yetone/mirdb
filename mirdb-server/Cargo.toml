@@ -34,5 +34,16 @@ toml = "0.5.0"
 log = "0.4.0"
 env_logger = "0.6.1"
 
+# Web server dependencies
+axum = "0.7"
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5", features = ["fs", "cors", "set-header"] }
+rust-embed = "8.0"
+mime_guess = "2.0"
+tokio_new = { package = "tokio", version = "1", features = ["full"] }
+http = "1.0"
+hex = "0.4"
+
 [dev-dependencies]
 rand = "0.6.1"
+tokio-test = "0.4"
