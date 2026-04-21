@@ -234,3 +234,163 @@ async fn test_hero_navigation_elements() {
         "Buttons should have button styling"
     );
 }
+
+// ============================================================================
+// Scenario 12: Memcached Protocol Reference Section tests
+// Owner: Scenario 12 - Memcached Protocol Reference Section
+// REQ-6: Quick reference section for Memcached protocol commands
+// ============================================================================
+
+/// Test Case 1: Load homepage and find protocol reference section
+/// Expected: Section visible with 'Memcached Protocol' or similar heading
+#[tokio::test]
+async fn test_protocol_reference_section_visible() {
+    let html = get_homepage_html().await;
+
+    // Verify protocol reference section exists with id="protocol"
+    assert!(
+        html.contains("id=\"protocol\""),
+        "Homepage should have a protocol reference section with id='protocol'"
+    );
+
+    // Verify protocol reference section has the correct class
+    assert!(
+        html.contains("class=\"protocol-reference\""),
+        "Protocol reference section should have 'protocol-reference' class"
+    );
+
+    // Verify 'Memcached Protocol' heading is present
+    assert!(
+        html.contains("Memcached Protocol Reference")
+            || html.contains("Memcached Protocol"),
+        "Protocol reference section should have 'Memcached Protocol' heading"
+    );
+
+    // Verify the section has proper heading structure
+    assert!(
+        html.contains("id=\"protocol-title\""),
+        "Protocol section should have labeled title for accessibility"
+    );
+
+    // Verify aria-labelledby for accessibility
+    assert!(
+        html.contains("aria-labelledby=\"protocol-title\""),
+        "Protocol section should have aria-labelledby for accessibility"
+    );
+}
+
+/// Test Case 2: Check SET command documentation
+/// Expected: Shows syntax: SET key flags exptime bytes [noreply]
+#[tokio::test]
+async fn test_set_command_documentation() {
+    let html = get_homepage_html().await;
+
+    // Verify SET command is documented
+    assert!(
+        html.contains("SET key flags exptime bytes"),
+        "Protocol reference should document SET command syntax"
+    );
+
+    // Verify SET command shows optional noreply parameter
+    assert!(
+        html.contains("[noreply]") || html.contains("noreply"),
+        "SET command should include noreply option"
+    );
+
+    // Verify SET command has description
+    assert!(
+        html.contains("Store a key-value pair")
+            || html.contains("store")
+            || html.contains("key-value"),
+        "SET command should have a description"
+    );
+
+    // Verify command is displayed in code element
+    assert!(
+        html.contains("<code>SET"),
+        "SET command syntax should be in code element for clarity"
+    );
+}
+
+/// Test Case 3: Check GET command documentation
+/// Expected: Shows syntax: GET key1 [key2 ...]
+#[tokio::test]
+async fn test_get_command_documentation() {
+    let html = get_homepage_html().await;
+
+    // Verify GET command is documented (accepts one or more keys)
+    assert!(
+        html.contains("GET key") || html.contains("GET key1"),
+        "Protocol reference should document GET command syntax"
+    );
+
+    // Verify GET command shows ability to retrieve multiple keys
+    assert!(
+        html.contains("key2") || html.contains("...") || html.contains("more"),
+        "GET command should show multiple key retrieval support"
+    );
+
+    // Verify GET command has description
+    assert!(
+        html.contains("Retrieve") || html.contains("retrieve") || html.contains("get"),
+        "GET command should have a description"
+    );
+
+    // Verify command is displayed in code element
+    assert!(
+        html.contains("<code>GET"),
+        "GET command syntax should be in code element for clarity"
+    );
+}
+
+/// Additional test: Verify DELETE command documentation
+/// Expected: Shows DELETE command syntax with key parameter
+#[tokio::test]
+async fn test_delete_command_documentation() {
+    let html = get_homepage_html().await;
+
+    // Verify DELETE command is documented
+    assert!(
+        html.contains("DELETE key"),
+        "Protocol reference should document DELETE command syntax"
+    );
+
+    // Verify DELETE command has description
+    assert!(
+        html.contains("Remove") || html.contains("remove") || html.contains("delete"),
+        "DELETE command should have a description"
+    );
+
+    // Verify command is displayed in code element
+    assert!(
+        html.contains("<code>DELETE"),
+        "DELETE command syntax should be in code element for clarity"
+    );
+}
+
+/// Additional test: Verify protocol commands are displayed in proper structure
+#[tokio::test]
+async fn test_protocol_commands_structure() {
+    let html = get_homepage_html().await;
+
+    // Verify commands are wrapped in command class divs
+    assert!(
+        html.contains("class=\"command\""),
+        "Protocol commands should be in command-styled divs"
+    );
+
+    // Verify protocol-commands container exists
+    assert!(
+        html.contains("class=\"protocol-commands\""),
+        "Protocol commands should be in a protocol-commands container"
+    );
+
+    // Count the number of commands documented (should have at least SET, GET, DELETE)
+    let command_count = html.matches("<code>SET").count()
+        + html.matches("<code>GET").count()
+        + html.matches("<code>DELETE").count();
+    assert!(
+        command_count >= 3,
+        "Should document at least SET, GET, and DELETE commands"
+    );
+}
