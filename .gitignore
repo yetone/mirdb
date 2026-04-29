@@ -1,2 +1,6 @@
 /target
 **/*.rs.bk
+.something/
+node_modules/
+frontend/node_modules/
+*.lock
