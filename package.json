@@ -21,6 +21,11 @@
   },
   "homepage": "https://github.com/yetone/mirdb#readme",
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "http-server": "^14.1.1",
     "vitest": "^4.1.5"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.59.1"
   }
 }

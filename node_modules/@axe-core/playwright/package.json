@@ -1,0 +1,93 @@
+{
+  "name": "@axe-core/playwright",
+  "version": "4.11.3",
+  "description": "Provides a method to inject and analyze web pages using axe",
+  "contributors": [
+    {
+      "name": "Michael Siek (me@michaelsiek.com)"
+    }
+  ],
+  "files": [
+    "/dist"
+  ],
+  "keywords": [
+    "a11y",
+    "unit",
+    "testing",
+    "tdd",
+    "bdd",
+    "accessibility",
+    "axe",
+    "playwright",
+    "axe-core"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dequelabs/axe-core-npm.git"
+  },
+  "license": "MPL-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "test": "mocha --timeout 60000 -r ts-node/register 'test/**.spec.ts'",
+    "test:export": "npm run test:esm && npm run test:commonjs && npm run test:ts",
+    "test:esm": "node test/esmTest.mjs",
+    "test:commonjs": "node test/commonjsTest.js",
+    "test:ts": "tsc test/tsTest.ts --noEmit --skipLibCheck --esModuleInterop",
+    "coverage": "nyc npm run test",
+    "prepare": "npx playwright install && npm run build"
+  },
+  "dependencies": {
+    "axe-core": "~4.11.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/chai": "^4.3.3",
+    "@types/express": "^5.0.3",
+    "@types/mocha": "^10.0.0",
+    "async-listen": "^3.0.1",
+    "axe-test-fixtures": "github:dequelabs/axe-test-fixtures#v1",
+    "chai": "^4.3.6",
+    "express": "^5.1.0",
+    "mocha": "^11.7.1",
+    "nyc": "^17.1.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.0.1"
+  },
+  "peerDependencies": {
+    "playwright-core": ">= 1.0.0"
+  },
+  "nyc": {
+    "include": [
+      "src/index.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true,
+    "checkCoverage": true,
+    "statements": 95,
+    "branches": 90,
+    "functions": 100,
+    "lines": 95
+  },
+  "gitHead": "25fbfd2a7b4d38fcdca487d393192e811592f1ec"
+}
