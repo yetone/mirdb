@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Persistent Key-Value Store</title>
+    <!--
+        Main entry point for MirDB homepage.
+        Owner: First scenario builder
+
+        Expected content:
+        - Basic HTML5 structure
+        - Links to CSS assets
+        - Header, main content, footer structure
+        - Meta tags for SEO and social sharing
+    -->
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Content populated by component sections -->
+        <header>
+            <img src="/assets/logo.gif" alt="MirDB Logo">
+            <h1>MirDB</h1>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#usage">Usage</a></li>
+                    <li><a href="#configuration">Configuration</a></li>
+                    <li><a href="https://github.com/yestone/mirdb">GitHub</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main><div class="container">
+            <!-- Hero Section -->
+            <section id="hero" class="hero">
+                <h2>MirDB: A Persistent Key-Value Store with Memcached Protocol</h2>
+                <p>Lightweight, efficient, and compatible with the Memcached ecosystem</p>
+                <div class="badges">
+                    <!-- CI/CD status badges will go here -->
+                </div>
+                <div class="actions">
+                    <a href="#getting-started" class="cta primary">Get Started</a>
+                    <a href="https://github.com/yestone/mirdb" class="cta secondary">View Source</a>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="features">
+                <h2>Features</h2>
+                <ul>
+                    <li>✅ Persistent storage with LSM Tree architecture</li>
+                    <li>✅ Full Memcached protocol compatibility</li>
+                    <li>✅ Async networking with Tokio</li>
+                    <li>✅ Memtable with skip-list implementation</li>
+                    <li>✅ Minor/major compaction</li>
+                    <li>🔜 Raft consensus (planned)</li>
+                </ul>
+            </section>
+
+            <!-- Usage Section -->
+            <section id="usage" class="usage">
+                <h2>Usage</h2>
+                <img src="/assets/usage.gif" alt="MirDB Usage Example">
+                <h3>Basic Memcached Commands</h3>
+                <pre><code>set mykey 0 0 7
+Hello
+STORED
+
+get mykey
+VALUE mykey 0 7
+Hello
+END</code></pre>
+            </section>
+
+            <!-- Configuration Section -->
+            <section id="configuration" class="configuration">
+                <h2>Configuration</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>port</td>
+                            <td>Server port</td>
+                            <td>11211</td>
+                        </tr>
+                        <tr>
+                            <td>data_dir</td>
+                            <td>Data storage directory</td>
+                            <td>./data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2026 MirDB Project | <a href="https://github.com/yestone/mirdb">GitHub</a></p>
+            <p>License: MIT</p>
+        </footer>
+    </div>
+    <script type="module" src="/src/index.js"></script>
+</body>
+</html>

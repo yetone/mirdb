@@ -1,0 +1,31 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yetone/mirdb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yetone/mirdb/issues"
+  },
+  "homepage": "https://github.com/yetone/mirdb#readme",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "http-server": "^14.1.1",
+    "vitest": "^4.1.5"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
