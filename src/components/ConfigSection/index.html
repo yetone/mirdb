@@ -1,0 +1,34 @@
+<section class="config">
+  <!--
+      Configuration documentation and quick start guide.
+      Owner: Scenario 2 - Quick Start Documentation Accuracy
+
+      Expected content:
+      - 3-step installation process using cargo
+      - Command to start server with default configuration
+      - Verification steps with memcached commands
+      - Version reference to latest GitHub release
+      - OS compatibility notes with clear error handling for unsupported systems
+  -->
+
+  <h2>Quick Start</h2>
+  <ol>
+    <li>Install MirDB:
+      <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+cargo install mirdb</code></pre>
+    </li>
+    <li>Start the server:
+      <pre><code>mirdb start --port 11211</code></pre>
+    </li>
+    <li>Verify it's working:
+      <pre><code>echo "set test 0 0 5\nhello\n" | nc localhost 11211
+      echo "get test" | nc localhost 11211</code></pre>
+    </li>
+  </ol>
+
+  <p>Version: v1.4.0 (matches <a href="https://github.com/yestone/mirdb/releases/latest">latest GitHub release</a>)</p>
+
+  <div class="os-warning">
+    <strong>Note:</strong> MirDB currently supports Linux and macOS. Windows support coming in Q3 2026.
+  </div>
+</section>
