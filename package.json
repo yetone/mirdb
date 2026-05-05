@@ -1,0 +1,18 @@
+{
+  "name": "mirdb-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+  "test": "npx playwright test --browser=webkit tests/e2e/navigation/",
+    "start": "npx serve src"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "axios": "^1.16.0",
+    "playwright": "^1.59.1"
+  }
+}

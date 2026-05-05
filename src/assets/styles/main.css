@@ -1,0 +1,81 @@
+/* Mobile-first responsive design */
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Mobile viewports */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  /* Hamburger menu for mobile */
+  .nav-menu {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    cursor: pointer;
+    padding: 15px;
+    font-size: 24px;
+  }
+
+  /* Ensure content readable without horizontal scrolling */
+  img, video, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Adjust typography for small screens */
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Form elements */
+  input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+  }
+}
+
+/* Tablet viewports */
+@media (min-width: 768px) and (max-width: 1023px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Desktop viewports */
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 30px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+}
