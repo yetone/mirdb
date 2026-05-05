@@ -10,6 +10,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.59.1"
+    "@playwright/test": "^1.59.1",
+    "axios": "^1.16.0",
+    "playwright": "^1.59.1"
   }
 }
