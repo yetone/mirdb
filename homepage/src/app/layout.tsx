@@ -1,5 +1,17 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ThemeProvider } from '@/hooks/useTheme';
+import ThemeToggle from '@/components/ThemeToggle';
+
+const themeScript = `
+  (function() {
+    try {
+      var saved = localStorage.getItem('mirdb-theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    } catch(e) {}
+  })();
+`;
 
 export const metadata: Metadata = {
   title: 'MirDB - A Persistent Key-Value Store',
@@ -19,8 +31,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen antialiased">{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen antialiased">
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <ThemeProvider>
+          {children}
+          <ThemeToggle />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
