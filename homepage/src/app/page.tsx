@@ -17,7 +17,8 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main>
+      {/* pt-16 offsets the fixed header height */}
+      <main className="pt-16">
         <HeroSection />
         <FeaturesSection />
         <QuickStartSection />
