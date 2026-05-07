@@ -60,11 +60,11 @@ export const PROTOCOL_COMMANDS = [
 ];
 
 export const ROADMAP_ITEMS = [
-  { title: 'Tokio-based async networking', status: 'implemented' as const },
-  { title: 'Memtable with skip list', status: 'implemented' as const },
-  { title: 'Minor compaction', status: 'implemented' as const },
-  { title: 'Major compaction', status: 'implemented' as const },
-  { title: 'Raft consensus', status: 'planned' as const },
+  { title: 'Tokio-based async networking with memcached protocol', status: 'implemented' as const },
+  { title: 'Memtable with skip list data structure', status: 'implemented' as const },
+  { title: 'Minor compaction (memtable to SSTable)', status: 'implemented' as const },
+  { title: 'Major compaction (SSTable level compaction)', status: 'implemented' as const },
+  { title: 'Raft consensus for distributed operation', status: 'planned' as const },
 ];
 
 export const NAV_LINKS = [
