@@ -38,6 +38,7 @@
     "node_modules",
     "tests",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "playwright.config.ts"
   ]
 }
