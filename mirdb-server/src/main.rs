@@ -53,6 +53,8 @@ mod test_utils;
 mod thread_pool;
 mod types;
 mod wal;
+mod homepage;
+mod web_server;
 
 pub struct Server {
     store: Arc<Store>,
@@ -126,6 +128,12 @@ Welcome to MirDB!
 "#
         .trim_matches('\n')
     );
+
+    // Start the HTTP homepage server
+    let homepage_addr = conf.homepage_server_addr();
+    if let Ok(homepage_socket) = homepage_addr.parse() {
+        let _ = web_server::start_http_server(homepage_socket);
+    }
 
     serve(addr, move || Ok(Server::new(store.clone())));
 

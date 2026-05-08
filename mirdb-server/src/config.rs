@@ -27,6 +27,8 @@ pub struct Config {
     pub l0_compaction_trigger: usize,
 
     pub thread_sleep_ms: usize,
+
+    pub homepage_addr: Option<String>,
 }
 
 impl Config {
@@ -43,6 +45,11 @@ impl Config {
         opt.l0_compaction_trigger = self.l0_compaction_trigger;
         opt.thread_sleep_ms = self.thread_sleep_ms;
         Ok(opt)
+    }
+
+    /// Returns the homepage server address, or a default if not configured
+    pub fn homepage_server_addr(&self) -> String {
+        self.homepage_addr.clone().unwrap_or_else(|| "0.0.0.0:8080".to_string())
     }
 }
 
