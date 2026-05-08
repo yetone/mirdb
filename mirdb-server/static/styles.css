@@ -121,6 +121,185 @@ body {
 
 /* Responsive media queries: Scenario 7 */
 
+/* Base mobile-friendly defaults to prevent horizontal scroll */
+html,
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Container fluid pattern using relative units */
+.container {
+  width: 100%;
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Ensure base font size is at least 16px on mobile to avoid iOS zoom on inputs */
+html {
+  font-size: 100%;
+}
+
+body {
+  font-size: 1rem;
+}
+
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+
+  .hero-content .tagline {
+    font-size: 1.25rem;
+  }
+
+  .container {
+    max-width: 90%;
+  }
+}
+
+/* Mobile breakpoint - primary responsive boundary */
+@media (max-width: 768px) {
+  /* Body: keep readable text, prevent horizontal overflow */
+  body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Header: stacked layout for mobile (responsive nav pattern) */
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  /* Mobile navigation: stacked links pattern (touch-friendly) */
+  header nav,
+  header .nav,
+  nav.primary-nav {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  header nav a,
+  nav.primary-nav a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  /* Hamburger toggle (shown on mobile, hidden on larger screens) */
+  .menu-toggle {
+    display: block;
+    background: transparent;
+    border: 0;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  /* Collapsible nav links container */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-links.open,
+  .nav-links.active {
+    display: flex;
+  }
+
+  /* Hero section adapts to mobile width */
+  #hero {
+    min-height: auto;
+    padding: 3rem 1rem;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+  }
+
+  .hero-content .tagline {
+    font-size: 1.125rem;
+  }
+
+  /* CTA button: full-width-ish, touch-friendly tap target */
+  .cta-button {
+    display: inline-block;
+    width: auto;
+    max-width: 90%;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+
+  /* Features grid stacks vertically */
+  #features,
+  .features-grid,
+  .features {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 2rem 1rem;
+  }
+
+  .feature,
+  .feature-card {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Footer stacks on mobile */
+  footer {
+    padding: 1.5rem 1rem;
+    text-align: center;
+  }
+}
+
+/* Small mobile breakpoint for very small screens */
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 1.875rem;
+  }
+
+  .hero-content .tagline {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
 /* Focus/accessibility styles: Scenario 8 */
 
 /* Dark theme: Scenario 10 */
