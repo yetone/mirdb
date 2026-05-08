@@ -8,6 +8,20 @@
  */
 
 /* Base/Reset styles: First builder */
+
+/* CSS Custom Properties for theming (Scenario 10) */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --hero-bg-start: #1a1a2e;
+  --hero-bg-end: #16213e;
+  --cta-text-color: #ffffff;
+  --footer-bg: #2c3e50;
+  --footer-text: #ecf0f1;
+  --footer-link-hover: #3498db;
+  --link-color: #3498db;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -17,7 +31,8 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   line-height: 1.6;
-  color: #333;
+  color: var(--text-color);
+  background-color: var(--bg-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -82,8 +97,8 @@ body {
 
 /* Footer styles: Scenario 6 */
 .site-footer {
-  background-color: #2c3e50;
-  color: #ecf0f1;
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
   padding: 2rem 1rem;
   margin-top: auto;
 }
@@ -116,7 +131,7 @@ body {
 }
 
 .footer-links a:hover {
-  color: #3498db;
+  color: var(--footer-link-hover);
 }
 
 /* Responsive media queries: Scenario 7 */
@@ -303,3 +318,18 @@ body {
 /* Focus/accessibility styles: Scenario 8 */
 
 /* Dark theme: Scenario 10 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --footer-bg: #1a1a2e;
+    --footer-text: #e0e0e0;
+    --footer-link-hover: #64b5f6;
+    --link-color: #64b5f6;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+}
