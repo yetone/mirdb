@@ -1,0 +1,335 @@
+/**
+ * MirDB Homepage Stylesheet
+ * Created by: First scenario builder
+ * Modified by: Scenarios 4-10
+ *
+ * Each scenario adds styles for its assigned components.
+ * Use CSS custom properties for theming (Scenario 10).
+ */
+
+/* Base/Reset styles: First builder */
+
+/* CSS Custom Properties for theming (Scenario 10) */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --hero-bg-start: #1a1a2e;
+  --hero-bg-end: #16213e;
+  --cta-text-color: #ffffff;
+  --footer-bg: #2c3e50;
+  --footer-text: #ecf0f1;
+  --footer-link-hover: #3498db;
+  --link-color: #3498db;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header/Nav styles: Scenario 5 */
+
+/* Hero styles: Scenario 2 */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+}
+
+.hero-content {
+  max-width: 800px;
+  padding: 2rem;
+}
+
+.hero-content h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content .tagline {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+/* Features styles: Scenario 3 */
+
+/* CTA styles: Scenario 4 */
+.cta-button {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+}
+
+.cta-button:focus {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Footer styles: Scenario 6 */
+.site-footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  padding: 2rem 1rem;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.copyright {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-links a {
+  color: #ecf0f1;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--footer-link-hover);
+}
+
+/* Responsive media queries: Scenario 7 */
+
+/* Base mobile-friendly defaults to prevent horizontal scroll */
+html,
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Container fluid pattern using relative units */
+.container {
+  width: 100%;
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Ensure base font size is at least 16px on mobile to avoid iOS zoom on inputs */
+html {
+  font-size: 100%;
+}
+
+body {
+  font-size: 1rem;
+}
+
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+
+  .hero-content .tagline {
+    font-size: 1.25rem;
+  }
+
+  .container {
+    max-width: 90%;
+  }
+}
+
+/* Mobile breakpoint - primary responsive boundary */
+@media (max-width: 768px) {
+  /* Body: keep readable text, prevent horizontal overflow */
+  body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Header: stacked layout for mobile (responsive nav pattern) */
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  /* Mobile navigation: stacked links pattern (touch-friendly) */
+  header nav,
+  header .nav,
+  nav.primary-nav {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  header nav a,
+  nav.primary-nav a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  /* Hamburger toggle (shown on mobile, hidden on larger screens) */
+  .menu-toggle {
+    display: block;
+    background: transparent;
+    border: 0;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  /* Collapsible nav links container */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-links.open,
+  .nav-links.active {
+    display: flex;
+  }
+
+  /* Hero section adapts to mobile width */
+  #hero {
+    min-height: auto;
+    padding: 3rem 1rem;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+  }
+
+  .hero-content .tagline {
+    font-size: 1.125rem;
+  }
+
+  /* CTA button: full-width-ish, touch-friendly tap target */
+  .cta-button {
+    display: inline-block;
+    width: auto;
+    max-width: 90%;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+
+  /* Features grid stacks vertically */
+  #features,
+  .features-grid,
+  .features {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 2rem 1rem;
+  }
+
+  .feature,
+  .feature-card {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Footer stacks on mobile */
+  footer {
+    padding: 1.5rem 1rem;
+    text-align: center;
+  }
+}
+
+/* Small mobile breakpoint for very small screens */
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 1.875rem;
+  }
+
+  .hero-content .tagline {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Focus/accessibility styles: Scenario 8 */
+
+/* Dark theme: Scenario 10 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --footer-bg: #1a1a2e;
+    --footer-text: #e0e0e0;
+    --footer-link-hover: #64b5f6;
+    --link-color: #64b5f6;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+}
