@@ -1,0 +1,48 @@
+/*
+ * Owner: Scenario 10 - Responsive Design.
+ * Breakpoints:
+ *   Mobile  : max-width 767px
+ *   Tablet  : 768px - 1024px
+ *   Desktop : 1025px+
+ * Adjusts grid, font-size, nav layout (hamburger on mobile).
+ */
+
+/* Hero responsive styles */
+@media (max-width: 767px) {
+  #hero {
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  #hero h1 {
+    font-size: 2.5rem;
+  }
+
+  #hero .tagline {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  #hero {
+    padding: 4rem 2rem;
+  }
+
+  #hero h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  #hero {
+    padding: 6rem 2rem;
+  }
+
+  #hero h1 {
+    font-size: 4rem;
+  }
+
+  #hero .tagline {
+    font-size: 1.25rem;
+  }
+}
