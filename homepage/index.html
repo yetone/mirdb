@@ -40,44 +40,53 @@
     </div>
   </nav>
 
+  <main id="main-content">
   <!-- include: sections/hero.html -->
-  <section id="hero">
+  <section id="hero" aria-labelledby="hero-title">
     <div class="hero-content">
-      <h1>MirDB</h1>
+      <h1 id="hero-title">MirDB</h1>
       <p class="tagline">A persistent key-value store with Memcached protocol support</p>
       <a href="#install" class="cta">Get Started</a>
     </div>
   </section>
 
   <!-- include: sections/features.html -->
-  <section id="features">
+  <section id="features" aria-labelledby="features-title">
     <div class="container">
-      <h2>Features</h2>
-      <div class="grid">
-        <div class="feature-card">
-          <h3>Memcached Protocol</h3>
-          <p>Full compatibility with the Memcached text protocol for seamless integration with existing clients.</p>
-        </div>
-        <div class="feature-card">
-          <h3>SkipList Memtable</h3>
-          <p>Fast in-memory data structure for efficient ordered key lookups and range scans.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Minor / Major Compaction</h3>
-          <p>Automatic background compaction to optimize storage and reduce read amplification.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Persistent Storage</h3>
-          <p>Durable LSM-tree based storage engine with Write-Ahead Log for crash recovery.</p>
-        </div>
-      </div>
+      <h2 id="features-title">Features</h2>
+      <ul class="grid feature-list">
+        <li>
+          <article class="feature-card">
+            <h3>Memcached Protocol</h3>
+            <p>Full compatibility with the Memcached text protocol for seamless integration with existing clients.</p>
+          </article>
+        </li>
+        <li>
+          <article class="feature-card">
+            <h3>SkipList Memtable</h3>
+            <p>Fast in-memory data structure for efficient ordered key lookups and range scans.</p>
+          </article>
+        </li>
+        <li>
+          <article class="feature-card">
+            <h3>Minor / Major Compaction</h3>
+            <p>Automatic background compaction to optimize storage and reduce read amplification.</p>
+          </article>
+        </li>
+        <li>
+          <article class="feature-card">
+            <h3>Persistent Storage</h3>
+            <p>Durable LSM-tree based storage engine with Write-Ahead Log for crash recovery.</p>
+          </article>
+        </li>
+      </ul>
     </div>
   </section>
 
   <!-- include: sections/install.html -->
-  <section id="install">
+  <section id="install" aria-labelledby="install-title">
     <div class="container">
-      <h2>Installation</h2>
+      <h2 id="install-title">Installation</h2>
       <p>Get MirDB up and running in seconds.</p>
 
       <div class="install-method">
@@ -105,9 +114,9 @@
   </section>
 
   <!-- include: sections/usage.html -->
-  <section id="usage">
+  <section id="usage" aria-labelledby="usage-title">
     <div class="container">
-      <h2>Usage</h2>
+      <h2 id="usage-title">Usage</h2>
       <p>Interact with MirDB using standard Memcached commands.</p>
       <div class="code-block">
         <pre><code class="language-shell"># Set a key-value pair
@@ -124,9 +133,9 @@ delete mykey</code></pre>
   </section>
 
   <!-- include: sections/architecture.html -->
-  <section id="architecture">
+  <section id="architecture" aria-labelledby="architecture-title">
     <div class="container">
-      <h2>Architecture</h2>
+      <h2 id="architecture-title">Architecture</h2>
       <p>MirDB uses an LSM-tree based storage engine for efficient write operations and crash recovery.</p>
       <div class="architecture-diagram">
         <svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="arch-title">
@@ -147,9 +156,9 @@ delete mykey</code></pre>
   </section>
 
   <!-- include: sections/resources.html -->
-  <section id="resources">
+  <section id="resources" aria-labelledby="resources-title">
     <div class="container">
-      <h2>Resources</h2>
+      <h2 id="resources-title">Resources</h2>
       <ul class="resource-links">
         <li><a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
         <li><a href="https://github.com/yetone/mirdb#api-documentation" target="_blank" rel="noopener noreferrer">API Documentation</a></li>
@@ -157,6 +166,7 @@ delete mykey</code></pre>
       </ul>
     </div>
   </section>
+  </main>
 
   <!-- include: sections/footer.html -->
   <footer id="footer">
