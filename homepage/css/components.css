@@ -108,3 +108,142 @@ code {
   color: var(--text-muted, #64748b);
   margin-top: 0.5rem;
 }
+
+/* ===== Navigation (Scenario 13) ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--bg-primary, #ffffff);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navbar.scrolled {
+  border-bottom-color: var(--card-border, #e2e8f0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-heading, #16213e);
+  text-decoration: none;
+}
+
+.nav-logo:hover {
+  text-decoration: none;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.nav-list a {
+  color: var(--text-primary, #1a1a2e);
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-list a:hover {
+  color: var(--cta-bg, #e94560);
+  text-decoration: none;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-primary, #1a1a2e);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--card-border, #e2e8f0);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: var(--text-primary, #1a1a2e);
+  font-size: 1.125rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--code-bg, #f1f5f9);
+}
+
+/* Mobile: show hamburger, hide nav list by default */
+@media (max-width: 767px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-list {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background-color: var(--bg-primary, #ffffff);
+    border-bottom: 1px solid var(--card-border, #e2e8f0);
+    padding: 1rem 1.5rem;
+    display: none;
+  }
+
+  .nav-list.open {
+    display: flex;
+  }
+
+  .nav-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--card-border, #e2e8f0);
+  }
+
+  .nav-list li:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Add top padding to body so fixed nav doesn't cover content */
+body {
+  padding-top: 64px;
+}

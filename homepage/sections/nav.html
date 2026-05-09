@@ -6,3 +6,24 @@
     - <button id="hamburger" aria-controls="nav-list" aria-expanded="false">
     - <button id="theme-toggle"> (consumed by Scenario 8 JS)
 -->
+<nav id="navbar" class="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo" aria-label="MirDB Home">MirDB</a>
+    <button id="hamburger" class="hamburger" aria-controls="nav-list" aria-expanded="false" aria-label="Toggle navigation menu">
+      <span class="hamburger-line" aria-hidden="true"></span>
+      <span class="hamburger-line" aria-hidden="true"></span>
+      <span class="hamburger-line" aria-hidden="true"></span>
+    </button>
+    <ul id="nav-list" class="nav-list">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#usage">Usage</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#resources">Resources</a></li>
+    </ul>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+      <span class="theme-icon-light" aria-hidden="true">☀</span>
+      <span class="theme-icon-dark" aria-hidden="true">☾</span>
+    </button>
+  </div>
+</nav>
