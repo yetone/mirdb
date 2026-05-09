@@ -6,7 +6,7 @@
     "test": "vitest run",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
-    "test:e2e": "vitest run tests/e2e",
+    "test:e2e": "playwright test tests/e2e",
     "lint": "echo 'Lint not configured'",
     "dev": "npx serve ."
   },

@@ -48,3 +48,63 @@ code {
   border-radius: 0.5rem;
   padding: 1.5rem;
 }
+
+/* Copy button (Scenario 3) */
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  color: var(--text-muted, #64748b);
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+  background-color: var(--code-bg, #f1f5f9);
+}
+
+.copy-btn.copied::after {
+  content: 'Copied!';
+  position: absolute;
+  top: -28px;
+  right: 0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  background-color: var(--text-primary, #1a1a2e);
+  color: var(--bg-primary, #ffffff);
+}
+
+/* Code block wrapper */
+.code-block {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  padding: 1rem;
+  padding-right: 3rem;
+}
+
+/* Install section */
+.install-method {
+  margin-bottom: 2rem;
+}
+
+.install-method h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.install-note {
+  font-size: 0.9rem;
+  color: var(--text-muted, #64748b);
+  margin-top: 0.5rem;
+}
