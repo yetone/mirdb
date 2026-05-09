@@ -1,0 +1,22 @@
+/*
+ * Owner: Scenario 8.
+ * Defines :root[data-theme="light"] and :root[data-theme="dark"] custom properties.
+ * Smooth transition for color/background-color (~200ms) on body.
+ */
+
+:root {
+  --text-primary: #1a1a2e;
+  --text-heading: #16213e;
+  --bg-primary: #ffffff;
+  --link-color: #0f3460;
+  --cta-bg: #e94560;
+  --cta-text: #ffffff;
+  --cta-bg-hover: #d1344f;
+  --code-bg: #f1f5f9;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+}
+
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}

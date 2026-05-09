@@ -1,0 +1,407 @@
+/*
+ * Owner: Scenario 10 - Responsive Design.
+ * Breakpoints:
+ *   Mobile  : max-width 767px
+ *   Tablet  : 768px - 1024px
+ *   Desktop : 1025px+
+ * Adjusts grid, font-size, nav layout (hamburger on mobile).
+ */
+
+/* ============================================
+   BASE (Mobile-First) — applies to all sizes
+   ============================================ */
+
+/* Prevent horizontal overflow on the page */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Navigation base */
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg-primary, #ffffff);
+  border-bottom: 1px solid var(--card-border, #e2e8f0);
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  min-height: 64px;
+}
+
+.nav-logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-heading, #16213e);
+  text-decoration: none;
+}
+
+/* Hamburger button */
+#hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  gap: 5px;
+}
+
+#hamburger .hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-primary, #1a1a2e);
+  border-radius: 1px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Nav list */
+#nav-list {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+#nav-list li a {
+  color: var(--text-primary, #1a1a2e);
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+#nav-list li a:hover {
+  color: var(--link-color, #0f3460);
+}
+
+/* Theme toggle button */
+#theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--card-border, #e2e8f0);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Features section base */
+#features {
+  padding: 4rem 1.5rem;
+}
+
+#features h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+#features .grid {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: var(--card-bg, #ffffff);
+  border: 1px solid var(--card-border, #e2e8f0);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.feature-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.feature-card p {
+  color: var(--text-muted, #64748b);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Hero responsive styles */
+#hero {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+#hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+#hero .tagline {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  color: var(--text-muted, #64748b);
+}
+
+/* Install section responsive */
+#install {
+  padding: 3rem 1rem;
+}
+
+#install h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Usage section responsive */
+#usage {
+  padding: 3rem 1rem;
+}
+
+/* Architecture section responsive */
+#architecture {
+  padding: 3rem 1rem;
+}
+
+#architecture img,
+#architecture svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Resources section responsive */
+#resources {
+  padding: 3rem 1rem;
+}
+
+#resources .resource-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+#resources .resource-links li a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: var(--code-bg, #f1f5f9);
+  border-radius: 0.375rem;
+  font-weight: 500;
+}
+
+/* Footer responsive */
+#footer {
+  padding: 2rem 1rem;
+  text-align: center;
+  border-top: 1px solid var(--card-border, #e2e8f0);
+}
+
+/* ============================================
+   MOBILE: max-width 767px
+   ============================================ */
+@media (max-width: 767px) {
+  /* Hamburger visible, nav list hidden */
+  #hamburger {
+    display: flex;
+  }
+
+  #nav-list {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-primary, #ffffff);
+    border-bottom: 1px solid var(--card-border, #e2e8f0);
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  #nav-list.open {
+    display: flex;
+  }
+
+  #nav-list li {
+    width: 100%;
+  }
+
+  #nav-list li a {
+    display: block;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  /* Features: single column */
+  #features .grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Container */
+  .container {
+    padding: 0 1rem;
+  }
+
+  section {
+    padding: 3rem 1rem;
+  }
+
+  /* Code blocks: allow horizontal scroll inside, not on page */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Resources: stack vertically */
+  #resources .resource-links {
+    flex-direction: column;
+  }
+
+  /* Prevent any element from exceeding viewport */
+  img, svg, video, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ============================================
+   TABLET: 768px - 1024px
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Hamburger hidden, nav list visible */
+  #hamburger {
+    display: none;
+  }
+
+  #nav-list {
+    display: flex;
+    flex-direction: row;
+    position: static;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  /* Features: two columns */
+  #features .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Hero */
+  #hero {
+    padding: 4rem 2rem;
+  }
+
+  #hero h1 {
+    font-size: 3.5rem;
+  }
+
+  #hero .tagline {
+    font-size: 1.125rem;
+  }
+
+  /* Container */
+  .container {
+    padding: 0 2rem;
+  }
+
+  section {
+    padding: 4rem 2rem;
+  }
+}
+
+/* ============================================
+   DESKTOP: 1025px+
+   ============================================ */
+@media (min-width: 1025px) {
+  /* Hamburger hidden, nav list visible */
+  #hamburger {
+    display: none;
+  }
+
+  #nav-list {
+    display: flex;
+    flex-direction: row;
+    position: static;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  /* Features: three or more columns */
+  #features .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Hero */
+  #hero {
+    padding: 6rem 2rem;
+  }
+
+  #hero h1 {
+    font-size: 4rem;
+  }
+
+  #hero .tagline {
+    font-size: 1.25rem;
+  }
+
+  /* Container */
+  .container {
+    padding: 0 2rem;
+  }
+
+  section {
+    padding: 4rem 2rem;
+  }
+
+  /* Nav container spacing */
+  .nav-container {
+    padding: 0 2rem;
+  }
+}
+
+/* ============================================
+   EXTRA-SMALL MOBILE: max-width 359px
+   ============================================ */
+@media (max-width: 359px) {
+  html {
+    font-size: 14px;
+  }
+
+  #hero h1 {
+    font-size: 2rem;
+  }
+
+  .nav-container {
+    padding: 0 0.75rem;
+  }
+
+  #features .grid {
+    grid-template-columns: 1fr;
+  }
+
+  pre {
+    font-size: 0.8rem;
+    padding: 0.75rem;
+  }
+}
