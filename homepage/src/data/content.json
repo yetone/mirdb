@@ -1,0 +1,54 @@
+{
+  "hero": {
+    "title": "MirDB",
+    "tagline": "Persistent key-value store with the Memcached protocol — built in Rust.",
+    "ctas": [
+      { "label": "View on GitHub", "href": "https://github.com/yetone/mirdb", "primary": true },
+      { "label": "Read Documentation", "href": "#quick-start", "primary": false }
+    ]
+  },
+  "features": [
+    { "id": "memcached", "title": "Memcached Protocol", "description": "Drop-in compatibility with existing Memcached clients." },
+    { "id": "rust", "title": "Built in Rust", "description": "Memory-safe systems language with zero-cost abstractions." },
+    { "id": "persistence", "title": "Persistent Storage", "description": "Durable on-disk storage instead of pure in-memory." },
+    { "id": "lsm-tree", "title": "LSM Tree Engine", "description": "Optimised for high-throughput writes." },
+    { "id": "skip-list", "title": "Skip-list Memtable", "description": "Concurrent in-memory data structure with logarithmic lookups." },
+    { "id": "wal", "title": "Write-Ahead Log", "description": "Durability and crash recovery via WAL." },
+    { "id": "compaction", "title": "Compaction", "description": "Background compaction keeps storage compact and reads fast." }
+  ],
+  "codeExample": {
+    "language": "shell",
+    "description": "Connect with any Memcached client. Here are the basics over the text protocol:",
+    "snippet": "# Start the server\nmirdb-server --port 11211\n\n# In another shell, use any memcached client:\nset hello 0 0 5\nworld\n# STORED\n\nget hello\n# VALUE hello 0 5\n# world\n# END\n\nadd counter 0 0 1\n0\n# STORED\n\nreplace hello 0 0 5\nMirDB\n# STORED\n\ndelete counter\n# DELETED"
+  },
+  "links": {
+    "github": "https://github.com/yetone/mirdb",
+    "docs": "https://github.com/yetone/mirdb#readme",
+    "api": "https://github.com/yetone/mirdb/blob/master/README.md",
+    "ci": "https://circleci.com/gh/yetone/mirdb"
+  },
+  "status": {
+    "version": "0.1.0",
+    "ciBadgeUrl": "https://circleci.com/gh/yetone/mirdb.svg?style=shield",
+    "ciLinkUrl": "https://circleci.com/gh/yetone/mirdb"
+  },
+  "roadmap": {
+    "done": [
+      { "title": "Memcached text protocol" },
+      { "title": "LSM tree storage engine" },
+      { "title": "Skip-list memtable" },
+      { "title": "Write-ahead log durability" },
+      { "title": "Background compaction" }
+    ],
+    "planned": [
+      { "title": "Raft consensus for distributed deployments" },
+      { "title": "Binary memcached protocol" },
+      { "title": "Pluggable compression" }
+    ]
+  },
+  "whyMirDB": [
+    { "competitor": "Memcached", "difference": "MirDB persists data to disk — values survive restarts." },
+    { "competitor": "Redis", "difference": "MirDB keeps the surface tiny by speaking the Memcached protocol." },
+    { "competitor": "RocksDB", "difference": "MirDB ships a network protocol out of the box; RocksDB is embedded only." }
+  ]
+}

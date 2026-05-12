@@ -1,0 +1,14 @@
+{
+  "name": "mirdb-homepage",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static marketing homepage for MirDB - persistent key-value store with Memcached protocol.",
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest tests/unit"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

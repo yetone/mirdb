@@ -1,0 +1,6 @@
+/* Footer styles. Created by the first scenario builder. */
+#footer {
+  padding: var(--space-6) 0;
+  color: var(--color-muted);
+  text-align: center;
+}

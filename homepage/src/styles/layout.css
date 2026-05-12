@@ -1,0 +1,18 @@
+/*
+ * Container / section layout for the MirDB homepage.
+ * Created by the first scenario builder.
+ */
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+section {
+  padding: var(--space-8) 0;
+}
+
+section + section {
+  border-top: 1px solid var(--color-border);
+}
