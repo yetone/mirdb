@@ -1,0 +1,47 @@
+<!--
+  Status indicators (CI badge, version).
+  Owner: Scenario 5 — Project status indicators
+
+  REQ-6 + US-5: surface project health signals so visitors can assess
+  build health and current release at a glance.
+
+  Values come from src/data/content.json#status (ciBadgeUrl, ciLinkUrl,
+  version) — the static build step substitutes them here. They are
+  inlined as concrete values so the page works without a runtime fetch.
+-->
+<section id="status" class="section section--status" aria-labelledby="status-heading">
+  <div class="container status-inner">
+    <h2 id="status-heading" class="status-heading">Project status</h2>
+    <p class="status-lede">
+      Current release and continuous integration status, straight from the
+      project's CI pipeline.
+    </p>
+
+    <ul class="status-list" role="list">
+      <li class="status-item status-item--ci">
+        <a
+          class="status-ci-link"
+          href="https://circleci.com/gh/yetone/mirdb"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-status="ci"
+          aria-label="View MirDB continuous integration build history on CircleCI"
+        >
+          <img
+            class="status-ci-badge"
+            src="https://circleci.com/gh/yetone/mirdb.svg?style=shield"
+            alt="MirDB CI build status badge"
+            width="120"
+            height="20"
+            loading="lazy"
+          />
+        </a>
+      </li>
+
+      <li class="status-item status-item--version">
+        <span class="status-label">Current release</span>
+        <span class="version" data-status="version">v0.1.0</span>
+      </li>
+    </ul>
+  </div>
+</section>

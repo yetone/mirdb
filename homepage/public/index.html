@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../src/components/hero/hero.css" />
     <link rel="stylesheet" href="../src/components/code-example/code-example.css" />
     <link rel="stylesheet" href="../src/components/features/features.css" />
+    <link rel="stylesheet" href="../src/components/status/status.css" />
   </head>
   <body>
     <!-- Navigation — Scenario 4 -->
@@ -253,9 +254,40 @@ delete counter
       </section>
 
       <!-- #status — Scenario 5 -->
-      <section id="status">
-        <div class="container">
-          <h2>Status</h2>
+      <section id="status" class="section section--status" aria-labelledby="status-heading">
+        <div class="container status-inner">
+          <h2 id="status-heading" class="status-heading">Project status</h2>
+          <p class="status-lede">
+            Current release and continuous integration status, straight from the
+            project's CI pipeline.
+          </p>
+
+          <ul class="status-list" role="list">
+            <li class="status-item status-item--ci">
+              <a
+                class="status-ci-link"
+                href="https://circleci.com/gh/yetone/mirdb"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-status="ci"
+                aria-label="View MirDB continuous integration build history on CircleCI"
+              >
+                <img
+                  class="status-ci-badge"
+                  src="https://circleci.com/gh/yetone/mirdb.svg?style=shield"
+                  alt="MirDB CI build status badge"
+                  width="120"
+                  height="20"
+                  loading="lazy"
+                />
+              </a>
+            </li>
+
+            <li class="status-item status-item--version">
+              <span class="status-label">Current release</span>
+              <span class="version" data-status="version">v0.1.0</span>
+            </li>
+          </ul>
         </div>
       </section>
 
