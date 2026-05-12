@@ -12,17 +12,43 @@
     <link rel="stylesheet" href="../src/styles/theme.css" />
     <link rel="stylesheet" href="../src/styles/base.css" />
     <link rel="stylesheet" href="../src/styles/layout.css" />
+    <link rel="stylesheet" href="../src/components/hero/hero.css" />
     <link rel="stylesheet" href="../src/components/code-example/code-example.css" />
   </head>
   <body>
     <main>
       <!-- #hero — Scenario 1 -->
-      <section id="hero" role="banner">
-        <div class="container">
-          <h1>MirDB</h1>
+      <section id="hero" aria-labelledby="hero-title">
+        <div class="container hero-inner">
+          <img
+            class="hero-logo"
+            src="../src/assets/images/logo.svg"
+            alt="MirDB logo — persistent key-value store"
+            width="96"
+            height="96"
+          />
+          <h1 id="hero-title">MirDB</h1>
           <p class="tagline">
             Persistent key-value store with the Memcached protocol — built in Rust.
           </p>
+          <div class="hero-ctas">
+            <a
+              class="cta cta-primary"
+              href="https://github.com/yetone/mirdb"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cta="primary"
+            >
+              View on GitHub
+            </a>
+            <a
+              class="cta cta-secondary"
+              href="https://github.com/yetone/mirdb#readme"
+              data-cta="secondary"
+            >
+              Read Documentation
+            </a>
+          </div>
         </div>
       </section>
 

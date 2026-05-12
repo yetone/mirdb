@@ -2,9 +2,13 @@
   "hero": {
     "title": "MirDB",
     "tagline": "Persistent key-value store with the Memcached protocol — built in Rust.",
+    "logo": {
+      "src": "../src/assets/images/logo.svg",
+      "alt": "MirDB logo — persistent key-value store"
+    },
     "ctas": [
       { "label": "View on GitHub", "href": "https://github.com/yetone/mirdb", "primary": true },
-      { "label": "Read Documentation", "href": "#quick-start", "primary": false }
+      { "label": "Read Documentation", "href": "https://github.com/yetone/mirdb#readme", "primary": false }
     ]
   },
   "features": [
