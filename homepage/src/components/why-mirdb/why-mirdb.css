@@ -1,0 +1,78 @@
+/*
+ * Why MirDB? — differentiation section styles.
+ * Owner: Scenario 7 — "Why MirDB?" (REQ-8).
+ *
+ * Layout: three side-by-side comparison cards on desktop, one column on
+ * mobile (≤ 640px). Each card calls out a single competitor and the
+ * concrete differentiator that matters when choosing MirDB.
+ *
+ * Color/contrast follows the shared design tokens in theme.css to keep
+ * WCAG 2.1 AA contrast (NFR-3).
+ */
+
+.section--why-mirdb {
+  background: var(--color-bg);
+}
+
+.why-mirdb__lede {
+  color: var(--color-muted);
+  max-width: 64ch;
+  margin: 0 0 var(--space-6);
+  line-height: 1.6;
+}
+
+.comparison {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.comparison-item {
+  background: var(--color-surface, #f6f8fb);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.comparison-item__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.comparison-item__badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.comparison-item__title {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--color-fg);
+}
+
+.comparison-item__text {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--color-fg);
+}
+
+@media (max-width: 640px) {
+  .comparison {
+    grid-template-columns: 1fr;
+  }
+}

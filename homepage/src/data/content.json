@@ -52,8 +52,8 @@
     ]
   },
   "whyMirDB": [
-    { "competitor": "Memcached", "difference": "MirDB persists data to disk — values survive restarts." },
-    { "competitor": "Redis", "difference": "MirDB keeps the surface tiny by speaking the Memcached protocol." },
-    { "competitor": "RocksDB", "difference": "MirDB ships a network protocol out of the box; RocksDB is embedded only." }
+    { "competitor": "Memcached", "difference": "MirDB writes every value to durable disk storage — your data stays persistent across restarts, where Memcached lives purely in memory and forgets on shutdown." },
+    { "competitor": "Redis", "difference": "MirDB chooses simplicity and Memcached protocol compatibility over Redis's much larger command surface — a tiny wire format your existing clients already speak." },
+    { "competitor": "RocksDB", "difference": "MirDB ships with a network protocol out of the box, so any Memcached client can talk to it; RocksDB is an embedded library you have to wrap yourself." }
   ]
 }
