@@ -20,8 +20,12 @@
     <link rel="stylesheet" href="../src/components/roadmap/roadmap.css" />
     <link rel="stylesheet" href="../src/components/why-mirdb/why-mirdb.css" />
     <link rel="stylesheet" href="../src/styles/responsive.css" />
+    <link rel="stylesheet" href="../src/styles/accessibility.css" />
   </head>
   <body>
+    <!-- Skip Link — Scenario 9 -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Navigation — Scenario 4 -->
     <header class="site-nav" role="navigation">
       <a class="nav-logo" href="#hero" aria-label="MirDB home">MirDB</a>
@@ -59,7 +63,7 @@
       </ul>
     </header>
 
-    <main>
+    <main id="main-content">
       <!-- #hero — Scenario 1 -->
       <section id="hero" aria-labelledby="hero-title">
         <div class="container hero-inner">
