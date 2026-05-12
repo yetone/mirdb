@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="../src/components/code-example/code-example.css" />
     <link rel="stylesheet" href="../src/components/features/features.css" />
     <link rel="stylesheet" href="../src/components/status/status.css" />
+    <link rel="stylesheet" href="../src/components/roadmap/roadmap.css" />
   </head>
   <body>
     <!-- Navigation — Scenario 4 -->
@@ -292,9 +293,96 @@ delete counter
       </section>
 
       <!-- #roadmap — Scenario 6 -->
-      <section id="roadmap">
+      <section id="roadmap" class="section section--roadmap" aria-labelledby="roadmap-heading">
         <div class="container">
-          <h2>Roadmap</h2>
+          <h2 id="roadmap-heading">Roadmap</h2>
+          <p class="roadmap-lede">
+            What works today and what is coming next. Done items run in
+            production; planned items are tracked in the project README.
+          </p>
+
+          <div class="roadmap-columns">
+            <section class="roadmap-column roadmap-column--done" aria-labelledby="roadmap-done-heading">
+              <h3 id="roadmap-done-heading" class="roadmap-column__title">
+                <span class="roadmap-column__badge" aria-hidden="true">Shipped</span>
+                Implemented
+              </h3>
+              <ul class="roadmap-done" role="list">
+                <li class="roadmap-item roadmap-item--done" data-status="done" aria-label="Done: Tokio Memcached text protocol server">
+                  <svg class="roadmap-item__icon roadmap-item__icon--done" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Tokio Memcached text protocol server</span>
+                </li>
+                <li class="roadmap-item roadmap-item--done" data-status="done" aria-label="Done: LSM tree storage engine">
+                  <svg class="roadmap-item__icon roadmap-item__icon--done" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">LSM tree storage engine</span>
+                </li>
+                <li class="roadmap-item roadmap-item--done" data-status="done" aria-label="Done: Skip-list memtable">
+                  <svg class="roadmap-item__icon roadmap-item__icon--done" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Skip-list memtable</span>
+                </li>
+                <li class="roadmap-item roadmap-item--done" data-status="done" aria-label="Done: Write-ahead log durability">
+                  <svg class="roadmap-item__icon roadmap-item__icon--done" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Write-ahead log durability</span>
+                </li>
+                <li class="roadmap-item roadmap-item--done" data-status="done" aria-label="Done: Minor compaction (memtable flush)">
+                  <svg class="roadmap-item__icon roadmap-item__icon--done" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Minor compaction (memtable flush)</span>
+                </li>
+                <li class="roadmap-item roadmap-item--done" data-status="done" aria-label="Done: Major compaction (level merge)">
+                  <svg class="roadmap-item__icon roadmap-item__icon--done" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Major compaction (level merge)</span>
+                </li>
+              </ul>
+            </section>
+
+            <section class="roadmap-column roadmap-column--planned" aria-labelledby="roadmap-planned-heading">
+              <h3 id="roadmap-planned-heading" class="roadmap-column__title">
+                <span class="roadmap-column__badge roadmap-column__badge--planned" aria-hidden="true">Next</span>
+                Planned
+              </h3>
+              <ul class="roadmap-planned" role="list">
+                <li class="roadmap-item roadmap-item--planned" data-status="planned" aria-label="Planned: Raft consensus for distributed deployments">
+                  <svg class="roadmap-item__icon roadmap-item__icon--planned" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" />
+                    <path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Raft consensus for distributed deployments</span>
+                </li>
+                <li class="roadmap-item roadmap-item--planned" data-status="planned" aria-label="Planned: Binary memcached protocol">
+                  <svg class="roadmap-item__icon roadmap-item__icon--planned" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" />
+                    <path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Binary memcached protocol</span>
+                </li>
+                <li class="roadmap-item roadmap-item--planned" data-status="planned" aria-label="Planned: Pluggable compression">
+                  <svg class="roadmap-item__icon roadmap-item__icon--planned" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" />
+                    <path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="roadmap-item__text">Pluggable compression</span>
+                </li>
+              </ul>
+            </section>
+          </div>
         </div>
       </section>
 

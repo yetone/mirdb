@@ -1,0 +1,111 @@
+/*
+ * Roadmap section styles.
+ * Owner: Scenario 6 — Roadmap (REQ-7).
+ *
+ * Visual distinction between done / planned items is conveyed by THREE
+ * non-color signals to satisfy WCAG 1.4.1:
+ *   1. SVG icon shape (filled check vs dashed-ring clock)
+ *   2. Column badge text ("Shipped" / "Next")
+ *   3. aria-label prefix ("Done:" / "Planned:")
+ * Color is layered on top as enhancement, not the primary cue.
+ */
+
+.section--roadmap {
+  background: var(--color-bg);
+}
+
+.roadmap-lede {
+  color: var(--color-muted);
+  max-width: 60ch;
+  margin: 0 0 var(--space-6);
+}
+
+.roadmap-columns {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.roadmap-column {
+  background: var(--color-surface, #f6f8fb);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+
+.roadmap-column__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-size: 1.125rem;
+  color: var(--color-fg);
+}
+
+.roadmap-column__badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.roadmap-column__badge--planned {
+  background: transparent;
+  color: var(--color-muted);
+  border: 1px dashed var(--color-muted);
+}
+
+.roadmap-done,
+.roadmap-planned {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.roadmap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-fg);
+}
+
+.roadmap-item__icon {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+}
+
+.roadmap-item__icon--done {
+  color: var(--color-accent);
+}
+
+.roadmap-item__icon--planned {
+  color: var(--color-muted);
+}
+
+.roadmap-item__text {
+  line-height: 1.5;
+}
+
+.roadmap-item--planned .roadmap-item__text {
+  color: var(--color-muted);
+}
+
+@media (max-width: 640px) {
+  .roadmap-columns {
+    grid-template-columns: 1fr;
+  }
+}

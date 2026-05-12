@@ -38,11 +38,12 @@
   },
   "roadmap": {
     "done": [
-      { "title": "Memcached text protocol" },
+      { "title": "Tokio Memcached text protocol server" },
       { "title": "LSM tree storage engine" },
       { "title": "Skip-list memtable" },
       { "title": "Write-ahead log durability" },
-      { "title": "Background compaction" }
+      { "title": "Minor compaction (memtable flush)" },
+      { "title": "Major compaction (level merge)" }
     ],
     "planned": [
       { "title": "Raft consensus for distributed deployments" },
