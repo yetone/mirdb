@@ -1,0 +1,35 @@
+{
+  "$comment": "Performance budget for the MirDB homepage. Enforced by tests/performance/lighthouse.test.js and tests/integration/build-output.test.js. Sizes are gzip bytes unless suffixed otherwise. Score thresholds reflect the PRD Success Criteria (Lighthouse > 90) and NFR-1 (page load < 2s on 3G).",
+  "categories": {
+    "performance": { "minScore": 90 },
+    "accessibility": { "minScore": 90 },
+    "best-practices": { "minScore": 90 },
+    "seo": { "minScore": 90 }
+  },
+  "metrics": {
+    "first-contentful-paint": { "maxMs": 2000 },
+    "largest-contentful-paint": { "maxMs": 2500 },
+    "total-blocking-time": { "maxMs": 200 },
+    "cumulative-layout-shift": { "maxValue": 0.1 },
+    "speed-index": { "maxMs": 3000 }
+  },
+  "resourceSizes": {
+    "totalGzipBytes": 256000,
+    "html": { "maxGzipBytes": 32000 },
+    "css": { "maxGzipBytes": 32000 },
+    "js": { "maxGzipBytes": 64000 },
+    "image": { "maxGzipBytes": 128000 }
+  },
+  "resourceCounts": {
+    "script": { "maxCount": 4 },
+    "stylesheet": { "maxCount": 4 },
+    "image": { "maxCount": 20 },
+    "third-party": { "maxCount": 5 },
+    "total": { "maxCount": 40 }
+  },
+  "network": {
+    "throughputKbps": 1638.4,
+    "rttMs": 150,
+    "$comment": "Approximates Lighthouse 'simulated 3G' (1.6 Mbps down, 150ms RTT)."
+  }
+}
