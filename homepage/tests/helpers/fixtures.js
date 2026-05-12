@@ -28,4 +28,16 @@ function buildClipboardMock({ shouldReject = false, rejectError } = {}) {
   };
 }
 
-module.exports = { sampleContent, buildClipboardMock };
+// REQ-3 feature identifiers — every entry must surface as both a card in
+// the features grid and an item in src/data/content.json#features.
+const REQUIRED_FEATURE_IDS = [
+  'memcached',
+  'rust',
+  'persistence',
+  'lsm-tree',
+  'skip-list',
+  'wal',
+  'compaction',
+];
+
+module.exports = { sampleContent, buildClipboardMock, REQUIRED_FEATURE_IDS };

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../src/styles/layout.css" />
     <link rel="stylesheet" href="../src/components/hero/hero.css" />
     <link rel="stylesheet" href="../src/components/code-example/code-example.css" />
+    <link rel="stylesheet" href="../src/components/features/features.css" />
   </head>
   <body>
     <main>
@@ -53,9 +54,121 @@
       </section>
 
       <!-- #features — Scenario 2 -->
-      <section id="features">
+      <section id="features" class="section section--features" aria-labelledby="features-heading">
         <div class="container">
-          <h2>Features</h2>
+          <h2 id="features-heading">Features</h2>
+          <p class="features-lede">
+            Every piece you need from a modern key-value store, packaged behind the
+            familiar Memcached wire protocol.
+          </p>
+
+          <ul class="features-grid" role="list">
+            <li class="feature-card" data-feature="memcached">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6h16v2H4zM4 11h16v2H4zM4 16h16v2H4z" fill="currentColor" />
+                <circle cx="6" cy="7" r="1" fill="#fff" />
+                <circle cx="6" cy="12" r="1" fill="#fff" />
+                <circle cx="6" cy="17" r="1" fill="#fff" />
+              </svg>
+              <h3 class="feature-card__title">Memcached Protocol</h3>
+              <p class="feature-card__desc">
+                Drop-in compatibility with the standard Memcached text protocol means
+                existing clients connect without changes.
+              </p>
+            </li>
+
+            <li class="feature-card" data-feature="rust">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.5 14 5l3-.5 1 3 3 1.5-1.5 3 1.5 3-3 1.5-1 3-3-.5-2 2.5-2-2.5-3 .5-1-3-3-1.5L2 12 .5 9l3-1.5 1-3 3 .5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <circle cx="12" cy="12" r="3" fill="currentColor" />
+              </svg>
+              <h3 class="feature-card__title">Built in Rust</h3>
+              <p class="feature-card__desc">
+                Memory safety, fearless concurrency, and predictable performance
+                thanks to a modern systems language.
+              </p>
+            </li>
+
+            <li class="feature-card" data-feature="persistence">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="12" cy="5" rx="8" ry="3" fill="currentColor" />
+                <path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" fill="none" stroke="currentColor" stroke-width="1.5" />
+              </svg>
+              <h3 class="feature-card__title">Persistent Storage</h3>
+              <p class="feature-card__desc">
+                Unlike pure in-memory caches, MirDB durably persists every write to
+                disk for safe long-term storage.
+              </p>
+            </li>
+
+            <li class="feature-card" data-feature="lsm-tree">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <rect x="9" y="3" width="6" height="4" rx="1" fill="currentColor" />
+                <rect x="3" y="10" width="6" height="4" rx="1" fill="currentColor" opacity="0.7" />
+                <rect x="15" y="10" width="6" height="4" rx="1" fill="currentColor" opacity="0.7" />
+                <rect x="3" y="17" width="6" height="4" rx="1" fill="currentColor" opacity="0.45" />
+                <rect x="15" y="17" width="6" height="4" rx="1" fill="currentColor" opacity="0.45" />
+                <path d="M12 7v3M6 14v3M18 14v3" stroke="currentColor" stroke-width="1.2" />
+              </svg>
+              <h3 class="feature-card__title">LSM Tree Architecture</h3>
+              <p class="feature-card__desc">
+                A log-structured merge tree powers high write throughput with
+                efficient on-disk layout across levels.
+              </p>
+            </li>
+
+            <li class="feature-card" data-feature="skip-list">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="3" cy="6" r="1.5" fill="currentColor" />
+                <circle cx="12" cy="6" r="1.5" fill="currentColor" />
+                <circle cx="21" cy="6" r="1.5" fill="currentColor" />
+                <circle cx="3" cy="12" r="1.5" fill="currentColor" />
+                <circle cx="9" cy="12" r="1.5" fill="currentColor" />
+                <circle cx="15" cy="12" r="1.5" fill="currentColor" />
+                <circle cx="21" cy="12" r="1.5" fill="currentColor" />
+                <circle cx="3" cy="18" r="1.5" fill="currentColor" />
+                <circle cx="6" cy="18" r="1.5" fill="currentColor" />
+                <circle cx="9" cy="18" r="1.5" fill="currentColor" />
+                <circle cx="12" cy="18" r="1.5" fill="currentColor" />
+                <circle cx="15" cy="18" r="1.5" fill="currentColor" />
+                <circle cx="18" cy="18" r="1.5" fill="currentColor" />
+                <circle cx="21" cy="18" r="1.5" fill="currentColor" />
+                <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="0.75" opacity="0.6" />
+              </svg>
+              <h3 class="feature-card__title">Skip-List Memtable</h3>
+              <p class="feature-card__desc">
+                An in-memory skip list provides ordered, lock-friendly inserts and
+                lookups for the hottest data.
+              </p>
+            </li>
+
+            <li class="feature-card" data-feature="wal">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 3h11l4 4v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M16 3v4h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M7 12h10M7 15h10M7 18h6" stroke="currentColor" stroke-width="1.4" />
+              </svg>
+              <h3 class="feature-card__title">WAL Durability</h3>
+              <p class="feature-card__desc">
+                A Write-Ahead Log records every mutation before acknowledgement,
+                guaranteeing crash recovery.
+              </p>
+            </li>
+
+            <li class="feature-card" data-feature="compaction">
+              <svg class="feature-card__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6h16M4 6l3-3M4 6l3 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M20 18H4M20 18l-3-3M20 18l-3 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                <rect x="6" y="10" width="12" height="4" rx="1" fill="currentColor" opacity="0.6" />
+              </svg>
+              <h3 class="feature-card__title">Background Compaction</h3>
+              <p class="feature-card__desc">
+                Minor and major compaction continuously merge SSTables to reclaim
+                space and keep reads fast.
+              </p>
+            </li>
+          </ul>
         </div>
       </section>
 

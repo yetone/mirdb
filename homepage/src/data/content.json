@@ -12,13 +12,13 @@
     ]
   },
   "features": [
-    { "id": "memcached", "title": "Memcached Protocol", "description": "Drop-in compatibility with existing Memcached clients." },
-    { "id": "rust", "title": "Built in Rust", "description": "Memory-safe systems language with zero-cost abstractions." },
-    { "id": "persistence", "title": "Persistent Storage", "description": "Durable on-disk storage instead of pure in-memory." },
-    { "id": "lsm-tree", "title": "LSM Tree Engine", "description": "Optimised for high-throughput writes." },
-    { "id": "skip-list", "title": "Skip-list Memtable", "description": "Concurrent in-memory data structure with logarithmic lookups." },
-    { "id": "wal", "title": "Write-Ahead Log", "description": "Durability and crash recovery via WAL." },
-    { "id": "compaction", "title": "Compaction", "description": "Background compaction keeps storage compact and reads fast." }
+    { "id": "memcached", "title": "Memcached Protocol", "description": "Drop-in compatibility with existing Memcached clients.", "icon": "memcached" },
+    { "id": "rust", "title": "Built in Rust", "description": "Memory-safe systems language with zero-cost abstractions.", "icon": "rust" },
+    { "id": "persistence", "title": "Persistent Storage", "description": "Durable on-disk storage instead of pure in-memory.", "icon": "persistence" },
+    { "id": "lsm-tree", "title": "LSM Tree Engine", "description": "Optimised for high-throughput writes.", "icon": "lsm-tree" },
+    { "id": "skip-list", "title": "Skip-list Memtable", "description": "Concurrent in-memory data structure with logarithmic lookups.", "icon": "skip-list" },
+    { "id": "wal", "title": "Write-Ahead Log", "description": "Durability and crash recovery via WAL.", "icon": "wal" },
+    { "id": "compaction", "title": "Compaction", "description": "Background compaction keeps storage compact and reads fast.", "icon": "compaction" }
   ],
   "codeExample": {
     "language": "shell",

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <circle cx="3" cy="6" r="1.5" fill="currentColor" />
+  <circle cx="12" cy="6" r="1.5" fill="currentColor" />
+  <circle cx="21" cy="6" r="1.5" fill="currentColor" />
+  <circle cx="3" cy="12" r="1.5" fill="currentColor" />
+  <circle cx="9" cy="12" r="1.5" fill="currentColor" />
+  <circle cx="15" cy="12" r="1.5" fill="currentColor" />
+  <circle cx="21" cy="12" r="1.5" fill="currentColor" />
+  <circle cx="3" cy="18" r="1.5" fill="currentColor" />
+  <circle cx="6" cy="18" r="1.5" fill="currentColor" />
+  <circle cx="9" cy="18" r="1.5" fill="currentColor" />
+  <circle cx="12" cy="18" r="1.5" fill="currentColor" />
+  <circle cx="15" cy="18" r="1.5" fill="currentColor" />
+  <circle cx="18" cy="18" r="1.5" fill="currentColor" />
+  <circle cx="21" cy="18" r="1.5" fill="currentColor" />
+  <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="0.75" opacity="0.6" />
+</svg>
