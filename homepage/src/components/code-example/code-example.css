@@ -1,0 +1,104 @@
+/*
+ * Get-started code example.
+ * Owner: Scenario 3 — dark-themed syntax highlighting + copy button.
+ *
+ * Pulls the dark palette from theme.css (--color-code-bg / --color-code-fg)
+ * so the code block stands out against the page's light surface.
+ */
+
+#quick-start .quick-start-intro {
+  color: var(--color-muted);
+  max-width: 60ch;
+}
+
+#quick-start .code-block {
+  position: relative;
+  margin: var(--space-5) 0 0;
+  border-radius: var(--radius-md);
+  background-color: var(--color-code-bg);
+  color: var(--color-code-fg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+#quick-start .code-block pre {
+  margin: 0;
+  padding: var(--space-5) var(--space-5) var(--space-5) var(--space-5);
+  overflow-x: auto;
+}
+
+#quick-start .code-block code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--color-code-fg);
+  white-space: pre;
+}
+
+/*
+ * Lightweight syntax-color hints via the language- class.
+ * A real syntax highlighter (e.g. Prism) can replace these tokens later;
+ * the dark theme remains valid in the meantime.
+ */
+#quick-start .code-block code.language-shell {
+  color: var(--color-code-fg);
+}
+
+#quick-start .copy-btn {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--color-code-fg);
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+#quick-start .copy-btn:hover,
+#quick-start .copy-btn:focus-visible {
+  background-color: rgba(255, 255, 255, 0.16);
+  outline: none;
+}
+
+#quick-start .copy-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+/* Toast region — used by clipboard.js / toast.js */
+#toast-region {
+  position: fixed;
+  bottom: var(--space-5);
+  right: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 220px;
+  max-width: 340px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-card);
+  background-color: var(--color-fg);
+  color: var(--color-bg);
+}
+
+.toast--success {
+  background-color: #136f3a;
+  color: #ffffff;
+}
+
+.toast--error {
+  background-color: #b00020;
+  color: #ffffff;
+}

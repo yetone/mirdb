@@ -1,0 +1,88 @@
+/*
+ * Status section styles.
+ * Owner: Scenario 5 — Project status indicators (REQ-6, US-5)
+ *
+ * Tokens come from theme.css. The section sits between #quick-start
+ * and #roadmap and reads as a slim horizontal strip on desktop and
+ * stacks vertically on narrow viewports.
+ */
+
+#status {
+  padding-block: var(--space-6, 2.5rem);
+}
+
+.status-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 1rem);
+  align-items: flex-start;
+}
+
+.status-heading {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: var(--color-fg, #111);
+}
+
+.status-lede {
+  margin: 0;
+  color: var(--color-muted, #555);
+  max-width: 56ch;
+}
+
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3, 1rem) var(--space-4, 1.25rem);
+}
+
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+}
+
+.status-ci-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: var(--radius-sm, 4px);
+  outline-offset: 3px;
+}
+
+.status-ci-badge {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.status-label {
+  font-size: 0.875rem;
+  color: var(--color-muted, #555);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.version {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--color-accent-bg, #eef);
+  color: var(--color-accent-fg, #224);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .status-list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

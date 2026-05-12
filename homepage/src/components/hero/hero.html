@@ -1,0 +1,45 @@
+<!--
+  Hero section — Scenario 1.
+  Source-of-truth markup. Also inlined into public/index.html so the
+  current static homepage works without a build step.
+
+  Renders:
+    - the MirDB logo
+    - product name (h1)
+    - one-sentence value proposition tagline
+    - primary CTA  ("View on GitHub", new tab + rel=noopener)
+    - secondary CTA ("Read Documentation")
+-->
+<section id="hero" aria-labelledby="hero-title">
+  <div class="container hero-inner">
+    <img
+      class="hero-logo"
+      src="../src/assets/images/logo.svg"
+      alt="MirDB logo — persistent key-value store"
+      width="96"
+      height="96"
+    />
+    <h1 id="hero-title">MirDB</h1>
+    <p class="tagline">
+      Persistent key-value store with the Memcached protocol — built in Rust.
+    </p>
+    <div class="hero-ctas">
+      <a
+        class="cta cta-primary"
+        href="https://github.com/yetone/mirdb"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta="primary"
+      >
+        View on GitHub
+      </a>
+      <a
+        class="cta cta-secondary"
+        href="https://github.com/yetone/mirdb#readme"
+        data-cta="secondary"
+      >
+        Read Documentation
+      </a>
+    </div>
+  </div>
+</section>

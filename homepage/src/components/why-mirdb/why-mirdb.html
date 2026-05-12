@@ -1,0 +1,62 @@
+<!--
+  Differentiation section.
+  Owner: Scenario 7 — "Why MirDB?" differentiation (REQ-8).
+
+  Compares MirDB against the three named alternatives in the PRD appendix
+  (Memcached, Redis, RocksDB) and surfaces the key differentiators called
+  out in the same appendix: Rust memory safety / performance, Memcached
+  protocol compatibility, LSM tree architecture, built-in compaction, and
+  planned Raft consensus.
+
+  Content source-of-truth: src/data/content.json#whyMirDB (comparisons) +
+  the static lede below for key-differentiator copy that spans the trio.
+-->
+<section id="why-mirdb" class="section section--why-mirdb" aria-labelledby="why-mirdb-heading">
+  <div class="container">
+    <h2 id="why-mirdb-heading">Why MirDB?</h2>
+    <p class="why-mirdb__lede">
+      Built in Rust for memory safety and performance, MirDB packs an LSM
+      tree (Log-Structured Merge) storage engine with built-in compaction
+      behind the familiar Memcached protocol — and Raft consensus is on the
+      roadmap for distributed deployments.
+    </p>
+
+    <ul class="comparison" role="list" aria-label="MirDB compared with Memcached, Redis, and RocksDB">
+      <li class="comparison-item" data-competitor="memcached">
+        <header class="comparison-item__header">
+          <span class="comparison-item__badge" aria-hidden="true">vs</span>
+          <h3 class="comparison-item__title">Memcached</h3>
+        </header>
+        <p class="comparison-item__text">
+          MirDB writes every value to durable disk storage — your data stays
+          persistent across restarts, where Memcached lives purely in
+          memory and forgets on shutdown.
+        </p>
+      </li>
+
+      <li class="comparison-item" data-competitor="redis">
+        <header class="comparison-item__header">
+          <span class="comparison-item__badge" aria-hidden="true">vs</span>
+          <h3 class="comparison-item__title">Redis</h3>
+        </header>
+        <p class="comparison-item__text">
+          MirDB chooses simplicity and Memcached protocol compatibility
+          over Redis's much larger command surface — a tiny wire format
+          your existing clients already speak.
+        </p>
+      </li>
+
+      <li class="comparison-item" data-competitor="rocksdb">
+        <header class="comparison-item__header">
+          <span class="comparison-item__badge" aria-hidden="true">vs</span>
+          <h3 class="comparison-item__title">RocksDB</h3>
+        </header>
+        <p class="comparison-item__text">
+          MirDB ships with a network protocol out of the box, so any
+          Memcached client can talk to it; RocksDB is an embedded library
+          you have to wrap yourself.
+        </p>
+      </li>
+    </ul>
+  </div>
+</section>

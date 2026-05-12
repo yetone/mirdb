@@ -1,0 +1,46 @@
+<!--
+  Get-started code example.
+  Owner: Scenario 3 — Get Started code example
+
+  Inlined into homepage/public/index.html.
+-->
+<section id="quick-start">
+  <div class="container">
+    <h2>Get Started</h2>
+    <p class="quick-start-intro">
+      Connect with any Memcached client. Here are the basics over the text protocol:
+    </p>
+    <div class="code-block" data-language="shell">
+      <button
+        type="button"
+        class="copy-btn"
+        aria-label="Copy code example to clipboard"
+      >
+        Copy
+      </button>
+      <pre><code class="language-shell"># Start the server
+mirdb-server --port 11211
+
+# In another shell, use any memcached client:
+set hello 0 0 5
+world
+# STORED
+
+get hello
+# VALUE hello 0 5
+# world
+# END
+
+add counter 0 0 1
+0
+# STORED
+
+replace hello 0 0 5
+MirDB
+# STORED
+
+delete counter
+# DELETED</code></pre>
+    </div>
+  </div>
+</section>

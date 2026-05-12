@@ -1,0 +1,53 @@
+/*
+ * Design tokens for the MirDB homepage.
+ *
+ * Created by the first scenario builder.
+ *
+ * Expected custom properties:
+ *   --color-bg, --color-fg, --color-accent, --color-muted
+ *   --color-code-bg (dark theme for code-example, Scenario 3)
+ *   --font-sans, --font-mono
+ *   --space-{1..8}, --radius-sm, --radius-md
+ *   --shadow-card
+ *
+ * Contrast minimum 4.5:1 (NFR-3 / Scenario 9).
+ */
+
+:root {
+  /* Base palette */
+  --color-bg: #ffffff;
+  --color-fg: #14171a;
+  --color-accent: #d35400;
+  --color-accent-fg: #ffffff;
+  --color-muted: #5b6772;
+  --color-border: #e4e7eb;
+
+  /* Code block dark theme (Scenario 3) */
+  --color-code-bg: #0d1117;
+  --color-code-fg: #e6edf3;
+  --color-code-keyword: #ff7b72;
+  --color-code-string: #a5d6ff;
+  --color-code-comment: #8b949e;
+  --color-code-number: #79c0ff;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", monospace;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 16px rgba(20, 23, 26, 0.08);
+}

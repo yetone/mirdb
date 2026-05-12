@@ -1,0 +1,108 @@
+/*
+ * Hero section styles — Scenario 1.
+ * Owns: #hero and its descendants.
+ * Uses design tokens from src/styles/theme.css.
+ */
+#hero {
+  padding: var(--space-8) 0;
+  text-align: center;
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(211, 84, 0, 0.06),
+      transparent 65%
+    );
+}
+
+#hero .hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 720px;
+}
+
+#hero .hero-logo {
+  width: 96px;
+  height: 96px;
+  filter: drop-shadow(0 4px 16px rgba(20, 23, 26, 0.12));
+}
+
+#hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
+  letter-spacing: -0.02em;
+}
+
+#hero .tagline {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1vw + 0.875rem, 1.375rem);
+  color: var(--color-muted);
+  max-width: 56ch;
+  line-height: 1.5;
+}
+
+#hero .hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+#hero .cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+#hero .cta-primary {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  border: 1px solid var(--color-accent);
+  box-shadow: 0 4px 12px rgba(211, 84, 0, 0.24);
+}
+
+#hero .cta-primary:hover,
+#hero .cta-primary:focus-visible {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+#hero .cta-secondary {
+  background: transparent;
+  color: var(--color-fg);
+  border: 1px solid var(--color-border);
+}
+
+#hero .cta-secondary:hover,
+#hero .cta-secondary:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+@media (max-width: 640px) {
+  #hero .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #hero .cta {
+    width: 100%;
+  }
+}
