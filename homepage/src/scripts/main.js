@@ -18,6 +18,9 @@
     if (window.MirdbClipboard && typeof window.MirdbClipboard.initClipboard === 'function') {
       window.MirdbClipboard.initClipboard(document);
     }
+    if (window.MirdbNavigation && typeof window.MirdbNavigation.initNavigation === 'function') {
+      window.MirdbNavigation.initNavigation(document);
+    }
     if (window.MirdbAnimations && typeof window.MirdbAnimations.initAnimations === 'function') {
       window.MirdbAnimations.initAnimations(document);
     }

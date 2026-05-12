@@ -12,11 +12,49 @@
     <link rel="stylesheet" href="../src/styles/theme.css" />
     <link rel="stylesheet" href="../src/styles/base.css" />
     <link rel="stylesheet" href="../src/styles/layout.css" />
+    <link rel="stylesheet" href="../src/components/navigation/navigation.css" />
     <link rel="stylesheet" href="../src/components/hero/hero.css" />
     <link rel="stylesheet" href="../src/components/code-example/code-example.css" />
     <link rel="stylesheet" href="../src/components/features/features.css" />
   </head>
   <body>
+    <!-- Navigation — Scenario 4 -->
+    <header class="site-nav" role="navigation">
+      <a class="nav-logo" href="#hero" aria-label="MirDB home">MirDB</a>
+
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+      </button>
+
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li>
+          <a
+            href="https://github.com/yetone/mirdb"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/yetone/mirdb#readme">Documentation</a>
+        </li>
+        <li>
+          <a href="https://github.com/yetone/mirdb/blob/master/README.md">API Reference</a>
+        </li>
+      </ul>
+    </header>
+
     <main>
       <!-- #hero — Scenario 1 -->
       <section id="hero" aria-labelledby="hero-title">
@@ -252,6 +290,7 @@ delete counter
 
     <script src="../src/scripts/toast.js"></script>
     <script src="../src/scripts/clipboard.js"></script>
+    <script src="../src/scripts/navigation.js"></script>
     <script src="../src/scripts/animations.js"></script>
     <script src="../src/scripts/main.js"></script>
   </body>
