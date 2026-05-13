@@ -7,7 +7,41 @@ export const CIRCLECI_BADGE_URL = 'https://circleci.com/gh/yetone/mirdb.svg';
 export const CIRCLECI_PROJECT_URL = 'https://circleci.com/gh/yetone/mirdb';
 export const GITHUB_API_URL = 'https://api.github.com/repos/yetone/mirdb';
 
-import type { DemoCaption } from '../types';
+import type { ComparisonRow, DemoCaption } from '../types';
+
+/** Comparison table data for REQ-8 */
+export const COMPARISON_DATA: ComparisonRow[] = [
+  {
+    dimension: 'Persistence',
+    mirdb: true,
+    memcached: false,
+    redis: true,
+  },
+  {
+    dimension: 'Memcached Protocol',
+    mirdb: true,
+    memcached: true,
+    redis: false,
+  },
+  {
+    dimension: 'Storage Engine',
+    mirdb: 'LSM-tree',
+    memcached: 'In-memory hash table',
+    redis: 'In-memory data structures',
+  },
+  {
+    dimension: 'Compaction',
+    mirdb: true,
+    memcached: false,
+    redis: false,
+  },
+  {
+    dimension: 'Write Performance',
+    mirdb: 'High (append-only)',
+    memcached: 'Very high (in-memory)',
+    redis: 'High (in-memory)',
+  },
+];
 
 export const DEMO_CAPTIONS: DemoCaption[] = [
   { id: 'connect', text: 'Connect to MirDB using any Memcached-compatible client on port 12333' },
