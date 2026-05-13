@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-size: 16px;
     /* Prevent iOS text size adjust after orientation change */
     -webkit-text-size-adjust: 100%;
   }
@@ -14,28 +15,45 @@
     @apply antialiased;
     /* Minimum 16px body text on mobile to prevent iOS zoom on input focus */
     font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: hidden;
   }
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-brand-500;
   }
 
-  /* Responsive images — prevent overflow on any viewport */
-  img,
-  video,
-  svg {
+  /* Prevent iOS zoom on input focus */
+  @media (max-width: 767px) {
+    input, select, textarea {
+      font-size: 16px;
+    }
+  }
+
+  /* Responsive images and media — prevent overflow on any viewport */
+  img, video, iframe, svg {
     max-width: 100%;
     height: auto;
   }
 
   /* Mobile tap targets: ≥ 44×44px per WCAG 2.5.5 (Level AAA) best practice */
   @media (max-width: 767px) {
-    button,
-    [role="button"],
-    a:not([class*="inline"]) {
+    button, a, [role="button"], [tabindex]:not([tabindex="-1"]) {
       min-height: 44px;
       min-width: 44px;
     }
+  }
+
+  /* Responsive heading scale */
+  h1 { font-size: clamp(1.75rem, 5vw, 3rem); }
+  h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+  h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
+  h4 { font-size: clamp(1.125rem, 2vw, 1.25rem); }
+
+  /* Prevent content overflow */
+  pre, code, table {
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 }
 
@@ -43,6 +61,11 @@
   /* Max-width wrapper that constrains content on ultra-wide displays (≥2560px) */
   .container-max {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Responsive container with max-width for ultra-wide displays */
+  .container-responsive {
+    @apply w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   /* Utility to prevent horizontal overflow */
