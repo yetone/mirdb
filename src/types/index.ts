@@ -31,9 +31,11 @@ export interface CodeExample {
 }
 
 export interface DocLink {
+  id: string;
   title: string;
   description: string;
   url: string;
+  icon: string;
 }
 
 export type Theme = 'light' | 'dark';
