@@ -1,14 +1,3 @@
-/**
- * Documentation navigation component.
- * Owner: Scenario 5 - Documentation Links
- *
- * Displays documentation resource links in a card-based layout.
- * Cards for: README/project overview, API/protocol reference, technical docs.
- * Each card has: title, brief description, link with hover/active/focus states.
- *
- * Requirements: REQ-5
- * Accessibility: Card links are keyboard focusable with visible focus indicators
- */
 import React from 'react';
 import { DOC_LINKS } from '../../utils/constants';
 import * as Icons from 'lucide-react';
@@ -33,10 +22,11 @@ export default function Docs() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:border-brand-400 hover:shadow-md focus-visible:border-brand-500 focus-visible:shadow-md focus-visible:outline-none dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500 dark:focus-visible:border-brand-500"
+                aria-label={`${link.title} - opens in new tab`}
+                className="group block rounded-xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:border-brand-400 hover:shadow-md focus-visible:border-brand-500 focus-visible:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500 dark:focus-visible:border-brand-500"
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100 dark:bg-brand-950 dark:text-brand-400 dark:group-hover:bg-brand-900">
-                  {IconComponent && <IconComponent className="h-6 w-6" />}
+                  {IconComponent && <IconComponent className="h-6 w-6" aria-hidden="true" />}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {link.title}
@@ -54,6 +44,7 @@ export default function Docs() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    aria-hidden="true"
                   >
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />

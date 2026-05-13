@@ -19,6 +19,7 @@
     overflow-x: hidden;
   }
 
+  /* Global focus-visible ring for keyboard navigation */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-brand-500;
   }
@@ -72,5 +73,12 @@
   .no-overflow-x {
     overflow-x: hidden;
     max-width: 100vw;
+  }
+}
+
+@layer utilities {
+  /* Override any outline:none that lacks a visible replacement */
+  .focus-outline-reset:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
   }
 }
