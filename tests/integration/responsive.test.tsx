@@ -156,7 +156,7 @@ describe('Responsive layout across devices', () => {
 
     it('skip-to-content link is present for keyboard accessibility', () => {
       render(<App />);
-      const skipLink = screen.getByText(/skip to content/i);
+      const skipLink = screen.getByText(/skip to main content/i);
       expect(skipLink).toBeInTheDocument();
     });
 
