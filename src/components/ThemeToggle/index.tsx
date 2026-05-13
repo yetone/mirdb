@@ -1,45 +1,19 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { Theme } from './types';
+import React from 'react';
+import { useTheme, ThemeProvider } from '../../hooks/useTheme';
+import { Sun, Moon } from 'lucide-react';
 
-interface ThemeContextValue {
-  theme: Theme;
-  toggleTheme: () => void;
-}
+export { useTheme, ThemeProvider };
 
-const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'light',
-  toggleTheme: () => {},
-});
-
-export function useTheme(): ThemeContextValue {
-  return useContext(ThemeContext);
-}
-
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('theme') as Theme | null;
-      if (stored === 'light' || stored === 'dark') return stored;
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
-    }
-    return 'light';
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
+export default function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <button
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+    >
+      {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+    </button>
   );
 }
