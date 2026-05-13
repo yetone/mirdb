@@ -90,7 +90,8 @@ export const FEATURES: MirDBFeature[] = [
 
 export const ROADMAP_ITEMS: RoadmapItem[] = [
   { id: 'tokio', title: 'Tokio Async Networking', status: 'completed', description: 'Async memcached protocol server' },
-  { id: 'memtable', title: 'Skiplist Memtable', status: 'completed', description: 'In-memory sorted key-value store' },
+  { id: 'protocol', title: 'Memcached Protocol Support', status: 'completed', description: 'Full text protocol compatibility' },
+  { id: 'memtable', title: 'Skip List Memtable', status: 'completed', description: 'In-memory sorted key-value store' },
   { id: 'minor-compaction', title: 'Minor Compaction', status: 'completed', description: 'Memtable to SSTable flush' },
   { id: 'major-compaction', title: 'Major Compaction', status: 'completed', description: 'Multi-level SSTable merge' },
   { id: 'raft', title: 'Raft Consensus', status: 'planned', description: 'Distributed consensus for cluster mode' },
