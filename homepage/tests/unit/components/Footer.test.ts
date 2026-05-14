@@ -1,253 +1,189 @@
 /**
  * Unit tests for Footer component.
- * Tests footer links, external link security attributes, copyright, and license.
+ * Tests GitHub link, external link security attributes, copyright, license,
+ * documentation link, footer element presence, and link navigation.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
+import { readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { execSync } from 'node:child_process';
 import { parseHTML } from 'linkedom';
 
-const GITHUB_REPO_URL = 'https://github.com/yetone/mirdb';
-const DOCS_URL = 'https://github.com/yetone/mirdb#readme';
-const COMMUNITY_URL = 'https://github.com/yetone/mirdb/discussions';
+const HOMEPAGE_DIR = join(__dirname, '..', '..', '..');
+const DIST_DIR = join(HOMEPAGE_DIR, 'dist');
+const INDEX_HTML = join(DIST_DIR, 'index.html');
 
-function buildFooterHTML(): string {
-  const currentYear = new Date().getFullYear();
-  return `<div class="footer-content">
-  <nav class="footer-links" aria-label="Footer navigation">
-    <a href="${GITHUB_REPO_URL}" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a href="${DOCS_URL}" target="_blank" rel="noopener noreferrer">Documentation</a>
-    <a href="${COMMUNITY_URL}" target="_blank" rel="noopener noreferrer">Community</a>
-  </nav>
-  <div class="footer-legal">
-    <p class="copyright">&copy; ${currentYear} MirDB. All rights reserved.</p>
-    <p class="license">Licensed under the MIT License.</p>
-  </div>
-</div>`;
+// Ensure esbuild binaries are executable (needed in sandboxed environments)
+function fixEsbuildPermissions() {
+  try {
+    execSync(
+      'find node_modules -name "esbuild" -path "*/bin/*" -exec chmod +x {} \\; 2>/dev/null',
+      { cwd: HOMEPAGE_DIR, stdio: 'pipe' },
+    );
+  } catch {
+    // Best-effort, ignore failures
+  }
 }
 
-function buildFullPageHTML(): string {
-  return `<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><title>MirDB</title></head>
-<body>
-  <header>...</header>
-  <main>...</main>
-  <footer>${buildFooterHTML()}</footer>
-</body>
-</html>`;
+function buildSite() {
+  fixEsbuildPermissions();
+  try {
+    const astroBin = join(HOMEPAGE_DIR, 'node_modules', 'astro', 'astro.js');
+    execSync(`node "${astroBin}" build`, {
+      cwd: HOMEPAGE_DIR,
+      stdio: 'pipe',
+      env: { ...process.env, NODE_ENV: 'production' },
+    });
+  } catch (e: any) {
+    const stderr = e.stderr?.toString() || '';
+    throw new Error(`Build failed: ${stderr}`);
+  }
+}
+
+function parseBuiltHtml() {
+  const html = readFileSync(INDEX_HTML, 'utf-8');
+  return parseHTML(html);
 }
 
 describe('Footer & External Links', () => {
-  // -----------------------------------------------------------------------
-  // Test Case 1: GitHub repository link
-  // -----------------------------------------------------------------------
-  describe('Test Case 1: GitHub repository link', () => {
-    it('should have a link pointing to the MirDB GitHub repository', () => {
-      const { document } = parseHTML(buildFooterHTML());
+  beforeAll(() => {
+    buildSite();
+  });
 
-      const githubLink = Array.from(document.querySelectorAll('a')).find(
-        (el) => el.getAttribute('href') === GITHUB_REPO_URL,
-      );
-
+  // Test Case 1: GitHub link
+  describe('Test Case 1: GitHub link', () => {
+    it('has a link with href pointing to the MirDB GitHub repository', () => {
+      const { document } = parseBuiltHtml();
+      const githubLink = document.querySelector('[data-footer-link="github"]');
       expect(githubLink).not.toBeNull();
-      expect(githubLink!.getAttribute('href')).toBe(GITHUB_REPO_URL);
+      expect(githubLink!.getAttribute('href')).toBe('https://github.com/yetone/mirdb');
     });
 
-    it('should have descriptive link text for the GitHub link', () => {
-      const { document } = parseHTML(buildFooterHTML());
-
-      const githubLink = Array.from(document.querySelectorAll('a')).find(
-        (el) => el.getAttribute('href') === GITHUB_REPO_URL,
-      );
-
+    it('has descriptive link text for the GitHub link', () => {
+      const { document } = parseBuiltHtml();
+      const githubLink = document.querySelector('[data-footer-link="github"]');
       expect(githubLink).not.toBeNull();
       const text = githubLink!.textContent?.trim() || '';
       expect(text.length).toBeGreaterThan(0);
-      expect(['GitHub', 'View Source', 'View on GitHub', 'Source Code', 'Repository']).toContain(text);
+      expect(text).toBe('GitHub');
     });
   });
 
-  // -----------------------------------------------------------------------
   // Test Case 2: External link security attributes
-  // -----------------------------------------------------------------------
   describe('Test Case 2: External link security attributes', () => {
-    it('should have target="_blank" on all external links', () => {
-      const { document } = parseHTML(buildFooterHTML());
+    it('every external link in the footer has target="_blank"', () => {
+      const { document } = parseBuiltHtml();
+      const footer = document.querySelector('footer');
+      expect(footer).not.toBeNull();
 
-      const externalLinks = Array.from(document.querySelectorAll('a')).filter((el) => {
-        const href = el.getAttribute('href') || '';
-        return href.startsWith('http');
-      });
-
+      const externalLinks = Array.from(
+        footer!.querySelectorAll('a[href^="http"]'),
+      );
       expect(externalLinks.length).toBeGreaterThan(0);
 
-      externalLinks.forEach((link) => {
+      for (const link of externalLinks) {
         expect(link.getAttribute('target')).toBe('_blank');
-      });
+      }
     });
 
-    it('should have rel="noopener noreferrer" on all external links', () => {
-      const { document } = parseHTML(buildFooterHTML());
+    it('every external link in the footer has rel="noopener noreferrer"', () => {
+      const { document } = parseBuiltHtml();
+      const footer = document.querySelector('footer');
+      expect(footer).not.toBeNull();
 
-      const externalLinks = Array.from(document.querySelectorAll('a')).filter((el) => {
-        const href = el.getAttribute('href') || '';
-        return href.startsWith('http');
-      });
-
+      const externalLinks = Array.from(
+        footer!.querySelectorAll('a[href^="http"]'),
+      );
       expect(externalLinks.length).toBeGreaterThan(0);
 
-      externalLinks.forEach((link) => {
+      for (const link of externalLinks) {
         expect(link.getAttribute('rel')).toBe('noopener noreferrer');
-      });
-    });
-
-    it('should have both target and rel on every external link', () => {
-      const { document } = parseHTML(buildFooterHTML());
-
-      const externalLinks = Array.from(document.querySelectorAll('a')).filter((el) => {
-        const href = el.getAttribute('href') || '';
-        return href.startsWith('http');
-      });
-
-      externalLinks.forEach((link) => {
-        expect(link.getAttribute('target')).toBe('_blank');
-        expect(link.getAttribute('rel')).toBe('noopener noreferrer');
-      });
+      }
     });
   });
 
-  // -----------------------------------------------------------------------
   // Test Case 3: Copyright notice and license
-  // -----------------------------------------------------------------------
-  describe('Test Case 3: Copyright notice and license', () => {
-    it('should display a copyright notice with the current year', () => {
-      const { document } = parseHTML(buildFooterHTML());
+  describe('Test Case 3: Copyright notice', () => {
+    it('displays a copyright notice with the copyright symbol and a year', () => {
+      const { document } = parseBuiltHtml();
+      const footer = document.querySelector('footer');
+      expect(footer).not.toBeNull();
 
-      const copyright = document.querySelector('.copyright');
-      expect(copyright).not.toBeNull();
-
-      const text = copyright!.textContent || '';
-      expect(text).toMatch(/Copyright|©/);
+      const copyrightEl = footer!.querySelector('.footerCopyright');
+      expect(copyrightEl).not.toBeNull();
+      const text = copyrightEl!.textContent?.trim() || '';
+      expect(text).toMatch(/©\s*\d{4}/);
     });
 
-    it('should include a year in the copyright notice', () => {
-      const { document } = parseHTML(buildFooterHTML());
+    it('displays the project license type', () => {
+      const { document } = parseBuiltHtml();
+      const footer = document.querySelector('footer');
+      expect(footer).not.toBeNull();
 
-      const copyright = document.querySelector('.copyright');
-      expect(copyright).not.toBeNull();
-
-      const text = copyright!.textContent || '';
-      // Should contain a 4-digit year (current year or year range)
-      expect(text).toMatch(/\d{4}/);
-    });
-
-    it('should display the project license type', () => {
-      const { document } = parseHTML(buildFooterHTML());
-
-      const license = document.querySelector('.license');
-      expect(license).not.toBeNull();
-
-      const text = license!.textContent || '';
-      expect(text).toMatch(/MIT|Apache|GPL|BSD|license/i);
+      const licenseEl = footer!.querySelector('.footerLicense');
+      expect(licenseEl).not.toBeNull();
+      const text = licenseEl!.textContent?.trim() || '';
+      expect(text.length).toBeGreaterThan(0);
+      expect(text).toMatch(/MIT|Apache|BSD|GPL|License/i);
     });
   });
 
-  // -----------------------------------------------------------------------
   // Test Case 4: Documentation link
-  // -----------------------------------------------------------------------
   describe('Test Case 4: Documentation link', () => {
-    it('should have a link to documentation', () => {
-      const { document } = parseHTML(buildFooterHTML());
+    it('has a link to documentation', () => {
+      const { document } = parseBuiltHtml();
+      const docsLink = document.querySelector('[data-footer-link="docs"]');
+      expect(docsLink).not.toBeNull();
+      expect(docsLink!.getAttribute('href')).toBeTruthy();
+    });
 
-      const docLink = Array.from(document.querySelectorAll('a')).find((el) => {
-        const text = (el.textContent || '').toLowerCase();
-        const href = (el.getAttribute('href') || '').toLowerCase();
-        return (
-          text.includes('doc') ||
-          text.includes('readme') ||
-          text.includes('wiki') ||
-          href.includes('readme') ||
-          href.includes('docs') ||
-          href.includes('wiki')
-        );
-      });
-
-      expect(docLink).not.toBeNull();
-      expect(docLink!.getAttribute('href')).toBeTruthy();
+    it('the documentation link is a valid URL', () => {
+      const { document } = parseBuiltHtml();
+      const docsLink = document.querySelector('[data-footer-link="docs"]');
+      expect(docsLink).not.toBeNull();
+      const href = docsLink!.getAttribute('href');
+      expect(href).toMatch(/^https?:\/\//);
     });
   });
 
-  // -----------------------------------------------------------------------
-  // Test Case 5: Footer element presence and content
-  // -----------------------------------------------------------------------
+  // Test Case 5: Footer element presence with non-trivial content
   describe('Test Case 5: Footer element presence', () => {
-    it('should have a <footer> element in the page', () => {
-      const { document } = parseHTML(buildFullPageHTML());
-
+    it('has a footer element within the page body', () => {
+      const { document } = parseBuiltHtml();
       const footer = document.querySelector('footer');
       expect(footer).not.toBeNull();
     });
 
-    it('should contain non-trivial content beyond a single copyright line', () => {
-      const { document } = parseHTML(buildFullPageHTML());
-
+    it('contains non-trivial content beyond just a copyright line', () => {
+      const { document } = parseBuiltHtml();
       const footer = document.querySelector('footer');
       expect(footer).not.toBeNull();
 
-      const text = footer!.textContent?.trim() || '';
-      // Should contain more than just a copyright line
-      expect(text.length).toBeGreaterThan(20);
-
-      // Should have at least one link
+      // Footer should have multiple link elements
       const links = footer!.querySelectorAll('a');
-      expect(links.length).toBeGreaterThanOrEqual(1);
-    });
+      expect(links.length).toBeGreaterThanOrEqual(3);
 
-    it('should have navigation links in the footer', () => {
-      const { document } = parseHTML(buildFooterHTML());
-
-      const nav = document.querySelector('nav');
-      expect(nav).not.toBeNull();
-
-      const navLinks = nav!.querySelectorAll('a');
-      expect(navLinks.length).toBeGreaterThanOrEqual(2);
+      // Footer text should mention MirDB and license
+      const footerText = footer!.textContent?.trim() || '';
+      expect(footerText).toContain('MirDB');
+      expect(footerText).toContain('License');
     });
   });
 
-  // -----------------------------------------------------------------------
-  // Test Case 6: GitHub link integration (click behavior)
-  // -----------------------------------------------------------------------
+  // Test Case 6: GitHub link navigation (integration)
   describe('Test Case 6: GitHub link navigation', () => {
-    it('should have the correct GitHub URL for navigation', () => {
-      const { document } = parseHTML(buildFullPageHTML());
-
-      const githubLink = Array.from(document.querySelectorAll('a')).find(
-        (el) => el.getAttribute('href') === GITHUB_REPO_URL,
-      );
-
+    it('the GitHub link points to the correct repository URL', () => {
+      const { document } = parseBuiltHtml();
+      const githubLink = document.querySelector(
+        '[data-footer-link="github"]',
+      ) as HTMLAnchorElement;
       expect(githubLink).not.toBeNull();
-      expect(githubLink!.getAttribute('href')).toBe(GITHUB_REPO_URL);
-    });
 
-    it('should open GitHub link in a new tab', () => {
-      const { document } = parseHTML(buildFullPageHTML());
+      const href = githubLink!.getAttribute('href');
+      expect(href).toBe('https://github.com/yetone/mirdb');
 
-      const githubLink = Array.from(document.querySelectorAll('a')).find(
-        (el) => el.getAttribute('href') === GITHUB_REPO_URL,
-      );
-
-      expect(githubLink).not.toBeNull();
+      // Verify it opens in a new tab
       expect(githubLink!.getAttribute('target')).toBe('_blank');
-      expect(githubLink!.getAttribute('rel')).toBe('noopener noreferrer');
-    });
-
-    it('should have the GitHub link inside the footer', () => {
-      const { document } = parseHTML(buildFullPageHTML());
-
-      const footer = document.querySelector('footer');
-      expect(footer).not.toBeNull();
-
-      const githubLink = footer!.querySelector(`a[href="${GITHUB_REPO_URL}"]`);
-      expect(githubLink).not.toBeNull();
     });
   });
 });
