@@ -1,16 +1,9 @@
 ---
 /**
- * Main homepage entry point composing all sections.
+ * Page entry point.
  * Owner: Scenario 1 - Hero Section & Branding
  */
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero/Hero.astro';
-import '../styles/global.css';
 ---
-
-<BaseLayout>
-  <main>
-    <Hero />
-    <!-- Other sections will be added by subsequent scenarios -->
-  </main>
-</BaseLayout>
+<main>
+  <slot />
+</main>

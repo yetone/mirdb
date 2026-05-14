@@ -5,4 +5,12 @@ export default defineConfig({
   srcDir: 'src',
   publicDir: 'public',
   outDir: 'dist',
+  integrations: [],
+  vite: {
+    test: {
+      environment: 'happy-dom',
+      globals: true,
+      include: ['tests/**/*.test.ts'],
+    },
+  },
 });

@@ -1,0 +1,194 @@
+---
+/**
+ * Code block component with syntax highlighting and copy-to-clipboard.
+ * Owner: Scenario 3 - Quick Start & Code Examples
+ *
+ * Renders a code snippet in an editor-like display with:
+ * - Language indicator
+ * - Label describing the code
+ * - Copy-to-clipboard button with visual feedback
+ * - Keyboard accessible copy action
+ */
+
+export interface Props {
+  id: string;
+  code: string;
+  language?: string;
+  label?: string;
+}
+
+const { id, code, language = 'plaintext', label } = Astro.props;
+---
+
+<div
+  class="code-block-wrapper"
+  data-code-block
+  data-code-block-id={id}
+>
+  <div class="code-block-header">
+    {label && (
+      <span class="code-block-label" id={`${id}-label`}>{label}</span>
+    )}
+    {language && (
+      <span class="code-block-lang">{language}</span>
+    )}
+  </div>
+  <div class="code-block-body">
+    <pre class="code-block-pre" id={`${id}-code`}><code class={`language-${language}`}>{code}</code></pre>
+    <button
+      class="copy-button"
+      data-copy-target={id}
+      data-copy-text={code}
+      aria-label={`Copy ${label || 'code'} to clipboard`}
+      aria-describedby={`${id}-label`}
+      type="button"
+      id={`${id}-copy-btn`}
+    >
+      <span class="copy-icon" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.5 1.5H11.5C13.1569 1.5 14.5 2.84315 14.5 4.5V10.5C14.5 10.7761 14.2761 11 14 11C13.7239 11 13.5 10.7761 13.5 10.5V4.5C13.5 3.39543 12.6046 2.5 11.5 2.5H5.5C5.22386 2.5 5 2.27614 5 2C5 1.72386 5.22386 1.5 5.5 1.5Z" fill="currentColor"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 4.5H10.5C11.0523 4.5 11.5 4.94772 11.5 5.5V12.5C11.5 13.0523 11.0523 13.5 10.5 13.5H3.5C2.94772 13.5 2.5 13.0523 2.5 12.5V5.5C2.5 4.94772 2.94772 4.5 3.5 4.5ZM1.5 5.5C1.5 4.39543 2.39543 3.5 3.5 3.5H10.5C11.6046 3.5 12.5 4.39543 12.5 5.5V12.5C12.5 13.6046 11.6046 14.5 10.5 14.5H3.5C2.39543 14.5 1.5 13.6046 1.5 12.5V5.5Z" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="copy-text">Copy</span>
+    </button>
+  </div>
+</div>
+
+<style>
+  .code-block-wrapper {
+    background-color: var(--color-bg-code);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+
+  .code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .code-block-label {
+    color: #a6adc8;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+  }
+
+  .code-block-lang {
+    color: #6c7086;
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .code-block-body {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .code-block-pre {
+    flex: 1;
+    margin: 0;
+    padding: var(--space-md);
+    overflow-x: auto;
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    color: var(--color-code-text);
+  }
+
+  .code-block-pre code {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-button {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 4px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    color: #a6adc8;
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index: 1;
+  }
+
+  .copy-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+
+  .copy-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .copy-button.copied {
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+    color: #ffffff;
+  }
+
+  .copy-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .copy-text {
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  import { copyToClipboard } from '../../utils/copyToClipboard';
+
+  function initCopyButtons() {
+    const container = document.currentScript?.parentElement;
+    if (!container) return;
+
+    const buttons = container.querySelectorAll<HTMLButtonElement>('[data-copy-target]');
+    buttons.forEach((button) => {
+      const code = button.getAttribute('data-copy-text');
+      if (!code) return;
+
+      const copyTextEl = button.querySelector('.copy-text');
+
+      const handleCopy = async () => {
+        const success = await copyToClipboard(code);
+        if (success) {
+          button.classList.add('copied');
+          if (copyTextEl) {
+            const originalText = copyTextEl.textContent;
+            copyTextEl.textContent = 'Copied!';
+            setTimeout(() => {
+              button.classList.remove('copied');
+              copyTextEl.textContent = originalText;
+            }, 2000);
+          }
+        }
+      };
+
+      button.addEventListener('click', handleCopy);
+      button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCopy();
+        }
+      });
+    });
+  }
+
+  initCopyButtons();
+</script>

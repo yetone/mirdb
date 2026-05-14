@@ -1,0 +1,52 @@
+{
+  "sectionTitle": "Quick Start",
+  "sectionDescription": "Get MirDB up and running in minutes. Choose your preferred installation method below.",
+  "installMethods": [
+    {
+      "id": "cargo",
+      "name": "Cargo",
+      "commands": ["cargo install mirdb"]
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "commands": [
+        "docker pull yetone/mirdb:latest",
+        "docker run -p 12333:12333 yetone/mirdb"
+      ]
+    },
+    {
+      "id": "source",
+      "name": "From Source",
+      "commands": [
+        "git clone https://github.com/yetone/mirdb.git",
+        "cd mirdb",
+        "cargo build --release",
+        "./target/release/mirdb"
+      ]
+    }
+  ],
+  "usageExamples": [
+    {
+      "id": "set",
+      "operation": "SET",
+      "description": "Store a key-value pair with optional flags and TTL",
+      "language": "shell",
+      "code": "set mykey 0 3600 5\r\nhello"
+    },
+    {
+      "id": "get",
+      "operation": "GET",
+      "description": "Retrieve a value by its key",
+      "language": "shell",
+      "code": "get mykey"
+    },
+    {
+      "id": "delete",
+      "operation": "DELETE",
+      "description": "Remove a key from the store",
+      "language": "shell",
+      "code": "delete mykey"
+    }
+  ]
+}

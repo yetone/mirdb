@@ -10,6 +10,8 @@
  * - FAQItem: { id: string; question: string; answer: string; }
  * - CodeSnippet: { id: string; language: string; code: string; label?: string; }
  * - InstallMethod: { id: string; name: string; commands: string[]; }
+ * - UsageExample: { id: string; operation: string; description: string; language: string; code: string; }
+ * - QuickStartData: { sectionTitle: string; sectionDescription: string; installMethods: InstallMethod[]; usageExamples: UsageExample[]; }
  * - SEOProps: { title: string; description: string; ogImage?: string; ogType?: string; canonical?: string; }
  */
 
@@ -44,6 +46,21 @@ export interface InstallMethod {
   id: string;
   name: string;
   commands: string[];
+}
+
+export interface UsageExample {
+  id: string;
+  operation: string;
+  description: string;
+  language: string;
+  code: string;
+}
+
+export interface QuickStartData {
+  sectionTitle: string;
+  sectionDescription: string;
+  installMethods: InstallMethod[];
+  usageExamples: UsageExample[];
 }
 
 export interface SEOProps {
