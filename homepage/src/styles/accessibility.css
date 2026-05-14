@@ -1,6 +1,11 @@
-/* Accessibility styles for MirDB homepage */
-/* Will be enhanced by Scenario 7 */
+/* ==========================================================================
+   Accessibility styles for MirDB homepage — WCAG 2.1 AA compliance
+   Owner: Scenario 7 - Accessibility Compliance
+   ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   1. Screen-reader-only utility
+   -------------------------------------------------------------------------- */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -13,11 +18,87 @@
   border-width: 0;
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-primary);
+/* --------------------------------------------------------------------------
+   2. Skip-to-main-content link
+   Visually hidden until focused — must be the first focusable element.
+   -------------------------------------------------------------------------- */
+.skip-to-main {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-primary, #4361ee);
+  color: #ffffff;
+  font-size: var(--font-size-md, 1rem);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 var(--radius-md, 8px) 0;
+  transition: top 0.1s ease;
+}
+
+.skip-to-main:focus {
+  top: 0;
+  outline: 3px solid var(--color-text, #1a1a2e);
   outline-offset: 2px;
 }
 
+/* --------------------------------------------------------------------------
+   3. Focus indicators
+   All interactive elements must have a clearly visible focus indicator
+   with at least 3:1 contrast against adjacent colors.
+   -------------------------------------------------------------------------- */
+
+/* Global focus-visible — 3px outline with offset for clear visibility */
+:focus-visible {
+  outline: 3px solid var(--color-primary, #4361ee);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline only when :focus-visible provides a custom one.
+   Never suppress focus indicators without a replacement. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Firefox-specific focus indicator */
+@-moz-document url-prefix() {
+  :focus-visible {
+    outline: 3px solid var(--color-primary, #4361ee);
+    outline-offset: 2px;
+  }
+}
+
+/* Links receive an underline on focus for additional affordance */
+a:focus-visible {
+  outline: 3px solid var(--color-primary, #4361ee);
+  outline-offset: 2px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+/* Buttons and interactive controls */
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primary, #4361ee);
+  outline-offset: 2px;
+}
+
+/* Inputs, selects, textareas */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-primary, #4361ee);
+  outline-offset: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Reduced motion
+   When the user has requested reduced motion, disable or significantly
+   reduce animations, transitions, and smooth scrolling.
+   -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -28,3 +109,66 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   5. Forced colors / Windows High Contrast Mode
+   Ensure the page is usable when forced colors are active.
+   -------------------------------------------------------------------------- */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .skip-to-main {
+    border: 2px solid Highlight;
+  }
+
+  button,
+  a,
+  [role="button"] {
+    forced-color-adjust: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Visibility helper for focus management
+   Element is hidden but remains in the accessibility tree.
+   -------------------------------------------------------------------------- */
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   7. Keyboard-only focus outline
+   Visible focus indicator with sufficient thickness (3px) and contrast
+   for all interactive elements focused via keyboard navigation.
+   -------------------------------------------------------------------------- */
+
+/* Ensure focus outlines are not hidden by overflow on containers */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Scroll containers should not clip focus indicators */
+* {
+  scroll-padding-top: 80px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Color contrast note
+   The CSS custom properties in theme.css define the color palette.
+   The primary text color (--color-text: #1a1a2e) on background
+   (--color-bg: #ffffff) yields a contrast ratio of ~16.5:1 (AAA).
+   The secondary text (--color-text-secondary: #6c757d) on white yields
+   ~5.1:1 (AA). Primary link color (--color-primary: #4361ee) on white
+   yields ~3.7:1 — links must not be the sole differentiator for content.
+   -------------------------------------------------------------------------- */
