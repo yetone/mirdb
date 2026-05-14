@@ -12,7 +12,8 @@ const LOGO_BACKUP = join(HOMEPAGE_DIR, 'public', 'assets', 'logo.gif.bak');
 
 function buildSite() {
   try {
-    execSync('npx astro build', {
+    const astroBin = join(HOMEPAGE_DIR, 'node_modules', 'astro', 'astro.js');
+    execSync(`node "${astroBin}" build`, {
       cwd: HOMEPAGE_DIR,
       stdio: 'pipe',
       env: { ...process.env, NODE_ENV: 'production' },

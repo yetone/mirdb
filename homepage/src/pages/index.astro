@@ -1,9 +1,8 @@
 ---
-/**
- * Page entry point.
- * Owner: Scenario 1 - Hero Section & Branding
- */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero/Hero.astro';
 ---
-<main>
-  <slot />
-</main>
+
+<BaseLayout>
+  <Hero />
+</BaseLayout>

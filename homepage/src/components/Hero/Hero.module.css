@@ -1,1 +1,51 @@
-/* Hero section scoped styles (extracted for testing/static analysis) */
+.hero {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+  color: #e6edf3;
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.brand {
+  margin-bottom: 0.5rem;
+}
+
+.logo {
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(67, 97, 238, 0.25);
+}
+
+.headline {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #ffffff;
+  margin: 0;
+}
+
+.tagline {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  max-width: 640px;
+  color: #8b949e;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}

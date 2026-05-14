@@ -1,18 +1,15 @@
 ---
-/**
- * Base layout wrapping every page.
- * Owner: Scenario 1 - Hero Section & Branding
- *
- * Includes: SEOHead, NavBar, main content slot, Footer.
- * Sets HTML lang, charset, viewport meta, and applies global styles.
- */
+import '../styles/global.css';
+import '../styles/theme.css';
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MirDB - Persistent Key-Value Store</title>
+    <meta name="description" content="MirDB is a high-performance persistent key-value store with Memcached protocol compatibility, built in Rust." />
   </head>
   <body>
     <slot />
