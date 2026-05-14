@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "what-is-mirdb",
+    "question": "What is MirDB?",
+    "answer": "MirDB is a high-performance persistent key-value store written in Rust. It implements the Memcached text protocol, allowing existing Memcached clients to connect seamlessly. Unlike traditional Memcached (which is in-memory only), MirDB persists data to disk using an LSM tree architecture, providing durability without sacrificing performance."
+  },
+  {
+    "id": "installation",
+    "question": "How do I install MirDB?",
+    "answer": "MirDB can be installed in multiple ways: <ul><li><strong>Cargo</strong>: Run <code>cargo install mirdb</code></li><li><strong>Docker</strong>: Pull the image with <code>docker pull yetone/mirdb</code> and run with <code>docker run -p 12333:12333 yetone/mirdb</code></li><li><strong>From Source</strong>: Clone the repository with <code>git clone https://github.com/yetone/mirdb.git</code> and build with <code>cargo build --release</code></li></ul>"
+  },
+  {
+    "id": "protocol-commands",
+    "question": "What Memcached protocol commands does MirDB support?",
+    "answer": "MirDB supports the following Memcached protocol commands:<ul><li><strong>SET</strong> — Store a key-value pair: <code>set &lt;key&gt; &lt;flags&gt; &lt;ttl&gt; &lt;bytes&gt;\\r\\n&lt;data&gt;\\r\\n</code></li><li><strong>GET</strong> — Retrieve one or more keys: <code>get &lt;key&gt;\\r\\n</code></li><li><strong>DELETE</strong> — Remove a key: <code>delete &lt;key&gt;\\r\\n</code></li><li><strong>ADD</strong> — Store only if the key does not exist</li><li><strong>REPLACE</strong> — Store only if the key exists</li><li><strong>APPEND</strong> — Append data to an existing value</li><li><strong>PREPEND</strong> — Prepend data to an existing value</li><li><strong>GETS</strong> — Retrieve with CAS token</li></ul>MirDB also supports two custom commands: <code>INFO</code> for database status and <code>MAJOR_COMPACTION</code> to trigger manual compaction."
+  },
+  {
+    "id": "memcached-compatibility",
+    "question": "Is MirDB compatible with existing Memcached clients?",
+    "answer": "Yes. MirDB speaks the standard Memcached text protocol over TCP, so any Memcached client library (Python, Ruby, Node.js, PHP, etc.) can connect and issue commands without modification. The default listen address is <code>0.0.0.0:12333</code>. Simply point your existing Memcached client at that address and start sending commands."
+  },
+  {
+    "id": "durability",
+    "question": "How does MirDB ensure data durability?",
+    "answer": "MirDB uses a Write-Ahead Log (WAL) to ensure durability. All writes are first appended to the WAL before being applied to the in-memory memtable. The memtable, implemented as a skip-list, is flushed to disk as an SSTable (Sorted String Table) during compaction. This design ensures that data is never lost on crash — MirDB replays the WAL on restart to recover un-flushed writes. The LSM tree architecture with multi-level compaction keeps read performance high even as data grows."
+  },
+  {
+    "id": "docs-links",
+    "question": "Where can I find detailed API documentation?",
+    "answer": "Comprehensive documentation is available on the <a href=\"https://github.com/yetone/mirdb#readme\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub README</a>. For protocol details, refer to the <a href=\"https://github.com/memcached/memcached/blob/master/doc/protocol.txt\" target=\"_blank\" rel=\"noopener noreferrer\">Memcached Protocol Specification</a>. For configuration reference, see the <a href=\"https://github.com/yetone/mirdb/blob/main/etc/mirdb.toml\" target=\"_blank\" rel=\"noopener noreferrer\">example configuration file</a> in the repository."
+  }
+]

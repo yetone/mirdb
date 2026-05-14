@@ -9,7 +9,84 @@
  * - Common questions about MirDB usage
  * - Links to detailed API documentation
  */
+import { SECTION_IDS } from '../../utils/constants';
+import type { FAQItem as FAQItemType } from '../../types';
+import FAQItem from './FAQItem.astro';
+import faqData from '../../data/faq.json';
+import styles from './FAQ.module.css';
+
+const items: FAQItemType[] = faqData;
 ---
-<section id="faq">
-  <slot />
+
+<section id={SECTION_IDS.FAQ} class={styles.faqSection}>
+  <div class={styles.faqContainer}>
+    <h2 class={styles.faqHeading}>Frequently Asked Questions</h2>
+
+    {items.length === 0 ? (
+      <p class={styles.faqEmpty} data-faq-empty>No frequently asked questions available at this time.</p>
+    ) : (
+      <div class={styles.faqList} data-faq-list>
+        {items.map((item: FAQItemType, index: number) => (
+          <FAQItem item={item} index={index} />
+        ))}
+      </div>
+    )}
+  </div>
 </section>
+
+<script>
+  function initFAQ() {
+    const triggers = document.querySelectorAll<HTMLButtonElement>('[data-faq-trigger]');
+
+    if (triggers.length === 0) return;
+
+    function collapseAll() {
+      triggers.forEach((trigger) => {
+        const answerId = trigger.getAttribute('aria-controls');
+        const answer = answerId ? document.getElementById(answerId) : null;
+        if (answer) {
+          trigger.setAttribute('aria-expanded', 'false');
+          answer.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    function expandItem(trigger: HTMLButtonElement) {
+      const answerId = trigger.getAttribute('aria-controls');
+      const answer = answerId ? document.getElementById(answerId) : null;
+      if (answer) {
+        trigger.setAttribute('aria-expanded', 'true');
+        answer.setAttribute('aria-hidden', 'false');
+      }
+    }
+
+    function toggleItem(trigger: HTMLButtonElement) {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+      if (isExpanded) {
+        collapseAll();
+      } else {
+        collapseAll();
+        expandItem(trigger);
+      }
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        toggleItem(trigger);
+      });
+
+      trigger.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleItem(trigger);
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFAQ);
+  } else {
+    initFAQ();
+  }
+</script>
