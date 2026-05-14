@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="arch-diagram-title arch-diagram-desc">
+  <title id="arch-diagram-title">MirDB Architecture Diagram</title>
+  <desc id="arch-diagram-desc">High-level architecture showing data flow from Client through the Memcached Protocol Layer, Skip-List Memtable, Write-Ahead Log, and LSM Tree Storage with SSTable files on disk.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Client -->
+  <rect x="300" y="20" width="200" height="50" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="400" y="50" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#0d47a1">Client (Memcached)</text>
+
+  <line x1="400" y1="70" x2="400" y2="100" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Memcached Protocol Layer -->
+  <rect x="250" y="100" width="300" height="55" rx="8" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+  <text x="400" y="122" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#bf360c">Memcached Protocol Layer</text>
+  <text x="400" y="142" text-anchor="middle" font-family="monospace" font-size="11" fill="#bf360c">Connection mgmt, request parsing, responses</text>
+
+  <line x1="400" y1="155" x2="400" y2="185" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Memtable -->
+  <rect x="250" y="185" width="300" height="55" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="400" y="207" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#1b5e20">Skip-List Memtable</text>
+  <text x="400" y="227" text-anchor="middle" font-family="monospace" font-size="11" fill="#1b5e20">In-memory write buffer, O(log n) ops</text>
+
+  <!-- Fork to WAL and LSM -->
+  <line x1="400" y1="240" x2="400" y2="260" stroke="#555" stroke-width="2"/>
+  <line x1="400" y1="260" x2="200" y2="260" stroke="#555" stroke-width="2"/>
+  <line x1="400" y1="260" x2="600" y2="260" stroke="#555" stroke-width="2"/>
+  <line x1="200" y1="260" x2="200" y2="300" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="600" y1="260" x2="600" y2="300" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- WAL -->
+  <rect x="75" y="300" width="250" height="55" rx="8" fill="#fce4ec" stroke="#c62828" stroke-width="2"/>
+  <text x="200" y="322" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#b71c1c">Write-Ahead Log (WAL)</text>
+  <text x="200" y="342" text-anchor="middle" font-family="monospace" font-size="11" fill="#b71c1c">Sequential log for crash recovery</text>
+
+  <!-- LSM Tree -->
+  <rect x="475" y="300" width="250" height="55" rx="8" fill="#ede7f6" stroke="#4527a0" stroke-width="2"/>
+  <text x="600" y="322" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#311b92">LSM Tree Storage</text>
+  <text x="600" y="342" text-anchor="middle" font-family="monospace" font-size="11" fill="#311b92">Compacted SSTables across levels</text>
+
+  <!-- Arrow from LSM to disk -->
+  <line x1="600" y1="355" x2="600" y2="400" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Disk -->
+  <rect x="450" y="400" width="300" height="55" rx="8" fill="#eceff1" stroke="#37474f" stroke-width="2"/>
+  <text x="600" y="422" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#263238">Disk (SSTable Files)</text>
+  <text x="600" y="442" text-anchor="middle" font-family="monospace" font-size="11" fill="#263238">Index blocks + data blocks + bloom filters</text>
+
+  <!-- Compaction feedback arrow -->
+  <path d="M 725 355 Q 760 355 760 280 Q 760 220 725 220" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)"/>
+  <text x="770" y="290" font-family="monospace" font-size="10" fill="#888">Compaction</text>
+</svg>
