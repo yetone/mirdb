@@ -1,0 +1,12 @@
+---
+/**
+ * Max-width container for centering page content.
+ */
+export interface Props {
+  class?: string;
+}
+const { class: extraClass = '' } = Astro.props;
+---
+<div class={`container ${extraClass}`}>
+  <slot />
+</div>

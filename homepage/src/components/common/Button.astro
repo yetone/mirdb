@@ -1,0 +1,34 @@
+---
+/**
+ * Reusable button component supporting primary/secondary variants and both
+ * anchor and button elements.
+ */
+export interface Props {
+  variant?: 'primary' | 'secondary';
+  href?: string;
+  tag?: 'a' | 'button';
+  type?: 'button' | 'submit' | 'reset';
+  target?: string;
+  rel?: string;
+  class?: string;
+}
+const {
+  variant = 'primary',
+  href,
+  tag = href ? 'a' : 'button',
+  type = 'button',
+  target,
+  rel,
+  class: extraClass = '',
+} = Astro.props;
+const variantClass = variant === 'primary' ? 'btn-primary' : 'btn-secondary';
+---
+{tag === 'a' ? (
+  <a href={href} class={`btn ${variantClass} ${extraClass}`} target={target} rel={rel}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={`btn ${variantClass} ${extraClass}`}>
+    <slot />
+  </button>
+)}
