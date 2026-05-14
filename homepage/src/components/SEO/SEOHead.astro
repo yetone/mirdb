@@ -1,7 +1,36 @@
 ---
 /**
- * SEO head component.
+ * SEO head component. Renders all meta tags for search engine optimization
+ * and social media sharing (Open Graph).
  * Owner: Scenario 6 - SEO & Metadata
  */
+import { generateSEOTags } from '../../utils/seo';
+import { APP_NAME, APP_DESCRIPTION, SITE_URL } from '../../utils/constants';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+}
+
+const {
+  title = `${APP_NAME} - Persistent Key-Value Store`,
+  description = APP_DESCRIPTION,
+  ogImage = '/assets/logo.gif',
+  ogType = 'website',
+  canonical = SITE_URL,
+} = Astro.props;
 ---
-<meta name="description" content="MirDB - A persistent key-value store with Memcached protocol compatibility" />
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:url" content={canonical} />
+<meta property="og:type" content={ogType} />
+<link rel="canonical" href={canonical} />

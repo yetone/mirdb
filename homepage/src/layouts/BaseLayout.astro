@@ -1,17 +1,28 @@
 ---
 import '../styles/global.css';
 import '../styles/theme.css';
+import SEOHead from '../components/SEO/SEOHead.astro';
+import NavBar from '../components/Navigation/NavBar.astro';
+import Footer from '../components/Footer/Footer.astro';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MirDB - Persistent Key-Value Store</title>
-    <meta name="description" content="MirDB is a high-performance persistent key-value store with Memcached protocol compatibility, built in Rust." />
+    <SEOHead />
   </head>
   <body>
-    <slot />
+    <header role="banner">
+      <NavBar />
+    </header>
+    <nav aria-label="Main navigation">
+      <slot name="nav" />
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <Footer />
+    </footer>
   </body>
 </html>
