@@ -1,0 +1,168 @@
+---
+/**
+ * Installation method tabs component.
+ * Owner: Scenario 3 - Quick Start & Code Examples
+ *
+ * Renders a tabbed interface for different installation methods.
+ * Each tab shows installation commands specific to that method.
+ */
+import CodeBlock from './CodeBlock.astro';
+import type { InstallMethod } from '../../types/index';
+
+export interface Props {
+  methods: InstallMethod[];
+}
+
+const { methods } = Astro.props;
+const defaultMethodId = methods.length > 0 ? methods[0].id : '';
+---
+
+<div class="install-tabs" data-install-tabs role="tablist" aria-label="Installation method tabs">
+  <div class="tabs-header" role="tablist">
+    {methods.map((method, index) => (
+      <button
+        class={`tab-button ${index === 0 ? 'active' : ''}`}
+        role="tab"
+        aria-selected={index === 0 ? 'true' : 'false'}
+        aria-controls={`panel-${method.id}`}
+        id={`tab-${method.id}`}
+        data-tab={method.id}
+        type="button"
+      >
+        {method.name}
+      </button>
+    ))}
+  </div>
+  <div class="tabs-content">
+    {methods.map((method, index) => (
+      <div
+        class={`tab-panel ${index === 0 ? 'active' : ''}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${method.id}`}
+        id={`panel-${method.id}`}
+        data-panel={method.id}
+      >
+        <CodeBlock
+          id={`install-${method.id}`}
+          code={method.commands.join('\n')}
+          language="shell"
+          label={`Install with ${method.name}`}
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .install-tabs {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+
+  .tabs-header {
+    display: flex;
+    background-color: var(--color-bg-alt);
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+  }
+
+  .tab-button {
+    flex: 1;
+    min-width: fit-content;
+    padding: var(--space-sm) var(--space-lg);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .tab-button:hover {
+    color: var(--color-text);
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  .tab-button.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .tab-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  .tab-panel :global(.code-block-wrapper) {
+    border-radius: 0;
+    border: none;
+  }
+</style>
+
+<script>
+  function initTabs() {
+    const container = document.currentScript?.parentElement;
+    if (!container) return;
+
+    const tabButtons = container.querySelectorAll<HTMLButtonElement>('[data-tab]');
+    const panels = container.querySelectorAll<HTMLElement>('[data-panel]');
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        if (!targetTab) return;
+
+        // Update buttons
+        tabButtons.forEach((btn) => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+
+        // Update panels
+        panels.forEach((panel) => {
+          panel.classList.remove('active');
+        });
+        const targetPanel = container.querySelector(`[data-panel="${targetTab}"]`);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+        }
+      });
+
+      // Keyboard support
+      button.addEventListener('keydown', (e) => {
+        const buttons = Array.from(tabButtons);
+        const currentIndex = buttons.indexOf(button);
+
+        let targetIndex = currentIndex;
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          targetIndex = (currentIndex + 1) % buttons.length;
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          targetIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+        }
+
+        if (targetIndex !== currentIndex) {
+          (buttons[targetIndex] as HTMLButtonElement).click();
+          (buttons[targetIndex] as HTMLButtonElement).focus();
+        }
+      });
+    });
+  }
+
+  initTabs();
+</script>

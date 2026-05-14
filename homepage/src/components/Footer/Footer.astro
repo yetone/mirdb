@@ -1,0 +1,102 @@
+---
+import { APP_NAME, GITHUB_REPO_URL, DOCS_URL, COMMUNITY_URL } from '../../utils/constants';
+
+const currentYear = new Date().getFullYear();
+---
+
+<div class="footerContainer">
+  <nav class="footerNav" aria-label="Footer navigation">
+    <a
+      href={GITHUB_REPO_URL}
+      class="footerLink"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-footer-link="github"
+    >
+      GitHub
+    </a>
+    <a
+      href={DOCS_URL}
+      class="footerLink"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-footer-link="docs"
+    >
+      Documentation
+    </a>
+    <a
+      href={COMMUNITY_URL}
+      class="footerLink"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-footer-link="community"
+    >
+      Community
+    </a>
+  </nav>
+  <div class="footerLegal">
+    <span class="footerLicense">MIT License</span>
+    <span class="footerCopyright">
+      &copy; {currentYear} {APP_NAME}
+    </span>
+  </div>
+</div>
+
+<style>
+  .footerContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .footerNav {
+    display: flex;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footerLink {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: color var(--transition-fast);
+  }
+
+  .footerLink:hover {
+    color: var(--color-primary);
+  }
+
+  .footerLink:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .footerLegal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+
+  .footerLicense {
+    font-weight: 500;
+  }
+
+  @media (min-width: 768px) {
+    .footerContainer {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .footerLegal {
+      align-items: flex-end;
+    }
+  }
+</style>

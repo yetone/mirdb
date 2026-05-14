@@ -1,0 +1,13 @@
+---
+/**
+ * Full-width page section wrapper with consistent vertical padding.
+ */
+export interface Props {
+  id?: string;
+  class?: string;
+}
+const { id, class: extraClass = '' } = Astro.props;
+---
+<section {id} class={`section ${extraClass}`}>
+  <slot />
+</section>

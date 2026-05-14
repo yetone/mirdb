@@ -1,0 +1,38 @@
+---
+/**
+ * Feature highlights grid section.
+ * Owner: Scenario 2 - Feature Highlights Section
+ *
+ * Expected content:
+ * - 2-3 column responsive grid
+ * - Feature cards for: Memcached protocol, LSM tree storage,
+ *   Skip-list memtable, WAL durability, Tokio async runtime
+ * - Each card: icon/visual, name, description, technical details
+ */
+import FeatureCard from './FeatureCard.astro';
+import features from '../../data/features.json';
+
+const sectionTitle = 'Why MirDB?';
+const sectionDescription =
+  'MirDB combines proven data structures and modern async architecture to deliver a fast, durable, and protocol-compatible key-value store.';
+---
+
+<section id="features" class="features-section">
+  <div class="features-header">
+    {features.length > 0 && (
+      <>
+        <h2 class="features-title">{sectionTitle}</h2>
+        <p class="features-subtitle">{sectionDescription}</p>
+      </>
+    )}
+  </div>
+  {features.length > 0 ? (
+    <div class="features-grid">
+      {features.map((feature) => (
+        <FeatureCard feature={feature} />
+      ))}
+    </div>
+  ) : (
+    <p class="features-empty" role="status">Feature highlights coming soon.</p>
+  )}
+</section>

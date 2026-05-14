@@ -1,0 +1,31 @@
+---
+import Container from '../common/Container.astro';
+import Button from '../common/Button.astro';
+import { APP_NAME, APP_TAGLINE, GITHUB_REPO_URL, SECTION_IDS } from '../../utils/constants';
+import styles from './Hero.module.css';
+---
+
+<section id={SECTION_IDS.HERO} class={styles.hero}>
+  <Container class={styles.container}>
+    <div class={styles.brand}>
+      <img
+        src="/assets/logo.gif"
+        alt={`${APP_NAME} logo`}
+        class={styles.logo}
+        width="96"
+        height="96"
+        loading="eager"
+      />
+    </div>
+    <h1 class={styles.headline}>{APP_NAME}</h1>
+    <p class={styles.tagline}>{APP_TAGLINE}</p>
+    <div class={styles.ctas}>
+      <Button variant="primary" href={`#${SECTION_IDS.QUICK_START}`}>
+        Get Started
+      </Button>
+      <Button variant="secondary" href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer">
+        View on GitHub
+      </Button>
+    </div>
+  </Container>
+</section>

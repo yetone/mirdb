@@ -1,0 +1,257 @@
+---
+/**
+ * Fixed/sticky navigation bar.
+ * Owner: Scenario 5 - Navigation & Interactive Elements
+ *
+ * Includes:
+ * - Logo linking to homepage top
+ * - Section links: Features, Quick Start, Architecture, FAQ
+ * - "Get Started" CTA button
+ * - Active section highlighting based on scroll position
+ * - Smooth scroll behavior on nav link clicks
+ * - Mobile menu toggle for responsive layout
+ */
+import { APP_NAME, SECTION_IDS } from '../../utils/constants';
+import type { NavItem } from '../../types';
+import navItems from '../../data/navigation.json';
+import MobileMenu from './MobileMenu.astro';
+import styles from './Navigation.module.css';
+
+const items: NavItem[] = navItems;
+---
+
+<header class={styles.header} id="navbar">
+  <div class={styles.navContainer}>
+    <a href={`#${SECTION_IDS.HERO}`} class={styles.logo} aria-label={`${APP_NAME} home`}>
+      <img
+        src="/assets/logo.gif"
+        alt={`${APP_NAME} logo`}"
+        width="36"
+        height="36"
+        loading="eager"
+      />
+      <span class={styles.logoText}>{APP_NAME}</span>
+    </a>
+
+    <nav class={styles.desktopNav} aria-label="Main navigation">
+      <ul class={styles.navList}>
+        {items.map((item: NavItem) => (
+          <li>
+            <a
+              href={item.href}
+              class={styles.navLink}
+              data-nav-link={item.id}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a
+        href={`#${SECTION_IDS.QUICK_START}`}
+        class={styles.ctaButton}
+        data-cta="get-started"
+      >
+        Get Started
+      </a>
+    </nav>
+
+    <button
+      class={styles.mobileToggle}
+      id="mobile-toggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span class={styles.hamburger}></span>
+    </button>
+  </div>
+
+  <MobileMenu items={items} />
+</header>
+
+<script>
+  function initNavbar() {
+    const header = document.getElementById('navbar');
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navLinks = document.querySelectorAll('[data-nav-link]');
+    const mobileNavLinks = mobileMenu?.querySelectorAll('a[data-nav-link]');
+    const ctaLinks = document.querySelectorAll('[data-cta="get-started"]');
+
+    function getTargetHref(link: Element): string | null {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) return href;
+      return null;
+    }
+
+    function scrollToTarget(href: string) {
+      const id = href.replace('#', '');
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function handleNavClick(e: Event) {
+      const link = e.currentTarget as HTMLAnchorElement;
+      const href = getTargetHref(link);
+      if (href) {
+        e.preventDefault();
+        scrollToTarget(href);
+        closeMobileMenu();
+      }
+    }
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', handleNavClick);
+    });
+
+    mobileNavLinks?.forEach(link => {
+      link.addEventListener('click', handleNavClick);
+    });
+
+    ctaLinks.forEach(link => {
+      link.addEventListener('click', handleNavClick);
+    });
+
+    // Active section tracking via IntersectionObserver
+    const sectionIds = Array.from(navLinks).map(link => {
+      const href = getTargetHref(link);
+      return href ? href.replace('#', '') : '';
+    }).filter(Boolean);
+
+    const allNavLinkEls = [
+      ...Array.from(navLinks),
+      ...(mobileNavLinks ? Array.from(mobileNavLinks) : []),
+    ];
+
+    function setActiveLink(activeId: string) {
+      allNavLinkEls.forEach(link => {
+        const href = getTargetHref(link);
+        const linkId = href ? href.replace('#', '') : '';
+        if (linkId === activeId) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    if (sectionIds.length > 0 && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              setActiveLink(entry.target.id);
+              break;
+            }
+          }
+        },
+        { rootMargin: '-80px 0px -60% 0px', threshold: 0.1 }
+      );
+
+      sectionIds.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) observer.observe(section);
+      });
+    }
+
+    // Mobile menu logic
+    function openMobileMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.add('open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+      }
+      if (mobileToggle) {
+        mobileToggle.setAttribute('aria-expanded', 'true');
+      }
+      document.addEventListener('keydown', handleMobileKeydown);
+      trapFocus();
+    }
+
+    function closeMobileMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+      if (mobileToggle) {
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileToggle.focus();
+      }
+      document.removeEventListener('keydown', handleMobileKeydown);
+    }
+
+    function toggleMobileMenu() {
+      const isOpen = mobileToggle?.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    }
+
+    function handleMobileKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        closeMobileMenu();
+      }
+    }
+
+    function trapFocus() {
+      if (!mobileMenu) return;
+      const focusable = mobileMenu.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      function handleFocusTrap(e: KeyboardEvent) {
+        if (e.key !== 'Tab') return;
+        const active = document.activeElement;
+
+        if (e.shiftKey) {
+          if (active === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (active === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+
+      mobileMenu.addEventListener('keydown', handleFocusTrap, { once: true });
+
+      setTimeout(() => {
+        mobileMenu.addEventListener('keydown', function trap(e: KeyboardEvent) {
+          if (e.key !== 'Tab') return;
+          const currentFocusable = mobileMenu.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          );
+          if (currentFocusable.length === 0) return;
+          const f = currentFocusable[0];
+          const l = currentFocusable[currentFocusable.length - 1];
+          const a = document.activeElement;
+
+          if (e.shiftKey) {
+            if (a === f) { e.preventDefault(); l.focus(); }
+          } else {
+            if (a === l) { e.preventDefault(); f.focus(); }
+          }
+        });
+      }, 0);
+    }
+
+    mobileToggle?.addEventListener('click', toggleMobileMenu);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavbar);
+  } else {
+    initNavbar();
+  }
+</script>

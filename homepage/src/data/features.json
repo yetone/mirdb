@@ -1,0 +1,57 @@
+[
+  {
+    "id": "memcached-protocol",
+    "name": "Memcached Protocol",
+    "description": "Full compatibility with the Memcached text-based protocol for key-value operations, enabling seamless integration with existing Memcached clients and libraries.",
+    "icon": "⚡",
+    "technicalDetails": [
+      "Text-based protocol support",
+      "Compatible with existing Memcached clients",
+      "Supports standard commands: get, set, delete"
+    ]
+  },
+  {
+    "id": "lsm-tree",
+    "name": "LSM Tree Storage",
+    "description": "Log-Structured Merge tree data structure optimized for write-heavy workloads, providing efficient storage and retrieval of key-value pairs.",
+    "icon": "🌲",
+    "technicalDetails": [
+      "Write-optimized data structure",
+      "Efficient compaction strategies",
+      "Sorted string tables (SSTables) for persistent storage"
+    ]
+  },
+  {
+    "id": "skip-list",
+    "name": "Skip-List Memtable",
+    "description": "A probabilistic data structure enabling O(log n) search, insertion, and deletion with simpler implementation than balanced trees.",
+    "icon": "📊",
+    "technicalDetails": [
+      "O(log n) average-case operations",
+      "Probabilistic balancing mechanism",
+      "In-memory write buffer for fast writes"
+    ]
+  },
+  {
+    "id": "wal",
+    "name": "WAL Durability",
+    "description": "Write-Ahead Log ensures data durability by recording all mutations before they are applied, enabling crash recovery without data loss.",
+    "icon": "💾",
+    "technicalDetails": [
+      "Sequential write logging for performance",
+      "Automatic crash recovery on restart",
+      "Configurable sync intervals"
+    ]
+  },
+  {
+    "id": "tokio-async",
+    "name": "Tokio Async Runtime",
+    "description": "Built on the Tokio asynchronous runtime for Rust, delivering high concurrency and efficient I/O handling for network operations.",
+    "icon": "⚙️",
+    "technicalDetails": [
+      "Asynchronous I/O for high throughput",
+      "Multi-threaded runtime",
+      "Efficient connection multiplexing"
+    ]
+  }
+]

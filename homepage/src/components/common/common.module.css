@@ -1,0 +1,80 @@
+/* Shared styles for common components */
+
+/* Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Primary button */
+.btn-primary {
+  background-color: var(--color-accent-primary);
+  color: #ffffff;
+  border-color: var(--color-accent-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-primary-hover);
+  border-color: var(--color-accent-primary-hover);
+  text-decoration: none;
+  color: #ffffff;
+  box-shadow: var(--shadow-md);
+}
+
+/* Secondary button */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--color-border-secondary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-text-tertiary);
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+/* Section */
+.section {
+  padding: var(--space-20) var(--container-padding);
+  width: 100%;
+}
+
+/* Hero section variant */
+.section-hero {
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+/* Container */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  width: 100%;
+}

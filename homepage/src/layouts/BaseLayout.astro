@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+import '../styles/theme.css';
+import SEOHead from '../components/SEO/SEOHead.astro';
+import NavBar from '../components/Navigation/NavBar.astro';
+import Footer from '../components/Footer/Footer.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead />
+  </head>
+  <body>
+    <header role="banner">
+      <NavBar />
+    </header>
+    <nav aria-label="Main navigation">
+      <slot name="nav" />
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <Footer />
+    </footer>
+  </body>
+</html>

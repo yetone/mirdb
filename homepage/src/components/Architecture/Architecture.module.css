@@ -1,0 +1,183 @@
+/* Architecture section styles */
+
+.architecture {
+  padding: var(--space-3xl, 4rem) var(--space-xl, 2rem);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.architecture-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl, 3rem);
+}
+
+.architecture-title {
+  font-size: var(--font-size-3xl, 2rem);
+  font-weight: 700;
+  color: var(--color-text, #1a1a2e);
+  margin-bottom: var(--space-md, 1rem);
+}
+
+.architecture-subtitle {
+  font-size: var(--font-size-lg, 1.125rem);
+  color: var(--color-text-secondary, #6c757d);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Architecture diagram */
+.diagram-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-2xl, 3rem);
+}
+
+.diagram-img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border, #dee2e6);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.07));
+}
+
+.diagram-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  width: 100%;
+  max-width: 700px;
+  background: var(--color-bg-alt, #f8f9fa);
+  border: 2px dashed var(--color-border, #dee2e6);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--space-2xl, 3rem);
+  text-align: center;
+  color: var(--color-text-secondary, #6c757d);
+}
+
+.diagram-fallback-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md, 1rem);
+}
+
+.diagram-fallback-text {
+  font-size: var(--font-size-md, 1rem);
+  line-height: 1.6;
+}
+
+/* Component descriptions */
+.components-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xl, 2rem);
+  margin-bottom: var(--space-2xl, 3rem);
+}
+
+.component-card {
+  background: var(--color-bg, #ffffff);
+  border: 1px solid var(--color-border, #dee2e6);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--space-xl, 2rem);
+  transition: box-shadow var(--transition-normal, 250ms ease);
+}
+
+.component-card:hover {
+  box-shadow: var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.1));
+}
+
+.component-heading {
+  font-size: var(--font-size-xl, 1.25rem);
+  font-weight: 600;
+  color: var(--color-text, #1a1a2e);
+  margin-bottom: var(--space-sm, 0.5rem);
+}
+
+.component-description {
+  font-size: var(--font-size-md, 1rem);
+  color: var(--color-text-secondary, #6c757d);
+  line-height: 1.7;
+}
+
+/* Documentation links */
+.doc-links {
+  text-align: center;
+  margin-top: var(--space-lg, 1.5rem);
+  padding-top: var(--space-xl, 2rem);
+  border-top: 1px solid var(--color-border, #dee2e6);
+}
+
+.doc-links-heading {
+  font-size: var(--font-size-lg, 1.125rem);
+  font-weight: 600;
+  color: var(--color-text, #1a1a2e);
+  margin-bottom: var(--space-md, 1rem);
+}
+
+.doc-links-list {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg, 1.5rem);
+  flex-wrap: wrap;
+}
+
+.doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs, 0.25rem);
+  color: var(--color-primary, #4361ee);
+  text-decoration: none;
+  font-size: var(--font-size-md, 1rem);
+  font-weight: 500;
+  padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+  border: 1px solid var(--color-primary, #4361ee);
+  border-radius: var(--radius-md, 8px);
+  transition: background var(--transition-fast, 150ms ease),
+              color var(--transition-fast, 150ms ease);
+}
+
+.doc-link:hover {
+  background: var(--color-primary, #4361ee);
+  color: var(--color-bg, #ffffff);
+}
+
+/* Empty state */
+.architecture-empty {
+  text-align: center;
+  color: var(--color-text-secondary, #6c757d);
+  font-size: var(--font-size-lg, 1.125rem);
+  padding: var(--space-2xl, 3rem) 0;
+}
+
+/* Tablet: 768px - 1279px */
+@media (max-width: 1279px) {
+  .components-list {
+    grid-template-columns: 1fr;
+    gap: var(--space-md, 1rem);
+  }
+}
+
+/* Mobile: below 768px */
+@media (max-width: 767px) {
+  .architecture {
+    padding: var(--space-2xl, 3rem) var(--space-md, 1rem);
+  }
+
+  .architecture-title {
+    font-size: var(--font-size-2xl, 1.5rem);
+  }
+
+  .architecture-subtitle {
+    font-size: var(--font-size-md, 1rem);
+  }
+
+  .component-card {
+    padding: var(--space-lg, 1.5rem);
+  }
+
+  .doc-links-list {
+    flex-direction: column;
+    align-items: center;
+  }
+}

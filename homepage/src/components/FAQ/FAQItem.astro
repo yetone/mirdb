@@ -1,0 +1,47 @@
+---
+/**
+ * Individual FAQ accordion item.
+ * Owner: Scenario 11 - FAQ & Documentation Integration
+ *
+ * Renders an accessible expandable FAQ item with:
+ * - Button trigger with aria-expanded and aria-controls
+ * - Chevron indicator for expanded/collapsed state
+ * - Answer panel with aria-hidden for screen reader support
+ */
+import type { FAQItem as FAQItemType } from '../../types';
+import styles from './FAQ.module.css';
+
+interface Props {
+  item: FAQItemType;
+  index: number;
+}
+
+const { item, index } = Astro.props;
+const answerId = `faq-answer-${item.id}`;
+const triggerId = `faq-trigger-${item.id}`;
+---
+
+<div class={styles.faqItem}>
+  <h3>
+    <button
+      type="button"
+      class={styles.faqTrigger}
+      id={triggerId}
+      aria-expanded="false"
+      aria-controls={answerId}
+      data-faq-trigger
+    >
+      <span class={styles.faqQuestion}>{item.question}</span>
+      <span class={styles.faqChevron} aria-hidden="true"></span>
+    </button>
+  </h3>
+  <div
+    class={styles.faqAnswer}
+    id={answerId}
+    role="region"
+    aria-labelledby={triggerId}
+    aria-hidden="true"
+  >
+    <div class={styles.faqAnswerInner} set:html={item.answer}></div>
+  </div>
+</div>

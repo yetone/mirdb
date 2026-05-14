@@ -1,0 +1,50 @@
+---
+/**
+ * Mobile menu overlay component.
+ * Owner: Scenario 5 - Navigation & Interactive Elements
+ *
+ * Renders the mobile navigation overlay with links.
+ * Toggle, open/close, focus trapping, and keyboard handling
+ * are managed by NavBar.astro's client-side script.
+ */
+import type { NavItem } from '../../types';
+import styles from './Navigation.module.css';
+
+interface Props {
+  items: NavItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div
+  class={styles.mobileMenu}
+  id="mobile-menu"
+  aria-hidden="true"
+  aria-label="Mobile navigation"
+  role="dialog"
+  aria-modal="true"
+>
+  <nav aria-label="Mobile navigation">
+    <ul class={styles.mobileNavList}>
+      {items.map((item: NavItem) => (
+        <li>
+          <a
+            href={item.href}
+            class={styles.mobileNavLink}
+            data-nav-link={item.id}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a
+      href="#quick-start"
+      class={styles.ctaButton}
+      data-cta="get-started"
+    >
+      Get Started
+    </a>
+  </nav>
+</div>
