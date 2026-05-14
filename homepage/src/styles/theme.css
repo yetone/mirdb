@@ -1,5 +1,5 @@
 /* Theme tokens for MirDB homepage - created by first builder */
-/* Will be enhanced by Scenario 8 */
+/* Enhanced by Scenario 8 with responsive breakpoints, container tokens, and additional properties */
 
 :root {
   /* Color palette */
@@ -19,6 +19,15 @@
   --color-warning: #f39c12;
   --color-error: #e74c3c;
 
+  /* Color aliases for common component compatibility */
+  --color-accent-primary: var(--color-primary);
+  --color-accent-primary-hover: var(--color-primary-hover);
+  --color-text-primary: var(--color-text);
+  --color-text-tertiary: var(--color-text-secondary);
+  --color-border-secondary: var(--color-border);
+  --color-bg-tertiary: var(--color-bg-alt);
+  --color-focus-ring: var(--color-primary);
+
   /* Spacing scale */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -28,15 +37,26 @@
   --space-2xl: 3rem;
   --space-3xl: 4rem;
 
+  /* Numeric spacing aliases for common component compatibility */
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-6: 1.5rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
   /* Typography */
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 2rem;
   --font-size-4xl: 2.5rem;
+  --font-weight-semibold: 600;
+  --line-height-normal: 1.5;
 
   /* Border radius */
   --radius-sm: 4px;
@@ -49,12 +69,71 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
 
-  /* Breakpoints (reference only, use in media queries) */
-  /* Mobile: 320px - 767px */
-  /* Tablet: 768px - 1279px */
-  /* Desktop: 1280px+ */
+  /* Container */
+  --container-max: 1200px;
+  --container-padding: var(--space-lg);
+
+  /* Touch targets */
+  --touch-target-min: 44px;
+
+  /* Breakpoints as custom properties for JS reference */
+  --bp-mobile-max: 767px;
+  --bp-tablet-min: 768px;
+  --bp-tablet-max: 1279px;
+  --bp-desktop-min: 1280px;
 
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
+}
+
+/* ── Responsive container padding ──────────────────────────────────── */
+@media (max-width: 767px) {
+  :root {
+    --container-padding: var(--space-md);
+  }
+}
+
+/* ── Touch target minimum sizes (WCAG 2.5.5) ───────────────────────── */
+@media (pointer: coarse) {
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [role='button'],
+  [role='link'],
+  [data-copy-target] {
+    min-height: var(--touch-target-min, 44px);
+    min-width: var(--touch-target-min, 44px);
+  }
+}
+
+/* ── Responsive image baseline ──────────────────────────────────────── */
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Prevent horizontal overflow on all viewports ──────────────────── */
+body {
+  overflow-x: hidden;
+}
+
+/* ── Smooth layout transitions between breakpoints ─────────────────── */
+@media (max-width: 1279px) and (min-width: 768px) {
+  /* Tablet breakpoint range - consistent padding */
+  :root {
+    --container-padding: var(--space-lg);
+  }
+}
+
+@media (min-width: 1280px) {
+  /* Desktop breakpoint range */
+  :root {
+    --container-padding: var(--space-xl);
+  }
 }
