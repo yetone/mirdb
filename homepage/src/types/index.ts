@@ -13,6 +13,9 @@
  * - UsageExample: { id: string; operation: string; description: string; language: string; code: string; }
  * - QuickStartData: { sectionTitle: string; sectionDescription: string; installMethods: InstallMethod[]; usageExamples: UsageExample[]; }
  * - SEOProps: { title: string; description: string; ogImage?: string; ogType?: string; canonical?: string; }
+ * - ArchitectureComponent: { id: string; name: string; description: string; }
+ * - ArchitectureLink: { label: string; url: string; }
+ * - ArchitectureData: { sectionTitle: string; sectionDescription: string; diagramSrc: string; diagramAlt: string; components: ArchitectureComponent[]; documentationLinks: ArchitectureLink[]; }
  */
 
 export interface Feature {
@@ -69,4 +72,24 @@ export interface SEOProps {
   ogImage?: string;
   ogType?: string;
   canonical?: string;
+}
+
+export interface ArchitectureComponent {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface ArchitectureLink {
+  label: string;
+  url: string;
+}
+
+export interface ArchitectureData {
+  sectionTitle: string;
+  sectionDescription: string;
+  diagramSrc: string;
+  diagramAlt: string;
+  components: ArchitectureComponent[];
+  documentationLinks: ArchitectureLink[];
 }

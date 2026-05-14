@@ -1,5 +1,38 @@
 {
   "sectionTitle": "Architecture",
-  "description": "",
-  "components": []
+  "sectionDescription": "MirDB is built on a layered architecture that combines protocol compatibility, in-memory write buffering, write-ahead logging for durability, and LSM tree storage for efficient persistent key-value operations.",
+  "diagramSrc": "/assets/architecture-diagram.svg",
+  "diagramAlt": "Architecture diagram of MirDB showing the flow: Client → Memcached Protocol Layer → Skip-List Memtable → Write-Ahead Log → LSM Tree Storage with SSTable files on disk",
+  "components": [
+    {
+      "id": "memcached-protocol",
+      "name": "Memcached Protocol Layer",
+      "description": "MirDB exposes a text-based Memcached protocol interface on port 12333 by default. The protocol layer parses incoming commands — get, set, delete, and others — from standard Memcached clients. It handles connection management, request parsing, and response serialization, making MirDB a drop-in replacement for applications already using Memcached in their stack. The protocol layer uses Tokio's async I/O for high-concurrency connection handling."
+    },
+    {
+      "id": "memtable",
+      "name": "Skip-List Memtable",
+      "description": "Writes are first buffered in an in-memory skip-list data structure called the memtable. The skip-list provides O(log n) average-case lookup, insertion, and deletion with probabilistic balancing, offering simpler implementation than balanced trees. The memtable serves as a write buffer that absorbs incoming writes at memory speed. Once the memtable reaches a configurable size threshold, it is frozen and flushed to disk as a sorted string table (SSTable)."
+    },
+    {
+      "id": "wal",
+      "name": "Write-Ahead Log (WAL)",
+      "description": "Before any mutation is applied to the memtable, MirDB records it in a sequential write-ahead log on disk. The WAL guarantees durability: if the process crashes, the WAL is replayed on restart to reconstruct any writes that were in the memtable but not yet persisted to SSTables. WAL entries are written sequentially to minimize disk I/O overhead, and old log segments are compacted or removed once the corresponding data has been safely flushed to LSM tree levels."
+    },
+    {
+      "id": "lsm-tree",
+      "name": "LSM Tree Storage",
+      "description": "MirDB uses Log-Structured Merge trees as its persistent storage engine. Frozen memtables are flushed to disk as level-0 SSTables. A background compaction process merges and sorts SSTables across multiple levels, discarding overwritten or deleted entries. This design optimizes for write-heavy workloads by batching random writes into sequential disk I/O. Each SSTable is internally organized with index blocks and data blocks for efficient point lookups and range scans."
+    }
+  ],
+  "documentationLinks": [
+    {
+      "label": "Design Documentation",
+      "url": "https://github.com/yetone/mirdb#readme"
+    },
+    {
+      "label": "Memcached Protocol Specification",
+      "url": "https://github.com/memcached/memcached/blob/master/doc/protocol.txt"
+    }
+  ]
 }
