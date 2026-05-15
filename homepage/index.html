@@ -116,7 +116,18 @@
 
   <!-- Footer (Scenario 6) -->
   <footer>
-    <!-- Copyright, footer links -->
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/discussions" target="_blank" rel="noopener noreferrer">Community</a>
+      </div>
+      <div class="copyright">
+        <p>&copy; <span id="copyright-year">2026</span> MirDB. All rights reserved.</p>
+      </div>
+    </div>
+    <script>
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    </script>
   </footer>
 </body>
 </html>

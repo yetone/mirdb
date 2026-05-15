@@ -1,4 +1,101 @@
 /*
  * Footer styles for MirDB homepage.
  * Owner: Scenario 6 - Footer Section
+ *
+ * Defines:
+ * - Footer background, color, padding, margin-top
+ * - Footer links layout
+ * - Copyright text styling
+ * - Sticky footer behavior
+ * - Responsive footer stacking
  */
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  background-color: var(--color-text);
+  color: var(--color-primary-contrast);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  list-style: none;
+}
+
+.footer-links a {
+  color: var(--color-primary-contrast);
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  font-size: 0.9375rem;
+  opacity: 0.85;
+  transition: opacity 200ms ease, color 200ms ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+.footer-links a:focus-visible {
+  outline: 2px solid var(--color-primary-contrast);
+  outline-offset: 2px;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+.copyright {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.copyright p {
+  margin: 0;
+}
+
+/* Responsive: mobile stacking */
+@media (max-width: 767px) {
+  footer {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .footer-links a {
+    display: block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    min-height: 44px;
+    line-height: 1.5;
+  }
+}
