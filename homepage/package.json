@@ -1,0 +1,25 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB static homepage - persistent key-value store with memcached protocol",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "playwright test",
+    "lint": "eslint tests/",
+    "lint:html": "html-validate index.html"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "axe-core": "^4.8.0",
+    "chrome-launcher": "^1.2.1",
+    "eslint": "^8.0.0",
+    "jsdom": "^24.0.0",
+    "lighthouse": "^13.3.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}

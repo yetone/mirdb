@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - Persistent Key-Value Store with Memcached Protocol</title>
+  <meta name="description" content="MirDB is a persistent key-value store that speaks the memcached protocol. Built with an LSM-tree storage engine, skip-list memtable, and automatic compaction.">
+  <meta name="keywords" content="MirDB, key-value store, persistent storage, memcached protocol, LSM-tree, skip-list, database, memcached compatible">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mirdb.io">
+  <!-- Open Graph tags -->
+  <meta property="og:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+  <meta property="og:description" content="MirDB is a persistent key-value store that speaks the memcached protocol. Built with an LSM-tree storage engine, skip-list memtable, and automatic compaction.">
+  <meta property="og:image" content="https://mirdb.io/assets/logo.webp">
+  <meta property="og:url" content="https://mirdb.io">
+  <meta property="og:type" content="website">
+  <!-- Twitter Card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
+  <meta name="twitter:description" content="MirDB is a persistent key-value store that speaks the memcached protocol. Built with an LSM-tree storage engine, skip-list memtable, and automatic compaction.">
+  <meta name="twitter:image" content="https://mirdb.io/assets/logo.webp">
+  <!-- Preconnect to external domains for faster handshake -->
+  <link rel="preconnect" href="https://github.com" crossorigin>
+  <link rel="dns-prefetch" href="https://github.com">
+  <!-- Preload hero logo to optimize LCP -->
+  <link rel="preload" href="assets/logo.webp" as="image" fetchpriority="high">
+  <!-- Critical CSS inlined for performance -->
+  <style>
+    /* === Critical CSS: base.css === */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--color-primary:#2563eb;--color-primary-hover:#1d4ed8;--color-primary-contrast:#fff;--color-secondary:#64748b;--color-text:#1e293b;--color-text-muted:#64748b;--color-background:#fff;--color-surface:#f8fafc;--color-border:#e2e8f0;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;--font-mono:'SF Mono','Fira Code','Fira Mono',Menlo,Consolas,monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:2rem;--spacing-xl:4rem;--spacing-2xl:6rem;--max-width:1200px;--border-radius:8px}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-sans);color:var(--color-text);background-color:var(--color-background);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    a{color:var(--color-primary);text-decoration:none}
+    img{max-width:100%;height:auto;display:block}
+    .skip-link{position:absolute;top:-100%;left:var(--spacing-md);background:var(--color-primary);color:var(--color-primary-contrast);padding:var(--spacing-sm) var(--spacing-md);border-radius:var(--border-radius);z-index:1000}
+    .skip-link:focus{top:var(--spacing-sm)}
+
+    /* === Critical CSS: navigation.css === */
+    header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 var(--spacing-lg);background:var(--color-background);border-bottom:1px solid var(--color-border);z-index:100}
+    header .logo-link{display:flex;align-items:center;text-decoration:none}
+    nav{display:flex;align-items:center}
+    .nav-links{display:flex;list-style:none;gap:var(--spacing-lg);align-items:center}
+    .nav-link{color:var(--color-text);font-weight:500;font-size:0.95rem;text-decoration:none;padding:var(--spacing-xs) var(--spacing-sm);border-radius:var(--border-radius);transition:color 0.2s ease,background-color 0.2s ease}
+    .nav-link:hover{color:var(--color-primary);text-decoration:none}
+    .hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;width:44px;height:44px;background:none;border:none;cursor:pointer;padding:var(--spacing-sm);border-radius:var(--border-radius)}
+    .hamburger-line{display:block;width:22px;height:2px;background:var(--color-text);border-radius:2px;transition:transform 0.3s ease,opacity 0.3s ease}
+    .hamburger-line+.hamburger-line{margin-top:5px}
+    .hamburger[aria-expanded="true"] .hamburger-line:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger[aria-expanded="true"] .hamburger-line:nth-child(2){opacity:0}
+    .hamburger[aria-expanded="true"] .hamburger-line:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mobile-menu{position:fixed;top:64px;left:0;right:0;bottom:0;background:var(--color-background);z-index:99;padding:var(--spacing-lg);display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease}
+    .mobile-menu.open{transform:translateX(0)}
+    .mobile-menu .nav-links{flex-direction:column;gap:0}
+    .mobile-menu .nav-link{display:block;padding:var(--spacing-md) 0;font-size:1.125rem;border-bottom:1px solid var(--color-border)}
+    @media (max-width:767px){nav>.nav-links{display:none}.hamburger{display:flex}}
+    @media (min-width:768px){.mobile-menu{display:none}}
+
+    /* === Critical CSS: hero.css === */
+    #hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:80vh;padding:var(--spacing-2xl) var(--spacing-lg);max-width:var(--max-width);margin:0 auto}
+    .hero-headline{font-size:3rem;font-weight:800;line-height:1.15;color:var(--color-text);max-width:800px;margin-bottom:var(--spacing-lg);letter-spacing:-0.025em}
+    .hero-subheadline{font-size:1.25rem;line-height:1.6;color:var(--color-text-muted);max-width:640px;margin-bottom:var(--spacing-xl)}
+    .hero-cta-group{display:flex;align-items:center;gap:var(--spacing-md);flex-wrap:wrap;justify-content:center}
+    .hero-cta-primary{display:inline-flex;align-items:center;justify-content:center;padding:0.875rem 2rem;font-size:1.125rem;font-weight:600;color:var(--color-primary-contrast);background-color:var(--color-primary);border:2px solid var(--color-primary);border-radius:var(--border-radius);text-decoration:none;transition:background-color 200ms ease,transform 200ms ease,box-shadow 200ms ease;cursor:pointer}
+    .hero-cta-primary:hover{background-color:var(--color-primary-hover);border-color:var(--color-primary-hover);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,0.3);text-decoration:none}
+    .hero-cta-secondary{display:inline-flex;align-items:center;justify-content:center;padding:0.875rem 2rem;font-size:1.125rem;font-weight:600;color:var(--color-text);background-color:transparent;border:2px solid var(--color-border);border-radius:var(--border-radius);text-decoration:none;transition:border-color 200ms ease,color 200ms ease,background-color 200ms ease;cursor:pointer}
+    .hero-cta-secondary:hover{border-color:var(--color-text);color:var(--color-text);text-decoration:none}
+    .hero-logo{width:48px;height:48px;object-fit:contain}
+    @media (max-width:768px){.hero-headline{font-size:2rem}.hero-subheadline{font-size:1.0625rem}#hero{min-height:70vh;padding:var(--spacing-xl) var(--spacing-md)}.hero-cta-group{flex-direction:column;width:100%}.hero-cta-primary,.hero-cta-secondary{width:100%}}
+  </style>
+  <!-- Non-critical CSS loaded asynchronously -->
+  <link rel="stylesheet" href="css/features.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/quickstart.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/resources.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/footer.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/responsive.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="css/features.css"><link rel="stylesheet" href="css/quickstart.css"><link rel="stylesheet" href="css/resources.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/responsive.css"></noscript>
+  <!-- Scripts loaded with defer for performance -->
+  <script src="js/navigation.js" defer></script>
+  <script src="js/copy-code.js" defer></script>
+</head>
+<body>
+  <!-- Skip to content link for accessibility (Scenario 8) -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- Header with logo and navigation (Scenario 1 + Scenario 4) -->
+  <header>
+    <a href="/" class="logo-link" aria-label="MirDB Home">
+      <img class="hero-logo" src="assets/logo.webp" alt="MirDB Logo - Persistent Key-Value Store" width="48" height="48" fetchpriority="high">
+    </a>
+    <nav aria-label="Main navigation">
+      <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#quick-start" class="nav-link">Documentation</a></li>
+        <li><a href="https://github.com/yetone/mirdb" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="#resources" class="nav-link">Community</a></li>
+      </ul>
+    </nav>
+    <div class="mobile-menu">
+      <ul class="nav-links">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#quick-start" class="nav-link">Documentation</a></li>
+        <li><a href="https://github.com/yetone/mirdb" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="#resources" class="nav-link">Community</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero">
+      <h1 class="hero-headline">The Persistent Key-Value Store with Memcached Protocol</h1>
+      <p class="hero-subheadline">MirDB is a persistent key-value store that speaks the memcached protocol, providing a drop-in replacement for existing memcached deployments with durable storage that survives restarts.</p>
+      <div class="hero-cta-group">
+        <a href="#quick-start" class="hero-cta-primary">Get Started</a>
+        <a href="https://github.com/yetone/mirdb" class="hero-cta-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+      </div>
+    </section>
+
+    <!-- Feature Grid Section (Scenario 2) -->
+    <section id="features">
+      <h2 class="section-title">Why MirDB?</h2>
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 class="feature-title">Memcached Protocol</h3>
+          <p class="feature-description">Drop-in compatible with the memcached text protocol — existing clients work out of the box.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </div>
+          <h3 class="feature-title">Persistent Storage</h3>
+          <p class="feature-description">Data persists to disk via LSM-tree SSTables — survive restarts without losing your data.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </div>
+          <h3 class="feature-title">Skip-List Memtable</h3>
+          <p class="feature-description">In-memory skip-list data structure delivers fast writes with logarithmic lookup complexity.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <h3 class="feature-title">Automatic Compaction</h3>
+          <p class="feature-description">Minor and major compaction merge SSTables in the background, reclaiming space and improving read performance.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Quick Start Section (Scenario 3) -->
+    <section id="quick-start">
+      <!-- Code snippets, copy button -->
+    </section>
+
+    <!-- Documentation & Resources Section (Scenario 5) -->
+    <section id="resources">
+      <h2 class="section-title">Documentation &amp; Resources</h2>
+      <p class="resources-intro">Everything you need to get the most out of MirDB, from API references to community support.</p>
+      <div class="resources-grid">
+        <div class="resource-group">
+          <h3 class="resource-group-title">Documentation</h3>
+          <ul class="resource-list">
+            <li><a href="https://github.com/yetone/mirdb/blob/main/README.md" class="resource-link" target="_blank" rel="noopener noreferrer">API Documentation</a></li>
+            <li><a href="https://github.com/yetone/mirdb/blob/main/README.md#configuration" class="resource-link" target="_blank" rel="noopener noreferrer">Configuration Guide</a></li>
+            <li><a href="https://github.com/yetone/mirdb/blob/main/README.md#architecture" class="resource-link" target="_blank" rel="noopener noreferrer">Architecture Overview</a></li>
+          </ul>
+        </div>
+        <div class="resource-group">
+          <h3 class="resource-group-title">Project</h3>
+          <ul class="resource-list">
+            <li><a href="https://github.com/yetone/mirdb" class="resource-link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/yetone/mirdb/releases" class="resource-link" target="_blank" rel="noopener noreferrer">Release Notes</a></li>
+            <li><a href="https://github.com/yetone/mirdb/issues" class="resource-link" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
+            <li><a href="https://github.com/yetone/mirdb/blob/main/CONTRIBUTING.md" class="resource-link" target="_blank" rel="noopener noreferrer">Contribution Guidelines</a></li>
+          </ul>
+        </div>
+        <div class="resource-group">
+          <h3 class="resource-group-title">Community</h3>
+          <ul class="resource-list">
+            <li><a href="https://github.com/yetone/mirdb/discussions" class="resource-link community-link" target="_blank" rel="noopener noreferrer">GitHub Discussions</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 6) -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/yetone/mirdb" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/yetone/mirdb/discussions" target="_blank" rel="noopener noreferrer">Community</a>
+      </div>
+      <div class="copyright">
+        <p>&copy; <span id="copyright-year">2026</span> MirDB. All rights reserved.</p>
+      </div>
+    </div>
+    <script>
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    </script>
+  </footer>
+</body>
+</html>

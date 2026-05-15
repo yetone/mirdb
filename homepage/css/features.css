@@ -1,0 +1,95 @@
+/*
+ * Feature grid section styles for MirDB homepage.
+ * Owner: Scenario 2 - Feature Grid
+ *
+ * Defines:
+ * - #features section layout (centered, padding)
+ * - .features-grid: CSS grid container (responsive columns)
+ * - .feature-card: Card styling (background, border-radius, padding, shadow)
+ * - .feature-card:hover: Hover effect (transform, elevated shadow)
+ * - .feature-icon: Icon sizing and color
+ * - .feature-title: Card title typography
+ * - .feature-description: Card description typography
+ * - Transition: 200ms ease on hover effects
+ */
+
+/* Section layout */
+#features {
+  padding: var(--spacing-xl) var(--spacing-md);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* Grid layout */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: single column */
+@media (max-width: 767px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Feature card */
+.feature-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  cursor: default;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Feature icon */
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--spacing-md);
+  border-radius: 12px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* Feature title */
+.feature-title {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-xs);
+}
+
+/* Feature description */
+.feature-description {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin: 0;
+}
