@@ -11,10 +11,15 @@
     "lint:html": "html-validate index.html"
   },
   "devDependencies": {
-    "vitest": "^1.0.0",
-    "jsdom": "^24.0.0",
     "@playwright/test": "^1.40.0",
     "axe-core": "^4.8.0",
-    "eslint": "^8.0.0"
+    "chrome-launcher": "^1.2.1",
+    "eslint": "^8.0.0",
+    "jsdom": "^24.0.0",
+    "lighthouse": "^13.3.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }

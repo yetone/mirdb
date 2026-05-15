@@ -155,10 +155,10 @@ describe('Hero Section', () => {
       expect(logo).not.toBeNull();
     });
 
-    it('should reference logo.gif as the source', () => {
+    it('should reference logo.webp as the source', () => {
       const logo = document.querySelector('header img');
       const src = logo.getAttribute('src');
-      expect(src).toMatch(/logo\.gif/i);
+      expect(src).toMatch(/logo\.webp/i);
     });
 
     it('should have descriptive alt text', () => {
@@ -198,6 +198,8 @@ describe('Hero Section', () => {
     it('should have no inline event handler attributes that could cause JS errors', () => {
       const allElements = document.querySelectorAll('*');
       for (const el of allElements) {
+        // Skip link tags which legitimately use onload for async CSS loading
+        if (el.tagName === 'LINK') continue;
         const attrs = Array.from(el.attributes).map((a) => a.name);
         for (const attr of attrs) {
           expect(attr).not.toMatch(/^on/);

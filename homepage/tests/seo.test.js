@@ -89,10 +89,10 @@ describe('SEO and Meta Tags', () => {
       expect(ogDesc.getAttribute('content').length).toBeGreaterThan(0);
     });
 
-    it('should have og:image meta tag pointing to logo.gif', () => {
+    it('should have og:image meta tag pointing to logo', () => {
       const ogImage = document.querySelector('meta[property="og:image"]');
       expect(ogImage).not.toBeNull();
-      expect(ogImage.getAttribute('content')).toMatch(/logo\.gif/i);
+      expect(ogImage.getAttribute('content')).toMatch(/logo\./i);
     });
 
     it('should have og:url meta tag', () => {

@@ -11,22 +11,65 @@
   <!-- Open Graph tags -->
   <meta property="og:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
   <meta property="og:description" content="MirDB is a persistent key-value store that speaks the memcached protocol. Built with an LSM-tree storage engine, skip-list memtable, and automatic compaction.">
-  <meta property="og:image" content="https://mirdb.io/assets/logo.gif">
+  <meta property="og:image" content="https://mirdb.io/assets/logo.webp">
   <meta property="og:url" content="https://mirdb.io">
   <meta property="og:type" content="website">
   <!-- Twitter Card tags -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
   <meta name="twitter:description" content="MirDB is a persistent key-value store that speaks the memcached protocol. Built with an LSM-tree storage engine, skip-list memtable, and automatic compaction.">
-  <meta name="twitter:image" content="https://mirdb.io/assets/logo.gif">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/navigation.css">
-  <link rel="stylesheet" href="css/hero.css">
-  <link rel="stylesheet" href="css/features.css">
-  <link rel="stylesheet" href="css/quickstart.css">
-  <link rel="stylesheet" href="css/resources.css">
-  <link rel="stylesheet" href="css/footer.css">
-  <link rel="stylesheet" href="css/responsive.css">
+  <meta name="twitter:image" content="https://mirdb.io/assets/logo.webp">
+  <!-- Critical CSS inlined for performance -->
+  <style>
+    /* === Critical CSS: base.css === */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--color-primary:#2563eb;--color-primary-hover:#1d4ed8;--color-primary-contrast:#fff;--color-secondary:#64748b;--color-text:#1e293b;--color-text-muted:#64748b;--color-background:#fff;--color-surface:#f8fafc;--color-border:#e2e8f0;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;--font-mono:'SF Mono','Fira Code','Fira Mono',Menlo,Consolas,monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:2rem;--spacing-xl:4rem;--spacing-2xl:6rem;--max-width:1200px;--border-radius:8px}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-sans);color:var(--color-text);background-color:var(--color-background);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    a{color:var(--color-primary);text-decoration:none}
+    img{max-width:100%;height:auto;display:block}
+    .skip-link{position:absolute;top:-100%;left:var(--spacing-md);background:var(--color-primary);color:var(--color-primary-contrast);padding:var(--spacing-sm) var(--spacing-md);border-radius:var(--border-radius);z-index:1000}
+    .skip-link:focus{top:var(--spacing-sm)}
+
+    /* === Critical CSS: navigation.css === */
+    header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 var(--spacing-lg);background:var(--color-background);border-bottom:1px solid var(--color-border);z-index:100}
+    header .logo-link{display:flex;align-items:center;text-decoration:none}
+    nav{display:flex;align-items:center}
+    .nav-links{display:flex;list-style:none;gap:var(--spacing-lg);align-items:center}
+    .nav-link{color:var(--color-text);font-weight:500;font-size:0.95rem;text-decoration:none;padding:var(--spacing-xs) var(--spacing-sm);border-radius:var(--border-radius);transition:color 0.2s ease,background-color 0.2s ease}
+    .nav-link:hover{color:var(--color-primary);text-decoration:none}
+    .hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;width:44px;height:44px;background:none;border:none;cursor:pointer;padding:var(--spacing-sm);border-radius:var(--border-radius)}
+    .hamburger-line{display:block;width:22px;height:2px;background:var(--color-text);border-radius:2px;transition:transform 0.3s ease,opacity 0.3s ease}
+    .hamburger-line+.hamburger-line{margin-top:5px}
+    .hamburger[aria-expanded="true"] .hamburger-line:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger[aria-expanded="true"] .hamburger-line:nth-child(2){opacity:0}
+    .hamburger[aria-expanded="true"] .hamburger-line:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mobile-menu{position:fixed;top:64px;left:0;right:0;bottom:0;background:var(--color-background);z-index:99;padding:var(--spacing-lg);display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease}
+    .mobile-menu.open{transform:translateX(0)}
+    .mobile-menu .nav-links{flex-direction:column;gap:0}
+    .mobile-menu .nav-link{display:block;padding:var(--spacing-md) 0;font-size:1.125rem;border-bottom:1px solid var(--color-border)}
+    @media (max-width:767px){nav>.nav-links{display:none}.hamburger{display:flex}}
+    @media (min-width:768px){.mobile-menu{display:none}}
+
+    /* === Critical CSS: hero.css === */
+    #hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:80vh;padding:var(--spacing-2xl) var(--spacing-lg);max-width:var(--max-width);margin:0 auto}
+    .hero-headline{font-size:3rem;font-weight:800;line-height:1.15;color:var(--color-text);max-width:800px;margin-bottom:var(--spacing-lg);letter-spacing:-0.025em}
+    .hero-subheadline{font-size:1.25rem;line-height:1.6;color:var(--color-text-muted);max-width:640px;margin-bottom:var(--spacing-xl)}
+    .hero-cta-group{display:flex;align-items:center;gap:var(--spacing-md);flex-wrap:wrap;justify-content:center}
+    .hero-cta-primary{display:inline-flex;align-items:center;justify-content:center;padding:0.875rem 2rem;font-size:1.125rem;font-weight:600;color:var(--color-primary-contrast);background-color:var(--color-primary);border:2px solid var(--color-primary);border-radius:var(--border-radius);text-decoration:none;transition:background-color 200ms ease,transform 200ms ease,box-shadow 200ms ease;cursor:pointer}
+    .hero-cta-primary:hover{background-color:var(--color-primary-hover);border-color:var(--color-primary-hover);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,0.3);text-decoration:none}
+    .hero-cta-secondary{display:inline-flex;align-items:center;justify-content:center;padding:0.875rem 2rem;font-size:1.125rem;font-weight:600;color:var(--color-text);background-color:transparent;border:2px solid var(--color-border);border-radius:var(--border-radius);text-decoration:none;transition:border-color 200ms ease,color 200ms ease,background-color 200ms ease;cursor:pointer}
+    .hero-cta-secondary:hover{border-color:var(--color-text);color:var(--color-text);text-decoration:none}
+    .hero-logo{width:48px;height:48px;object-fit:contain}
+    @media (max-width:768px){.hero-headline{font-size:2rem}.hero-subheadline{font-size:1.0625rem}#hero{min-height:70vh;padding:var(--spacing-xl) var(--spacing-md)}.hero-cta-group{flex-direction:column;width:100%}.hero-cta-primary,.hero-cta-secondary{width:100%}}
+  </style>
+  <!-- Non-critical CSS loaded asynchronously -->
+  <link rel="stylesheet" href="css/features.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/quickstart.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/resources.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/footer.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/responsive.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="css/features.css"><link rel="stylesheet" href="css/quickstart.css"><link rel="stylesheet" href="css/resources.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/responsive.css"></noscript>
   <!-- Scripts loaded with defer for performance -->
   <script src="js/navigation.js" defer></script>
   <script src="js/copy-code.js" defer></script>
@@ -38,7 +81,7 @@
   <!-- Header with logo and navigation (Scenario 1 + Scenario 4) -->
   <header>
     <a href="/" class="logo-link" aria-label="MirDB Home">
-      <img class="hero-logo" src="assets/logo.gif" alt="MirDB Logo - Persistent Key-Value Store" width="48" height="48">
+      <img class="hero-logo" src="assets/logo.webp" alt="MirDB Logo - Persistent Key-Value Store" width="48" height="48" fetchpriority="high">
     </a>
     <nav aria-label="Main navigation">
       <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
