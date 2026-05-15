@@ -56,7 +56,7 @@ footer {
 .footer-links a:hover {
   opacity: 1;
   text-decoration: underline;
-  color: #ffffff;
+  color: var(--color-primary-contrast);
 }
 
 .footer-links a:focus-visible {

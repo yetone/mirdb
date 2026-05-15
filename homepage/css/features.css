@@ -15,25 +15,16 @@
 
 /* Section layout */
 #features {
-  padding: var(--spacing-xl, 64px) var(--spacing-md, 24px);
-  max-width: var(--max-width, 1200px);
+  padding: var(--spacing-xl) var(--spacing-md);
+  max-width: var(--max-width);
   margin: 0 auto;
-}
-
-.section-title {
-  text-align: center;
-  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--color-text, #1a1a2e);
-  margin-bottom: var(--spacing-xl, 48px);
 }
 
 /* Grid layout */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg, 32px);
+  gap: var(--spacing-lg);
 }
 
 @media (min-width: 1024px) {
@@ -42,12 +33,26 @@
   }
 }
 
+/* Tablet: 2 columns */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: single column */
+@media (max-width: 767px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Feature card */
 .feature-card {
-  background: var(--color-surface, #ffffff);
-  border: 1px solid var(--color-border, #e2e8f0);
-  border-radius: var(--border-radius, 12px);
-  padding: var(--spacing-lg, 32px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
   text-align: center;
   transition: transform 200ms ease, box-shadow 200ms ease;
   cursor: default;
@@ -65,40 +70,26 @@
   justify-content: center;
   width: 56px;
   height: 56px;
-  margin: 0 auto var(--spacing-md, 16px);
+  margin: 0 auto var(--spacing-md);
   border-radius: 12px;
-  background: var(--color-primary-light, #eef2ff);
-  color: var(--color-primary, #4f46e5);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 /* Feature title */
 .feature-title {
-  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  font-family: var(--font-sans);
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text, #1a1a2e);
-  margin: 0 0 var(--spacing-xs, 8px);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-xs);
 }
 
 /* Feature description */
 .feature-description {
-  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  font-family: var(--font-sans);
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: var(--color-text-muted, #64748b);
+  color: var(--color-text-muted);
   margin: 0;
-}
-
-/* Tablet: 2 columns */
-@media (max-width: 1023px) and (min-width: 768px) {
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile: single column */
-@media (max-width: 767px) {
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
 }
