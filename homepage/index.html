@@ -25,14 +25,21 @@
 
   <!-- Header with logo and navigation (Scenario 1 + Scenario 4) -->
   <header>
-    <!-- Logo (Scenario 1) -->
+    <a href="/" class="logo-link" aria-label="MirDB Home">
+      <img class="hero-logo" src="assets/logo.gif" alt="MirDB Logo - Persistent Key-Value Store" width="48" height="48">
+    </a>
     <!-- Navigation (Scenario 4) -->
   </header>
 
   <main id="main-content">
     <!-- Hero Section (Scenario 1) -->
     <section id="hero">
-      <!-- Headline, subheadline, CTAs -->
+      <h1 class="hero-headline">The Persistent Key-Value Store with Memcached Protocol</h1>
+      <p class="hero-subheadline">MirDB is a persistent key-value store that speaks the memcached protocol, providing a drop-in replacement for existing memcached deployments with durable storage that survives restarts.</p>
+      <div class="hero-cta-group">
+        <a href="#quick-start" class="hero-cta-primary">Get Started</a>
+        <a href="https://github.com/yetone/mirdb" class="hero-cta-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+      </div>
     </section>
 
     <!-- Feature Grid Section (Scenario 2) -->

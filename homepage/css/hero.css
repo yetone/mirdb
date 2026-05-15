@@ -1,4 +1,173 @@
 /*
  * Hero section styles for MirDB homepage.
  * Owner: Scenario 1 - Hero Section
+ *
+ * Expected styles:
+ * - #hero section layout (centered, full viewport height or large min-height)
+ * - .hero-headline: h1 styling (bold, large font, centered)
+ * - .hero-subheadline: paragraph styling (medium font, muted color, max-width for readability)
+ * - .hero-cta-primary: Primary button (contrasting background, large padding, border-radius)
+ * - .hero-cta-secondary: Secondary link/button (outline or text style)
+ * - .hero-logo: Logo image sizing and positioning
+ * - Responsive adjustments for hero text sizes
+ * - Hover/active/focus states for CTAs
  */
+
+/* Hero Section Layout */
+#hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 80vh;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* Headline */
+.hero-headline {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-text);
+  max-width: 800px;
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: -0.025em;
+}
+
+/* Subheadline */
+.hero-subheadline {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 640px;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* CTA Group */
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Primary CTA Button */
+.hero-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-primary-contrast);
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  cursor: pointer;
+}
+
+.hero-cta-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  text-decoration: none;
+}
+
+.hero-cta-primary:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.hero-cta-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Secondary CTA Link */
+.hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background-color: transparent;
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease;
+  cursor: pointer;
+}
+
+.hero-cta-secondary:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.hero-cta-secondary:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Logo */
+.hero-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-link:hover {
+  text-decoration: none;
+}
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-headline {
+    font-size: 2rem;
+  }
+
+  .hero-subheadline {
+    font-size: 1.0625rem;
+  }
+
+  #hero {
+    min-height: 70vh;
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    width: 100%;
+  }
+}
