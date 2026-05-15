@@ -19,6 +19,11 @@
   <meta name="twitter:title" content="MirDB - Persistent Key-Value Store with Memcached Protocol">
   <meta name="twitter:description" content="MirDB is a persistent key-value store that speaks the memcached protocol. Built with an LSM-tree storage engine, skip-list memtable, and automatic compaction.">
   <meta name="twitter:image" content="https://mirdb.io/assets/logo.webp">
+  <!-- Preconnect to external domains for faster handshake -->
+  <link rel="preconnect" href="https://github.com" crossorigin>
+  <link rel="dns-prefetch" href="https://github.com">
+  <!-- Preload hero logo to optimize LCP -->
+  <link rel="preload" href="assets/logo.webp" as="image" fetchpriority="high">
   <!-- Critical CSS inlined for performance -->
   <style>
     /* === Critical CSS: base.css === */
