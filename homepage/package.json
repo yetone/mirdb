@@ -1,0 +1,18 @@
+{
+    "name": "mirdb-homepage",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "description": "Static homepage for the MirDB project",
+    "scripts": {
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "serve": "http-server . -p 5173 -c-1",
+        "e2e": "echo 'playwright tests run separately' && exit 0"
+    },
+    "devDependencies": {
+        "vitest": "^1.6.0",
+        "jsdom": "^24.0.0",
+        "@vitest/coverage-v8": "^1.6.0"
+    }
+}
