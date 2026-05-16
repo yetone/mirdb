@@ -3,6 +3,7 @@ import { attachSignupHandler } from "../components/cta-signup/cta-signup.js";
 import { attachLoginHandler } from "../components/cta-login/cta-login.js";
 import { renderFeatures } from "../components/features/features.js";
 import { FEATURES } from "../components/features/features.data.js";
+import { initFooter } from "../components/footer/footer.js";
 
 async function bootstrap() {
     await loadAllComponents(document);
@@ -18,6 +19,11 @@ async function bootstrap() {
     const featuresSlot = document.querySelector('[data-component="features"] .features__grid');
     if (featuresSlot) {
         renderFeatures(featuresSlot, FEATURES);
+    }
+
+    const footerSlot = document.querySelector('[data-component="footer"]');
+    if (footerSlot) {
+        initFooter(footerSlot);
     }
 
     document.dispatchEvent(new CustomEvent("homepage:ready"));
