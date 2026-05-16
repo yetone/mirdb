@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" role="img" aria-label="Independent security audit completed badge">
+  <rect width="160" height="48" rx="8" fill="#1f1f23"/>
+  <g>
+    <path d="M24 13l9 4v7c0 5-4 9-9 11-5-2-9-6-9-11v-7z" fill="none" stroke="#7aa2ff" stroke-width="2"/>
+    <path d="M20 24l3 3 6-7" stroke="#7aa2ff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="44" y="22" fill="#ffffff" font-family="system-ui,sans-serif" font-size="12" font-weight="700">SECURITY</text>
+  <text x="44" y="36" fill="#a0a0a8" font-family="system-ui,sans-serif" font-size="10">Independently audited</text>
+</svg>

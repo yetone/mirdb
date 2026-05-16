@@ -1,0 +1,40 @@
+.cta-signup,
+a.btn.btn--primary.cta-signup {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 150ms ease, transform 100ms ease, box-shadow 150ms ease;
+}
+
+.cta-signup:hover,
+.cta-signup:focus-visible {
+    background-color: #1d4ed8;
+}
+
+.cta-signup:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25);
+}
+
+.cta-signup:active {
+    transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cta-signup {
+        transition: none;
+    }
+    .cta-signup:active {
+        transform: none;
+    }
+}

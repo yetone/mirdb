@@ -1,0 +1,72 @@
+/**
+ * Theme tokens — Scenario 8.
+ * Defines CSS custom properties on :root[data-theme="light"] and
+ * :root[data-theme="dark"] (background, surface, text, primary, etc.).
+ * Honours prefers-color-scheme on first paint.
+ */
+
+/* ---------- Light theme (default) ---------- */
+:root,
+:root[data-theme="light"] {
+    --color-background: #ffffff;
+    --color-surface: #f8f9fa;
+    --color-surface-hover: #e9ecef;
+    --color-text: #1a1a1a;
+    --color-text-muted: #5a5a5a;
+    --color-primary: #2563eb;
+    --color-primary-hover: #1d4ed8;
+    --color-border: #d1d5db;
+    --color-focus-ring: #2563eb;
+    --color-cta-bg: #2563eb;
+    --color-cta-text: #ffffff;
+    --color-cta-hover: #1d4ed8;
+    --color-secondary-bg: transparent;
+    --color-secondary-text: #2563eb;
+    --color-secondary-border: #2563eb;
+}
+
+/* ---------- Dark theme ---------- */
+:root[data-theme="dark"] {
+    --color-background: #0f1117;
+    --color-surface: #1a1d27;
+    --color-surface-hover: #252a38;
+    --color-text: #e8e8e8;
+    --color-text-muted: #9ca3af;
+    --color-primary: #60a5fa;
+    --color-primary-hover: #93c5fd;
+    --color-border: #374151;
+    --color-focus-ring: #60a5fa;
+    --color-cta-bg: #60a5fa;
+    --color-cta-text: #0f1117;
+    --color-cta-hover: #93c5fd;
+    --color-secondary-bg: transparent;
+    --color-secondary-text: #60a5fa;
+    --color-secondary-border: #60a5fa;
+}
+
+/* Default data-theme based on system preference before JS runs */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --color-background: #0f1117;
+        --color-surface: #1a1d27;
+        --color-surface-hover: #252a38;
+        --color-text: #e8e8e8;
+        --color-text-muted: #9ca3af;
+        --color-primary: #60a5fa;
+        --color-primary-hover: #93c5fd;
+        --color-border: #374151;
+        --color-focus-ring: #60a5fa;
+        --color-cta-bg: #60a5fa;
+        --color-cta-text: #0f1117;
+        --color-cta-hover: #93c5fd;
+        --color-secondary-bg: transparent;
+        --color-secondary-text: #60a5fa;
+        --color-secondary-border: #60a5fa;
+    }
+}
+
+/* Apply theme colors to body by default */
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
