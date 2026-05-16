@@ -4,12 +4,18 @@ import { attachLoginHandler } from "../components/cta-login/cta-login.js";
 import { renderFeatures } from "../components/features/features.js";
 import { FEATURES } from "../components/features/features.data.js";
 import { initNavigation } from "../components/navigation/navigation.js";
+import { initThemeToggle } from "../components/theme-toggle/theme-toggle.js";
 import { initFooter } from "../components/footer/footer.js";
 
 async function bootstrap() {
     await loadAllComponents(document);
 
     initNavigation();
+
+    const themeToggleButton = document.querySelector('.theme-toggle');
+    if (themeToggleButton) {
+        initThemeToggle(themeToggleButton);
+    }
 
     document.querySelectorAll('[data-component="cta-signup"]').forEach(slot => {
         attachSignupHandler(slot);
