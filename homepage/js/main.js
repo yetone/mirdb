@@ -3,10 +3,13 @@ import { attachSignupHandler } from "../components/cta-signup/cta-signup.js";
 import { attachLoginHandler } from "../components/cta-login/cta-login.js";
 import { renderFeatures } from "../components/features/features.js";
 import { FEATURES } from "../components/features/features.data.js";
+import { initNavigation } from "../components/navigation/navigation.js";
 import { initFooter } from "../components/footer/footer.js";
 
 async function bootstrap() {
     await loadAllComponents(document);
+
+    initNavigation();
 
     document.querySelectorAll('[data-component="cta-signup"]').forEach(slot => {
         attachSignupHandler(slot);

@@ -1,1 +1,104 @@
-/* Responsive breakpoints placeholder (Scenario 7 owner). */
+/*
+ * Responsive breakpoints — Scenario 7 (PRD REQ-6).
+ *
+ * Layout strategy: mobile-first. Base rules (outside @media blocks) describe
+ * the mobile presentation. Progressive @media (min-width: ...) blocks layer in
+ * tablet and desktop refinements.
+ *
+ * Breakpoint scale:
+ *   - mobile  : 0     .. 599px   (no @media — default rules)
+ *   - tablet  : 600px .. 1023px  (@media (min-width: 600px))
+ *   - desktop : 1024px and up    (@media (min-width: 1024px))
+ *
+ * Selectors targeted:
+ *   - .features__grid               (Features section grid, REQ-3 / REQ-6)
+ *   - .site-header__burger          (Mobile nav toggle, REQ-5 / REQ-6)
+ *   - #primary-nav                  (Primary nav drawer, REQ-7)
+ *   - .container, .grid             (utility classes from base.css)
+ */
+
+/* -----------------------------------------------------------
+ * Mobile (default — applies to all viewports < 600px)
+ * --------------------------------------------------------- */
+
+.features__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.site-header__burger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 1px solid var(--color-border, #e2e2e8);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#primary-nav {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 100%;
+    max-width: 320px;
+    background: var(--color-bg, #ffffff);
+    transition: left 0.2s ease;
+}
+
+#primary-nav[aria-expanded="true"],
+.site-header__burger[aria-expanded="true"] + #primary-nav {
+    left: 0;
+}
+
+.container {
+    width: 100%;
+    padding-inline: 1rem;
+}
+
+/* -----------------------------------------------------------
+ * Tablet (>= 600px)
+ * --------------------------------------------------------- */
+
+@media (min-width: 600px) {
+    .features__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+
+    .container {
+        padding-inline: 1.5rem;
+    }
+}
+
+/* -----------------------------------------------------------
+ * Desktop (>= 1024px)
+ * --------------------------------------------------------- */
+
+@media (min-width: 1024px) {
+    .features__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2rem;
+    }
+
+    .site-header__burger {
+        display: none;
+    }
+
+    #primary-nav {
+        position: static;
+        left: auto;
+        max-width: none;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        background: transparent;
+    }
+
+    .container {
+        padding-inline: 2rem;
+    }
+}
