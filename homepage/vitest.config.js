@@ -6,5 +6,6 @@ export default defineConfig({
         globals: false,
         setupFiles: ["./tests/setup.js"],
         include: ["tests/**/*.test.js"],
+        exclude: ["tests/cross-browser/**", "node_modules/**"],
     },
 });
