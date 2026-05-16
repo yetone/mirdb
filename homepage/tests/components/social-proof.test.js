@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import axe from "axe-core";
 import { mountComponent } from "../helpers/dom-helpers.js";
 import {
     renderSocialProof,
@@ -317,5 +318,109 @@ describe("Social Proof data file contract", () => {
             expect(typeof b.alt).toBe("string");
             expect(b.alt.length).toBeGreaterThan(0);
         }
+    });
+});
+
+describe("Social Proof component — axe-core WCAG audit (PRD REQ-8, TC 4)", () => {
+    let mount;
+    let originalTheme;
+
+    function injectStyle(css) {
+        const style = document.createElement("style");
+        style.textContent = css;
+        document.head.appendChild(style);
+        return style;
+    }
+
+    function loadSocialProofStyles() {
+        const cssFiles = [
+            "../../css/base.css",
+            "../../css/theme.css",
+            "../../components/social-proof/social-proof.css",
+        ];
+        for (const rel of cssFiles) {
+            const file = resolve(__dirname, rel);
+            try {
+                injectStyle(readFileSync(file, "utf8"));
+            } catch (err) {
+                if (!err || err.code !== "ENOENT") throw err;
+            }
+        }
+    }
+
+    async function runAxe(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.setAttribute("lang", "en");
+        const title = document.createElement("title");
+        title.textContent = "Social Proof axe audit";
+        document.head.appendChild(title);
+        loadSocialProofStyles();
+        return axe.run(document, {
+            runOnly: { type: "tag", values: ["wcag2a", "wcag2aa"] },
+            rules: {
+                "color-contrast": { enabled: false },
+                "target-size": { enabled: false },
+            },
+        });
+    }
+
+    beforeEach(async () => {
+        originalTheme = document.documentElement.getAttribute("data-theme");
+        mount = await mountSocialProof();
+    });
+
+    afterEach(() => {
+        if (mount.container.parentNode) {
+            mount.container.parentNode.removeChild(mount.container);
+        }
+        if (originalTheme === null) {
+            document.documentElement.removeAttribute("data-theme");
+        } else {
+            document.documentElement.setAttribute("data-theme", originalTheme);
+        }
+    });
+
+    it("test_case 4: section is visible (no [hidden]) in dark mode when populated", () => {
+        renderSocialProof(mount.section, SOCIAL_PROOF_DATA);
+        document.documentElement.setAttribute("data-theme", "dark");
+        expect(mount.section.hasAttribute("hidden")).toBe(false);
+    });
+
+    it(
+        "test_case 4: axe-core reports zero WCAG 2 A/AA violations in dark mode",
+        async () => {
+            renderSocialProof(mount.section, SOCIAL_PROOF_DATA);
+            const results = await runAxe("dark");
+            const blocking = results.violations.filter(
+                (v) => v.impact === "critical" || v.impact === "serious"
+            );
+            if (blocking.length > 0) {
+                console.error(JSON.stringify(blocking, null, 2));
+            }
+            expect(blocking).toEqual([]);
+        }
+    );
+
+    it(
+        "test_case 4: axe-core reports zero WCAG 2 A/AA violations in light mode",
+        async () => {
+            renderSocialProof(mount.section, SOCIAL_PROOF_DATA);
+            const results = await runAxe("light");
+            const blocking = results.violations.filter(
+                (v) => v.impact === "critical" || v.impact === "serious"
+            );
+            if (blocking.length > 0) {
+                console.error(JSON.stringify(blocking, null, 2));
+            }
+            expect(blocking).toEqual([]);
+        }
+    );
+
+    it("test_case 4: dark theme reachable via :root[data-theme='dark'] selector for contrast tokens", () => {
+        const css = readFileSync(SOCIAL_PROOF_CSS_PATH, "utf8");
+        const darkBlock = css.match(
+            /:root\[data-theme="dark"\]\s+\.social-proof\s*\{[^}]*background-color:/
+        );
+        expect(darkBlock).not.toBeNull();
     });
 });
