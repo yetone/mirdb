@@ -3,3 +3,7 @@ node_modules/
 coverage/
 *.log
 .DS_Store
+test-results/
+playwright-report/
+blob-report/
+.playwright/

@@ -19,10 +19,12 @@
     <script type="module" src="js/main.js"></script>
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <header>
         <div data-component="navigation"></div>
     </header>
-    <main>
+    <main id="main" tabindex="-1">
+        <h1 class="visually-hidden">MirDB &mdash; Fast, embeddable key-value store</h1>
         <section data-component="hero"></section>
         <section data-component="features"></section>
         <section data-component="social-proof"></section>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--
+  Cross-browser test fixture - Scenario 12.
+
+  Self-contained page used by tests/cross-browser/cross-browser.test.js.
+  Embeds the markup, styles, and behaviour required to validate the
+  homepage's NFR-2 cross-browser contract (chromium / webkit / firefox)
+  without depending on components that may not yet be built in parallel
+  scenario branches.
+
+  The page intentionally includes:
+    - A real .hero section with a single h1 (PRD REQ-1)
+    - The actual cta-signup component markup + behaviour
+    - The actual theme-toggle component markup + behaviour
+  so that engine-specific differences in layout, navigation, and
+  storage APIs surface during the smoke flow.
+-->
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirDB - Cross-Browser Test Fixture</title>
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="../../css/theme.css">
+    <link rel="stylesheet" href="../../components/cta-signup/cta-signup.css">
+    <link rel="stylesheet" href="../../components/cta-login/cta-login.css">
+    <link rel="stylesheet" href="../../components/theme-toggle/theme-toggle.css">
+    <style>
+        /* Minimal hero styles - this fixture is owned by scenario 12 and
+           does not import from the hero component which may not exist yet. */
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--color-bg, #ffffff);
+            color: var(--color-text, #111111);
+        }
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            margin: 0 0 1rem;
+        }
+        .hero p {
+            font-size: 1.125rem;
+            margin: 0 0 2rem;
+            opacity: 0.85;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0 2rem 4rem;
+        }
+        [data-theme="dark"] body,
+        :root[data-theme="dark"] body {
+            background: #0c0f12;
+            color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section class="hero" aria-labelledby="hero-headline">
+            <h1 id="hero-headline">MirDB - Fast, embeddable key-value store</h1>
+            <p class="hero__description">A high-performance LSM-tree storage engine for modern applications, with memcached compatibility built in.</p>
+            <div class="hero__cta-slot" data-cta-slot="signup"></div>
+        </section>
+        <div class="controls">
+            <div data-cta-slot="login"></div>
+            <div data-cta-slot="theme-toggle"></div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { attachSignupHandler } from "../../components/cta-signup/cta-signup.js";
+        import { attachLoginHandler } from "../../components/cta-login/cta-login.js";
+        import { initThemeToggle } from "../../components/theme-toggle/theme-toggle.js";
+
+        async function inject(slotName, componentName) {
+            const slot = document.querySelector(`[data-cta-slot="${slotName}"]`);
+            if (!slot) return null;
+            const response = await fetch(`../../components/${componentName}/${componentName}.html`);
+            if (!response.ok) {
+                throw new Error(`Fixture failed to load ${componentName}: ${response.status}`);
+            }
+            slot.innerHTML = await response.text();
+            return slot;
+        }
+
+        (async () => {
+            try {
+                const signupSlot = await inject("signup", "cta-signup");
+                if (signupSlot) attachSignupHandler(signupSlot);
+
+                const loginSlot = await inject("login", "cta-login");
+                if (loginSlot) attachLoginHandler(loginSlot);
+
+                const toggleSlot = await inject("theme-toggle", "theme-toggle");
+                const toggleButton = toggleSlot && toggleSlot.querySelector(".theme-toggle");
+                if (toggleButton) initThemeToggle(toggleButton);
+
+                document.documentElement.dataset.fixtureReady = "true";
+                document.dispatchEvent(new CustomEvent("fixture:ready"));
+            } catch (error) {
+                document.documentElement.dataset.fixtureError = String(error.message || error);
+                document.dispatchEvent(new CustomEvent("fixture:error", { detail: error }));
+            }
+        })();
+    </script>
+</body>
+</html>

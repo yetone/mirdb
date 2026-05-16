@@ -8,11 +8,13 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "serve": "http-server . -p 5173 -c-1",
-        "e2e": "echo 'playwright tests run separately' && exit 0"
+        "e2e": "playwright test"
     },
     "devDependencies": {
         "@playwright/test": "^1.60.0",
         "@vitest/coverage-v8": "^1.6.0",
+        "axe-core": "^4.11.4",
+        "http-server": "^14.1.1",
         "jsdom": "^24.0.0",
         "vitest": "^1.6.0"
     }
