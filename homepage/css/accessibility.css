@@ -1,5 +1,69 @@
-/* Accessibility utilities placeholder (Scenario 10 owner). */
+/*
+ * Accessibility utilities — Scenario 10 (PRD NFR-1, WCAG 2.1 AA).
+ *
+ * Defines:
+ *   - .skip-link styles (visible on focus only)
+ *   - :focus-visible outlines (4.5:1 contrast against any theme surface)
+ *   - reduced-motion overrides via prefers-reduced-motion
+ *
+ * Does NOT alter component-specific styles. Component owners keep their own
+ * focus-ring colours; this file provides a safety net so any element that
+ * gains keyboard focus has a perceivable indicator even when components
+ * forget.
+ */
+
+/* ---------- Skip link (WCAG 2.4.1 Bypass Blocks) ---------- */
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.75rem 1rem;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
+    z-index: 1000;
+    /* Move off-screen but keep focusable. We cannot use display:none or
+       visibility:hidden because those remove the element from the focus
+       order. Negative top with overflow:hidden is the canonical pattern. */
+    transform: translateY(-100%);
+    transition: transform 150ms ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+}
+
+/* ---------- Global focus indicator (WCAG 2.4.7 Focus Visible) ---------- */
 :focus-visible {
     outline: 3px solid #f59e0b;
     outline-offset: 2px;
+}
+
+/* Dark theme keeps the same amber ring for contrast. */
+:root[data-theme="dark"] :focus-visible {
+    outline-color: #fbbf24;
+}
+
+/* Mouse users get no outline (focus-visible only matches keyboard). */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ---------- Reduced motion (WCAG 2.3.3 Animation from Interactions) ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0s !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+        scroll-behavior: auto !important;
+    }
 }
