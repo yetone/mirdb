@@ -29,17 +29,17 @@ export const SOCIAL_PROOF_DATA = {
     ],
     badges: [
         {
-            src: "images/badges/rust-foundation.svg",
+            src: "images/social-proof/rust-foundation.svg",
             alt: "Rust Foundation member badge",
             name: "Rust Foundation",
         },
         {
-            src: "images/badges/oss-100.svg",
+            src: "images/social-proof/oss-100.svg",
             alt: "Open Source 100% certified badge",
             name: "Open Source 100",
         },
         {
-            src: "images/badges/security-audit.svg",
+            src: "images/social-proof/security-audit.svg",
             alt: "Independent security audit completed badge",
             name: "Security Audited",
         },

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" role="img" aria-label="Rust Foundation member badge">
+  <rect width="160" height="48" rx="8" fill="#1f1f23"/>
+  <g fill="#f74c00">
+    <circle cx="24" cy="24" r="10" fill="none" stroke="#f74c00" stroke-width="2"/>
+    <path d="M24 18l3 4h-2v6h-2v-6h-2z"/>
+  </g>
+  <text x="44" y="22" fill="#ffffff" font-family="system-ui,sans-serif" font-size="12" font-weight="700">RUST</text>
+  <text x="44" y="36" fill="#a0a0a8" font-family="system-ui,sans-serif" font-size="10">Foundation member</text>
+</svg>

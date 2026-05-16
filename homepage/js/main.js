@@ -6,6 +6,8 @@ import { FEATURES } from "../components/features/features.data.js";
 import { initNavigation } from "../components/navigation/navigation.js";
 import { initThemeToggle } from "../components/theme-toggle/theme-toggle.js";
 import { initFooter } from "../components/footer/footer.js";
+import { renderSocialProof } from "../components/social-proof/social-proof.js";
+import { SOCIAL_PROOF_DATA } from "../components/social-proof/social-proof.data.js";
 
 async function bootstrap() {
     await loadAllComponents(document);
@@ -33,6 +35,11 @@ async function bootstrap() {
     const footerSlot = document.querySelector('[data-component="footer"]');
     if (footerSlot) {
         initFooter(footerSlot);
+    }
+
+    const socialProofSection = document.querySelector('[data-component="social-proof"] section.social-proof');
+    if (socialProofSection) {
+        renderSocialProof(socialProofSection, SOCIAL_PROOF_DATA);
     }
 
     document.dispatchEvent(new CustomEvent("homepage:ready"));

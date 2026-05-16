@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" role="img" aria-label="Open Source 100% certified badge">
+  <rect width="160" height="48" rx="8" fill="#0a3d62"/>
+  <g>
+    <circle cx="24" cy="24" r="11" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+    <path d="M20 24l3 3 5-6" stroke="#22c55e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="44" y="22" fill="#ffffff" font-family="system-ui,sans-serif" font-size="12" font-weight="700">100% OSS</text>
+  <text x="44" y="36" fill="#9fd0ff" font-family="system-ui,sans-serif" font-size="10">Apache 2.0 licensed</text>
+</svg>
