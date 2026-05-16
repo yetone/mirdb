@@ -1,5 +1,6 @@
 import { loadAllComponents } from "./component-loader.js";
 import { attachSignupHandler } from "../components/cta-signup/cta-signup.js";
+import { attachLoginHandler } from "../components/cta-login/cta-login.js";
 import { renderFeatures } from "../components/features/features.js";
 import { FEATURES } from "../components/features/features.data.js";
 
@@ -8,6 +9,10 @@ async function bootstrap() {
 
     document.querySelectorAll('[data-component="cta-signup"]').forEach(slot => {
         attachSignupHandler(slot);
+    });
+
+    document.querySelectorAll('[data-component="cta-login"]').forEach(slot => {
+        attachLoginHandler(slot);
     });
 
     const featuresSlot = document.querySelector('[data-component="features"] .features__grid');
