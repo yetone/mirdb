@@ -218,5 +218,29 @@ describe('Homepage performance and bundle size (NFR-1, NFR-3)', () => {
       );
       expect(blocking).toHaveLength(0);
     });
+
+    it('produces a production index.html with no synchronous <script> tags', () => {
+      // Ensures the Vite output remains free of blocking scripts: the entry
+      // chunk is emitted with type="module" (implicitly deferred) and no
+      // extra non-module/non-async/non-defer <script> tags are introduced
+      // by a future regression in the build configuration.
+      if (process.env.SKIP_BUILD === '1') return;
+      const indexHtml = path.join(DIST_DIR, 'index.html');
+      expect(fs.existsSync(indexHtml)).toBe(true);
+
+      const html = fs.readFileSync(indexHtml, 'utf-8');
+      const scriptTagMatcher = /<script\b[^>]*>/gi;
+      const offenders: string[] = [];
+      for (const match of html.matchAll(scriptTagMatcher)) {
+        const tag = match[0];
+        const isModule = /\btype\s*=\s*"module"/i.test(tag);
+        const isAsync = /\basync\b/i.test(tag);
+        const isDefer = /\bdefer\b/i.test(tag);
+        if (!isModule && !isAsync && !isDefer) {
+          offenders.push(tag);
+        }
+      }
+      expect(offenders).toEqual([]);
+    });
   });
 });
