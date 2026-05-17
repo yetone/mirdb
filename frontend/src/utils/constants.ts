@@ -41,6 +41,9 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
+  DASHBOARD: '/dashboard',
+  STATS: '/stats/:shortCode',
+  SETTINGS: '/settings',
 } as const;
 
 export const THEMES = ['light', 'dark', 'cyberpunk', 'synthwave'] as const;
