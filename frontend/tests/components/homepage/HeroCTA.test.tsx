@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import HeroCTA from '../../../src/components/homepage/HeroCTA';
+import App from '../../../src/App';
 
 describe('HeroCTA', () => {
   it('renders exactly two CTA links', () => {
@@ -103,5 +104,22 @@ describe('HeroCTA', () => {
       expect(href).toBeDefined();
       expect(allowedRoutes).toContain(href);
     }
+  });
+
+  it('integration: clicking the Register CTA inside <App /> navigates to /register', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    const registerButton = screen.getByRole('link', {
+      name: /register|get started|sign up/i,
+    });
+    await user.click(registerButton);
+
+    expect(await screen.findByTestId('register-page')).toBeInTheDocument();
   });
 });

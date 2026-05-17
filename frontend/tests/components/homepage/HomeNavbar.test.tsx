@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import HomeNavbar from '../../../src/components/homepage/HomeNavbar';
+import App from '../../../src/App';
 
 describe('HomeNavbar', () => {
   it('renders the MirDB brand link pointing to /', () => {
@@ -104,5 +105,21 @@ describe('HomeNavbar', () => {
     await user.click(brandLink);
 
     expect(brandLink).toHaveAttribute('href', '/');
+  });
+
+  it('integration: clicking the Login link in the navbar navigates to /login inside <App />', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    const nav = screen.getByRole('navigation', { name: /main navigation/i });
+    const loginLink = within(nav).getByRole('link', { name: /login|sign in/i });
+    await user.click(loginLink);
+
+    expect(await screen.findByTestId('login-page')).toBeInTheDocument();
   });
 });
