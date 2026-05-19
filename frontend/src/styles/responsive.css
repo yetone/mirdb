@@ -1,0 +1,251 @@
+/**
+ * Responsive design rules and breakpoint tokens.
+ * Owner: Scenario 5 - Responsive Layout Across Viewports
+ *
+ * Declares CSS custom properties and utility classes for:
+ * - Mobile (<768px), tablet (768-1023px), desktop (>=1024px)
+ * - Minimum tap targets (44x44px)
+ * - Vertical stacking helpers for feature cards on mobile
+ * - Navbar responsive behavior (hamburger menu)
+ * - Horizontal overflow prevention
+ */
+
+/* ── Breakpoint Tokens ─────────────────────────────────────────────── */
+
+:root {
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+
+  --tap-target-min: 44px;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+}
+
+/* ── Global Overflow Prevention ────────────────────────────────────── */
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+.homepage-container {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* ── Tap Target Utilities ──────────────────────────────────────────── */
+
+.tap-target {
+  min-width: var(--tap-target-min);
+  min-height: var(--tap-target-min);
+}
+
+/* All interactive elements should meet minimum touch target */
+button,
+[role="button"],
+a,
+input[type="submit"],
+input[type="button"] {
+  min-width: var(--tap-target-min);
+  min-height: var(--tap-target-min);
+}
+
+/* ── Navbar Responsive ─────────────────────────────────────────────── */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  position: relative;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.navbar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-target-min);
+  height: var(--tap-target-min);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.navbar-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.navbar-menu {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu.is-open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: inherit;
+  padding: var(--spacing-sm);
+  gap: var(--spacing-xs);
+  z-index: 50;
+}
+
+.navbar-menu a {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  text-decoration: none;
+}
+
+/* Tablet and up: full navbar */
+@media (min-width: 768px) {
+  .navbar-menu {
+    display: flex;
+    flex-direction: row;
+    position: static;
+    gap: var(--spacing-md);
+    align-items: center;
+  }
+
+  .navbar-toggle {
+    display: none;
+  }
+}
+
+/* ── Feature Cards Responsive Layout ───────────────────────────────── */
+
+.feature-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feature-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-md);
+}
+
+/* Tablet: 2-column grid */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .feature-cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .feature-card {
+    width: auto;
+  }
+}
+
+/* Desktop: horizontal row with equal spacing */
+@media (min-width: 1024px) {
+  .feature-cards-container {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card {
+    flex: 1 1 0;
+    max-width: 320px;
+    width: auto;
+  }
+}
+
+/* ── Hero Section Responsive ───────────────────────────────────────── */
+
+.hero-section {
+  padding: var(--spacing-lg) var(--spacing-sm);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+}
+
+/* ── CTA Section Responsive ────────────────────────────────────────── */
+
+.cta-section {
+  padding: var(--spacing-lg) var(--spacing-sm);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .cta-section {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+}
+
+/* ── Footer Responsive ─────────────────────────────────────────────── */
+
+.footer {
+  padding: var(--spacing-md) var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+}
+
+/* ── Container Max Widths ──────────────────────────────────────────── */
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1200px;
+  }
+}
