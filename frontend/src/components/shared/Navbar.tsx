@@ -3,6 +3,7 @@
  * Stub created by first builder; responsive behavior added by Scenario 5.
  */
 import React, { useState } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,6 +57,7 @@ export function Navbar() {
           <a href="/register" className="tap-target" data-testid="nav-link-register">Register</a>
         </li>
       </ul>
+      <ThemeToggle />
     </nav>
   );
 }
