@@ -6,6 +6,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { routes } from './router/routes';
 import { useRoutes } from 'react-router-dom';
 import './styles/globals.css';
+import './styles/responsive.css';
 
 function App() {
   return useRoutes(routes);
