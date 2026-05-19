@@ -1,6 +1,11 @@
 /**
  * Theme provider supporting all DaisyUI / Tailwind themes.
- * Created by first builder; owned by Scenario 6.
+ * Owner: Scenario 6 - Theme System Compatibility
+ *
+ * Expected exports:
+ * - ThemeProvider
+ * - useTheme(): { theme: Theme; setTheme: (t: Theme) => void }
+ * - Persists selection in localStorage
  */
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -17,11 +22,20 @@ const ThemeContext = createContext<ThemeContextValue>({
   setTheme: () => {},
 });
 
+function isValidTheme(value: string | null): value is Theme {
+  return value !== null && (SUPPORTED_THEMES as readonly string[]).includes(value);
+}
+
+function getInitialTheme(): Theme {
+  if (typeof window === 'undefined') {
+    return DEFAULT_THEME;
+  }
+  const stored = localStorage.getItem('theme');
+  return isValidTheme(stored) ? stored : DEFAULT_THEME;
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    const stored = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
-    return (stored as Theme) || DEFAULT_THEME;
-  });
+  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
