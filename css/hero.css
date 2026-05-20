@@ -2,5 +2,156 @@
  * Hero Section Styles
  * Owner: Scenario 1 - Hero Section
  *
- * Stub for hero section styles.
+ * Styles for:
+ * - #hero section layout
+ * - Logo sizing and positioning
+ * - Tagline typography
+ * - CTA button styling (primary and secondary)
+ * - Background gradient/effects
+ * - Subtext styling
  */
+
+/* Hero Section */
+#hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  overflow: hidden;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+/* Background gradient effect */
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    #f0f9ff 0%,
+    #e0f2fe 25%,
+    #dbeafe 50%,
+    #ede9fe 75%,
+    #faf5ff 100%
+  );
+  z-index: 0;
+}
+
+/* Decorative radial glow */
+.hero-background::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    rgba(37, 99, 235, 0.08) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Hero content */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+/* Logo */
+.hero-logo {
+  width: 120px;
+  height: auto;
+  margin: 0 auto var(--spacing-xl);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+}
+
+/* Tagline */
+.hero-tagline {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+/* Subtext */
+.hero-subtext {
+  font-size: 1.25rem;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-xl);
+  font-weight: 400;
+}
+
+/* CTA Group */
+.hero-cta-group {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* CTA Buttons */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  min-width: 160px;
+}
+
+/* Primary CTA */
+.hero-cta-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+.hero-cta-primary:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-cta-primary:focus {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/* Secondary CTA */
+.hero-cta-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.hero-cta-secondary:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-cta-secondary:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
