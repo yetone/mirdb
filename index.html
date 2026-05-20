@@ -213,7 +213,69 @@
         </div>
       </div>
     </section>
-    <section id="roadmap"><!-- Scenario 5: Status & Roadmap --></section>
+    <section id="roadmap">
+      <div class="container">
+        <h2 class="section-title">Status &amp; Roadmap</h2>
+        <div class="roadmap-content">
+          <div class="ci-status">
+            <h3>Build Status</h3>
+            <a
+              href="https://circleci.com/gh/yetone/mirdb"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="ci-badge-link"
+              aria-label="CircleCI build status for yetone/mirdb"
+              title="CircleCI build status: yetone/mirdb"
+            >
+              <img
+                class="ci-badge"
+                src="https://circleci.com/gh/yetone/mirdb.svg?style=shield"
+                alt="CircleCI build status"
+                loading="lazy"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
+              />
+              <span class="ci-badge-fallback" aria-hidden="true" style="display:none;">
+                <span class="ci-badge-fallback-dot"></span>
+                CircleCI: yetone/mirdb
+              </span>
+            </a>
+          </div>
+          <div class="roadmap-lists">
+            <div class="roadmap-completed">
+              <h3>Completed</h3>
+              <ul class="roadmap-list" role="list">
+                <li class="roadmap-item roadmap-item--completed">
+                  <span class="roadmap-check" aria-hidden="true">&#10003;</span>
+                  <span class="roadmap-item-text">Tokio with Memcached protocol</span>
+                </li>
+                <li class="roadmap-item roadmap-item--completed">
+                  <span class="roadmap-check" aria-hidden="true">&#10003;</span>
+                  <span class="roadmap-item-text">Memtable with SkipList</span>
+                </li>
+                <li class="roadmap-item roadmap-item--completed">
+                  <span class="roadmap-check" aria-hidden="true">&#10003;</span>
+                  <span class="roadmap-item-text">Minor compaction</span>
+                </li>
+                <li class="roadmap-item roadmap-item--completed">
+                  <span class="roadmap-check" aria-hidden="true">&#10003;</span>
+                  <span class="roadmap-item-text">Major compaction</span>
+                </li>
+              </ul>
+            </div>
+            <div class="roadmap-planned">
+              <h3>Coming Soon</h3>
+              <ul class="roadmap-list" role="list">
+                <li class="roadmap-item roadmap-item--planned">
+                  <span class="roadmap-check" aria-hidden="true">&#9711;</span>
+                  <span class="roadmap-item-text">Raft consensus</span>
+                  <span class="roadmap-coming-soon-label">Coming Soon</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
   <footer><!-- Scenario 7: Footer --></footer>
   <script src="js/main.js"></script>
