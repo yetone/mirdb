@@ -13,4 +13,369 @@
  * - Typography scaling
  * - Padding/margin adjustments
  * - Touch target sizes
+ * - Overflow prevention
  */
+
+/* ============================================
+   MOBILE FIRST (base styles for < 768px)
+   ============================================ */
+
+/* Prevent horizontal overflow globally */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Ensure all containers respect viewport width */
+.container {
+  max-width: 100%;
+  padding: 0 var(--spacing-md);
+  width: 100%;
+}
+
+/* Mobile typography scaling */
+.hero-tagline {
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.hero-subtext {
+  font-size: 1rem;
+}
+
+.hero-logo {
+  width: 80px;
+}
+
+#hero {
+  padding: var(--spacing-xl) var(--spacing-md);
+  min-height: auto;
+  padding-top: calc(64px + var(--spacing-xl));
+}
+
+/* Hero CTA buttons stack on very small screens */
+.hero-cta-group {
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.hero-cta {
+  width: 100%;
+  max-width: 280px;
+  min-height: 48px;
+}
+
+/* Section padding on mobile */
+section {
+  padding: var(--spacing-xl) 0;
+}
+
+/* Overview section mobile */
+#overview h2 {
+  font-size: 1.5rem;
+}
+
+#overview .overview-description {
+  font-size: 1rem;
+}
+
+/* Features section mobile - single column */
+.features-grid {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.feature-card {
+  padding: var(--spacing-lg);
+}
+
+#features .section-title {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Quick Start mobile */
+#quickstart .section-title {
+  font-size: 1.5rem;
+}
+
+.quickstart-description {
+  font-size: 0.9375rem;
+}
+
+.terminal-window {
+  max-width: 100%;
+}
+
+.terminal-body {
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+}
+
+.terminal-body pre {
+  font-size: 0.8125rem;
+}
+
+/* Roadmap section mobile */
+#roadmap .section-title {
+  font-size: 1.5rem;
+}
+
+.roadmap-lists {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+}
+
+.roadmap-content {
+  gap: var(--spacing-xl);
+}
+
+/* Footer mobile */
+.footer-content {
+  flex-direction: column;
+  text-align: center;
+  gap: var(--spacing-sm);
+}
+
+.footer-link-list {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.site-footer {
+  padding: var(--spacing-lg) 0;
+}
+
+/* ============================================
+   TOUCH TARGET SIZES (mobile)
+   ============================================ */
+
+/* Ensure minimum 44x44px touch targets for all interactive elements */
+.nav-links a,
+.hamburger,
+.theme-toggle,
+.hero-cta,
+.copy-button,
+.ci-badge-link,
+.footer-link-list a,
+.header-logo {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Mobile nav links need larger touch targets */
+.mobile-nav .nav-links a {
+  min-height: 48px;
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   TABLET BREAKPOINT (768px - 1023px)
+   ============================================ */
+
+@media (min-width: 768px) {
+  /* Container padding on tablet */
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Tablet typography */
+  .hero-tagline {
+    font-size: 2.25rem;
+  }
+
+  .hero-subtext {
+    font-size: 1.125rem;
+  }
+
+  .hero-logo {
+    width: 100px;
+  }
+
+  /* Hero CTA side-by-side on tablet */
+  .hero-cta-group {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .hero-cta {
+    width: auto;
+    max-width: none;
+  }
+
+  /* Section padding on tablet */
+  section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Overview tablet */
+  #overview h2 {
+    font-size: 1.75rem;
+  }
+
+  /* Features tablet - 2 column grid */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
+
+  .feature-card {
+    padding: var(--spacing-xl);
+  }
+
+  #features .section-title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  /* Quick Start tablet */
+  #quickstart .section-title {
+    font-size: 1.75rem;
+  }
+
+  .terminal-window {
+    max-width: 640px;
+  }
+
+  .terminal-body pre {
+    font-size: 0.875rem;
+  }
+
+  /* Roadmap tablet - single column for lists */
+  .roadmap-lists {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  #roadmap .section-title {
+    font-size: 1.75rem;
+  }
+
+  /* Footer tablet - row layout */
+  .footer-content {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--spacing-md);
+  }
+
+  .site-footer {
+    padding: var(--spacing-xl) 0;
+  }
+}
+
+/* ============================================
+   DESKTOP BREAKPOINT (>= 1024px)
+   ============================================ */
+
+@media (min-width: 1024px) {
+  /* Desktop container */
+  .container {
+    max-width: var(--max-width);
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* Desktop typography - large */
+  .hero-tagline {
+    font-size: 3rem;
+  }
+
+  .hero-subtext {
+    font-size: 1.25rem;
+  }
+
+  .hero-logo {
+    width: 120px;
+  }
+
+  /* Hero full height on desktop */
+  #hero {
+    min-height: 100vh;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  /* Features desktop - 4 column grid */
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Roadmap desktop - 2 columns for lists */
+  .roadmap-lists {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+  }
+
+  .roadmap-content {
+    gap: var(--spacing-2xl);
+  }
+
+  /* Footer desktop */
+  .footer-content {
+    justify-content: space-between;
+  }
+}
+
+/* ============================================
+   WIDE DESKTOP (>= 1200px)
+   ============================================ */
+
+@media (min-width: 1200px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+/* ============================================
+   ULTRA-WIDE SCREENS (>= 1920px)
+   ============================================ */
+
+@media (min-width: 1920px) {
+  :root {
+    --max-width: 1400px;
+  }
+
+  .hero-tagline {
+    font-size: 3.5rem;
+  }
+}
+
+/* ============================================
+   VERY SMALL SCREENS (< 360px)
+   ============================================ */
+
+@media (max-width: 359px) {
+  .hero-tagline {
+    font-size: 1.5rem;
+  }
+
+  .hero-cta {
+    font-size: 0.875rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+/* ============================================
+   LANDSCAPE ORIENTATION ON MOBILE
+   ============================================ */
+
+@media (max-width: 767px) and (orientation: landscape) {
+  #hero {
+    min-height: auto;
+    padding: var(--spacing-lg) var(--spacing-md);
+    padding-top: calc(64px + var(--spacing-lg));
+  }
+
+  .hero-tagline {
+    font-size: 1.5rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
