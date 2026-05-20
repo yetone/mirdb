@@ -13,7 +13,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- SEO and Open Graph tags to be populated by Scenario 9 -->
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="MirDB is a persistent key-value store written in Rust with Memcached protocol support. Built on Tokio with skip list memtables and LSM tree architecture.">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+  <meta property="og:description" content="MirDB is a persistent key-value store written in Rust with Memcached protocol support. Built on Tokio with skip list memtables and LSM tree architecture.">
+  <meta property="og:image" content="https://github.com/yetone/mirdb/raw/master/assets/logo.gif">
+  <meta property="og:url" content="https://github.com/yetone/mirdb">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+  <meta name="twitter:description" content="MirDB is a persistent key-value store written in Rust with Memcached protocol support. Built on Tokio with skip list memtables and LSM tree architecture.">
+  <meta name="twitter:image" content="https://github.com/yetone/mirdb/raw/master/assets/logo.gif">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://github.com/yetone/mirdb">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/gif" href="assets/logo.gif">
+
   <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/hero.css">
@@ -119,7 +141,7 @@
         <h2 class="section-title">Key Features</h2>
         <div class="features-grid">
           <article class="feature-card">
-            <div class="feature-icon" aria-label="Tokio Async Runtime icon">
+            <div class="feature-icon" role="img" aria-label="Tokio Async Runtime icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
               </svg>
@@ -128,7 +150,7 @@
             <p class="feature-description">High-performance asynchronous I/O powered by Tokio, enabling thousands of concurrent connections with minimal overhead.</p>
           </article>
           <article class="feature-card">
-            <div class="feature-icon" aria-label="Memcached Protocol icon">
+            <div class="feature-icon" role="img" aria-label="Memcached Protocol icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="3" width="20" height="8" rx="2" ry="2"></rect>
                 <rect x="2" y="13" width="20" height="8" rx="2" ry="2"></rect>
@@ -140,7 +162,7 @@
             <p class="feature-description">Drop-in compatibility with existing tools and libraries. Use any memcached client without code changes.</p>
           </article>
           <article class="feature-card">
-            <div class="feature-icon" aria-label="SkipList Memtable icon">
+            <div class="feature-icon" role="img" aria-label="SkipList Memtable icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="4" y1="6" x2="20" y2="6"></line>
                 <line x1="4" y1="12" x2="20" y2="12"></line>
@@ -153,7 +175,7 @@
             <p class="feature-description">Efficient in-memory data structure using skip lists for fast writes and ordered range queries.</p>
           </article>
           <article class="feature-card">
-            <div class="feature-icon" aria-label="Compaction icon">
+            <div class="feature-icon" role="img" aria-label="Compaction icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
