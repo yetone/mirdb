@@ -2,5 +2,206 @@
  * Quick Start Section Styles
  * Owner: Scenario 4 - Quick Start Section
  *
- * Stub for quick start section styles.
+ * Styles for:
+ * - #quickstart section layout
+ * - Terminal/code block container
+ * - Syntax highlighting colors
+ * - Copy button positioning and styling
+ * - Code font and spacing
  */
+
+/* Quick Start Section Layout */
+#quickstart {
+  background-color: var(--color-card-bg, #f9fafb);
+}
+
+#quickstart .section-title {
+  text-align: center;
+  margin-bottom: var(--spacing-sm, 0.5rem);
+}
+
+.quickstart-description {
+  text-align: center;
+  color: var(--color-muted, #6b7280);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl, 2rem);
+}
+
+/* Terminal Window */
+.terminal-window {
+  max-width: 640px;
+  margin: 0 auto;
+  border-radius: var(--border-radius, 8px);
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  background-color: #1e1e2e;
+}
+
+/* Terminal Header (Window Chrome) */
+.terminal-header {
+  display: flex;
+  align-items: center;
+  padding: 0.625rem 1rem;
+  background-color: #181825;
+  border-bottom: 1px solid #313244;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 0.375rem;
+  margin-right: 0.75rem;
+}
+
+.terminal-btn {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-btn-red {
+  background-color: #ff5f56;
+}
+
+.terminal-btn-yellow {
+  background-color: #ffbd2e;
+}
+
+.terminal-btn-green {
+  background-color: #27c93f;
+}
+
+.terminal-title {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.75rem;
+  color: #6c7086;
+  margin-right: 3.25rem;
+}
+
+/* Terminal Body (Code Area) */
+.terminal-body {
+  position: relative;
+  padding: 1rem 1.25rem;
+  background-color: #1e1e2e;
+}
+
+.terminal-body pre {
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #cdd6f4;
+}
+
+.terminal-body code {
+  font-family: inherit;
+  white-space: pre;
+}
+
+/* Syntax Highlighting */
+.sh-keyword {
+  color: #f38ba8;
+  font-weight: 600;
+}
+
+.sh-prompt {
+  color: #89b4fa;
+}
+
+.sh-comment {
+  color: #6c7086;
+  font-style: italic;
+}
+
+.sh-response {
+  color: #a6e3a1;
+}
+
+.sh-string {
+  color: #f9e2af;
+}
+
+/* Copy Button */
+.copy-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid #45475a;
+  border-radius: 6px;
+  background-color: #313244;
+  color: #cdd6f4;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.copy-button:hover {
+  background-color: #45475a;
+  border-color: #585b70;
+}
+
+.copy-button:focus-visible {
+  outline: 2px solid #89b4fa;
+  outline-offset: 2px;
+}
+
+.copy-button .copy-icon {
+  display: block;
+}
+
+.copy-button .copy-success-icon {
+  display: none;
+}
+
+.copy-button.copy-success .copy-icon {
+  display: none;
+}
+
+.copy-button.copy-success .copy-success-icon {
+  display: block;
+  color: #a6e3a1;
+}
+
+/* Copy Tooltip */
+.copy-tooltip {
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.5rem;
+  background-color: #313244;
+  color: #cdd6f4;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.75rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.copy-button.copy-success .copy-tooltip {
+  opacity: 1;
+}
+
+/* Scrollbar Styling for Terminal */
+.terminal-body pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.terminal-body pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-body pre::-webkit-scrollbar-thumb {
+  background-color: #45475a;
+  border-radius: 3px;
+}

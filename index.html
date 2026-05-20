@@ -106,7 +106,53 @@
         </div>
       </div>
     </section>
-    <section id="quickstart"><!-- Scenario 4: Quick Start Section --></section>
+    <section id="quickstart">
+      <div class="container">
+        <h2 class="section-title">Quick Start</h2>
+        <p class="quickstart-description">
+          MirDB speaks the memcached protocol. Connect with any memcached client and start storing data persistently.
+        </p>
+        <div class="terminal-window" role="region" aria-label="Code example">
+          <div class="terminal-header">
+            <div class="terminal-buttons">
+              <span class="terminal-btn terminal-btn-red" aria-hidden="true"></span>
+              <span class="terminal-btn terminal-btn-yellow" aria-hidden="true"></span>
+              <span class="terminal-btn terminal-btn-green" aria-hidden="true"></span>
+            </div>
+            <span class="terminal-title">mirdb-example.sh</span>
+          </div>
+          <div class="terminal-body">
+            <button class="copy-button" type="button" aria-label="Copy code to clipboard" data-copy-target="quickstart-code">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <svg class="copy-success-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span class="copy-tooltip" role="status" aria-live="polite">Copied!</span>
+            </button>
+            <pre id="quickstart-code"><code><span class="sh-comment"># Connect to MirDB with telnet</span>
+<span class="sh-prompt">$</span> telnet localhost 11211
+
+<span class="sh-comment"># Store a value (SET)</span>
+<span class="sh-prompt">&gt;</span> <span class="sh-keyword">set</span> mykey 0 0 5
+<span class="sh-prompt">&gt;</span> hello
+<span class="sh-response">STORED</span>
+
+<span class="sh-comment"># Retrieve a value (GET)</span>
+<span class="sh-prompt">&gt;</span> <span class="sh-keyword">get</span> mykey
+<span class="sh-response">VALUE mykey 0 5</span>
+<span class="sh-response">hello</span>
+<span class="sh-response">END</span>
+
+<span class="sh-comment"># Delete a value (DELETE)</span>
+<span class="sh-prompt">&gt;</span> <span class="sh-keyword">delete</span> mykey
+<span class="sh-response">DELETED</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
     <section id="roadmap"><!-- Scenario 5: Status & Roadmap --></section>
   </main>
   <footer><!-- Scenario 7: Footer --></footer>
