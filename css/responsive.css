@@ -1,0 +1,16 @@
+/**
+ * Responsive Design - Media Queries
+ * Owner: Scenario 8 - Responsive Design
+ *
+ * Breakpoints:
+ * - Mobile: < 768px
+ * - Tablet: 768px - 1023px
+ * - Desktop: >= 1024px
+ *
+ * Adjustments:
+ * - Grid column count (4 -> 2 -> 1)
+ * - Navigation (horizontal -> hamburger)
+ * - Typography scaling
+ * - Padding/margin adjustments
+ * - Touch target sizes
+ */

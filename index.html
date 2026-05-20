@@ -1,0 +1,94 @@
+<!--
+  MirDB Product Homepage
+  Owner: First Builder (Scenario 1 initiates, all scenarios contribute sections)
+
+  Structure:
+  - <head>: Meta tags, SEO, Open Graph, stylesheet links
+  - <body>: Header (nav), Main (hero, overview, features, quickstart, roadmap), Footer
+
+  Each scenario adds its section within <main>.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO and Open Graph tags to be populated by Scenario 9 -->
+  <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/overview.css">
+  <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/quickstart.css">
+  <link rel="stylesheet" href="css/roadmap.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <header><!-- Scenario 6: Navigation --></header>
+  <main>
+    <section id="hero"><!-- Scenario 1: Hero Section --></section>
+    <section id="overview"><!-- Scenario 2: Overview Section --></section>
+    <section id="features">
+      <!-- Scenario 3: Features Section -->
+      <div class="container">
+        <h2 class="section-title">Key Features</h2>
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-label="Tokio Async Runtime icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <h3 class="feature-title">Tokio Async Runtime</h3>
+            <p class="feature-description">High-performance asynchronous I/O powered by Tokio, enabling thousands of concurrent connections with minimal overhead.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-label="Memcached Protocol icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="8" rx="2" ry="2"></rect>
+                <rect x="2" y="13" width="20" height="8" rx="2" ry="2"></rect>
+                <line x1="6" y1="7" x2="6.01" y2="7"></line>
+                <line x1="6" y1="17" x2="6.01" y2="17"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">Memcached Protocol</h3>
+            <p class="feature-description">Drop-in compatibility with existing tools and libraries. Use any memcached client without code changes.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-label="SkipList Memtable icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="6" x2="20" y2="6"></line>
+                <line x1="4" y1="12" x2="20" y2="12"></line>
+                <line x1="4" y1="18" x2="20" y2="18"></line>
+                <polyline points="8 9 12 5 16 9"></polyline>
+                <polyline points="8 15 12 19 16 15"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">SkipList Memtable</h3>
+            <p class="feature-description">Efficient in-memory data structure using skip lists for fast writes and ordered range queries.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-label="Compaction icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">Compaction</h3>
+            <p class="feature-description">Minor and major compaction for storage optimization, reclaiming space and improving read performance over time.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section id="quickstart"><!-- Scenario 4: Quick Start Section --></section>
+    <section id="roadmap"><!-- Scenario 5: Status & Roadmap --></section>
+  </main>
+  <footer><!-- Scenario 7: Footer --></footer>
+  <script src="js/main.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/copy.js"></script>
+</body>
+</html>
