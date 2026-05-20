@@ -1,0 +1,126 @@
+/**
+ * Base Styles and CSS Custom Properties
+ * Owner: First Builder
+ *
+ * Contains:
+ * - CSS custom properties (--color-primary, --font-family, --spacing-unit, etc.)
+ * - CSS reset (normalize/box-sizing)
+ * - Utility classes (.container, .sr-only, .text-center, etc.)
+ * - Base typography styles
+ *
+ * Expected exports (CSS custom properties):
+ * --color-primary, --color-text, --color-bg, --color-accent
+ * --font-sans, --font-mono
+ * --spacing-sm, --spacing-md, --spacing-lg, --spacing-xl
+ * --breakpoint-tablet: 768px
+ * --breakpoint-desktop: 1024px
+ */
+
+/* CSS Custom Properties */
+:root {
+  --color-primary: #2563eb;
+  --color-text: #1f2937;
+  --color-bg: #ffffff;
+  --color-accent: #10b981;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-card-bg: #f9fafb;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-mono: 'Fira Code', 'SF Mono', Consolas, monospace;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --max-width: 1200px;
+  --border-radius: 8px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Utility Classes */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Base Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+section {
+  padding: var(--spacing-2xl) 0;
+}

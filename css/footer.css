@@ -1,0 +1,107 @@
+/**
+ * Footer Styles
+ * Owner: Scenario 7 - Footer
+ *
+ * Styles for:
+ * - Footer layout and spacing
+ * - Copyright and license text
+ * - Footer link styling
+ * - Visual separation from main content
+ */
+
+/* Footer container with distinct visual separation */
+.site-footer {
+  background-color: var(--color-card-bg, #f9fafb);
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  padding: var(--spacing-xl) 0;
+  margin-top: auto;
+}
+
+/* Footer content layout */
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+/* Copyright text styling */
+.footer-copyright p {
+  font-size: 0.875rem;
+  color: var(--color-muted, #6b7280);
+  margin: 0;
+}
+
+.footer-copyright-symbol {
+  margin-right: 0.25rem;
+}
+
+/* License text styling */
+.footer-license p {
+  font-size: 0.875rem;
+  color: var(--color-muted, #6b7280);
+  margin: 0;
+}
+
+.footer-license a {
+  color: var(--color-primary, #2563eb);
+  text-decoration: none;
+}
+
+.footer-license a:hover {
+  text-decoration: underline;
+}
+
+/* Footer links navigation */
+.footer-links {
+  flex-shrink: 0;
+}
+
+.footer-link-list {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-lg);
+  margin: 0;
+  padding: 0;
+}
+
+.footer-link-list li {
+  display: flex;
+  align-items: center;
+}
+
+.footer-link-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--color-muted, #6b7280);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-link-list a:hover {
+  color: var(--color-primary, #2563eb);
+  text-decoration: none;
+}
+
+.footer-link-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+
+  .footer-link-list {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
