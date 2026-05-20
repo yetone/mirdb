@@ -29,7 +29,15 @@
   <header><!-- Scenario 6: Navigation --></header>
   <main>
     <section id="hero"><!-- Scenario 1: Hero Section --></section>
-    <section id="overview"><!-- Scenario 2: Overview Section --></section>
+    <section id="overview">
+      <!-- Scenario 2: Overview Section -->
+      <div class="container">
+        <h2>What is MirDB?</h2>
+        <p class="overview-description">
+          MirDB is a persistent key-value store written in Rust that implements the Memcached protocol. It combines the simplicity of memcached with durable data persistence using SSTables and an LSM tree architecture. Built on Tokio's async runtime with a skip list memtable, MirDB delivers high-performance storage without sacrificing the familiar memcached experience.
+        </p>
+      </div>
+    </section>
     <section id="features">
       <!-- Scenario 3: Features Section -->
       <div class="container">
