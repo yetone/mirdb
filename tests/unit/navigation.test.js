@@ -46,7 +46,7 @@ describe('Header Structure', () => {
     const logo = document.querySelector('.header-logo');
     const img = logo.querySelector('img');
     expect(img).toBeTruthy();
-    expect(img.getAttribute('src')).toMatch(/assets\/logo\.gif/i);
+    expect(img.getAttribute('src')).toMatch(/assets\/logo\.gif|assets\/logo/i);
   });
 
   test('logo image has alt text', () => {

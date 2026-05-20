@@ -37,21 +37,24 @@
   <link rel="icon" type="image/gif" href="assets/logo.gif">
 
   <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/hero.css">
-  <link rel="stylesheet" href="css/overview.css">
-  <link rel="stylesheet" href="css/features.css">
-  <link rel="stylesheet" href="css/quickstart.css">
-  <link rel="stylesheet" href="css/roadmap.css">
-  <link rel="stylesheet" href="css/nav.css">
-  <link rel="stylesheet" href="css/footer.css">
+  <meta http-equiv="Cache-Control" content="public, max-age=86400">
+  <link rel="preload" href="css/base.min.css" as="style">
+  <link rel="preload" href="css/hero.min.css" as="style">
+  <link rel="stylesheet" href="css/base.min.css">
+  <link rel="stylesheet" href="css/hero.min.css">
+  <link rel="stylesheet" href="css/overview.min.css">
+  <link rel="stylesheet" href="css/features.min.css">
+  <link rel="stylesheet" href="css/quickstart.min.css">
+  <link rel="stylesheet" href="css/roadmap.min.css">
+  <link rel="stylesheet" href="css/nav.min.css">
+  <link rel="stylesheet" href="css/footer.min.css">
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
   <header>
     <div class="header-container">
       <a href="#" class="header-logo" aria-label="MirDB - Go to top">
-        <img src="assets/logo.gif" alt="MirDB Logo" width="32" height="32" />
+        <img src="assets/logo-optimized.gif" alt="MirDB Logo" width="32" height="32" />
         <span>MirDB</span>
       </a>
       <nav class="desktop-nav" aria-label="Main navigation">
@@ -113,7 +116,7 @@
     <section id="hero" class="hero">
       <div class="hero-background"></div>
       <div class="container hero-content">
-        <img class="hero-logo" src="assets/logo.gif" alt="MirDB Logo" />
+        <img class="hero-logo" src="assets/logo-optimized.gif" alt="MirDB Logo" width="120" height="43" />
         <h1 class="hero-tagline">A Persistent Key-Value Store with Memcached Protocol</h1>
         <p class="hero-subtext">It is painless as using memcached</p>
         <div class="hero-cta-group">
@@ -231,6 +234,7 @@
 <span class="sh-comment"># Delete a value (DELETE)</span>
 <span class="sh-prompt">&gt;</span> <span class="sh-keyword">delete</span> mykey
 <span class="sh-response">DELETED</span></code></pre>
+            <img src="assets/usage-optimized.gif" alt="MirDB usage demonstration" loading="lazy" width="660" height="416" />
           </div>
         </div>
       </div>
@@ -254,6 +258,8 @@
                 src="https://circleci.com/gh/yetone/mirdb.svg?style=shield"
                 alt="CircleCI build status"
                 loading="lazy"
+                width="90"
+                height="20"
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
               />
               <span class="ci-badge-fallback" aria-hidden="true" style="display:none;">
@@ -335,8 +341,8 @@
       </div>
     </div>
   </footer>
-  <script src="js/main.js"></script>
-  <script src="js/nav.js"></script>
-  <script src="js/copy.js"></script>
+  <script src="js/main.min.js"></script>
+  <script src="js/nav.min.js"></script>
+  <script src="js/copy.min.js"></script>
 </body>
 </html>
