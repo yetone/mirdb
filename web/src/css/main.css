@@ -116,6 +116,44 @@ img, svg {
   }
 }
 
+/* ===== Analytics Counter - Scenario 12 ===== */
+
+/* Stat card styling */
+.stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Stat value number styling */
+.stat-value {
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dark mode stat card hover */
+[data-theme="dark"] .stat-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+/* Analytics section responsive */
+@media (max-width: 767px) {
+  #analytics .grid {
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 2.25rem;
+  }
+}
+
 /* Preload critical font fallback to avoid FOUT */
 @font-face {
   font-family: 'SystemUI';

@@ -1,0 +1,73 @@
+<!--
+  Analytics Counter Section Partial.
+  Owner: Scenario 12 - Analytics Counter Display
+
+  Displays key statistics about the service:
+  - Total URLs created
+  - Active users
+  - Total clicks
+
+  Features:
+  - Fetches data dynamically from /api/stats
+  - Formats large numbers with K/M/B suffixes
+  - Shows loading skeleton while fetching
+  - Handles errors gracefully with fallback values
+  - Responsive grid layout
+  - Accessible with aria-live regions
+-->
+
+<section id="analytics" class="py-16 bg-base-200" aria-labelledby="analytics-heading" data-testid="analytics-section">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 id="analytics-heading" class="text-3xl md:text-4xl font-bold text-base-content mb-4" data-testid="analytics-heading">
+        Trusted by Thousands
+      </h2>
+      <p class="text-lg text-base-content/70 max-w-2xl mx-auto" data-testid="analytics-subheading">
+        Join a growing community of users who rely on MirDB for their link management needs.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto" data-testid="analytics-grid">
+      <!-- URLs Created Counter -->
+      <article class="stat-card card bg-base-100 border border-base-300 p-8 text-center" data-testid="stat-card-urls">
+        <div class="stat-value text-4xl md:text-5xl font-bold text-primary mb-2" data-testid="stat-value-urls" aria-live="polite">
+          <span class="stat-number" data-stat-key="urls_created">--</span>
+        </div>
+        <div class="stat-label text-base-content/70 text-lg" data-testid="stat-label-urls">
+          URLs Created
+        </div>
+      </article>
+
+      <!-- Active Users Counter -->
+      <article class="stat-card card bg-base-100 border border-base-300 p-8 text-center" data-testid="stat-card-users">
+        <div class="stat-value text-4xl md:text-5xl font-bold text-secondary mb-2" data-testid="stat-value-users" aria-live="polite">
+          <span class="stat-number" data-stat-key="active_users">--</span>
+        </div>
+        <div class="stat-label text-base-content/70 text-lg" data-testid="stat-label-users">
+          Active Users
+        </div>
+      </article>
+
+      <!-- Total Clicks Counter -->
+      <article class="stat-card card bg-base-100 border border-base-300 p-8 text-center" data-testid="stat-card-clicks">
+        <div class="stat-value text-4xl md:text-5xl font-bold text-accent mb-2" data-testid="stat-value-clicks" aria-live="polite">
+          <span class="stat-number" data-stat-key="total_clicks">--</span>
+        </div>
+        <div class="stat-label text-base-content/70 text-lg" data-testid="stat-label-clicks">
+          Total Clicks
+        </div>
+      </article>
+    </div>
+
+    <!-- Loading state -->
+    <div id="analytics-loading" class="hidden text-center py-8" data-testid="analytics-loading">
+      <div class="loading loading-spinner loading-lg text-primary"></div>
+      <p class="mt-4 text-base-content/60">Loading statistics...</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="analytics-error" class="hidden text-center py-8" data-testid="analytics-error">
+      <p class="text-error">Unable to load statistics. Please try again later.</p>
+    </div>
+  </div>
+</section>

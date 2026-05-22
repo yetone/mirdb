@@ -15,6 +15,7 @@ tokio-proto = "0.1"
 tokio-service = "0.1"
 glob = "0.3.0"
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 bincode = "1.1.2"
 integer-encoding = "1.0"
 snap = "0.2"

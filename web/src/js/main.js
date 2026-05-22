@@ -75,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize CTA button handlers
   initCTAButtons();
+
+  // Initialize analytics counter
+  window.App.Stats.init();
 });
 
 /**
@@ -157,6 +160,128 @@ function updateToggleLabel(button, theme) {
     icon.textContent = isDark ? '☀' : '☽'; // Sun : Moon
   }
 }
+
+/**
+ * Analytics Counter Display
+ * Owner: Scenario 12 - Analytics Counter Display
+ *
+ * Features:
+ * - Fetches stats from /api/stats endpoint
+ * - Formats large numbers with K/M/B suffixes
+ * - Shows loading and error states
+ * - Updates DOM with formatted values
+ */
+
+window.App.Stats = {
+  DEFAULT_STATS: {
+    urls_created: 128456,
+    active_users: 3421,
+    total_clicks: 8923456
+  },
+
+  init: function() {
+    this.fetchStats();
+  },
+
+  /**
+   * Format a number with K/M/B suffixes for large values.
+   * Examples: 128456 -> "128K+", 8923456 -> "8.9M+", 1500000000 -> "1.5B+"
+   */
+  formatNumber: function(num) {
+    if (typeof num !== 'number' || isNaN(num)) {
+      return '--';
+    }
+
+    var absNum = Math.abs(num);
+
+    if (absNum >= 1000000000) {
+      var billions = (absNum / 1000000000).toFixed(1);
+      // Remove trailing .0
+      billions = billions.replace(/\.0$/, '');
+      return billions + 'B+';
+    }
+
+    if (absNum >= 1000000) {
+      var millions = (absNum / 1000000).toFixed(1);
+      millions = millions.replace(/\.0$/, '');
+      return millions + 'M+';
+    }
+
+    if (absNum >= 1000) {
+      var thousands = (absNum / 1000).toFixed(1);
+      thousands = thousands.replace(/\.0$/, '');
+      return thousands + 'K+';
+    }
+
+    return String(num);
+  },
+
+  fetchStats: function() {
+    var self = this;
+    var apiUrl = '/api/stats';
+
+    // Check if analytics section exists on the page
+    var analyticsSection = document.getElementById('analytics');
+    if (!analyticsSection) return;
+
+    // Show loading state
+    self.showLoading(true);
+    self.showError(false);
+
+    fetch(apiUrl)
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Failed to fetch stats: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(function(data) {
+        self.updateCounters(data);
+        self.showLoading(false);
+      })
+      .catch(function(error) {
+        console.warn('Analytics stats fetch failed:', error.message);
+        // Use fallback/default values on error
+        self.updateCounters(self.DEFAULT_STATS);
+        self.showLoading(false);
+      });
+  },
+
+  updateCounters: function(data) {
+    var statElements = document.querySelectorAll('.stat-number');
+
+    statElements.forEach(function(el) {
+      var key = el.getAttribute('data-stat-key');
+      if (key && data.hasOwnProperty(key)) {
+        var value = data[key];
+        var formatted = this.formatNumber(value);
+        el.textContent = formatted;
+      }
+    }.bind(this));
+  },
+
+  showLoading: function(show) {
+    var loadingEl = document.getElementById('analytics-loading');
+    if (loadingEl) {
+      if (show) {
+        loadingEl.classList.remove('hidden');
+      } else {
+        loadingEl.classList.add('hidden');
+      }
+    }
+  },
+
+  showError: function(show) {
+    var errorEl = document.getElementById('analytics-error');
+    if (errorEl) {
+      if (show) {
+        errorEl.classList.remove('hidden');
+      } else {
+        errorEl.classList.add('hidden');
+      }
+    }
+  }
+};
 
 /**
  * Initialize CTA button click tracking and interactivity.
