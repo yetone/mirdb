@@ -8,15 +8,55 @@
   <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body class="min-h-screen bg-base-100 text-base-content">
-  <nav class="navbar bg-base-100 shadow-sm" role="navigation" aria-label="Main navigation">
+  <nav class="navbar bg-base-100 shadow-sm" role="navigation" aria-label="Main navigation" data-testid="navbar">
     <div class="navbar-start">
-      <a href="/" class="btn btn-ghost text-xl">MirDB</a>
+      <a href="/" class="btn btn-ghost text-xl" data-testid="nav-brand">MirDB</a>
     </div>
-    <div class="navbar-end">
-      <a href="/login" class="btn btn-ghost">Log In</a>
-      <a href="/register" class="btn btn-primary">Sign Up</a>
+
+    <!-- Desktop navigation -->
+    <div class="navbar-end hidden md:flex" data-testid="desktop-nav">
+      <!-- Unauthenticated links -->
+      <div class="nav-unauth-links" data-testid="nav-unauth-group">
+        <a href="/login" class="btn btn-ghost" data-testid="nav-login">Log In</a>
+        <a href="/register" class="btn btn-primary" data-testid="nav-signup">Sign Up</a>
+      </div>
+      <!-- Authenticated links -->
+      <div class="nav-auth-links hidden" data-testid="nav-auth-group">
+        <a href="/dashboard" class="btn btn-primary" data-testid="nav-dashboard">Dashboard</a>
+      </div>
+    </div>
+
+    <!-- Mobile menu toggle -->
+    <div class="navbar-end md:hidden">
+      <button
+        type="button"
+        class="btn btn-ghost btn-square"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-testid="mobile-menu-toggle"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile navigation menu -->
+  <div id="mobile-menu" class="md:hidden hidden bg-base-100 shadow-md" data-testid="mobile-menu" aria-hidden="true">
+    <div class="flex flex-col p-4 gap-2">
+      <!-- Unauthenticated mobile links -->
+      <div class="nav-unauth-links" data-testid="mobile-unauth-group">
+        <a href="/login" class="btn btn-ghost justify-start" data-testid="mobile-login">Log In</a>
+        <a href="/register" class="btn btn-primary justify-start" data-testid="mobile-signup">Sign Up</a>
+      </div>
+      <!-- Authenticated mobile links -->
+      <div class="nav-auth-links hidden" data-testid="mobile-auth-group">
+        <a href="/dashboard" class="btn btn-primary justify-start" data-testid="mobile-dashboard">Dashboard</a>
+      </div>
+    </div>
+  </div>
 
   <main>
     <section class="hero bg-base-200 py-20" aria-labelledby="hero-title" data-testid="hero-section">
