@@ -1,0 +1,17 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB URL Shortening Service Homepage",
+  "scripts": {
+    "test:e2e": "playwright test tests/e2e/",
+    "build:css": "tailwindcss -i web/src/css/main.css -o web/static/css/main.css",
+    "serve": "python3 -m http.server 8080 --directory web"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "daisyui": "^4.4.0"
+  }
+}

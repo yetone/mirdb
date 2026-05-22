@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MirDB - URL Shortening Service{% endblock %}</title>
+  <meta name="description" content="A fast and reliable URL shortening service with analytics and dashboard.">
+  {% block meta %}{% endblock %}
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="min-h-screen bg-base-100 text-base-content">
+  {% include 'partials/nav.html' ignore missing %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'partials/footer.html' ignore missing %}
+
+  <script src="/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

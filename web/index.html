@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - URL Shortening Service</title>
+  <meta name="description" content="A fast and reliable URL shortening service with analytics and dashboard.">
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="min-h-screen bg-base-100 text-base-content">
+  <nav class="navbar bg-base-100 shadow-sm" role="navigation" aria-label="Main navigation">
+    <div class="navbar-start">
+      <a href="/" class="btn btn-ghost text-xl">MirDB</a>
+    </div>
+    <div class="navbar-end">
+      <a href="/login" class="btn btn-ghost">Log In</a>
+      <a href="/register" class="btn btn-primary">Sign Up</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero bg-base-200 py-20" aria-labelledby="hero-title">
+      <div class="hero-content text-center">
+        <div class="max-w-2xl">
+          <h1 id="hero-title" class="text-5xl font-bold">Shorten Your URLs</h1>
+          <p class="py-6 text-lg">Create short, memorable links and track their performance with powerful analytics.</p>
+          <a href="/create" class="btn btn-primary btn-lg">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="py-20 bg-base-100" aria-labelledby="features-heading">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 id="features-heading" class="text-3xl md:text-4xl font-bold text-base-content mb-4">
+            Powerful Features for Every Need
+          </h2>
+          <p class="text-lg text-base-content/70 max-w-2xl mx-auto">
+            Everything you need to manage, track, and optimize your links in one place.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Feature Card 1: URL Shortening -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/link.svg" alt="Link icon representing URL shortening" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">URL Shortening</h3>
+            <p class="text-base-content/70">
+              Create concise, shareable short links instantly. Customize your URLs with memorable aliases and branded domains.
+            </p>
+          </article>
+
+          <!-- Feature Card 2: Analytics -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/bar-chart.svg" alt="Bar chart icon representing analytics" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">Analytics</h3>
+            <p class="text-base-content/70">
+              Track clicks, geographic locations, referrers, and device types. Get real-time insights into how your links perform.
+            </p>
+          </article>
+
+          <!-- Feature Card 3: Dashboard -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/layout-dashboard.svg" alt="Dashboard layout icon" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">Dashboard</h3>
+            <p class="text-base-content/70">
+              Manage all your shortened URLs from a clean, intuitive dashboard. Organize, edit, and delete links with ease.
+            </p>
+          </article>
+
+          <!-- Feature Card 4: Secure Links -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/shield-check.svg" alt="Shield check icon representing secure links" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">Secure Links</h3>
+            <p class="text-base-content/70">
+              Protect your links with password authentication and expiration dates. HTTPS encryption ensures safe redirections.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-primary text-primary-content py-16" aria-labelledby="cta-title">
+      <div class="container mx-auto px-4 text-center">
+        <h2 id="cta-title" class="text-3xl font-bold mb-4">Ready to shorten your links?</h2>
+        <p class="mb-8 text-lg opacity-90">Join thousands of users who trust MirDB for their URL shortening needs.</p>
+        <a href="/register" class="btn btn-secondary btn-lg">Create Your Free Account</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer footer-center p-10 bg-base-200 text-base-content" role="contentinfo">
+    <div>
+      <p class="font-bold">MirDB</p>
+      <p>Copyright &copy; 2024 MirDB. All rights reserved.</p>
+    </div>
+    <div class="grid grid-flow-col gap-4">
+      <a href="/docs" class="link link-hover">Documentation</a>
+      <a href="/privacy" class="link link-hover">Privacy Policy</a>
+      <a href="/terms" class="link link-hover">Terms of Service</a>
+    </div>
+  </footer>
+
+  <script src="/src/js/main.js"></script>
+</body>
+</html>
