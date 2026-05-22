@@ -77,3 +77,48 @@ body, .navbar, .hero, .card, .footer, section {
     @apply py-8;
   }
 }
+
+/* ===== Performance Optimizations - Scenario 11 ===== */
+
+/* Prevent layout shift by reserving space for images */
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Content visibility for below-fold sections to improve rendering performance */
+#features,
+[data-testid="cta-section"],
+[data-testid="footer"] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+/* Layout containment for feature cards to isolate layout shifts */
+.feature-card {
+  contain: layout style;
+}
+
+/* Optimize paint performance for the navbar */
+.navbar {
+  contain: layout style paint;
+}
+
+/* Reduce motion for users who prefer it (performance + accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Preload critical font fallback to avoid FOUT */
+@font-face {
+  font-family: 'SystemUI';
+  src: local('system-ui');
+  font-display: swap;
+}

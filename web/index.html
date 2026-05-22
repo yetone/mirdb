@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MirDB - URL Shortening Service</title>
   <meta name="description" content="A fast and reliable URL shortening service with analytics and dashboard.">
-  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="preconnect" href="/">
+  <link rel="stylesheet" href="/static/css/main.css" fetchpriority="high">
 </head>
 <body class="min-h-screen bg-base-100 text-base-content">
   <nav class="navbar bg-base-100 shadow-sm" role="navigation" aria-label="Main navigation" data-testid="navbar">
@@ -104,7 +105,7 @@
           <!-- Feature Card 1: URL Shortening -->
           <article class="feature-card card bg-base-200 border border-base-300 p-6">
             <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
-              <img src="/assets/images/link.svg" alt="Link icon representing URL shortening" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+              <img src="/assets/images/link.svg" alt="Link icon representing URL shortening" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
             </div>
             <h3 class="text-xl font-semibold text-base-content mb-2">URL Shortening</h3>
             <p class="text-base-content/70">
@@ -115,7 +116,7 @@
           <!-- Feature Card 2: Analytics -->
           <article class="feature-card card bg-base-200 border border-base-300 p-6">
             <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
-              <img src="/assets/images/bar-chart.svg" alt="Bar chart icon representing analytics" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+              <img src="/assets/images/bar-chart.svg" alt="Bar chart icon representing analytics" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
             </div>
             <h3 class="text-xl font-semibold text-base-content mb-2">Analytics</h3>
             <p class="text-base-content/70">
@@ -126,7 +127,7 @@
           <!-- Feature Card 3: Dashboard -->
           <article class="feature-card card bg-base-200 border border-base-300 p-6">
             <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
-              <img src="/assets/images/layout-dashboard.svg" alt="Dashboard layout icon" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+              <img src="/assets/images/layout-dashboard.svg" alt="Dashboard layout icon" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
             </div>
             <h3 class="text-xl font-semibold text-base-content mb-2">Dashboard</h3>
             <p class="text-base-content/70">
@@ -137,7 +138,7 @@
           <!-- Feature Card 4: Secure Links -->
           <article class="feature-card card bg-base-200 border border-base-300 p-6">
             <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
-              <img src="/assets/images/shield-check.svg" alt="Shield check icon representing secure links" width="48" height="48" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+              <img src="/assets/images/shield-check.svg" alt="Shield check icon representing secure links" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
             </div>
             <h3 class="text-xl font-semibold text-base-content mb-2">Secure Links</h3>
             <p class="text-base-content/70">

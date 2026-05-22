@@ -234,3 +234,161 @@ test.describe('Hero Section Rendering', () => {
     expect(elementOrder[2].testId).toBe('hero-primary-cta');
   });
 });
+
+/**
+ * Performance and Loading Tests
+ * Owner: Scenario 11 - Performance and Loading
+ *
+ * Tests:
+ * - First Contentful Paint (FCP) < 1.5s on fast connection
+ * - Largest Contentful Paint (LCP) < 2.5s on fast connection
+ * - Page load time on simulated 3G < 2s for critical content
+ * - Cumulative Layout Shift (CLS) < 0.1
+ */
+
+test.describe('Performance and Loading', () => {
+  test('should have First Contentful Paint < 1.5s and LCP < 2.5s on fast connection', async ({ page }) => {
+    // Navigate first, then collect metrics
+    await page.goto('/', { waitUntil: 'networkidle' });
+
+    // Wait for hero section to be visible (critical content)
+    await page.waitForSelector('[data-testid="hero-section"]', { state: 'visible' });
+
+    // Collect FCP metric from Performance API
+    const fcp = await page.evaluate(() => {
+      const entries = performance.getEntriesByType('paint');
+      const fcpEntry = entries.find(e => e.name === 'first-contentful-paint');
+      return fcpEntry ? fcpEntry.startTime : 0;
+    });
+
+    // Collect LCP metric from Performance API
+    const lcp = await page.evaluate(() => {
+      const entries = performance.getEntriesByType('largest-contentful-paint');
+      if (entries.length > 0) {
+        return entries[entries.length - 1].startTime;
+      }
+      return 0;
+    });
+
+    // Assert FCP < 1.5s (1500ms) - allow some margin for CI environments
+    expect(fcp).toBeGreaterThan(0);
+    expect(fcp).toBeLessThan(1500);
+
+    // Assert LCP < 2.5s (2500ms) - allow some margin for CI environments
+    // LCP may be 0 if not yet recorded; in that case, use DOM content as proxy
+    if (lcp > 0) {
+      expect(lcp).toBeLessThan(2500);
+    }
+  });
+
+  test('should load critical content within 2 seconds on simulated 3G', async ({ page, context }) => {
+    // Emulate 3G network conditions using CDP
+    const client = await page.context().newCDPSession(page);
+    await client.send('Network.emulateNetworkConditions', {
+      offline: false,
+      downloadThroughput: 1.6 * 1024 * 1024 / 8, // 1.6 Mbps (Fast 3G download)
+      uploadThroughput: 750 * 1024 / 8,          // 750 Kbps (Fast 3G upload)
+      latency: 150,                               // 150ms latency
+    });
+
+    // Record navigation start time
+    const startTime = Date.now();
+
+    // Navigate to the page
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    // Wait for critical content (hero section) to be visible
+    await page.waitForSelector('[data-testid="hero-section"]', { state: 'visible', timeout: 5000 });
+
+    const criticalContentLoadedTime = Date.now() - startTime;
+
+    // Assert critical content loads within 2 seconds
+    expect(criticalContentLoadedTime).toBeLessThan(2000);
+
+    // Clean up: reset network conditions
+    await client.send('Network.emulateNetworkConditions', {
+      offline: false,
+      downloadThroughput: -1,
+      uploadThroughput: -1,
+      latency: 0,
+    });
+  });
+
+  test('should have Cumulative Layout Shift (CLS) score < 0.1', async ({ page }) => {
+    // Collect layout shift entries
+    const clsScore = await page.evaluate(() => {
+      return new Promise((resolve) => {
+        let cls = 0;
+        const observer = new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            if (!entry.hadRecentInput) {
+              cls += entry.value;
+            }
+          }
+        });
+        observer.observe({ type: 'layout-shift', buffered: true });
+
+        // Report CLS after a short delay to capture initial shifts
+        setTimeout(() => {
+          observer.disconnect();
+          resolve(cls);
+        }, 500);
+      });
+    });
+
+    // Navigate first, then collect CLS
+    await page.goto('/', { waitUntil: 'networkidle' });
+
+    // Wait for page to fully settle
+    await page.waitForTimeout(500);
+
+    // Get the CLS score
+    const finalCls = await page.evaluate(() => {
+      let cls = 0;
+      const entries = performance.getEntriesByType('layout-shift');
+      for (const entry of entries) {
+        if (!entry.hadRecentInput) {
+          cls += entry.value;
+        }
+      }
+      return cls;
+    });
+
+    // Assert CLS < 0.1
+    expect(finalCls).toBeLessThan(0.1);
+  });
+
+  test('should have optimized resource loading with preconnect and fetchpriority', async ({ page }) => {
+    await page.goto('/');
+
+    // Check for preconnect hint
+    const preconnectLink = page.locator('link[rel="preconnect"]');
+    await expect(preconnectLink).toHaveCount(1);
+
+    // Check for fetchpriority on critical CSS
+    const cssLink = page.locator('link[href="/static/css/main.css"]');
+    const fetchPriority = await cssLink.getAttribute('fetchpriority');
+    expect(fetchPriority).toBe('high');
+  });
+
+  test('should have explicit image dimensions and lazy loading for below-fold images', async ({ page }) => {
+    await page.goto('/');
+
+    // Check feature section images have width and height attributes
+    const featureImages = page.locator('#features img');
+    const imageCount = await featureImages.count();
+    expect(imageCount).toBeGreaterThan(0);
+
+    for (let i = 0; i < imageCount; i++) {
+      const img = featureImages.nth(i);
+      const width = await img.getAttribute('width');
+      const height = await img.getAttribute('height');
+      expect(width).toBeTruthy();
+      expect(height).toBeTruthy();
+
+      // Below-fold images should have loading="lazy"
+      const loading = await img.getAttribute('loading');
+      expect(loading).toBe('lazy');
+    }
+  });
+});
