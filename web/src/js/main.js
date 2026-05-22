@@ -118,24 +118,28 @@ function initTheme() {
  * Owner: Scenario 8 - Dark Mode Theme
  */
 function initThemeToggle() {
-  const toggleBtn = document.querySelector('[data-testid="theme-toggle"]');
-  if (!toggleBtn) return;
+  const toggleBtns = document.querySelectorAll('[data-testid="theme-toggle"]');
+  if (!toggleBtns.length) return;
 
-  toggleBtn.addEventListener('click', function() {
-    const root = document.documentElement;
-    const currentTheme = root.getAttribute('data-theme') || 'light';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  toggleBtns.forEach(function(toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+      const root = document.documentElement;
+      const currentTheme = root.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-    root.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
+      root.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
 
-    // Update toggle button icon/label
-    updateToggleLabel(toggleBtn, newTheme);
+      // Update all toggle button icons/labels
+      toggleBtns.forEach(function(btn) {
+        updateToggleLabel(btn, newTheme);
+      });
+    });
+
+    // Set initial toggle label
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateToggleLabel(toggleBtn, currentTheme);
   });
-
-  // Set initial toggle label
-  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-  updateToggleLabel(toggleBtn, currentTheme);
 }
 
 /**

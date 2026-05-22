@@ -116,7 +116,7 @@ test.describe('Dark Mode Theme', () => {
     test('should toggle to dark mode when theme button is clicked', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await expect(toggleBtn).toBeVisible();
 
       // Click the toggle button
@@ -134,7 +134,7 @@ test.describe('Dark Mode Theme', () => {
     test('should apply dark background colors in dark mode', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
@@ -154,7 +154,7 @@ test.describe('Dark Mode Theme', () => {
     test('should apply light text colors in dark mode', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
@@ -187,7 +187,7 @@ test.describe('Dark Mode Theme', () => {
     test('should toggle back to light mode when clicked again', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
 
       // Toggle to dark
       await toggleBtn.click();
@@ -210,7 +210,7 @@ test.describe('Dark Mode Theme', () => {
       await clearStorageAndGoto(page, '/');
 
       // Toggle to dark mode
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
@@ -232,7 +232,7 @@ test.describe('Dark Mode Theme', () => {
       await clearStorageAndGoto(page, '/');
 
       // First toggle to dark, then back to light to set explicit preference
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
       await toggleBtn.click();
@@ -285,7 +285,7 @@ test.describe('Dark Mode Theme', () => {
     test('hero section has proper dark mode styling', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
@@ -306,7 +306,7 @@ test.describe('Dark Mode Theme', () => {
     test('features section has proper dark mode styling', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
@@ -341,7 +341,7 @@ test.describe('Dark Mode Theme', () => {
     test('CTA section has proper dark mode styling', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
@@ -363,7 +363,7 @@ test.describe('Dark Mode Theme', () => {
     test('footer has proper dark mode styling', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
@@ -384,7 +384,7 @@ test.describe('Dark Mode Theme', () => {
     test('navigation bar has proper dark mode styling', async ({ page }) => {
       await clearStorageAndGoto(page, '/');
 
-      const toggleBtn = page.locator('[data-testid="theme-toggle"]');
+      const toggleBtn = page.locator('[data-testid="theme-toggle"]:visible');
       await toggleBtn.click();
       await page.waitForTimeout(350);
 
