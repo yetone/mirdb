@@ -26,3 +26,44 @@ html {
   height: 3rem;
   border-radius: 0.75rem;
 }
+
+/* ===== Responsive Design - Scenario 7 ===== */
+
+/* Mobile: ensure no horizontal overflow */
+@media (max-width: 767px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Reduce hero padding on mobile */
+  .hero {
+    @apply py-12;
+  }
+
+  /* Ensure touch targets */
+  .btn,
+  a.btn,
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Footer links stack vertically */
+  .footer .grid-flow-col {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .hero {
+    @apply py-8;
+  }
+}

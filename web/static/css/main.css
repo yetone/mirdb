@@ -2368,3 +2368,127 @@ html {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* ===== Responsive Design - Scenario 7 ===== */
+
+/* Mobile: ensure no horizontal overflow */
+@media (max-width: 767px) {
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Reduce hero padding on mobile */
+  .hero {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Hero title sizing for mobile */
+  .hero h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  /* Hero tagline sizing for mobile */
+  .hero p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Feature heading sizing for mobile */
+  #features h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+
+  /* CTA section heading for mobile */
+  #cta-title,
+  section[aria-labelledby="cta-title"] h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+
+  /* Ensure touch targets are at least 44x44px */
+  .btn,
+  a.btn,
+  button,
+  #mobile-menu a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Footer links stack vertically on mobile */
+  .footer .grid-flow-col {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* Reduce padding on mobile */
+  .py-20 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .py-16 {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .p-10 {
+    padding: 1.5rem;
+  }
+}
+
+/* Tablet breakpoint */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Hero title sizing for tablet */
+  .hero h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  /* Ensure text is readable */
+  .hero p {
+    font-size: 1.125rem;
+  }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1024px) {
+  .hero h1 {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero p {
+    font-size: 0.875rem;
+  }
+
+  .hero {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Ensure minimum touch target size for all interactive elements on mobile */
+@media (max-width: 767px) {
+  a, button, [role="button"] {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
