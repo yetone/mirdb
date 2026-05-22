@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - URL Shortening Service</title>
+  <meta name="description" content="A fast and reliable URL shortening service with analytics and dashboard.">
+
+  <link rel="preconnect" href="/">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="MirDB - URL Shortening Service">
+  <meta property="og:description" content="Create short, memorable links and track their performance with powerful analytics. MirDB is a fast and reliable URL shortening service.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mirdb.io/">
+  <meta property="og:image" content="https://mirdb.io/assets/images/og-image.png">
+  <meta property="og:site_name" content="MirDB">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - URL Shortening Service">
+  <meta name="twitter:description" content="Create short, memorable links and track their performance with powerful analytics. MirDB is a fast and reliable URL shortening service.">
+  <meta name="twitter:image" content="https://mirdb.io/assets/images/og-image.png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MirDB",
+    "description": "A fast and reliable URL shortening service with analytics and dashboard.",
+    "url": "https://mirdb.io/"
+  }
+  </script>
+
+  <link rel="stylesheet" href="/static/css/main.css" fetchpriority="high">
+</head>
+<body class="min-h-screen bg-base-100 text-base-content">
+  <nav class="navbar bg-base-100 shadow-sm" role="navigation" aria-label="Main navigation" data-testid="navbar">
+    <div class="navbar-start">
+      <a href="/" class="btn btn-ghost text-xl" data-testid="nav-brand">MirDB</a>
+    </div>
+
+    <!-- Desktop navigation -->
+    <div class="navbar-end hidden md:flex gap-2" data-testid="desktop-nav">
+      <!-- Theme toggle -->
+      <button
+        type="button"
+        class="btn btn-ghost btn-circle"
+        data-testid="theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode"
+      >
+        <span class="theme-icon text-lg">☽</span>
+      </button>
+      <!-- Unauthenticated links -->
+      <div class="nav-unauth-links" data-testid="nav-unauth-group">
+        <a href="/login" class="btn btn-ghost" data-testid="nav-login">Log In</a>
+        <a href="/register" class="btn btn-primary" data-testid="nav-signup">Sign Up</a>
+      </div>
+      <!-- Authenticated links -->
+      <div class="nav-auth-links hidden" data-testid="nav-auth-group">
+        <a href="/dashboard" class="btn btn-primary" data-testid="nav-dashboard">Dashboard</a>
+      </div>
+    </div>
+
+    <!-- Mobile menu toggle -->
+    <div class="navbar-end md:hidden gap-2">
+      <button
+        type="button"
+        class="btn btn-ghost btn-circle"
+        data-testid="theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode"
+      >
+        <span class="theme-icon text-lg">☽</span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost btn-square"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-testid="mobile-menu-toggle"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile navigation menu -->
+  <div id="mobile-menu" class="md:hidden hidden bg-base-100 shadow-md" data-testid="mobile-menu" aria-hidden="true">
+    <div class="flex flex-col p-4 gap-2">
+      <!-- Unauthenticated mobile links -->
+      <div class="nav-unauth-links" data-testid="mobile-unauth-group">
+        <a href="/login" class="btn btn-ghost justify-start" data-testid="mobile-login">Log In</a>
+        <a href="/register" class="btn btn-primary justify-start" data-testid="mobile-signup">Sign Up</a>
+      </div>
+      <!-- Authenticated mobile links -->
+      <div class="nav-auth-links hidden" data-testid="mobile-auth-group">
+        <a href="/dashboard" class="btn btn-primary justify-start" data-testid="mobile-dashboard">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero bg-base-200 py-20" aria-labelledby="hero-title" data-testid="hero-section">
+      <div class="hero-content text-center">
+        <div class="max-w-2xl">
+          <h1 id="hero-title" class="text-5xl font-bold text-base-content">Shorten Your URLs with MirDB</h1>
+          <p class="py-6 text-lg text-base-content" data-testid="hero-tagline">Create short, memorable links and track their performance with powerful analytics.</p>
+          <a href="/register" class="btn btn-primary btn-lg min-h-[48px] w-full sm:w-auto" data-testid="hero-primary-cta">Get Started</a>
+          <a href="/create" class="btn btn-outline btn-lg min-h-[48px] mt-4 w-full sm:w-auto" data-testid="hero-secondary-cta">Create Short URL</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="py-20 bg-base-100" aria-labelledby="features-heading">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 id="features-heading" class="text-3xl md:text-4xl font-bold text-base-content mb-4">
+            Powerful Features for Every Need
+          </h2>
+          <p class="text-lg text-base-content/70 max-w-2xl mx-auto">
+            Everything you need to manage, track, and optimize your links in one place.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Feature Card 1: URL Shortening -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/link.svg" alt="Link icon representing URL shortening" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">URL Shortening</h3>
+            <p class="text-base-content/70">
+              Create concise, shareable short links instantly. Customize your URLs with memorable aliases and branded domains.
+            </p>
+          </article>
+
+          <!-- Feature Card 2: Analytics -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/bar-chart.svg" alt="Bar chart icon representing analytics" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">Analytics</h3>
+            <p class="text-base-content/70">
+              Track clicks, geographic locations, referrers, and device types. Get real-time insights into how your links perform.
+            </p>
+          </article>
+
+          <!-- Feature Card 3: Dashboard -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/layout-dashboard.svg" alt="Dashboard layout icon" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">Dashboard</h3>
+            <p class="text-base-content/70">
+              Manage all your shortened URLs from a clean, intuitive dashboard. Organize, edit, and delete links with ease.
+            </p>
+          </article>
+
+          <!-- Feature Card 4: Secure Links -->
+          <article class="feature-card card bg-base-200 border border-base-300 p-6">
+            <div class="feature-icon bg-brand-100 text-brand-600 mb-4">
+              <img src="/assets/images/shield-check.svg" alt="Shield check icon representing secure links" width="48" height="48" loading="lazy" style="filter: invert(30%) sepia(85%) saturate(2000%) hue-rotate(210deg);">
+            </div>
+            <h3 class="text-xl font-semibold text-base-content mb-2">Secure Links</h3>
+            <p class="text-base-content/70">
+              Protect your links with password authentication and expiration dates. HTTPS encryption ensures safe redirections.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Analytics Counter Section - Owner: Scenario 12 -->
+    <section id="analytics" class="py-16 bg-base-200" aria-labelledby="analytics-heading" data-testid="analytics-section">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 id="analytics-heading" class="text-3xl md:text-4xl font-bold text-base-content mb-4" data-testid="analytics-heading">
+            Trusted by Thousands
+          </h2>
+          <p class="text-lg text-base-content/70 max-w-2xl mx-auto" data-testid="analytics-subheading">
+            Join a growing community of users who rely on MirDB for their link management needs.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto" data-testid="analytics-grid">
+          <article class="stat-card card bg-base-100 border border-base-300 p-8 text-center" data-testid="stat-card-urls">
+            <div class="stat-value text-4xl md:text-5xl font-bold text-primary mb-2" data-testid="stat-value-urls" aria-live="polite">
+              <span class="stat-number" data-stat-key="urls_created">--</span>
+            </div>
+            <div class="stat-label text-base-content/70 text-lg" data-testid="stat-label-urls">URLs Created</div>
+          </article>
+
+          <article class="stat-card card bg-base-100 border border-base-300 p-8 text-center" data-testid="stat-card-users">
+            <div class="stat-value text-4xl md:text-5xl font-bold text-secondary mb-2" data-testid="stat-value-users" aria-live="polite">
+              <span class="stat-number" data-stat-key="active_users">--</span>
+            </div>
+            <div class="stat-label text-base-content/70 text-lg" data-testid="stat-label-users">Active Users</div>
+          </article>
+
+          <article class="stat-card card bg-base-100 border border-base-300 p-8 text-center" data-testid="stat-card-clicks">
+            <div class="stat-value text-4xl md:text-5xl font-bold text-accent mb-2" data-testid="stat-value-clicks" aria-live="polite">
+              <span class="stat-number" data-stat-key="total_clicks">--</span>
+            </div>
+            <div class="stat-label text-base-content/70 text-lg" data-testid="stat-label-clicks">Total Clicks</div>
+          </article>
+        </div>
+
+        <div id="analytics-loading" class="hidden text-center py-8" data-testid="analytics-loading">
+          <div class="loading loading-spinner loading-lg text-primary"></div>
+          <p class="mt-4 text-base-content/60">Loading statistics...</p>
+        </div>
+
+        <div id="analytics-error" class="hidden text-center py-8" data-testid="analytics-error">
+          <p class="text-error">Unable to load statistics. Please try again later.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-primary text-primary-content py-16" aria-labelledby="cta-title" data-testid="cta-section">
+      <div class="container mx-auto px-4 text-center">
+        <h2 id="cta-title" class="text-3xl font-bold mb-4">Ready to shorten your links?</h2>
+        <p class="mb-8 text-lg opacity-90">Join thousands of users who trust MirDB for their URL shortening needs.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-testid="cta-button-group">
+          <a href="/create" class="btn btn-neutral btn-lg min-h-[48px] min-w-[180px]" data-testid="cta-create-short-url">Create Short URL</a>
+          <a href="/register" class="btn btn-accent btn-lg min-h-[48px] min-w-[180px]" data-testid="cta-get-started">Get Started</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer footer-center p-10 bg-base-200 text-base-content" role="contentinfo" data-testid="footer">
+    <div>
+      <p class="font-bold text-lg">MirDB</p>
+      <p data-testid="footer-copyright">Copyright &copy; 2024 MirDB. All rights reserved.</p>
+    </div>
+    <div class="grid grid-flow-col gap-4" data-testid="footer-links">
+      <a href="/docs" class="link link-hover" data-testid="footer-link-docs">Documentation</a>
+      <a href="/privacy" class="link link-hover" data-testid="footer-link-privacy">Privacy Policy</a>
+      <a href="/terms" class="link link-hover" data-testid="footer-link-terms">Terms of Service</a>
+    </div>
+  </footer>
+
+  <script src="/src/js/main.js"></script>
+</body>
+</html>

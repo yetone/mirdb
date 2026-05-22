@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MirDB - URL Shortening Service{% endblock %}</title>
+  <meta name="description" content="A fast and reliable URL shortening service with analytics and dashboard.">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mirdb.io/">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="MirDB - URL Shortening Service">
+  <meta property="og:description" content="Create short, memorable links and track their performance with powerful analytics. MirDB is a fast and reliable URL shortening service.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mirdb.io/">
+  <meta property="og:image" content="https://mirdb.io/assets/images/og-image.png">
+  <meta property="og:site_name" content="MirDB">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MirDB - URL Shortening Service">
+  <meta name="twitter:description" content="Create short, memorable links and track their performance with powerful analytics. MirDB is a fast and reliable URL shortening service.">
+  <meta name="twitter:image" content="https://mirdb.io/assets/images/og-image.png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MirDB",
+    "description": "A fast and reliable URL shortening service with analytics and dashboard.",
+    "url": "https://mirdb.io/"
+  }
+  </script>
+
+  {% block meta %}{% endblock %}
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="min-h-screen bg-base-100 text-base-content">
+  {% include 'partials/nav.html' ignore missing %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'partials/footer.html' ignore missing %}
+
+  <script src="/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

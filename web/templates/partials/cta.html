@@ -1,0 +1,19 @@
+<!--
+  Call-to-action section partial.
+  Owner: Scenario 5 - CTA Buttons and Actions
+
+  Expected content:
+  - Secondary CTA for undecided visitors
+  - Action buttons with proper href targets
+  - Bottom-of-page conversion opportunity
+-->
+<section class="bg-primary text-primary-content py-16" aria-labelledby="cta-title" data-testid="cta-section">
+  <div class="container mx-auto px-4 text-center">
+    <h2 id="cta-title" class="text-3xl font-bold mb-4">Ready to shorten your links?</h2>
+    <p class="mb-8 text-lg opacity-90">Join thousands of users who trust MirDB for their URL shortening needs.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-testid="cta-button-group">
+      <a href="/create" class="btn btn-secondary btn-lg min-h-[48px] min-w-[180px]" data-testid="cta-create-short-url">Create Short URL</a>
+      <a href="/register" class="btn btn-accent btn-lg min-h-[48px] min-w-[180px]" data-testid="cta-get-started">Get Started</a>
+    </div>
+  </div>
+</section>

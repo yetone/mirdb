@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme transitions - Owner: Scenario 8 - Dark Mode Theme */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth transitions for theme-aware elements */
+body, .navbar, .hero, .card, .footer, section {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Feature card hover effects in dark mode */
+[data-theme="dark"] .feature-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+/* Feature card hover effects */
+.feature-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Feature icon styling */
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+}
+
+/* ===== Responsive Design - Scenario 7 ===== */
+
+/* Mobile: ensure no horizontal overflow */
+@media (max-width: 767px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Reduce hero padding on mobile */
+  .hero {
+    @apply py-12;
+  }
+
+  /* Ensure touch targets */
+  .btn,
+  a.btn,
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Footer links stack vertically */
+  .footer .grid-flow-col {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .hero {
+    @apply py-8;
+  }
+}
+
+/* ===== Performance Optimizations - Scenario 11 ===== */
+
+/* Prevent layout shift by reserving space for images */
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Content visibility for below-fold sections to improve rendering performance */
+#features,
+[data-testid="cta-section"],
+[data-testid="footer"] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+/* Layout containment for feature cards to isolate layout shifts */
+.feature-card {
+  contain: layout style;
+}
+
+/* Optimize paint performance for the navbar */
+.navbar {
+  contain: layout style paint;
+}
+
+/* Reduce motion for users who prefer it (performance + accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== Analytics Counter - Scenario 12 ===== */
+
+/* Stat card styling */
+.stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Stat value number styling */
+.stat-value {
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dark mode stat card hover */
+[data-theme="dark"] .stat-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+/* Analytics section responsive */
+@media (max-width: 767px) {
+  #analytics .grid {
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 2.25rem;
+  }
+}
+
+/* Preload critical font fallback to avoid FOUT */
+@font-face {
+  font-family: 'SystemUI';
+  src: local('system-ui');
+  font-display: swap;
+}
