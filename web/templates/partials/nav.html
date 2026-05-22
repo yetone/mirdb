@@ -1,12 +1,7 @@
 <!--
   Navigation bar partial.
   Owner: Scenario 4 - Navigation Links
-
-  Expected behavior:
-  - Show Login/Sign Up for unauthenticated users
-  - Show Dashboard link for authenticated users
-  - Collapse to hamburger menu on mobile
-  - Include theme toggle button (coordinated with Scenario 8)
+  Theme toggle button coordinated with Scenario 8 - Dark Mode Theme
 -->
 <nav class="navbar bg-base-100 shadow-sm" role="navigation" aria-label="Main navigation" data-testid="navbar">
   <div class="navbar-start">
@@ -14,7 +9,17 @@
   </div>
 
   <!-- Desktop navigation -->
-  <div class="navbar-end hidden md:flex" data-testid="desktop-nav">
+  <div class="navbar-end hidden md:flex gap-2" data-testid="desktop-nav">
+    <!-- Theme toggle -->
+    <button
+      type="button"
+      class="btn btn-ghost btn-circle"
+      data-testid="theme-toggle"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-icon text-lg">☽</span>
+    </button>
     <!-- Unauthenticated links -->
     <div class="nav-unauth-links" data-testid="nav-unauth-group">
       <a href="/login" class="btn btn-ghost" data-testid="nav-login">Log In</a>
@@ -27,7 +32,16 @@
   </div>
 
   <!-- Mobile menu toggle -->
-  <div class="navbar-end md:hidden">
+  <div class="navbar-end md:hidden gap-2">
+    <button
+      type="button"
+      class="btn btn-ghost btn-circle"
+      data-testid="theme-toggle"
+      aria-label="Switch to dark mode"
+      title="Switch to dark mode"
+    >
+      <span class="theme-icon text-lg">☽</span>
+    </button>
     <button
       type="button"
       class="btn btn-ghost btn-square"

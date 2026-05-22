@@ -68,8 +68,7 @@ window.App.Nav = {
 
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize theme
-  var savedTheme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
+  initTheme();
 
   // Initialize navigation
   window.App.Nav.init();
@@ -77,6 +76,83 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize CTA button handlers
   initCTAButtons();
 });
+
+/**
+ * Initialize theme preference detection, persistence, and toggle.
+ * Owner: Scenario 8 - Dark Mode Theme
+ *
+ * Checks localStorage for a saved theme, falls back to system
+ * prefers-color-scheme, and sets up the toggle button.
+ */
+function initTheme() {
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem('theme');
+
+  let theme;
+  if (savedTheme) {
+    theme = savedTheme;
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    theme = 'dark';
+  } else {
+    theme = 'light';
+  }
+
+  root.setAttribute('data-theme', theme);
+
+  // Listen for system preference changes
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  mediaQuery.addEventListener('change', function(event) {
+    // Only apply system preference if user hasn't manually set a preference
+    if (!localStorage.getItem('theme')) {
+      const newTheme = event.matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', newTheme);
+    }
+  });
+
+  // Set up theme toggle button
+  initThemeToggle();
+}
+
+/**
+ * Initialize the theme toggle button.
+ * Owner: Scenario 8 - Dark Mode Theme
+ */
+function initThemeToggle() {
+  const toggleBtn = document.querySelector('[data-testid="theme-toggle"]');
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener('click', function() {
+    const root = document.documentElement;
+    const currentTheme = root.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    root.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+
+    // Update toggle button icon/label
+    updateToggleLabel(toggleBtn, newTheme);
+  });
+
+  // Set initial toggle label
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  updateToggleLabel(toggleBtn, currentTheme);
+}
+
+/**
+ * Update the toggle button's accessible label and icon based on theme.
+ * Owner: Scenario 8 - Dark Mode Theme
+ */
+function updateToggleLabel(button, theme) {
+  const isDark = theme === 'dark';
+  button.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+  button.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+
+  // Update icon if present
+  const icon = button.querySelector('.theme-icon');
+  if (icon) {
+    icon.textContent = isDark ? '☀' : '☽'; // Sun : Moon
+  }
+}
 
 /**
  * Initialize CTA button click tracking and interactivity.

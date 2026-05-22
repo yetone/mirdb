@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,17 @@
     </div>
 
     <!-- Desktop navigation -->
-    <div class="navbar-end hidden md:flex" data-testid="desktop-nav">
+    <div class="navbar-end hidden md:flex gap-2" data-testid="desktop-nav">
+      <!-- Theme toggle -->
+      <button
+        type="button"
+        class="btn btn-ghost btn-circle"
+        data-testid="theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode"
+      >
+        <span class="theme-icon text-lg">☽</span>
+      </button>
       <!-- Unauthenticated links -->
       <div class="nav-unauth-links" data-testid="nav-unauth-group">
         <a href="/login" class="btn btn-ghost" data-testid="nav-login">Log In</a>
@@ -27,7 +37,16 @@
     </div>
 
     <!-- Mobile menu toggle -->
-    <div class="navbar-end md:hidden">
+    <div class="navbar-end md:hidden gap-2">
+      <button
+        type="button"
+        class="btn btn-ghost btn-circle"
+        data-testid="theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode"
+      >
+        <span class="theme-icon text-lg">☽</span>
+      </button>
       <button
         type="button"
         class="btn btn-ghost btn-square"
