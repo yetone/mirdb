@@ -76,7 +76,57 @@
     </section>
 
     <!-- Project Status Section: owned by Scenario 4 -->
-    <section id="status">...</section>
+    <section id="status" aria-labelledby="status-heading">
+      <div class="container">
+        <h2 id="status-heading">Project Status</h2>
+        <p class="status-description">
+          MirDB is actively being developed. Below is a summary of implemented features
+          and what is planned for upcoming releases.
+        </p>
+        <ul class="status-list" role="list" aria-label="Project feature status">
+          <li class="status-item status-completed" data-testid="status-tokio">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Tokio with memcached protocol</span>
+          </li>
+          <li class="status-item status-completed" data-testid="status-memtable">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Memtable with skiplist</span>
+          </li>
+          <li class="status-item status-completed" data-testid="status-minor-compaction">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Minor compaction</span>
+          </li>
+          <li class="status-item status-completed" data-testid="status-major-compaction">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Major compaction</span>
+          </li>
+          <li class="status-item status-planned" data-testid="status-raft">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-empty" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v12H4V4z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Raft consensus</span>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <!-- Quick Start Section: owned by Scenario 5 -->
     <section id="quick-start">...</section>
