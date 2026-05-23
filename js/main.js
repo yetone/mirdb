@@ -20,7 +20,9 @@ function initSmoothScroll() {
       var target = document.querySelector(href);
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
+        if (typeof target.scrollIntoView === 'function') {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
         // Update URL hash without triggering page reload
         if (window.history && window.history.pushState) {
           window.history.pushState(null, null, href);
@@ -31,7 +33,26 @@ function initSmoothScroll() {
 }
 
 async function copyToClipboard(text) {
-  await navigator.clipboard.writeText(text);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  // Fallback for browsers without clipboard API support
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  textarea.style.top = '0';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('Fallback copy failed:', err);
+    throw new Error('Clipboard API not supported and fallback failed');
+  } finally {
+    document.body.removeChild(textarea);
+  }
 }
 
 function initCopyButtons() {
@@ -65,30 +86,12 @@ function initCopyButtons() {
   });
 }
 
-function initThemeToggle() {
-  var toggle = document.querySelector('.theme-toggle');
-  if (!toggle) return;
-
-  toggle.addEventListener('click', function() {
-    var currentTheme = document.documentElement.getAttribute('data-theme');
-    var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    toggle.setAttribute('aria-pressed', String(newTheme === 'dark'));
-    try {
-      localStorage.setItem('theme', newTheme);
-    } catch (e) {
-      // localStorage may not be available
-    }
-  });
-}
-
 document.addEventListener('DOMContentLoaded', function() {
   initSmoothScroll();
   initCopyButtons();
-  initThemeToggle();
 });
 
 // Exports for testing
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { initSmoothScroll, initCopyButtons, copyToClipboard, initThemeToggle };
+  module.exports = { initSmoothScroll, initCopyButtons, copyToClipboard };
 }
