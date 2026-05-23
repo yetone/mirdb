@@ -132,7 +132,82 @@
     <section id="quick-start">...</section>
 
     <!-- Configuration Section: owned by Scenario 6 -->
-    <section id="configuration">...</section>
+    <section id="configuration">
+      <div class="container">
+        <h2>Configuration</h2>
+        <p class="config-description">
+          MirDB uses sensible defaults that work out of the box. These are the default configuration values:
+        </p>
+        <div class="config-table-wrapper">
+          <table class="config-table">
+            <thead>
+              <tr>
+                <th>Option</th>
+                <th>Default Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-testid="config-addr">
+                <td>listen address</td>
+                <td>0.0.0.0:12333</td>
+                <td>Address the server listens on</td>
+              </tr>
+              <tr data-testid="config-max-level">
+                <td>max_level</td>
+                <td>7</td>
+                <td>Maximum number of LSM tree levels</td>
+              </tr>
+              <tr data-testid="config-work-dir">
+                <td>work_dir</td>
+                <td>/tmp/mirdb</td>
+                <td>Working directory for data files</td>
+              </tr>
+              <tr data-testid="config-sst-max-size">
+                <td>sst_max_size</td>
+                <td>100MB</td>
+                <td>Maximum size of an SSTable file</td>
+              </tr>
+              <tr data-testid="config-mem-table-max-size">
+                <td>mem_table_max_size</td>
+                <td>4MB</td>
+                <td>Maximum size of the in-memory write buffer</td>
+              </tr>
+              <tr data-testid="config-block-size">
+                <td>block_size</td>
+                <td>4KB</td>
+                <td>Size of each data block in SSTables</td>
+              </tr>
+              <tr data-testid="config-mem-table-max-height">
+                <td>mem_table_max_height</td>
+                <td>32</td>
+                <td>Maximum height of the skip list memtable</td>
+              </tr>
+              <tr data-testid="config-imm-mem-table-max-count">
+                <td>imm_mem_table_max_count</td>
+                <td>16</td>
+                <td>Maximum number of immutable memtables</td>
+              </tr>
+              <tr data-testid="config-block-restart-interval">
+                <td>block_restart_interval</td>
+                <td>16</td>
+                <td>Restart interval for delta encoding in blocks</td>
+              </tr>
+              <tr data-testid="config-l0-compaction-trigger">
+                <td>l0_compaction_trigger</td>
+                <td>4</td>
+                <td>Trigger for L0 level compaction</td>
+              </tr>
+              <tr data-testid="config-thread-sleep-ms">
+                <td>thread_sleep_ms</td>
+                <td>500</td>
+                <td>Background thread sleep interval in milliseconds</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer: owned by Scenario 13 -->
