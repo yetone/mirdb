@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dark-mode.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation: owned by Scenario 7 -->
+  <header>...</header>
+
+  <main>
+    <!-- Hero Section: owned by Scenario 1 -->
+    <section id="hero">...</section>
+
+    <!-- About Section: owned by Scenario 2 -->
+    <section id="about">...</section>
+
+    <!-- Features Section: owned by Scenario 3 -->
+    <section id="features">
+      <div class="container">
+        <h2>Features</h2>
+        <div class="features-grid">
+          <article class="feature-card" data-testid="feature-memcached">
+            <span class="feature-icon" aria-hidden="true">&#128268;</span>
+            <h3>Memcached Protocol</h3>
+            <p>Full Memcached protocol compatibility means existing clients connect seamlessly. Drop MirDB into your infrastructure without changing a single line of client code.</p>
+          </article>
+
+          <article class="feature-card" data-testid="feature-persistence">
+            <span class="feature-icon" aria-hidden="true">&#128190;</span>
+            <h3>Persistence</h3>
+            <p>SSTable-based persistence with LSM tree architecture ensures your data survives restarts. Durability meets performance with efficient disk-based storage.</p>
+          </article>
+
+          <article class="feature-card" data-testid="feature-lsm-tree">
+            <span class="feature-icon" aria-hidden="true">&#127795;</span>
+            <h3>LSM Tree Architecture</h3>
+            <p>Advanced LSM tree storage engine with minor and major compaction strategies optimizes read and write performance while minimizing storage overhead.</p>
+          </article>
+
+          <article class="feature-card" data-testid="feature-async-networking">
+            <span class="feature-icon" aria-hidden="true">&#9889;</span>
+            <h3>Async Networking</h3>
+            <p>Built on Tokio, Rust's premier async runtime, MirDB handles thousands of concurrent connections with minimal resource overhead and maximum throughput.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Status Section: owned by Scenario 4 -->
+    <section id="status">...</section>
+
+    <!-- Quick Start Section: owned by Scenario 5 -->
+    <section id="quick-start">...</section>
+
+    <!-- Configuration Section: owned by Scenario 6 -->
+    <section id="configuration">...</section>
+  </main>
+
+  <!-- Footer: owned by Scenario 13 -->
+  <footer>...</footer>
+
+  <script src="js/dark-mode.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
