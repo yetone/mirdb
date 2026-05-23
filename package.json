@@ -4,7 +4,8 @@
   "description": "MirDB product homepage",
   "scripts": {
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:accessibility": "playwright test tests/e2e/accessibility.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",

@@ -24,7 +24,7 @@
   --color-card-border: #e2e8f0;
   --color-text-muted: #64748b;
 
-  /* Spacing */
+  /* Spacing scale */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
@@ -36,24 +36,45 @@
   /* Typography */
   --font-heading: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+  /* Font sizes */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+
+  /* Line heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
 
   /* Layout */
   --max-width: 1200px;
   --border-radius: 8px;
 }
 
-/* Reset */
+/* Reset and base styles */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-body);
-  background-color: var(--color-background);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
   color: var(--color-text);
-  line-height: 1.6;
+  background-color: var(--color-background);
 }
 
 /* Base typography */
@@ -81,6 +102,62 @@ a:hover {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
+}
+
+/* ============================================================
+   HERO SECTION - Owned by Scenario 1 (Hero Section)
+   ============================================================ */
+
+#hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+#hero h1 {
+  font-family: var(--font-heading);
+  font-size: var(--text-5xl);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  margin-bottom: var(--spacing-lg);
+}
+
+#hero .tagline {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--spacing-2xl);
+  opacity: 0.85;
+}
+
+#hero .cta-button {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#hero .cta-button:hover {
+  background-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+#hero .cta-button:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* ============================================================
