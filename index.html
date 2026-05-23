@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+  <meta name="description" content="MirDB is a persistent key-value store written in Rust implementing the Memcached protocol. A drop-in replacement with LSM tree persistence and async networking.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+  <meta property="og:description" content="MirDB is a persistent key-value store written in Rust implementing the Memcached protocol. A drop-in replacement with LSM tree persistence and async networking.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/yetone/mirdb">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+  <meta name="twitter:description" content="MirDB is a persistent key-value store written in Rust implementing the Memcached protocol. A drop-in replacement with LSM tree persistence and async networking.">
+
+  <link rel="canonical" href="https://github.com/yetone/mirdb">
+  <link rel="icon" href="assets/logo.gif" type="image/gif">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dark-mode.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MirDB",
+    "description": "A persistent key-value store written in Rust that implements the Memcached protocol",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "url": "https://github.com/yetone/mirdb",
+    "codeRepository": "https://github.com/yetone/mirdb",
+    "programmingLanguage": "Rust",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Skip link: owned by Scenario 11 -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation: owned by Scenario 7 -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#" class="site-logo" aria-label="MirDB - Home">MirDB</a>
+      <nav class="main-nav" role="navigation" aria-label="Main navigation">
+        <button
+          class="mobile-menu-toggle"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+        >
+          <span class="hamburger-bar" aria-hidden="true"></span>
+          <span class="hamburger-bar" aria-hidden="true"></span>
+          <span class="hamburger-bar" aria-hidden="true"></span>
+        </button>
+        <ul id="nav-menu" class="nav-menu">
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#quick-start" class="nav-link">Quick Start</a></li>
+          <li><a href="#status" class="nav-link">Project Status</a></li>
+          <li>
+            <a
+              href="https://github.com/yetone/mirdb"
+              class="nav-link nav-link--github"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="github-link-header"
+            >
+              <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span>GitHub</span>
+            </a>
+          </li>
+        </ul>
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle dark mode"
+          aria-pressed="false"
+          data-testid="theme-toggle"
+          title="Toggle dark mode"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313-12.454z"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section: owned by Scenario 1 -->
+    <section id="hero">
+      <div class="hero-content">
+        <img src="assets/logo.gif" alt="MirDB logo" class="hero-logo" data-testid="hero-logo">
+        <h1>MirDB</h1>
+        <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        <div class="hero-actions">
+          <a href="#quick-start" class="cta-button">Get Started</a>
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="github-button"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="github-link-hero"
+          >
+            <svg class="github-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section: owned by Scenario 2 -->
+    <section id="about">
+      <div class="container">
+        <h2>What is MirDB?</h2>
+        <p class="about-description">
+          MirDB is a persistent key-value store written in Rust that implements the Memcached protocol.
+          It combines the simplicity and speed of memcached with the durability of disk-based persistence,
+          making it a drop-in replacement for memcached that ensures your data survives restarts.
+        </p>
+        <p class="about-value-prop">
+          Unlike traditional memcached which stores all data in memory and loses everything on restart,
+          MirDB uses an LSM tree architecture with SSTable-based persistence to provide both
+          high-performance caching and reliable data storage. Existing memcached clients connect
+          seamlessly — just point them at MirDB and enjoy the benefits of persistence without
+          changing a single line of client code.
+        </p>
+      </div>
+    </section>
+
+    <!-- Features Section: owned by Scenario 3 -->
+    <section id="features">
+      <div class="container">
+        <h2>Features</h2>
+        <div class="features-grid">
+          <article class="feature-card" data-testid="feature-memcached">
+            <span class="feature-icon" aria-hidden="true">&#128268;</span>
+            <h3>Memcached Protocol</h3>
+            <p>Full Memcached protocol compatibility means existing clients connect seamlessly. Drop MirDB into your infrastructure without changing a single line of client code.</p>
+          </article>
+
+          <article class="feature-card" data-testid="feature-persistence">
+            <span class="feature-icon" aria-hidden="true">&#128190;</span>
+            <h3>Persistence</h3>
+            <p>SSTable-based persistence with LSM tree architecture ensures your data survives restarts. Durability meets performance with efficient disk-based storage.</p>
+          </article>
+
+          <article class="feature-card" data-testid="feature-lsm-tree">
+            <span class="feature-icon" aria-hidden="true">&#127795;</span>
+            <h3>LSM Tree Architecture</h3>
+            <p>Advanced LSM tree storage engine with minor and major compaction strategies optimizes read and write performance while minimizing storage overhead.</p>
+          </article>
+
+          <article class="feature-card" data-testid="feature-async-networking">
+            <span class="feature-icon" aria-hidden="true">&#9889;</span>
+            <h3>Async Networking</h3>
+            <p>Built on Tokio, Rust's premier async runtime, MirDB handles thousands of concurrent connections with minimal resource overhead and maximum throughput.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Status Section: owned by Scenario 4 -->
+    <section id="status" aria-labelledby="status-heading">
+      <div class="container">
+        <h2 id="status-heading">Project Status</h2>
+        <p class="status-description">
+          MirDB is actively being developed. Below is a summary of implemented features
+          and what is planned for upcoming releases.
+        </p>
+        <ul class="status-list" role="list" aria-label="Project feature status">
+          <li class="status-item status-completed" data-testid="status-tokio">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Tokio with memcached protocol</span>
+          </li>
+          <li class="status-item status-completed" data-testid="status-memtable">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Memtable with skiplist</span>
+          </li>
+          <li class="status-item status-completed" data-testid="status-minor-compaction">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Minor compaction</span>
+          </li>
+          <li class="status-item status-completed" data-testid="status-major-compaction">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-checkmark" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Major compaction</span>
+          </li>
+          <li class="status-item status-planned" data-testid="status-raft">
+            <span class="status-indicator" aria-hidden="true">
+              <svg class="status-empty" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v12H4V4z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span class="status-text">Raft consensus</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Quick Start Section: owned by Scenario 5 -->
+    <section id="quick-start">
+      <div class="container">
+        <h2>Quick Start</h2>
+        <p class="quick-start-description">
+          MirDB implements the Memcached text protocol, so any memcached client works out of the box.
+          Here is how to set and retrieve values using a simple telnet session:
+        </p>
+
+        <div class="code-block-wrapper" data-testid="quick-start-set-example">
+          <div class="code-block-header">
+            <span class="code-block-label">Set a key-value pair</span>
+            <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block"><code><span class="syntax-command">set</span> <span class="syntax-key">mykey</span> <span class="syntax-number">0</span> <span class="syntax-number">60</span> <span class="syntax-number">5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-response">STORED</span></code></pre>
+        </div>
+
+        <div class="code-block-wrapper" data-testid="quick-start-get-example">
+          <div class="code-block-header">
+            <span class="code-block-label">Retrieve a value</span>
+            <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block"><code><span class="syntax-command">get</span> <span class="syntax-key">mykey</span>
+<span class="syntax-response">VALUE mykey 0 5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-response">END</span></code></pre>
+        </div>
+
+        <div class="code-block-wrapper" data-testid="quick-start-client-example">
+          <div class="code-block-header">
+            <span class="code-block-label">Using a memcached client (Python example)</span>
+            <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block"><code><span class="syntax-keyword">import</span> memcache
+client = memcache.Client([<span class="syntax-string">'127.0.0.1:12333'</span>])
+client.<span class="syntax-method">set</span>(<span class="syntax-string">'mykey'</span>, <span class="syntax-string">'hello'</span>)
+value = client.<span class="syntax-method">get</span>(<span class="syntax-string">'mykey'</span>)
+<span class="syntax-method">print</span>(value)  <span class="syntax-comment"># Output: hello</span></code></pre>
+        </div>
+
+        <div class="usage-demo" data-testid="usage-gif-container">
+          <h3>Usage Demonstration</h3>
+          <img src="assets/usage.gif" alt="MirDB usage demonstration" class="usage-gif" data-testid="usage-gif">
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuration Section: owned by Scenario 6 -->
+    <section id="configuration">
+      <div class="container">
+        <h2>Configuration</h2>
+        <p class="config-description">
+          MirDB uses sensible defaults that work out of the box. These are the default configuration values:
+        </p>
+        <div class="config-table-wrapper">
+          <table class="config-table">
+            <thead>
+              <tr>
+                <th scope="col">Option</th>
+                <th scope="col">Default Value</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-testid="config-addr">
+                <td>listen address</td>
+                <td>0.0.0.0:12333</td>
+                <td>Address the server listens on</td>
+              </tr>
+              <tr data-testid="config-max-level">
+                <td>max_level</td>
+                <td>7</td>
+                <td>Maximum number of LSM tree levels</td>
+              </tr>
+              <tr data-testid="config-work-dir">
+                <td>work_dir</td>
+                <td>/tmp/mirdb</td>
+                <td>Working directory for data files</td>
+              </tr>
+              <tr data-testid="config-sst-max-size">
+                <td>sst_max_size</td>
+                <td>100MB</td>
+                <td>Maximum size of an SSTable file</td>
+              </tr>
+              <tr data-testid="config-mem-table-max-size">
+                <td>mem_table_max_size</td>
+                <td>4MB</td>
+                <td>Maximum size of the in-memory write buffer</td>
+              </tr>
+              <tr data-testid="config-block-size">
+                <td>block_size</td>
+                <td>4KB</td>
+                <td>Size of each data block in SSTables</td>
+              </tr>
+              <tr data-testid="config-mem-table-max-height">
+                <td>mem_table_max_height</td>
+                <td>32</td>
+                <td>Maximum height of the skip list memtable</td>
+              </tr>
+              <tr data-testid="config-imm-mem-table-max-count">
+                <td>imm_mem_table_max_count</td>
+                <td>16</td>
+                <td>Maximum number of immutable memtables</td>
+              </tr>
+              <tr data-testid="config-block-restart-interval">
+                <td>block_restart_interval</td>
+                <td>16</td>
+                <td>Restart interval for delta encoding in blocks</td>
+              </tr>
+              <tr data-testid="config-l0-compaction-trigger">
+                <td>l0_compaction_trigger</td>
+                <td>4</td>
+                <td>Trigger for L0 level compaction</td>
+              </tr>
+              <tr data-testid="config-thread-sleep-ms">
+                <td>thread_sleep_ms</td>
+                <td>500</td>
+                <td>Background thread sleep interval in milliseconds</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer: owned by Scenario 7 (nav/footer), Scenario 8 (badges), and Scenario 13 -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">MirDB</span>
+          <p class="footer-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <ul class="footer-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#quick-start">Quick Start</a></li>
+            <li><a href="#status">Project Status</a></li>
+            <li>
+              <a
+                href="https://github.com/yetone/mirdb"
+                class="footer-github-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="github-link-footer"
+              >
+                <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                GitHub
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2025 MirDB by yetone. Open source under the MIT License.</p>
+        <div class="footer-badges" data-testid="footer-badges">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="CircleCI build status for yetone/mirdb">
+            <img src="https://img.shields.io/circleci/build/gh/yetone/mirdb" alt="CircleCI build status" class="badge-img" data-testid="circleci-badge">
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/dark-mode.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

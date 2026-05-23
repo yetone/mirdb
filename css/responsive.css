@@ -1,0 +1,400 @@
+/**
+ * Responsive design breakpoints.
+ * Owner: Scenario 9 - Responsive Design
+ * Co-owner: Scenario 7 - Navigation and GitHub Links (mobile nav styles)
+ *
+ * Expected contents:
+ * - Mobile: max-width 767px (hamburger menu, stacked layout)
+ * - Tablet: 768px - 1023px (adjusted grid, medium padding)
+ * - Desktop: min-width 1024px (full grid, max-width container)
+ */
+
+/* ============================================================
+   MOBILE NAVIGATION - Owned by Scenario 7 (Navigation and GitHub Links)
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-card-border);
+    padding: var(--spacing-md) var(--spacing-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-menu.is-open {
+    display: flex;
+  }
+
+  .nav-menu li {
+    border-bottom: 1px solid var(--color-card-border);
+  }
+
+  .nav-menu li:last-child {
+    border-bottom: none;
+  }
+
+  .nav-link {
+    display: block;
+    padding: var(--spacing-md) 0;
+    font-size: var(--text-lg);
+  }
+
+  .nav-link--github {
+    display: inline-flex;
+    padding: var(--spacing-md) 0;
+  }
+
+  /* Hamburger animation when open */
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* Hero actions stack on mobile */
+  .hero-actions {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .github-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Footer stacks on mobile */
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+}
+
+/* ============================================================
+   TABLET BREAKPOINT
+   ============================================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================================
+   DESKTOP BREAKPOINT
+   ============================================================ */
+
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+
+  .header-container {
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+
+  #hero h1 {
+    font-size: var(--text-5xl);
+  }
+
+  #hero .tagline {
+    font-size: var(--text-xl);
+  }
+}
+
+/* ============================================================
+   MOBILE BREAKPOINT - General Layout
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #hero h1 {
+    font-size: var(--text-4xl);
+  }
+
+  #hero .tagline {
+    font-size: var(--text-lg);
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .header-container {
+    padding: var(--spacing-md);
+  }
+
+  /* About section mobile */
+  #about h2 {
+    font-size: var(--text-2xl);
+  }
+
+  #about p {
+    font-size: var(--text-base);
+  }
+
+  /* Features section mobile */
+  #features h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .feature-card h3 {
+    font-size: var(--text-lg);
+  }
+
+  .feature-card p {
+    font-size: var(--text-base);
+  }
+
+  /* Status section mobile */
+  #status h2 {
+    font-size: var(--text-2xl);
+  }
+
+  #status .status-description {
+    font-size: var(--text-base);
+  }
+
+  #status .status-text {
+    font-size: var(--text-base);
+  }
+
+  /* Quick start mobile */
+  #quick-start h2 {
+    font-size: var(--text-2xl);
+  }
+
+  #quick-start .quick-start-description {
+    font-size: var(--text-base);
+  }
+
+  .code-block-wrapper {
+    margin: 0 auto var(--spacing-lg) auto;
+  }
+
+  .code-block {
+    padding: var(--spacing-sm) var(--spacing-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .code-block code {
+    font-size: var(--text-sm);
+  }
+
+  /* Configuration mobile */
+  #configuration h2 {
+    font-size: var(--text-2xl);
+  }
+
+  #configuration .config-description {
+    font-size: var(--text-base);
+  }
+
+  #configuration .config-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #configuration .config-table {
+    min-width: 600px;
+  }
+
+  #configuration .config-table th,
+  #configuration .config-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--text-sm);
+  }
+
+  /* Footer mobile adjustments */
+  .site-footer {
+    padding: var(--spacing-2xl) 0 var(--spacing-lg) 0;
+  }
+
+  .footer-container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .footer-logo {
+    font-size: var(--text-lg);
+  }
+
+  .footer-tagline {
+    font-size: var(--text-sm);
+  }
+
+  .footer-links a {
+    font-size: var(--text-base);
+  }
+
+  .footer-copyright {
+    font-size: var(--text-sm);
+  }
+
+  /* Usage demo mobile */
+  .usage-demo h3 {
+    font-size: var(--text-lg);
+  }
+
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Hero logo mobile */
+  .hero-logo {
+    max-width: 80px;
+  }
+}
+
+/* ============================================================
+   TABLET BREAKPOINT - General Layout Adjustments
+   ============================================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  .header-container {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  #hero h1 {
+    font-size: 2.75rem;
+  }
+
+  #hero .tagline {
+    font-size: var(--text-xl);
+  }
+
+  #about h2,
+  #features h2,
+  #status h2,
+  #quick-start h2,
+  #configuration h2 {
+    font-size: var(--text-3xl);
+  }
+
+  .feature-card h3 {
+    font-size: var(--text-xl);
+  }
+
+  /* Code blocks tablet */
+  .code-block-wrapper {
+    max-width: 100%;
+    margin: 0 var(--spacing-md) var(--spacing-xl) var(--spacing-md);
+  }
+
+  /* Config table tablet */
+  #configuration .config-table-wrapper {
+    overflow-x: auto;
+  }
+
+  /* Footer tablet */
+  .footer-container {
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+/* ============================================================
+   TOUCH TARGET SIZING (WCAG 2.1 Compliance)
+   ============================================================ */
+
+@media (max-width: 767px) {
+  /* Ensure all interactive elements meet minimum 44x44px touch target (WCAG 2.1) */
+  .nav-link,
+  .nav-link--github,
+  .cta-button,
+  .github-button,
+  .copy-button,
+  .mobile-menu-toggle,
+  .footer-links a,
+  .footer-github-link {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-link--github {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .cta-button,
+  .github-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .copy-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .footer-links a {
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-menu-toggle {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY - Reduced Motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

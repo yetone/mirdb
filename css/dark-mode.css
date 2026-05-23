@@ -1,0 +1,172 @@
+/**
+ * Dark mode theme overrides.
+ * Owner: Scenario 10 - Dark Mode Theme
+ *
+ * Contents:
+ * - [data-theme="dark"] root variable overrides
+ * - Theme transition animations
+ * - Toggle button styles
+ * - Code block dark mode overrides
+ */
+
+/* Theme transition for smooth switching */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark theme variable overrides */
+[data-theme="dark"] {
+  --color-background: #0f172a;
+  --color-text: #e2e8f0;
+  --color-primary: #60a5fa;
+  --color-accent: #a78bfa;
+  --color-card-bg: #1e293b;
+  --color-card-border: #334155;
+  --color-text-muted: #94a3b8;
+}
+
+/* Ensure footer and sections use dark variables in dark mode */
+[data-theme="dark"] .site-footer {
+  background-color: var(--color-card-bg);
+  border-top-color: var(--color-card-border);
+}
+
+[data-theme="dark"] .site-header {
+  background-color: rgba(15, 23, 42, 0.85);
+  border-bottom-color: var(--color-card-border);
+}
+
+/* Code block dark mode */
+[data-theme="dark"] .code-block {
+  background-color: #1e1e1e;
+}
+
+[data-theme="dark"] .code-block code {
+  color: #d4d4d4;
+}
+
+[data-theme="dark"] .code-block-header {
+  background-color: #2d2d2d;
+  border-bottom-color: #3c3c3c;
+}
+
+[data-theme="dark"] .syntax-command {
+  color: #ff7b72;
+}
+
+[data-theme="dark"] .syntax-key {
+  color: #ffa657;
+}
+
+[data-theme="dark"] .syntax-string {
+  color: #a5d6ff;
+}
+
+[data-theme="dark"] .syntax-number {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .syntax-response {
+  color: #56d364;
+}
+
+[data-theme="dark"] .syntax-keyword {
+  color: #ff7b72;
+}
+
+[data-theme="dark"] .syntax-method {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] .syntax-comment {
+  color: #8b949e;
+}
+
+/* Hero section dark mode */
+[data-theme="dark"] #hero {
+  background-color: var(--color-background);
+}
+
+/* Feature card dark mode hover */
+[data-theme="dark"] .feature-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* GitHub button dark mode */
+[data-theme="dark"] .github-button {
+  border-color: var(--color-card-border);
+}
+
+[data-theme="dark"] .github-button:hover {
+  background-color: var(--color-card-bg);
+  border-color: var(--color-text-muted);
+}
+
+/* Mobile menu toggle dark mode */
+[data-theme="dark"] .mobile-menu-toggle {
+  border-color: var(--color-card-border);
+}
+
+[data-theme="dark"] .mobile-menu-toggle:hover {
+  background-color: var(--color-card-bg);
+  border-color: var(--color-text-muted);
+}
+
+/* Table dark mode */
+[data-theme="dark"] .config-table thead {
+  background-color: var(--color-card-bg);
+  border-bottom-color: var(--color-card-border);
+}
+
+[data-theme="dark"] .config-table td {
+  border-bottom-color: var(--color-card-border);
+}
+
+[data-theme="dark"] .config-table tbody tr:hover {
+  background-color: var(--color-card-bg);
+}
+
+/* Theme toggle button styles */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  color: var(--color-text);
+  margin-left: var(--spacing-md);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-card-bg);
+  border-color: var(--color-text-muted);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Responsive: show toggle on all screen sizes */
+@media (max-width: 767px) {
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+}
