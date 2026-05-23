@@ -18,6 +18,7 @@
     <!-- Hero Section: owned by Scenario 1 -->
     <section id="hero">
       <div class="hero-content">
+        <img src="assets/logo.gif" alt="MirDB logo" class="hero-logo" data-testid="hero-logo">
         <h1>MirDB</h1>
         <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
         <a href="#quick-start" class="cta-button">Get Started</a>
@@ -178,6 +179,11 @@ client.<span class="syntax-method">set</span>(<span class="syntax-string">'mykey
 value = client.<span class="syntax-method">get</span>(<span class="syntax-string">'mykey'</span>)
 <span class="syntax-method">print</span>(value)  <span class="syntax-comment"># Output: hello</span></code></pre>
         </div>
+
+        <div class="usage-demo" data-testid="usage-gif-container">
+          <h3>Usage Demonstration</h3>
+          <img src="assets/usage.gif" alt="MirDB usage demonstration" class="usage-gif" data-testid="usage-gif">
+        </div>
       </div>
     </section>
 
@@ -261,7 +267,17 @@ value = client.<span class="syntax-method">get</span>(<span class="syntax-string
   </main>
 
   <!-- Footer: owned by Scenario 13 -->
-  <footer>...</footer>
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-badges" data-testid="footer-badges">
+          <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="CircleCI build status for yetone/mirdb">
+            <img src="https://img.shields.io/circleci/build/gh/yetone/mirdb" alt="CircleCI build status" class="badge-img" data-testid="circleci-badge">
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script src="js/dark-mode.js"></script>
   <script src="js/navigation.js"></script>

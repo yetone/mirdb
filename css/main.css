@@ -570,3 +570,76 @@ a:hover {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
+
+/* ============================================================
+   STATUS BADGES AND VISUAL ASSETS - Owned by Scenario 8
+   ============================================================ */
+
+/* Hero logo */
+.hero-logo {
+  display: block;
+  max-width: 120px;
+  height: auto;
+  margin: 0 auto var(--spacing-lg) auto;
+  border-radius: var(--border-radius);
+}
+
+/* Usage GIF in Quick Start */
+.usage-demo {
+  max-width: 720px;
+  margin: var(--spacing-2xl) auto 0 auto;
+  text-align: center;
+}
+
+.usage-demo h3 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+}
+
+.usage-gif {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-card-border);
+  margin: 0 auto;
+}
+
+/* Footer */
+footer {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--color-card-bg);
+  border-top: 1px solid var(--color-card-border);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.footer-badges {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.badge-img {
+  display: inline-block;
+  height: 20px;
+  width: auto;
+}
+
+/* Badge link hover */
+.footer-badges a {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.footer-badges a:hover {
+  opacity: 0.8;
+}
