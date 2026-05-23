@@ -169,10 +169,41 @@ a:hover {
   background-color: var(--color-background);
 }
 
-#features .container {
+/* ============================================================
+   ABOUT SECTION - Owned by Scenario 2 (About Section)
+   ============================================================ */
+
+#about {
+  padding: var(--spacing-3xl) 0;
+  background-color: var(--color-background);
+  border-top: 1px solid var(--color-card-border);
+}
+
+#about .container {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
+}
+
+#about h2 {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-text);
+}
+
+#about p {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  max-width: 800px;
+  margin: 0 auto var(--spacing-lg) auto;
+  text-align: center;
+}
+
+#about p:last-child {
+  margin-bottom: 0;
 }
 
 #features h2 {

@@ -25,7 +25,23 @@
     </section>
 
     <!-- About Section: owned by Scenario 2 -->
-    <section id="about">...</section>
+    <section id="about">
+      <div class="container">
+        <h2>What is MirDB?</h2>
+        <p class="about-description">
+          MirDB is a persistent key-value store written in Rust that implements the Memcached protocol.
+          It combines the simplicity and speed of memcached with the durability of disk-based persistence,
+          making it a drop-in replacement for memcached that ensures your data survives restarts.
+        </p>
+        <p class="about-value-prop">
+          Unlike traditional memcached which stores all data in memory and loses everything on restart,
+          MirDB uses an LSM tree architecture with SSTable-based persistence to provide both
+          high-performance caching and reliable data storage. Existing memcached clients connect
+          seamlessly — just point them at MirDB and enjoy the benefits of persistence without
+          changing a single line of client code.
+        </p>
+      </div>
+    </section>
 
     <!-- Features Section: owned by Scenario 3 -->
     <section id="features">
