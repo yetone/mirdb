@@ -12,7 +12,44 @@
 </head>
 <body>
   <!-- Navigation: owned by Scenario 7 -->
-  <header>...</header>
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#" class="site-logo" aria-label="MirDB - Home">MirDB</a>
+      <nav class="main-nav" role="navigation" aria-label="Main navigation">
+        <button
+          class="mobile-menu-toggle"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+        >
+          <span class="hamburger-bar" aria-hidden="true"></span>
+          <span class="hamburger-bar" aria-hidden="true"></span>
+          <span class="hamburger-bar" aria-hidden="true"></span>
+        </button>
+        <ul id="nav-menu" class="nav-menu" role="menubar">
+          <li role="none"><a href="#features" class="nav-link" role="menuitem">Features</a></li>
+          <li role="none"><a href="#quick-start" class="nav-link" role="menuitem">Quick Start</a></li>
+          <li role="none"><a href="#status" class="nav-link" role="menuitem">Project Status</a></li>
+          <li role="none">
+            <a
+              href="https://github.com/yetone/mirdb"
+              class="nav-link nav-link--github"
+              target="_blank"
+              rel="noopener noreferrer"
+              role="menuitem"
+              data-testid="github-link-header"
+            >
+              <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span>GitHub</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <main>
     <!-- Hero Section: owned by Scenario 1 -->
@@ -21,7 +58,21 @@
         <img src="assets/logo.gif" alt="MirDB logo" class="hero-logo" data-testid="hero-logo">
         <h1>MirDB</h1>
         <p class="tagline">A Persistent Key-Value Store with Memcached Protocol</p>
-        <a href="#quick-start" class="cta-button">Get Started</a>
+        <div class="hero-actions">
+          <a href="#quick-start" class="cta-button">Get Started</a>
+          <a
+            href="https://github.com/yetone/mirdb"
+            class="github-button"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="github-link-hero"
+          >
+            <svg class="github-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
       </div>
     </section>
 
@@ -266,10 +317,38 @@ value = client.<span class="syntax-method">get</span>(<span class="syntax-string
     </section>
   </main>
 
-  <!-- Footer: owned by Scenario 13 -->
-  <footer>
-    <div class="container">
+  <!-- Footer: owned by Scenario 7 (nav/footer), Scenario 8 (badges), and Scenario 13 -->
+  <footer class="site-footer">
+    <div class="footer-container">
       <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">MirDB</span>
+          <p class="footer-tagline">A Persistent Key-Value Store with Memcached Protocol</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <ul class="footer-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#quick-start">Quick Start</a></li>
+            <li><a href="#status">Project Status</a></li>
+            <li>
+              <a
+                href="https://github.com/yetone/mirdb"
+                class="footer-github-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="github-link-footer"
+              >
+                <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                GitHub
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2025 MirDB. Open source under the MIT License.</p>
         <div class="footer-badges" data-testid="footer-badges">
           <a href="https://circleci.com/gh/yetone/mirdb" target="_blank" rel="noopener noreferrer" aria-label="CircleCI build status for yetone/mirdb">
             <img src="https://img.shields.io/circleci/build/gh/yetone/mirdb" alt="CircleCI build status" class="badge-img" data-testid="circleci-badge">
