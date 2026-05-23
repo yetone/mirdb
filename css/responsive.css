@@ -1,9 +1,132 @@
 /**
  * Responsive design breakpoints.
  * Owner: Scenario 9 - Responsive Design
+ * Co-owner: Scenario 7 - Navigation and GitHub Links (mobile nav styles)
  *
  * Expected contents:
  * - Mobile: max-width 767px (hamburger menu, stacked layout)
  * - Tablet: 768px - 1023px (adjusted grid, medium padding)
  * - Desktop: min-width 1024px (full grid, max-width container)
  */
+
+/* ============================================================
+   MOBILE NAVIGATION - Owned by Scenario 7 (Navigation and GitHub Links)
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-card-border);
+    padding: var(--spacing-md) var(--spacing-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-menu.is-open {
+    display: flex;
+  }
+
+  .nav-menu li {
+    border-bottom: 1px solid var(--color-card-border);
+  }
+
+  .nav-menu li:last-child {
+    border-bottom: none;
+  }
+
+  .nav-link {
+    display: block;
+    padding: var(--spacing-md) 0;
+    font-size: var(--text-lg);
+  }
+
+  .nav-link--github {
+    display: inline-flex;
+    padding: var(--spacing-md) 0;
+  }
+
+  /* Hamburger animation when open */
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* Hero actions stack on mobile */
+  .hero-actions {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .github-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Footer stacks on mobile */
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+}
+
+/* ============================================================
+   TABLET BREAKPOINT
+   ============================================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================================
+   MOBILE BREAKPOINT - General Layout
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #hero h1 {
+    font-size: var(--text-4xl);
+  }
+
+  #hero .tagline {
+    font-size: var(--text-lg);
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .header-container {
+    padding: var(--spacing-md);
+  }
+}

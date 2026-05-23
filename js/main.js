@@ -16,10 +16,15 @@
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
     anchor.addEventListener('click', function(e) {
-      var target = document.querySelector(this.getAttribute('href'));
+      var href = this.getAttribute('href');
+      var target = document.querySelector(href);
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth' });
+        // Update URL hash without triggering page reload
+        if (window.history && window.history.pushState) {
+          window.history.pushState(null, null, href);
+        }
       }
     });
   });
