@@ -129,7 +129,57 @@
     </section>
 
     <!-- Quick Start Section: owned by Scenario 5 -->
-    <section id="quick-start">...</section>
+    <section id="quick-start">
+      <div class="container">
+        <h2>Quick Start</h2>
+        <p class="quick-start-description">
+          MirDB implements the Memcached text protocol, so any memcached client works out of the box.
+          Here is how to set and retrieve values using a simple telnet session:
+        </p>
+
+        <div class="code-block-wrapper" data-testid="quick-start-set-example">
+          <div class="code-block-header">
+            <span class="code-block-label">Set a key-value pair</span>
+            <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block"><code><span class="syntax-command">set</span> <span class="syntax-key">mykey</span> <span class="syntax-number">0</span> <span class="syntax-number">60</span> <span class="syntax-number">5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-response">STORED</span></code></pre>
+        </div>
+
+        <div class="code-block-wrapper" data-testid="quick-start-get-example">
+          <div class="code-block-header">
+            <span class="code-block-label">Retrieve a value</span>
+            <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block"><code><span class="syntax-command">get</span> <span class="syntax-key">mykey</span>
+<span class="syntax-response">VALUE mykey 0 5</span>
+<span class="syntax-string">hello</span>
+<span class="syntax-response">END</span></code></pre>
+        </div>
+
+        <div class="code-block-wrapper" data-testid="quick-start-client-example">
+          <div class="code-block-header">
+            <span class="code-block-label">Using a memcached client (Python example)</span>
+            <button class="copy-button" type="button" aria-label="Copy code to clipboard">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <pre class="code-block"><code><span class="syntax-keyword">import</span> memcache
+client = memcache.Client([<span class="syntax-string">'127.0.0.1:12333'</span>])
+client.<span class="syntax-method">set</span>(<span class="syntax-string">'mykey'</span>, <span class="syntax-string">'hello'</span>)
+value = client.<span class="syntax-method">get</span>(<span class="syntax-string">'mykey'</span>)
+<span class="syntax-method">print</span>(value)  <span class="syntax-comment"># Output: hello</span></code></pre>
+        </div>
+      </div>
+    </section>
 
     <!-- Configuration Section: owned by Scenario 6 -->
     <section id="configuration">

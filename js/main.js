@@ -30,7 +30,34 @@ async function copyToClipboard(text) {
 }
 
 function initCopyButtons() {
-  // To be implemented by Scenario 5 (Quick Start Section)
+  document.querySelectorAll('.copy-button').forEach(function(button) {
+    button.addEventListener('click', async function() {
+      var wrapper = button.closest('.code-block-wrapper');
+      if (!wrapper) return;
+
+      var codeEl = wrapper.querySelector('code');
+      if (!codeEl) return;
+
+      var text = codeEl.textContent;
+
+      try {
+        await copyToClipboard(text);
+
+        // Visual feedback
+        var originalLabel = button.querySelector('.copy-label').textContent;
+        button.querySelector('.copy-label').textContent = 'Copied!';
+        button.classList.add('copied');
+
+        setTimeout(function() {
+          button.querySelector('.copy-label').textContent = originalLabel;
+          button.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        // Fallback for environments without clipboard API
+        console.error('Failed to copy:', err);
+      }
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function() {

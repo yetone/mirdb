@@ -345,6 +345,157 @@ a:hover {
 }
 
 /* ============================================================
+   QUICK START SECTION - Owned by Scenario 5 (Quick Start Section)
+   ============================================================ */
+
+#quick-start {
+  padding: var(--spacing-3xl) 0;
+  background-color: var(--color-background);
+  border-top: 1px solid var(--color-card-border);
+}
+
+#quick-start .container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+#quick-start h2 {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+#quick-start .quick-start-description {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl) auto;
+  text-align: center;
+}
+
+/* Code block wrapper */
+.code-block-wrapper {
+  max-width: 720px;
+  margin: 0 auto var(--spacing-xl) auto;
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+/* Code block header with label and copy button */
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-card-border);
+  border-bottom: 1px solid var(--color-card-border);
+}
+
+.code-block-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-family: var(--font-heading);
+}
+
+/* Copy button */
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  color: var(--color-text-muted);
+  background-color: transparent;
+  border: 1px solid var(--color-card-border);
+  border-radius: calc(var(--border-radius) / 2);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.copy-button:hover {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.copy-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.copy-button.copied {
+  color: #15803d;
+  border-color: #15803d;
+  background-color: #dcfce7;
+}
+
+.copy-icon {
+  flex-shrink: 0;
+}
+
+/* Code block */
+.code-block {
+  margin: 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  overflow-x: auto;
+  background-color: #1e1e2e;
+}
+
+.code-block code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: #cdd6f4;
+  background-color: transparent;
+  display: block;
+  white-space: pre;
+}
+
+/* Syntax highlighting tokens */
+.syntax-command {
+  color: #f38ba8;
+  font-weight: 600;
+}
+
+.syntax-key {
+  color: #fab387;
+}
+
+.syntax-string {
+  color: #a6e3a1;
+}
+
+.syntax-number {
+  color: #f9e2af;
+}
+
+.syntax-response {
+  color: #89b4fa;
+}
+
+.syntax-keyword {
+  color: #cba6f7;
+  font-weight: 600;
+}
+
+.syntax-method {
+  color: #89dceb;
+}
+
+.syntax-comment {
+  color: #6c7086;
+  font-style: italic;
+}
+
+/* ============================================================
    CONFIGURATION SECTION - Owned by Scenario 6 (Configuration Section)
    ============================================================ */
 
