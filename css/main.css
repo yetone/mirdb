@@ -22,7 +22,7 @@
   --color-accent: #7c3aed;
   --color-card-bg: #f8fafc;
   --color-card-border: #e2e8f0;
-  --color-text-muted: #64748b;
+  --color-text-muted: #475569;
 
   /* Spacing scale */
   --spacing-xs: 0.25rem;
@@ -491,7 +491,7 @@ a:hover {
 }
 
 .syntax-comment {
-  color: #6c7086;
+  color: #8389a4;
   font-style: italic;
 }
 
@@ -911,4 +911,76 @@ footer {
 
 .footer-badges a:hover {
   opacity: 0.8;
+}
+
+/* ============================================================
+   ACCESSIBILITY - Owned by Scenario 11 (Accessibility Compliance)
+   ============================================================ */
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Focus styles for all interactive elements */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-card-bg);
+  border-color: var(--color-text-muted);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* Fix copy-button.copied contrast */
+.copy-button.copied {
+  color: #14532d;
+  border-color: #14532d;
+  background-color: #dcfce7;
 }

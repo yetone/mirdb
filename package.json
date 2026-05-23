@@ -8,8 +8,10 @@
     "test:accessibility": "playwright test tests/e2e/accessibility.spec.js"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.40.0",
-    "vitest": "^1.0.0",
-    "jsdom": "^24.0.0"
+    "axe-core": "^4.11.4",
+    "jsdom": "^24.0.0",
+    "vitest": "^1.0.0"
   }
 }

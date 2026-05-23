@@ -65,12 +65,30 @@ function initCopyButtons() {
   });
 }
 
+function initThemeToggle() {
+  var toggle = document.querySelector('.theme-toggle');
+  if (!toggle) return;
+
+  toggle.addEventListener('click', function() {
+    var currentTheme = document.documentElement.getAttribute('data-theme');
+    var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    toggle.setAttribute('aria-pressed', String(newTheme === 'dark'));
+    try {
+      localStorage.setItem('theme', newTheme);
+    } catch (e) {
+      // localStorage may not be available
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   initSmoothScroll();
   initCopyButtons();
+  initThemeToggle();
 });
 
 // Exports for testing
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { initSmoothScroll, initCopyButtons, copyToClipboard };
+  module.exports = { initSmoothScroll, initCopyButtons, copyToClipboard, initThemeToggle };
 }

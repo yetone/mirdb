@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
+  <!-- Skip link: owned by Scenario 11 -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- Navigation: owned by Scenario 7 -->
   <header class="site-header">
     <div class="header-container">
@@ -27,17 +30,26 @@
           <span class="hamburger-bar" aria-hidden="true"></span>
           <span class="hamburger-bar" aria-hidden="true"></span>
         </button>
-        <ul id="nav-menu" class="nav-menu" role="menubar">
-          <li role="none"><a href="#features" class="nav-link" role="menuitem">Features</a></li>
-          <li role="none"><a href="#quick-start" class="nav-link" role="menuitem">Quick Start</a></li>
-          <li role="none"><a href="#status" class="nav-link" role="menuitem">Project Status</a></li>
-          <li role="none">
+        <ul id="nav-menu" class="nav-menu">
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#quick-start" class="nav-link">Quick Start</a></li>
+          <li><a href="#status" class="nav-link">Project Status</a></li>
+          <li>
+            <button
+              class="theme-toggle"
+              type="button"
+              aria-label="Toggle dark mode"
+              aria-pressed="false"
+            >
+              <span class="theme-toggle-icon" aria-hidden="true">&#9790;</span>
+            </button>
+          </li>
+          <li>
             <a
               href="https://github.com/yetone/mirdb"
               class="nav-link nav-link--github"
               target="_blank"
               rel="noopener noreferrer"
-              role="menuitem"
               data-testid="github-link-header"
             >
               <svg class="github-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
@@ -62,7 +74,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <!-- Hero Section: owned by Scenario 1 -->
     <section id="hero">
       <div class="hero-content">
@@ -260,9 +272,9 @@ value = client.<span class="syntax-method">get</span>(<span class="syntax-string
           <table class="config-table">
             <thead>
               <tr>
-                <th>Option</th>
-                <th>Default Value</th>
-                <th>Description</th>
+                <th scope="col">Option</th>
+                <th scope="col">Default Value</th>
+                <th scope="col">Description</th>
               </tr>
             </thead>
             <tbody>
