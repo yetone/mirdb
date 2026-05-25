@@ -35,7 +35,7 @@ export interface SSTableLevel {
 }
 
 export interface KVOperationRequest {
-  operation: 'get' | 'set' | 'delete' | 'flush_all';
+  op: 'get' | 'set' | 'delete' | 'flush_all';
   key?: string;
   value?: string;
   flags?: number;
@@ -43,9 +43,9 @@ export interface KVOperationRequest {
 }
 
 export interface KVOperationResponse {
-  success: boolean;
-  result?: string;
-  error?: string;
+  status: 'ok' | 'not_found' | 'error';
+  value?: string;
+  message?: string;
 }
 
 export interface HealthStatus {

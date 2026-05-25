@@ -41,3 +41,7 @@ export function executeOperation(op: KVOperationRequest): Promise<KVOperationRes
     body: JSON.stringify(op),
   });
 }
+
+export function getValue(key: string): Promise<KVOperationResponse> {
+  return executeOperation({ op: 'get', key });
+}

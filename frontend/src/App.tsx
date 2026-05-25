@@ -1,6 +1,7 @@
 import HeroSection from './components/hero/HeroSection';
 import FeaturesSection from './components/features/FeaturesSection';
 import PlannedFeatures from './components/features/PlannedFeatures';
+import KVExplorer from './components/kv-explorer/KVExplorer';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
         <HeroSection />
         <FeaturesSection />
         <PlannedFeatures />
+        <KVExplorer />
       </main>
     </div>
   );
