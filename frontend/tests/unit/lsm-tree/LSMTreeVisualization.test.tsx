@@ -148,6 +148,50 @@ describe('LSMTreeVisualization', () => {
     const svg = screen.getByTestId('lsm-tree-svg');
     expect(svg).toHaveTextContent('0 keys');
   });
+
+  it('updates to show immutable memtable when state changes', () => {
+    const { rerender } = render(
+      <LSMTreeVisualization
+        state={createMockState({ immutable_memtable: null })}
+      />
+    );
+    const svg = screen.getByTestId('lsm-tree-svg');
+    expect(svg.textContent).not.toContain('Immutable Memtable');
+
+    rerender(
+      <LSMTreeVisualization
+        state={createMockState({
+          immutable_memtable: { key_count: 25, size_bytes: 2048 },
+        })}
+      />
+    );
+    expect(svg).toHaveTextContent('Immutable Memtable');
+    expect(svg).toHaveTextContent('25 keys');
+  });
+
+  it('shows Level 0 SSTable increase after state simulates compaction', () => {
+    const { rerender } = render(
+      <LSMTreeVisualization
+        state={createMockState({
+          immutable_memtable: { key_count: 30, size_bytes: 4096 },
+          levels: [{ level: 0, file_count: 2, total_size_bytes: 100000 }],
+        })}
+      />
+    );
+    const svg = screen.getByTestId('lsm-tree-svg');
+    expect(svg).toHaveTextContent('2 files');
+
+    rerender(
+      <LSMTreeVisualization
+        state={createMockState({
+          immutable_memtable: null,
+          levels: [{ level: 0, file_count: 3, total_size_bytes: 150000 }],
+        })}
+      />
+    );
+    expect(svg).toHaveTextContent('3 files');
+    expect(svg.textContent).not.toContain('Immutable Memtable');
+  });
 });
 
 describe('LSMTreeVisualization - Tooltip interaction', () => {
