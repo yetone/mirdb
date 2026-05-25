@@ -4,6 +4,7 @@ import PlannedFeatures from './components/features/PlannedFeatures';
 import SystemOverview from './components/system-overview/SystemOverview';
 import { LSMTreeVisualization } from './components/lsm-tree';
 import KVExplorer from './components/kv-explorer/KVExplorer';
+import { MetricsDashboard } from './components/metrics';
 
 const DEFAULT_CONFIG = {
   listen_address: '0.0.0.0:12333',
@@ -31,6 +32,7 @@ function App() {
         <FeaturesSection />
         <PlannedFeatures />
         <SystemOverview config={DEFAULT_CONFIG} />
+        <MetricsDashboard />
         <LSMTreeVisualization state={DEMO_LSM_STATE} />
         <KVExplorer />
       </main>
