@@ -94,7 +94,7 @@ export function KVSetPanel({ onSetSuccess, onSetError }: KVSetPanelProps) {
       setStatusMessage('');
 
       const request: KVOperationRequest = {
-        operation: 'set',
+        op: 'set',
         key: formData.key.trim(),
         value: formData.value.trim(),
         flags: parseInt(formData.flags, 10) || 0,
@@ -104,13 +104,13 @@ export function KVSetPanel({ onSetSuccess, onSetError }: KVSetPanelProps) {
       try {
         const response: KVOperationResponse = await executeOperation(request);
 
-        if (response.success) {
+        if (response.status === 'ok') {
           setStatus('success');
           setStatusMessage('STORED');
           onSetSuccess?.(request.key!, request.value!);
         } else {
           setStatus('error');
-          const errorMsg = response.error || 'Operation failed';
+          const errorMsg = response.message || 'Operation failed';
           setStatusMessage(errorMsg);
           onSetError?.(errorMsg);
         }

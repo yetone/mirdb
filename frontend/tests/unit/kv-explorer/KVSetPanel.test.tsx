@@ -187,8 +187,7 @@ describe('KVSetPanel', () => {
     it('calls executeOperation with correct params for new key', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
@@ -202,7 +201,7 @@ describe('KVSetPanel', () => {
       });
 
       expect(executeOperationSpy).toHaveBeenCalledWith({
-        operation: 'set',
+        op: 'set',
         key: 'hello',
         value: 'world',
         flags: 0,
@@ -213,8 +212,7 @@ describe('KVSetPanel', () => {
     it('displays STORED success message after successful SET', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
@@ -234,8 +232,7 @@ describe('KVSetPanel', () => {
       const user = userEvent.setup();
       const onSetSuccess = vi.fn();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel onSetSuccess={onSetSuccess} />);
@@ -254,8 +251,7 @@ describe('KVSetPanel', () => {
     it('calls executeOperation to overwrite existing key with new value', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
@@ -269,7 +265,7 @@ describe('KVSetPanel', () => {
 
       await waitFor(() => {
         expect(executeOperationSpy).toHaveBeenCalledWith({
-          operation: 'set',
+          op: 'set',
           key: 'hello',
           value: 'updated',
           flags: 0,
@@ -281,8 +277,7 @@ describe('KVSetPanel', () => {
     it('shows STORED message after updating existing key', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
@@ -306,8 +301,7 @@ describe('KVSetPanel', () => {
     it('submits with non-zero exptime', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
@@ -323,7 +317,7 @@ describe('KVSetPanel', () => {
 
       await waitFor(() => {
         expect(executeOperationSpy).toHaveBeenCalledWith({
-          operation: 'set',
+          op: 'set',
           key: 'tempkey',
           value: 'tempvalue',
           flags: 0,
@@ -335,8 +329,7 @@ describe('KVSetPanel', () => {
     it('submits with custom flags', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
@@ -352,7 +345,7 @@ describe('KVSetPanel', () => {
 
       await waitFor(() => {
         expect(executeOperationSpy).toHaveBeenCalledWith({
-          operation: 'set',
+          op: 'set',
           key: 'flagged',
           value: 'data',
           flags: 42,
@@ -366,8 +359,8 @@ describe('KVSetPanel', () => {
     it('displays API error message when operation fails', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: false,
-        error: 'Server error: key too large',
+        status: 'error',
+        message: 'Server error: key too large',
       });
 
       render(<KVSetPanel />);
@@ -387,8 +380,8 @@ describe('KVSetPanel', () => {
       const user = userEvent.setup();
       const onSetError = vi.fn();
       executeOperationSpy.mockResolvedValue({
-        success: false,
-        error: 'Server error',
+        status: 'error',
+        message: 'Server error',
       });
 
       render(<KVSetPanel onSetError={onSetError} />);
@@ -439,13 +432,13 @@ describe('KVSetPanel', () => {
   describe('loading state', () => {
     it('shows loading text on Set button during submission', async () => {
       const user = userEvent.setup();
-      let resolveOp: (value: { success: boolean; result: string }) => void;
-      const promise = new Promise<{ success: boolean; result: string }>(
+      let resolveOp: (value: { status: 'ok' }) => void;
+      const promise = new Promise<{ status: 'ok' }>(
         (resolve) => {
           resolveOp = resolve;
         }
       );
-      executeOperationSpy.mockReturnValue(promise);
+      executeOperationSpy.mockReturnValue(promise as Promise<any>);
 
       render(<KVSetPanel />);
 
@@ -457,7 +450,7 @@ describe('KVSetPanel', () => {
         'Setting...'
       );
 
-      resolveOp!({ success: true, result: 'STORED' });
+      resolveOp!({ status: 'ok' });
 
       await waitFor(() => {
         expect(screen.getByTestId('kv-set-submit-button')).toHaveTextContent(
@@ -468,13 +461,13 @@ describe('KVSetPanel', () => {
 
     it('disables inputs during loading', async () => {
       const user = userEvent.setup();
-      let resolveOp: (value: { success: boolean; result: string }) => void;
-      const promise = new Promise<{ success: boolean; result: string }>(
+      let resolveOp: (value: { status: 'ok' }) => void;
+      const promise = new Promise<{ status: 'ok' }>(
         (resolve) => {
           resolveOp = resolve;
         }
       );
-      executeOperationSpy.mockReturnValue(promise);
+      executeOperationSpy.mockReturnValue(promise as Promise<any>);
 
       render(<KVSetPanel />);
 
@@ -487,7 +480,7 @@ describe('KVSetPanel', () => {
       expect(screen.getByTestId('kv-set-flags-input')).toBeDisabled();
       expect(screen.getByTestId('kv-set-exptime-input')).toBeDisabled();
 
-      resolveOp!({ success: true, result: 'STORED' });
+      resolveOp!({ status: 'ok' });
     });
   });
 
@@ -529,8 +522,7 @@ describe('KVSetPanel', () => {
     it('clears success message when Reset is clicked', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
@@ -591,8 +583,7 @@ describe('KVSetPanel', () => {
     it('success message has role="status"', async () => {
       const user = userEvent.setup();
       executeOperationSpy.mockResolvedValue({
-        success: true,
-        result: 'STORED',
+        status: 'ok',
       });
 
       render(<KVSetPanel />);
