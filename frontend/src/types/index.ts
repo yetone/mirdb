@@ -43,7 +43,7 @@ export interface KVOperationRequest {
 }
 
 export interface KVOperationResponse {
-  status: 'ok' | 'not_found' | 'error';
+  status: 'ok' | 'not_found' | 'deleted' | 'error';
   value?: string;
   message?: string;
 }
