@@ -70,7 +70,7 @@ describe('KVDeletePanel', () => {
       render(<KVDeletePanel />);
       expect(screen.getByTestId('kv-delete-panel')).toHaveAttribute(
         'aria-label',
-        'Key-Value DELETE and FLUSH Operations'
+        'Key-Value DELETE Operation'
       );
     });
   });
@@ -185,7 +185,7 @@ describe('KVDeletePanel', () => {
       });
       expect(
         screen.getByTestId('kv-delete-success-message')
-      ).toHaveTextContent('Key deleted successfully');
+      ).toHaveTextContent('DELETED');
     });
 
     it('calls onDeleteSuccess callback with key', async () => {

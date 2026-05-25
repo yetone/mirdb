@@ -80,11 +80,16 @@ export function KVDeletePanel({
         setDeleteResult({ status: 'deleted', message: response.message });
         onDeleteSuccess?.(key);
       } else if (response.status === 'not_found') {
+        const msg = response.message || 'Key not found';
         setDeleteResult({
           status: 'not_found',
-          message: response.message || 'Key not found',
+          message: msg,
         });
-        onDeleteNotFound?.(key);
+        if (onDeleteNotFound) {
+          onDeleteNotFound(key);
+        } else {
+          onDeleteError?.(msg);
+        }
       } else {
         const msg = response.message || 'Delete operation failed';
         setDeleteResult({ status: 'error', message: msg });
@@ -140,7 +145,7 @@ export function KVDeletePanel({
   return (
     <section
       className="kv-delete-panel"
-      aria-label="Key-Value DELETE and FLUSH Operations"
+      aria-label="Key-Value DELETE Operation"
       data-testid="kv-delete-panel"
     >
       <h2 className="kv-delete-panel__heading" data-testid="kv-delete-heading">
@@ -154,7 +159,7 @@ export function KVDeletePanel({
           role="status"
           data-testid="kv-delete-success-message"
         >
-          {deleteResult.message || 'Key deleted successfully'}
+          {deleteResult.message || 'DELETED'}
         </div>
       )}
 
