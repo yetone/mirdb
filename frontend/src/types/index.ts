@@ -53,4 +53,6 @@ export interface HealthStatus {
   timestamp: string;
 }
 
+export type ConnectionState = 'connected' | 'connecting' | 'disconnected';
+
 export type Theme = 'light' | 'dark';
