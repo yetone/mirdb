@@ -1,150 +1,231 @@
 /**
- * Key-Value Explorer DELETE Operation Panel.
- * Owner: Scenario 10 - KV Explorer - DELETE Operations
+ * Key-Value Explorer DELETE and FLUSH Operation Panel.
+ * Owner: Scenario 10 - KV Explorer - DELETE and FLUSH Operations
  *
- * Provides a UI for deleting individual keys via the MirDB API.
- * Covers REQ-7 (delete operations).
+ * Provides a UI for deleting individual keys and flushing all data.
+ * Covers REQ-7 (delete operations) and Appendix A (flush_all).
  */
 
 import { useState, useCallback } from 'react';
-import { executeOperation } from '../../api/client';
 import type { KVOperationResponse } from '../../types';
+import { executeOperation } from '../../api/client';
 
 export interface KVDeletePanelProps {
   onDeleteSuccess?: (key: string) => void;
+  onDeleteNotFound?: (key: string) => void;
   onDeleteError?: (error: string) => void;
+  onFlushSuccess?: () => void;
+  onFlushError?: (error: string) => void;
 }
 
 export type DeleteStatus = 'idle' | 'loading' | 'deleted' | 'not_found' | 'error';
+export type FlushStatus = 'idle' | 'confirming' | 'loading' | 'success' | 'error';
 
-export function KVDeletePanel({ onDeleteSuccess, onDeleteError }: KVDeletePanelProps) {
-  const [key, setKey] = useState('');
-  const [validationError, setValidationError] = useState('');
-  const [status, setStatus] = useState<DeleteStatus>('idle');
-  const [statusMessage, setStatusMessage] = useState('');
+export interface DeleteResult {
+  status: DeleteStatus;
+  message?: string;
+}
 
-  const handleKeyChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setKey(e.target.value);
-    if (validationError) {
-      setValidationError('');
+export interface FlushResult {
+  status: FlushStatus;
+  message?: string;
+}
+
+export function validateDeleteKey(key: string): string | undefined {
+  if (!key || key.trim() === '') {
+    return 'Key is required';
+  }
+  return undefined;
+}
+
+export function KVDeletePanel({
+  onDeleteSuccess,
+  onDeleteNotFound,
+  onDeleteError,
+  onFlushSuccess,
+  onFlushError,
+}: KVDeletePanelProps) {
+  const [deleteKey, setDeleteKey] = useState('');
+  const [deleteError, setDeleteError] = useState('');
+  const [deleteResult, setDeleteResult] = useState<DeleteResult>({ status: 'idle' });
+  const [flushResult, setFlushResult] = useState<FlushResult>({ status: 'idle' });
+
+  const handleDeleteKeyChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setDeleteKey(e.target.value);
+    if (deleteError) {
+      setDeleteError('');
     }
-  }, [validationError]);
+    if (deleteResult.status !== 'idle') {
+      setDeleteResult({ status: 'idle' });
+    }
+  }, [deleteError, deleteResult.status]);
 
   const handleDelete = useCallback(async () => {
-    const trimmedKey = key.trim();
-    if (!trimmedKey) {
-      setValidationError('Key is required');
-      setStatus('idle');
-      setStatusMessage('');
+    const validationError = validateDeleteKey(deleteKey);
+    if (validationError) {
+      setDeleteError(validationError);
+      setDeleteResult({ status: 'idle' });
       return;
     }
 
-    setValidationError('');
-    setStatus('loading');
-    setStatusMessage('');
+    setDeleteError('');
+    setDeleteResult({ status: 'loading' });
+
+    const key = deleteKey.trim();
 
     try {
-      const response: KVOperationResponse = await executeOperation({
-        op: 'delete',
-        key: trimmedKey,
-      });
+      const response: KVOperationResponse = await executeOperation({ op: 'delete', key });
 
       if (response.status === 'deleted') {
-        setStatus('deleted');
-        setStatusMessage('DELETED');
-        onDeleteSuccess?.(trimmedKey);
+        setDeleteResult({ status: 'deleted', message: response.message });
+        onDeleteSuccess?.(key);
       } else if (response.status === 'not_found') {
-        setStatus('not_found');
-        const msg = response.message || 'Key not found';
-        setStatusMessage(msg);
-        onDeleteError?.(msg);
+        setDeleteResult({
+          status: 'not_found',
+          message: response.message || 'Key not found',
+        });
+        onDeleteNotFound?.(key);
       } else {
-        setStatus('error');
         const msg = response.message || 'Delete operation failed';
-        setStatusMessage(msg);
+        setDeleteResult({ status: 'error', message: msg });
         onDeleteError?.(msg);
       }
     } catch (err) {
-      setStatus('error');
       const msg = err instanceof Error ? err.message : 'Network error';
-      setStatusMessage(msg);
+      setDeleteResult({ status: 'error', message: msg });
       onDeleteError?.(msg);
     }
-  }, [key, onDeleteSuccess, onDeleteError]);
+  }, [deleteKey, onDeleteSuccess, onDeleteNotFound, onDeleteError]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleDeleteKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleDelete();
     }
-  };
+  }, [handleDelete]);
+
+  const handleFlushClick = useCallback(() => {
+    setFlushResult({ status: 'confirming' });
+  }, []);
+
+  const handleFlushConfirm = useCallback(async () => {
+    setFlushResult({ status: 'loading' });
+
+    try {
+      const response: KVOperationResponse = await executeOperation({ op: 'flush_all' });
+
+      if (response.status === 'ok') {
+        setFlushResult({ status: 'success', message: response.message });
+        onFlushSuccess?.();
+      } else {
+        const msg = response.message || 'Flush operation failed';
+        setFlushResult({ status: 'error', message: msg });
+        onFlushError?.(msg);
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Network error';
+      setFlushResult({ status: 'error', message: msg });
+      onFlushError?.(msg);
+    }
+  }, [onFlushSuccess, onFlushError]);
+
+  const handleFlushCancel = useCallback(() => {
+    setFlushResult({ status: 'idle' });
+  }, []);
+
+  const isDeleteLoading = deleteResult.status === 'loading';
+  const isFlushLoading = flushResult.status === 'loading';
+  const isAnyLoading = isDeleteLoading || isFlushLoading;
 
   return (
     <section
       className="kv-delete-panel"
-      aria-label="Key-Value DELETE Operation"
+      aria-label="Key-Value DELETE and FLUSH Operations"
       data-testid="kv-delete-panel"
     >
       <h2 className="kv-delete-panel__heading" data-testid="kv-delete-heading">
-        Delete Key
+        Delete Key-Value Pair
       </h2>
 
-      {status === 'deleted' && (
+      {/* Delete Result Messages */}
+      {deleteResult.status === 'deleted' && (
         <div
           className="kv-delete-panel__message kv-delete-panel__message--success"
           role="status"
           data-testid="kv-delete-success-message"
         >
-          {statusMessage}
+          {deleteResult.message || 'Key deleted successfully'}
         </div>
       )}
 
-      {status === 'not_found' && (
+      {deleteResult.status === 'not_found' && (
         <div
           className="kv-delete-panel__message kv-delete-panel__message--not-found"
           role="status"
           data-testid="kv-delete-not-found-message"
         >
-          {statusMessage}
+          {deleteResult.message || 'Key not found'}
         </div>
       )}
 
-      {status === 'error' && statusMessage && (
+      {deleteResult.status === 'error' && (
         <div
           className="kv-delete-panel__message kv-delete-panel__message--error"
           role="alert"
           data-testid="kv-delete-error-message"
         >
-          {statusMessage}
+          {deleteResult.message || 'An error occurred'}
         </div>
       )}
 
-      <div className="kv-delete-panel__controls" data-testid="kv-delete-controls">
+      {/* Flush Result Messages */}
+      {flushResult.status === 'success' && (
+        <div
+          className="kv-delete-panel__message kv-delete-panel__message--success"
+          role="status"
+          data-testid="kv-flush-success-message"
+        >
+          {flushResult.message || 'All data flushed successfully'}
+        </div>
+      )}
+
+      {flushResult.status === 'error' && flushResult.message && (
+        <div
+          className="kv-delete-panel__message kv-delete-panel__message--error"
+          role="alert"
+          data-testid="kv-flush-error-message"
+        >
+          {flushResult.message}
+        </div>
+      )}
+
+      {/* Delete Key Input */}
+      <div className="kv-delete-panel__section" data-testid="kv-delete-section">
         <div className="kv-delete-panel__field">
           <label htmlFor="kv-delete-key" className="kv-delete-panel__label">
-            Key
+            Key to Delete
           </label>
           <input
             id="kv-delete-key"
             type="text"
-            value={key}
-            onChange={handleKeyChange}
-            onKeyDown={handleKeyDown}
+            value={deleteKey}
+            onChange={handleDeleteKeyChange}
+            onKeyDown={handleDeleteKeyDown}
             placeholder="Enter key to delete..."
-            className={`kv-delete-panel__input${validationError ? ' kv-delete-panel__input--error' : ''}`}
+            className={`kv-delete-panel__input${deleteError ? ' kv-delete-panel__input--error' : ''}`}
             data-testid="kv-delete-key-input"
-            aria-invalid={!!validationError}
-            aria-describedby={validationError ? 'kv-delete-key-error' : undefined}
-            disabled={status === 'loading'}
+            aria-invalid={!!deleteError}
+            aria-describedby={deleteError ? 'kv-delete-key-error' : undefined}
+            disabled={isAnyLoading}
           />
-          {validationError && (
+          {deleteError && (
             <span
               id="kv-delete-key-error"
-              className="kv-delete-panel__error"
+              className="kv-delete-panel__field-error"
               data-testid="kv-delete-key-error"
               role="alert"
             >
-              {validationError}
+              {deleteError}
             </span>
           )}
         </div>
@@ -152,13 +233,79 @@ export function KVDeletePanel({ onDeleteSuccess, onDeleteError }: KVDeletePanelP
         <button
           type="button"
           onClick={handleDelete}
-          disabled={status === 'loading'}
+          disabled={isAnyLoading}
           className="kv-delete-panel__button kv-delete-panel__button--delete"
           data-testid="kv-delete-button"
         >
-          {status === 'loading' ? 'Deleting...' : 'Delete'}
+          {isDeleteLoading ? 'Deleting...' : 'Delete'}
         </button>
       </div>
+
+      {/* Flush All Section */}
+      <div className="kv-delete-panel__section" data-testid="kv-flush-section">
+        <div className="kv-delete-panel__flush-info">
+          <span className="kv-delete-panel__flush-label">Danger Zone</span>
+          <p className="kv-delete-panel__flush-description">
+            Remove all key-value pairs from the store. This action cannot be undone.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleFlushClick}
+          disabled={isAnyLoading || flushResult.status === 'confirming'}
+          className="kv-delete-panel__button kv-delete-panel__button--flush"
+          data-testid="kv-flush-button"
+        >
+          Flush All
+        </button>
+      </div>
+
+      {/* Flush Confirmation Dialog */}
+      {flushResult.status === 'confirming' && (
+        <div
+          className="kv-delete-panel__dialog-overlay"
+          data-testid="kv-flush-dialog-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="flush-dialog-title"
+        >
+          <div className="kv-delete-panel__dialog">
+            <h3
+              id="flush-dialog-title"
+              className="kv-delete-panel__dialog-title"
+              data-testid="kv-flush-dialog-title"
+            >
+              Confirm Flush All
+            </h3>
+            <p
+              className="kv-delete-panel__dialog-text"
+              data-testid="kv-flush-dialog-text"
+            >
+              Are you sure you want to delete all key-value pairs? This action is
+              irreversible.
+            </p>
+            <div className="kv-delete-panel__dialog-actions">
+              <button
+                type="button"
+                onClick={handleFlushConfirm}
+                className="kv-delete-panel__button kv-delete-panel__button--confirm"
+                data-testid="kv-flush-confirm-button"
+              >
+                Yes, Flush All
+              </button>
+              <button
+                type="button"
+                onClick={handleFlushCancel}
+                className="kv-delete-panel__button kv-delete-panel__button--cancel"
+                data-testid="kv-flush-cancel-button"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

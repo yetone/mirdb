@@ -6,11 +6,17 @@
 export { default as KVExplorer } from './KVExplorer';
 export type { KVExplorerProps, OperationResult } from './KVExplorer';
 
-export { KVSetPanel, default } from './KVSetPanel';
+export { KVSetPanel } from './KVSetPanel';
 export type { KVSetPanelProps, SetFormData, SetFormErrors, SetStatus } from './KVSetPanel';
 
 export { KVDeletePanel } from './KVDeletePanel';
-export type { KVDeletePanelProps, DeleteStatus } from './KVDeletePanel';
+export type {
+  KVDeletePanelProps,
+  DeleteStatus,
+  FlushStatus,
+  DeleteResult,
+  FlushResult,
+} from './KVDeletePanel';
 
 export { KVFlushPanel } from './KVFlushPanel';
-export type { KVFlushPanelProps, FlushStatus } from './KVFlushPanel';
+export type { KVFlushPanelProps, FlushStatus as FlushPanelStatus } from './KVFlushPanel';
