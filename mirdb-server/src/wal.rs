@@ -300,6 +300,14 @@ impl WAL {
     pub fn iter(&self) -> MyResult<WALIter> {
         Ok(WALIter::new(&self))
     }
+
+    pub fn clear(&mut self) -> MyResult<()> {
+        while let Some(seg) = self.segs.pop_front() {
+            seg.delete()?;
+        }
+        self.current_file_num = 0;
+        Ok(())
+    }
 }
 
 pub struct WALIter<'a> {

@@ -5,6 +5,11 @@ use std::time::{Duration, Instant};
 
 use mirdb::http_adapter::{run_http_server, HttpServer};
 use mirdb::options::Options;
+use mirdb::store::Store;
+
+fn make_test_store(opt: Options) -> Arc<Store> {
+    Arc::new(Store::new(opt).unwrap())
+}
 
 fn send_request(host: &str, request: &str) -> String {
     try_send_request(host, request).expect("Failed to connect to server")
@@ -54,7 +59,8 @@ fn test_get_config_returns_200_with_expected_fields() {
     let addr = format!("127.0.0.1:{}", port);
     let opt = get_test_opt();
 
-    let server = Arc::new(HttpServer::new(opt));
+    let store = make_test_store(opt.clone());
+    let server = Arc::new(HttpServer::new(opt, store));
     let handle = run_http_server(&addr, server.clone()).unwrap();
 
     std::thread::sleep(Duration::from_millis(100));
@@ -131,7 +137,8 @@ fn test_get_health_returns_200_healthy_and_fast() {
     let addr = format!("127.0.0.1:{}", port);
     let opt = get_test_opt();
 
-    let server = Arc::new(HttpServer::new(opt));
+    let store = make_test_store(opt.clone());
+    let server = Arc::new(HttpServer::new(opt, store));
     let handle = run_http_server(&addr, server.clone()).unwrap();
 
     std::thread::sleep(Duration::from_millis(100));
@@ -170,7 +177,8 @@ fn test_get_health_when_shutting_down_returns_503() {
     let addr = format!("127.0.0.1:{}", port);
     let opt = get_test_opt();
 
-    let server = Arc::new(HttpServer::new(opt));
+    let store = make_test_store(opt.clone());
+    let server = Arc::new(HttpServer::new(opt, store));
     let handle = run_http_server(&addr, server.clone()).unwrap();
 
     std::thread::sleep(Duration::from_millis(100));
@@ -212,7 +220,8 @@ fn test_cors_preflight_options_returns_204() {
     let addr = format!("127.0.0.1:{}", port);
     let opt = get_test_opt();
 
-    let server = Arc::new(HttpServer::new(opt));
+    let store = make_test_store(opt.clone());
+    let server = Arc::new(HttpServer::new(opt, store));
     let handle = run_http_server(&addr, server.clone()).unwrap();
 
     std::thread::sleep(Duration::from_millis(100));
@@ -248,7 +257,8 @@ fn test_post_config_returns_405() {
     let addr = format!("127.0.0.1:{}", port);
     let opt = get_test_opt();
 
-    let server = Arc::new(HttpServer::new(opt));
+    let store = make_test_store(opt.clone());
+    let server = Arc::new(HttpServer::new(opt, store));
     let handle = run_http_server(&addr, server.clone()).unwrap();
 
     std::thread::sleep(Duration::from_millis(100));

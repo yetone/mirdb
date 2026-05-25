@@ -221,4 +221,17 @@ impl SstableReader {
         }
         result
     }
+
+    pub fn clear(&mut self) -> MyResult<()> {
+        let work_dir = Path::new(&self.opt_.work_dir);
+        for level_readers in &self.readers_ {
+            for reader in level_readers {
+                let path = work_dir.join(reader.file_name());
+                let _ = remove_file(&path);
+            }
+        }
+        self.readers_.clear();
+        self.manifest_builder_.clear()?;
+        Ok(())
+    }
 }

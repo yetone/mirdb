@@ -3,8 +3,9 @@ use std::net::TcpStream;
 use std::sync::atomic::AtomicBool;
 use std::sync::Arc;
 
-use crate::http_handlers::{get_config_handler, get_health_handler};
+use crate::http_handlers::{get_config_handler, get_health_handler, post_operation_handler};
 use crate::options::Options;
+use crate::store::Store;
 
 pub struct HttpRequest {
     pub method: String,
@@ -105,6 +106,7 @@ pub fn build_response(status: u16, body: &str, origin: Option<&str>) -> String {
 pub fn handle_request(
     request: &HttpRequest,
     opt: &Arc<Options>,
+    store: &Arc<Store>,
     shutting_down: &Arc<AtomicBool>,
 ) -> String {
     let origin = get_origin_header(request);
@@ -120,6 +122,10 @@ pub fn handle_request(
         }
         ("GET", "/api/health") => {
             let (status, body) = get_health_handler(shutting_down);
+            build_response(status, &body, origin)
+        }
+        ("POST", "/api/operation") => {
+            let (status, body) = post_operation_handler(store.clone(), &request.body);
             build_response(status, &body, origin)
         }
         ("POST", "/api/config") => {

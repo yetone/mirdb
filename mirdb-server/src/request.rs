@@ -40,4 +40,5 @@ pub enum Request {
     Info,
     Error,
     MajorCompaction,
+    FlushAll,
 }
