@@ -79,13 +79,13 @@ describe('Theme Integration', () => {
 
   it('header contains the theme toggle', () => {
     render(<App />);
-    const header = screen.getByTestId('app-header');
+    const header = screen.getByTestId('layout-header');
     expect(header).toContainElement(screen.getByTestId('theme-toggle-button'));
   });
 
-  it('app container has dark mode classes applied', () => {
+  it('app container has layout root applied', () => {
     render(<App />);
-    const appContainer = document.querySelector('.min-h-screen');
+    const appContainer = document.querySelector('.layout');
     expect(appContainer).toBeInTheDocument();
   });
 });

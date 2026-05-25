@@ -7,8 +7,8 @@ import KVExplorer from './components/kv-explorer/KVExplorer';
 import { KVDeletePanel, KVFlushPanel } from './components/kv-explorer';
 import { MetricsDashboard } from './components/metrics';
 import { InteractiveDemo } from './components/interactive-demo';
-import { ThemeToggle } from './components/theme';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { Layout } from './components/layout';
 
 const DEFAULT_CONFIG = {
   listen_address: '0.0.0.0:12333',
@@ -31,23 +31,18 @@ const DEMO_LSM_STATE = {
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-        <header className="app-header" data-testid="app-header">
-          <ThemeToggle />
-        </header>
-        <main>
-          <HeroSection />
-          <FeaturesSection />
-          <PlannedFeatures />
-          <SystemOverview config={DEFAULT_CONFIG} />
-          <MetricsDashboard />
-          <LSMTreeVisualization state={DEMO_LSM_STATE} />
-          <KVExplorer />
-          <KVDeletePanel />
-          <KVFlushPanel />
-          <InteractiveDemo />
-        </main>
-      </div>
+      <Layout>
+        <HeroSection />
+        <FeaturesSection />
+        <PlannedFeatures />
+        <SystemOverview config={DEFAULT_CONFIG} />
+        <MetricsDashboard />
+        <LSMTreeVisualization state={DEMO_LSM_STATE} />
+        <KVExplorer />
+        <KVDeletePanel />
+        <KVFlushPanel />
+        <InteractiveDemo />
+      </Layout>
     </ThemeProvider>
   );
 }
