@@ -59,6 +59,14 @@ pub struct Store {
 }
 
 impl Store {
+    pub fn opt(&self) -> &Options {
+        &self.opt
+    }
+
+    pub fn flush_all(&self) -> MyResult<()> {
+        self.data.flush_all()
+    }
+
     pub fn new(opt: Options) -> MyResult<Self> {
         let path = Path::new(&opt.work_dir);
         if !path.exists() {
@@ -180,6 +188,10 @@ impl Store {
             Request::Error => Ok(Response::Error),
             Request::MajorCompaction => {
                 self.data.major_compaction()?;
+                Ok(Response::Ok)
+            }
+            Request::FlushAll => {
+                self.data.flush_all()?;
                 Ok(Response::Ok)
             }
         }

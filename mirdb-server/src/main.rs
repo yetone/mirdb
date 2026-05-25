@@ -52,6 +52,9 @@ mod store;
 mod test_utils;
 mod thread_pool;
 mod types;
+mod http_adapter;
+mod http_handlers;
+mod http_routes;
 mod wal;
 
 pub struct Server {
@@ -126,6 +129,11 @@ Welcome to MirDB!
 "#
         .trim_matches('\n')
     );
+
+    let http_addr = "0.0.0.0:8080".to_string();
+    println!("HTTP adapter listening on http://{}", http_addr);
+    let http_server = Arc::new(http_adapter::HttpServer::new(opt.clone(), store.clone()));
+    http_adapter::run_http_server(&http_addr, http_server)?;
 
     serve(addr, move || Ok(Server::new(store.clone())));
 

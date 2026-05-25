@@ -175,6 +175,11 @@ impl ManifestBuilder {
     pub fn next_file_number(&self) -> usize {
         self.manifest_.next_file_number()
     }
+
+    pub fn clear(&mut self) -> MyResult<()> {
+        self.manifest_.level_metas.clear();
+        self.flush()
+    }
 }
 
 impl fmt::Display for ManifestBuilder {

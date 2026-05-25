@@ -137,7 +137,7 @@ impl<K: Ord, V> SkipList<K, V> {
         for i in 0..=height {
             let update = &mut updates[i];
             unsafe {
-                *((*node_ptr).nexts_.get_unchecked_mut(i)) = *(update.nexts_.get_unchecked_mut(i));
+                *((&mut (*node_ptr).nexts_).get_unchecked_mut(i)) = *(update.nexts_.get_unchecked_mut(i));
                 *(update.nexts_.get_unchecked_mut(i)) = node_ptr;
             }
         }
@@ -416,11 +416,11 @@ mod test {
         let mut seen = HashSet::with_capacity(n);
         let mut kvs = Vec::with_capacity(n);
         for _ in 0..=n {
-            let k = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let k = rng.gen_range(0..n + 1);
             if seen.contains(&k) {
                 continue;
             }
-            let v = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let v = rng.gen_range(0..n + 1);
             kvs.push((k, v));
             seen.insert(k);
         }
@@ -447,11 +447,11 @@ mod test {
         let mut seen = HashSet::with_capacity(n);
         let mut kvs = Vec::with_capacity(n);
         for _ in 0..=n {
-            let k = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let k = rng.gen_range(0..n + 1);
             if seen.contains(&k) {
                 continue;
             }
-            let v = rng.gen_range::<usize, usize, usize>(0, n + 1);
+            let v = rng.gen_range(0..n + 1);
             kvs.push((k, v));
             seen.insert(k);
         }

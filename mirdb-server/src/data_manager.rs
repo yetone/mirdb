@@ -410,6 +410,26 @@ impl DataManager {
             .collect()
     }
 
+    pub fn flush_all(&self) -> MyResult<()> {
+        {
+            let mut muttable = write_lock(&self.mut_);
+            muttable.clear();
+        }
+        {
+            let mut immuttable = write_lock(&self.imm_);
+            immuttable.clear();
+        }
+        {
+            let mut wal = write_lock(&self.wal_);
+            wal.clear()?;
+        }
+        {
+            let mut readers = write_lock(&self.readers_);
+            readers.clear()?;
+        }
+        Ok(())
+    }
+
     #[cfg(test)]
     fn clear_memtables(&self) {
         let mut muttable = write_lock(&self.mut_);
