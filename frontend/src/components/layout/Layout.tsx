@@ -16,8 +16,11 @@ export interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="layout" data-testid="layout-root">
+      <a href="#main-content" className="skip-link" data-testid="skip-link">
+        Skip to main content
+      </a>
       <Header />
-      <Container as="main" className="layout__main">
+      <Container as="main" className="layout__main" id="main-content">
         {children}
       </Container>
       <footer className="layout-footer" data-testid="layout-footer">

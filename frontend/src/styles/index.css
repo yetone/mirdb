@@ -981,3 +981,67 @@ a:hover {
     font-size: 20px;
   }
 }
+
+/* ================================
+   Accessibility - Focus Indicators
+   ================================ */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+/* Remove default focus outline (only show :focus-visible) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ================================
+   Accessibility - Skip Link
+   ================================ */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: #ffffff;
+  padding: 8px 16px;
+  z-index: 200;
+  font-weight: 600;
+  border-radius: 0 0 var(--border-radius) 0;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ================================
+   Accessibility - Reduced Motion
+   ================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse {
+    animation: none !important;
+  }
+
+  .layout-header__menu-bar {
+    transition: none !important;
+  }
+}

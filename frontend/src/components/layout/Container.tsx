@@ -10,15 +10,17 @@ export interface ContainerProps {
   children: React.ReactNode;
   className?: string;
   as?: keyof JSX.IntrinsicElements;
+  id?: string;
 }
 
 export default function Container({
   children,
   className = '',
   as: Component = 'div',
+  id,
 }: ContainerProps) {
   return (
-    <Component className={`container ${className}`.trim()} data-testid="layout-container">
+    <Component className={`container ${className}`.trim()} data-testid="layout-container" id={id}>
       {children}
     </Component>
   );

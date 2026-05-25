@@ -6,7 +6,7 @@
  * theme toggle, and mobile hamburger menu trigger.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { GITHUB_REPO_URL, DOCS_URL } from '../../utils/constants';
 import ThemeToggle from '../theme/ThemeToggle';
 
@@ -16,6 +16,21 @@ export interface HeaderProps {
 
 export default function Header({ onMenuToggle }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close mobile menu on Escape key
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        onMenuToggle?.(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [menuOpen, onMenuToggle]);
 
   const toggleMenu = useCallback(() => {
     setMenuOpen((prev) => {
