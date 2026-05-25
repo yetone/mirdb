@@ -4,6 +4,7 @@ import PlannedFeatures from './components/features/PlannedFeatures';
 import SystemOverview from './components/system-overview/SystemOverview';
 import { LSMTreeVisualization } from './components/lsm-tree';
 import KVExplorer from './components/kv-explorer/KVExplorer';
+import { KVDeletePanel, KVFlushPanel } from './components/kv-explorer';
 import { MetricsDashboard } from './components/metrics';
 
 const DEFAULT_CONFIG = {
@@ -35,6 +36,8 @@ function App() {
         <MetricsDashboard />
         <LSMTreeVisualization state={DEMO_LSM_STATE} />
         <KVExplorer />
+        <KVDeletePanel />
+        <KVFlushPanel />
       </main>
     </div>
   );
