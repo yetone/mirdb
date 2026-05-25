@@ -6,6 +6,7 @@ import { LSMTreeVisualization } from './components/lsm-tree';
 import KVExplorer from './components/kv-explorer/KVExplorer';
 import { KVDeletePanel, KVFlushPanel } from './components/kv-explorer';
 import { MetricsDashboard } from './components/metrics';
+import { InteractiveDemo } from './components/interactive-demo';
 
 const DEFAULT_CONFIG = {
   listen_address: '0.0.0.0:12333',
@@ -38,6 +39,7 @@ function App() {
         <KVExplorer />
         <KVDeletePanel />
         <KVFlushPanel />
+        <InteractiveDemo />
       </main>
     </div>
   );
