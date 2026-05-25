@@ -52,6 +52,9 @@ mod store;
 mod test_utils;
 mod thread_pool;
 mod types;
+mod http_adapter;
+mod http_handlers;
+mod http_routes;
 mod wal;
 
 pub struct Server {

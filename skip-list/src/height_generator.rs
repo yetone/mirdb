@@ -22,7 +22,7 @@ impl GenHeight {
 impl HeightGenerator for GenHeight {
     fn gen_height(&mut self, max_height: usize) -> usize {
         let mut l = 0;
-        while self.rng.gen_range::<usize, usize, usize>(0, 2) > 0 && l < max_height {
+        while self.rng.gen_range(0..2) > 0 && l < max_height {
             l += 1;
         }
         l
