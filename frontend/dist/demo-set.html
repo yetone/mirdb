@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KV Set Panel Demo</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f3f4f6;
+      padding: 40px;
+      margin: 0;
+    }
+    .demo-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #1f2937;
+      margin-bottom: 24px;
+    }
+    .kv-set-panel {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .kv-set-panel__heading {
+      margin: 0 0 16px 0;
+      font-size: 20px;
+      color: #1f2937;
+    }
+    .kv-set-panel__message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .kv-set-panel__message--success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .kv-set-panel__message--error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .kv-set-panel__form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .kv-set-panel__field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .kv-set-panel__row {
+      display: flex;
+      gap: 16px;
+    }
+    .kv-set-panel__field--half {
+      flex: 1;
+    }
+    .kv-set-panel__label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+    .kv-set-panel__input {
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .kv-set-panel__input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    .kv-set-panel__input--error {
+      border-color: #ef4444;
+    }
+    .kv-set-panel__field-error {
+      font-size: 12px;
+      color: #ef4444;
+    }
+    .kv-set-panel__actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .kv-set-panel__button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .kv-set-panel__button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .kv-set-panel__button--primary {
+      background: #3b82f6;
+      color: white;
+    }
+    .kv-set-panel__button--secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1>Key-Value Explorer - SET Operations Demo</h1>
+    <div id="root"></div>
+  </div>
+  <script type="text/babel">
+    const { useState, useCallback } = React;
+
+    function DemoSetPanel() {
+      const [formData, setFormData] = useState({ key: '', value: '', flags: '0', exptime: '0' });
+      const [errors, setErrors] = useState({});
+      const [status, setStatus] = useState('idle');
+      const [statusMessage, setStatusMessage] = useState('');
+      const [storedKeys, setStoredKeys] = useState([]);
+
+      const handleInputChange = (field) => (e) => {
+        const newValue = e.target.value;
+        setFormData((prev) => ({ ...prev, [field]: newValue }));
+        if (errors[field]) {
+          setErrors((prev) => {
+            const next = { ...prev };
+            delete next[field];
+            return next;
+          });
+        }
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const validationErrors = {};
+        if (!formData.key || formData.key.trim() === '') validationErrors.key = 'Key is required';
+        if (!formData.value || formData.value.trim() === '') validationErrors.value = 'Value is required';
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length > 0) {
+          setStatus('error');
+          setStatusMessage('Please fix the errors below.');
+          return;
+        }
+
+        setStatus('loading');
+        setStatusMessage('');
+
+        setTimeout(() => {
+          setStoredKeys((prev) => {
+            const filtered = prev.filter(k => k.key !== formData.key.trim());
+            return [...filtered, { key: formData.key.trim(), value: formData.value.trim() }];
+          });
+          setStatus('success');
+          setStatusMessage('STORED');
+        }, 800);
+      };
+
+      const handleReset = () => {
+        setFormData({ key: '', value: '', flags: '0', exptime: '0' });
+        setErrors({});
+        setStatus('idle');
+        setStatusMessage('');
+      };
+
+      return (
+        <div>
+          <section className="kv-set-panel" aria-label="Key-Value SET Operation" data-testid="kv-set-panel">
+            <h2 className="kv-set-panel__heading" data-testid="kv-set-heading">Set Key-Value Pair</h2>
+            {status === 'success' && (
+              <div className="kv-set-panel__message kv-set-panel__message--success" role="status" data-testid="kv-set-success-message">
+                {statusMessage}
+              </div>
+            )}
+            {status === 'error' && statusMessage && (
+              <div className="kv-set-panel__message kv-set-panel__message--error" role="alert" data-testid="kv-set-error-message">
+                {statusMessage}
+              </div>
+            )}
+            <form onSubmit={handleSubmit} className="kv-set-panel__form" data-testid="kv-set-form" noValidate>
+              <div className="kv-set-panel__field">
+                <label htmlFor="kv-set-key" className="kv-set-panel__label">Key</label>
+                <input id="kv-set-key" type="text" value={formData.key} onChange={handleInputChange('key')}
+                  placeholder="Enter key..."
+                  className={`kv-set-panel__input${errors.key ? ' kv-set-panel__input--error' : ''}`}
+                  data-testid="kv-set-key-input" aria-invalid={errors.key ? 'true' : 'false'}
+                  disabled={status === 'loading'} />
+                {errors.key && <span className="kv-set-panel__field-error" role="alert" data-testid="kv-set-key-error">{errors.key}</span>}
+              </div>
+              <div className="kv-set-panel__field">
+                <label htmlFor="kv-set-value" className="kv-set-panel__label">Value</label>
+                <input id="kv-set-value" type="text" value={formData.value} onChange={handleInputChange('value')}
+                  placeholder="Enter value..."
+                  className={`kv-set-panel__input${errors.value ? ' kv-set-panel__input--error' : ''}`}
+                  data-testid="kv-set-value-input" aria-invalid={errors.value ? 'true' : 'false'}
+                  disabled={status === 'loading'} />
+                {errors.value && <span className="kv-set-panel__field-error" role="alert" data-testid="kv-set-value-error">{errors.value}</span>}
+              </div>
+              <div className="kv-set-panel__row">
+                <div className="kv-set-panel__field kv-set-panel__field--half">
+                  <label htmlFor="kv-set-flags" className="kv-set-panel__label">Flags</label>
+                  <input id="kv-set-flags" type="number" min="0" value={formData.flags} onChange={handleInputChange('flags')}
+                    placeholder="0" className="kv-set-panel__input" data-testid="kv-set-flags-input" disabled={status === 'loading'} />
+                </div>
+                <div className="kv-set-panel__field kv-set-panel__field--half">
+                  <label htmlFor="kv-set-exptime" className="kv-set-panel__label">Expiration (seconds)</label>
+                  <input id="kv-set-exptime" type="number" min="0" value={formData.exptime} onChange={handleInputChange('exptime')}
+                    placeholder="0" className="kv-set-panel__input" data-testid="kv-set-exptime-input" disabled={status === 'loading'} />
+                </div>
+              </div>
+              <div className="kv-set-panel__actions">
+                <button type="submit" className="kv-set-panel__button kv-set-panel__button--primary"
+                  data-testid="kv-set-submit-button" disabled={status === 'loading'}>
+                  {status === 'loading' ? 'Setting...' : 'Set'}
+                </button>
+                <button type="button" className="kv-set-panel__button kv-set-panel__button--secondary"
+                  data-testid="kv-set-reset-button" onClick={handleReset} disabled={status === 'loading'}>
+                  Reset
+                </button>
+              </div>
+            </form>
+          </section>
+          {storedKeys.length > 0 && (
+            <div style={{marginTop: '24px', background: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)'}}>
+              <h3 style={{margin: '0 0 16px 0', fontSize: '16px', color: '#374151'}}>Stored Keys</h3>
+              <table style={{width: '100%', borderCollapse: 'collapse', fontSize: '14px'}}>
+                <thead>
+                  <tr style={{borderBottom: '1px solid #e5e7eb'}}>
+                    <th style={{textAlign: 'left', padding: '8px', color: '#6b7280'}}>Key</th>
+                    <th style={{textAlign: 'left', padding: '8px', color: '#6b7280'}}>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {storedKeys.map((k, i) => (
+                    <tr key={i} style={{borderBottom: '1px solid #f3f4f6'}}>
+                      <td style={{padding: '8px'}}>{k.key}</td>
+                      <td style={{padding: '8px'}}>{k.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<DemoSetPanel />);
+  </script>
+</body>
+</html>
