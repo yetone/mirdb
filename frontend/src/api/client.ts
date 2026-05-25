@@ -45,3 +45,11 @@ export function executeOperation(op: KVOperationRequest): Promise<KVOperationRes
 export function getValue(key: string): Promise<KVOperationResponse> {
   return executeOperation({ op: 'get', key });
 }
+
+export function deleteKey(key: string): Promise<KVOperationResponse> {
+  return executeOperation({ op: 'delete', key });
+}
+
+export function flushAll(): Promise<KVOperationResponse> {
+  return executeOperation({ op: 'flush_all' });
+}
