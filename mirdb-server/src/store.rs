@@ -53,9 +53,26 @@ impl StorePayload {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct ServerConfig {
+    pub data_dir: String,
+    pub memcached_port: u16,
+    pub http_port: u16,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ServerStats {
+    pub version: String,
+    pub uptime_seconds: u64,
+    pub keys_stored: usize,
+    pub memory_usage_bytes: usize,
+    pub config: ServerConfig,
+}
+
 pub struct Store {
     opt: Options,
     data: Arc<DataManager>,
+    start_time: std::time::Instant,
 }
 
 impl Store {
@@ -71,7 +88,11 @@ impl Store {
         {
             DataManager::background_thread(dm.clone());
         }
-        Ok(Store { data: dm, opt })
+        Ok(Store {
+            data: dm,
+            opt,
+            start_time: std::time::Instant::now(),
+        })
     }
 
     pub fn apply(&self, request: Request) -> MyResult<Response> {
@@ -182,6 +203,21 @@ impl Store {
                 self.data.major_compaction()?;
                 Ok(Response::Ok)
             }
+        }
+    }
+
+    pub fn stats(&self) -> ServerStats {
+        let uptime = self.start_time.elapsed().as_secs();
+        ServerStats {
+            version: "0.0.1".to_string(),
+            uptime_seconds: uptime,
+            keys_stored: 0,
+            memory_usage_bytes: 0,
+            config: ServerConfig {
+                data_dir: self.opt.work_dir.clone(),
+                memcached_port: 11211,
+                http_port: 8080,
+            },
         }
     }
 }

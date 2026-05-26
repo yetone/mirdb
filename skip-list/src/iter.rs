@@ -39,7 +39,7 @@ impl<'a, K, V> Iterator for SkipListIterMut<'a, K, V> {
             None => None,
             Some(next) => {
                 let next: *mut SkipListNode<K, V> = next;
-                ::std::mem::replace(&mut self.0, Some(unsafe { &mut *next }));
+                let _ = ::std::mem::replace(&mut self.0, Some(unsafe { &mut *next }));
                 Some(unsafe { (&(*next).key_, &mut (*next).value_) })
             }
         })
