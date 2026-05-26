@@ -57,7 +57,7 @@ impl<K, V> SkipListNode<K, V> {
 
     pub(crate) fn free(node_ptr: *mut SkipListNode<K, V>) {
         unsafe {
-            Box::from_raw(node_ptr);
+            drop(Box::from_raw(node_ptr));
         }
     }
 

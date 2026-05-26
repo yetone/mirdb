@@ -174,7 +174,7 @@ macro_rules! chain {
         chain!(@inner $i, $mac!($($args)*))
     );
     (@inner $i:expr, $e:ident >> $($rest:tt)*) => (
-        chain!(@inner $i, call!($e) >> $($rest)*);
+        chain!(@inner $i, call!($e) >> $($rest)*)
     );
     (@inner $i:expr, $mac:ident!($($args:tt)*) >> $($rest:tt)*) => ({
         use $crate::parser_util::macros::IRResult;
@@ -187,7 +187,7 @@ macro_rules! chain {
         }
     });
     (@inner $i:expr, $field:ident : $e:ident >> $($rest:tt)*) => (
-        chain!(@inner $i, $field: call!($e) >> $($rest)*);
+        chain!(@inner $i, $field: call!($e) >> $($rest)*)
     );
     (@inner $i:expr, $field:ident : $mac:ident!($($args:tt)*) >> $($rest:tt)*) => ({
         use $crate::parser_util::macros::IRResult;
@@ -201,7 +201,7 @@ macro_rules! chain {
         }
     });
     (@inner $i:expr, $e:ident >> ($($rest:tt)*)) => (
-        chain!(@inner $i, call!($e) >> ($($rest)*));
+        chain!(@inner $i, call!($e) >> ($($rest)*))
     );
     (@inner $i:expr, $mac:ident!($($args:tt)*) >> ($($rest:tt)*)) => ({
         use $crate::parser_util::macros::IRResult;
@@ -215,7 +215,7 @@ macro_rules! chain {
         }
     });
     (@inner $i:expr, $field:ident : $e:ident >> ( $($rest:tt)* )) => (
-        chain!(@inner $i, $field: call!($e) >> ( $($rest)* ) );
+        chain!(@inner $i, $field: call!($e) >> ( $($rest)* ) )
     );
     (@inner $i:expr, $field:ident : $mac:ident!( $($args:tt)* ) >> ( $($rest:tt)* )) => ({
         use $crate::parser_util::macros::IRResult;
@@ -241,7 +241,7 @@ macro_rules! chain {
         chain!(@inner $i, $($rest)*)
     );
     ($e:ident! >> $($rest:tt)* ) => (
-        chain!(call!($e) >> $($rest)*);
+        chain!(call!($e) >> $($rest)*)
     );
 }
 
