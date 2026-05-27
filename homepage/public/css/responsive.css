@@ -2,153 +2,279 @@
  * Responsive design media queries.
  * Owner: Scenario 10 - Responsive Design
  *
- * Expected breakpoints:
+ * Breakpoints:
  * - Mobile: 320px - 767px (single column, stacked layout)
  * - Tablet: 768px - 1023px (2-column grids)
  * - Desktop: 1024px - 2559px (full layout, 4-column grids)
  * - Large: 2560px+ (max-width container, centered)
  *
- * Must handle:
+ * Handles:
  * - Navigation collapse to hamburger
  * - Feature grid column changes
  * - Footer column changes
  * - Font size adjustments
  * - Touch-friendly tap targets (min 44x44px)
+ * - Architecture section side-by-side layout
+ * - Content centering at ultrawide
  */
 
-/* Mobile: 320px - 767px */
+/* ============================================
+   MOBILE FIRST (Base styles for 320px+)
+   ============================================ */
+
+/* Prevent horizontal overflow on all viewports */
+body {
+  overflow-x: hidden;
+}
+
+/* Mobile Navigation: show hamburger, hide text links by default */
+.mobile-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-links {
+  display: none;
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-sm);
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  z-index: 99;
+}
+
+.nav-links.open {
+  display: flex;
+}
+
+.nav-links li {
+  width: 100%;
+}
+
+.nav-links a {
+  display: block;
+  padding: var(--spacing-sm);
+  width: 100%;
+  min-height: 44px;
+}
+
+/* Hero: smaller font on very small screens */
+.hero h1 {
+  font-size: 2.5rem;
+}
+
+.hero-tagline {
+  font-size: 1.125rem;
+}
+
+.hero-actions {
+  flex-direction: column;
+}
+
+.hero-actions .btn {
+  width: 100%;
+}
+
+/* Features: single column on mobile */
+.features-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Docs: single column on mobile */
+.docs-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Footer: stacked on mobile */
+.footer-grid {
+  grid-template-columns: 1fr;
+  text-align: center;
+}
+
+/* Benchmark table: allow horizontal scroll */
+.benchmark-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.benchmark-table {
+  min-width: 500px;
+}
+
+/* Ensure all interactive elements meet minimum tap target on touch devices */
+@media (pointer: coarse) {
+  a, button, .btn, .copy-btn, .nav-links a, .mobile-menu-toggle, .theme-toggle {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* On mobile (max-width: 767px), enforce 44px min tap targets for all interactive elements */
 @media (max-width: 767px) {
-  html {
-    font-size: 100%;
+  .copy-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-xs);
   }
+}
 
-  h1 {
-    font-size: 2.5rem;
-  }
-
-  h2 {
-    font-size: 1.75rem;
-  }
-
-  h3 {
-    font-size: 1.25rem;
-  }
-
-  .hero h1 {
-    font-size: 2.5rem;
-  }
-
-  .hero-tagline {
-    font-size: 1.125rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-  }
-
-  .hero-actions .btn {
-    width: 100%;
-  }
-
-  /* Mobile Navigation */
+/* ============================================
+   TABLET (768px - 1023px)
+   ============================================ */
+@media (min-width: 768px) {
+  /* Navigation: show text links, hide hamburger */
   .mobile-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: none;
   }
 
   .nav-links {
-    display: none;
-    position: absolute;
-    top: var(--header-height);
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background-color: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--spacing-sm);
-    gap: 0;
-  }
-
-  .nav-links.open {
-    display: flex;
+    display: flex !important;
+    position: static;
+    flex-direction: row;
+    background-color: transparent;
+    border-bottom: none;
+    padding: 0;
+    gap: var(--spacing-md);
   }
 
   .nav-links li {
-    width: 100%;
+    width: auto;
   }
 
   .nav-links a {
-    display: block;
-    padding: var(--spacing-sm);
-    width: 100%;
-    min-height: 44px;
+    width: auto;
+    padding: var(--spacing-xs);
   }
 
-  /* Feature grid: 1 column */
-  .features-grid {
-    grid-template-columns: 1fr;
+  /* Hero: larger fonts */
+  .hero h1 {
+    font-size: 4rem;
   }
 
-  /* Docs grid: 1 column */
-  .docs-grid {
-    grid-template-columns: 1fr;
+  .hero-tagline {
+    font-size: 1.5rem;
   }
 
-  /* Footer: stacked */
-  .footer-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .hero-actions {
+    flex-direction: row;
   }
 
-  /* Benchmark table: allow horizontal scroll */
-  .benchmark-table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .hero-actions .btn {
+    width: auto;
   }
 
-  .benchmark-table {
-    min-width: 500px;
-  }
-}
-
-/* Tablet: 768px - 1023px */
-@media (min-width: 768px) and (max-width: 1023px) {
+  /* Features: 2-column grid */
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* Docs: 2-column grid */
   .docs-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* Footer: 3-column grid */
   .footer-grid {
     grid-template-columns: repeat(3, 1fr);
+    text-align: left;
   }
 }
 
-/* Desktop: 1024px - 2559px */
+/* ============================================
+   DESKTOP (1024px - 2559px)
+   ============================================ */
 @media (min-width: 1024px) {
+  /* Features: 4-column grid */
   .features-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 
+  /* Docs: 3-column grid */
   .docs-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-}
 
-/* Large: 2560px+ */
-@media (min-width: 2560px) {
-  .container {
-    max-width: 1400px;
+  /* Architecture: diagram + text side by side */
+  .architecture .container {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+  }
+
+  .architecture h2,
+  .architecture .section-intro {
+    grid-column: 1 / -1;
+  }
+
+  /* Hero: maximum font sizes */
+  .hero h1 {
+    font-size: 4.5rem;
   }
 }
 
-/* Ensure tap targets are at least 44x44px */
-@media (pointer: coarse) {
-  a, button, .btn, .copy-btn, .nav-links a {
-    min-height: 44px;
-    min-width: 44px;
+/* ============================================
+   LARGE DESKTOP (1440px+)
+   ============================================ */
+@media (min-width: 1440px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+/* ============================================
+   ULTRAWIDE (2560px+)
+   ============================================ */
+@media (min-width: 2560px) {
+  /* Constrain content to max-width and center */
+  .container {
+    max-width: 1200px;
+  }
+
+  /* Ensure text doesn't stretch too wide */
+  p,
+  .feature-card p,
+  .architecture-details p,
+  .doc-card p {
+    max-width: 75ch;
+  }
+
+  /* Scale up the hero for large screens */
+  .hero {
+    min-height: 60vh;
+  }
+
+  .hero h1 {
+    font-size: 5rem;
+  }
+}
+
+/* ============================================
+   ORIENTATION: LANDSCAPE ON MOBILE
+   ============================================ */
+@media (max-width: 767px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .hero-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
   }
 }
