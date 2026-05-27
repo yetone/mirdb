@@ -2,9 +2,6 @@
 <html lang="en" data-theme="dark">
 <head>
   {% include "partials/head.html" %}
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/responsive.css">
-  <link rel="stylesheet" href="/css/syntax.css">
   {% block head %}{% endblock %}
 </head>
 <body>
@@ -18,8 +15,9 @@
 
   {% include "partials/footer.html" %}
 
-  <script src="/js/theme.js"></script>
-  <script src="/js/nav.js"></script>
-  <script src="/js/clipboard.js"></script>
+  {% block scripts %}{% endblock %}
+  <script src="{{ get_url(path='js/nav.js') }}" defer></script>
+  <script src="{{ get_url(path='js/theme.js') }}" defer></script>
+  <script src="{{ get_url(path='js/clipboard.js') }}" defer></script>
 </body>
 </html>

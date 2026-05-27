@@ -10,6 +10,8 @@ module.exports = defineConfig({
   reporter: 'list',
   use: {
     baseURL: 'http://localhost:8080',
+    headless: true,
+    screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },
   projects: [

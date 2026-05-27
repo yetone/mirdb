@@ -1,18 +1,17 @@
 <!--
-  Head partial for SEO and meta tags.
-  Owner: Scenario 12 - SEO & Meta Tags
+  Head partial for Performance, SEO, and Meta Tags.
+  Owners: Scenario 11 (Performance) + Scenario 12 (SEO & Meta Tags)
 
-  Contains:
-  - <title> with project name and tagline
-  - <meta name="description">
-  - <meta charset="UTF-8">
-  - <meta name="viewport">
-  - Open Graph meta tags (og:title, og:description, og:image, og:type, og:url)
-  - Twitter Card meta tags (twitter:card, twitter:title, etc.)
+  Content:
+  - Performance meta tags and resource hints
+  - Inline critical CSS (above-the-fold styles)
+  - Async loading of non-critical CSS via preload + onload pattern
+  - DNS prefetch and preconnect hints
+  - Open Graph meta tags
+  - Twitter Card meta tags
   - Canonical link tag
-  - Structured data JSON-LD (schema.org SoftwareApplication, WebSite)
   - Favicon links
-  - Preconnect hints for external resources
+  - Structured data JSON-LD
 -->
 
 <meta charset="UTF-8">
@@ -22,6 +21,10 @@
 <meta name="robots" content="index, follow">
 <meta name="author" content="MirDB Team">
 <meta name="keywords" content="MirDB, key-value store, memcached, persistent, Rust, database, cache">
+
+<!-- Performance: prevent text-size-adjust on mobile -->
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
@@ -46,9 +49,29 @@
 <link rel="icon" type="image/svg+xml" href="{{ get_url(path='images/logo.svg') }}">
 <link rel="apple-touch-icon" href="{{ get_url(path='images/logo.svg') }}">
 
-<!-- Preconnect hints -->
+<!-- Performance: preconnect to external domains -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+<!-- Performance: inline critical CSS to avoid render-blocking -->
+{% set critical_css = load_data(path="static/css/critical.css") %}
+<style>{{ critical_css | safe }}</style>
+
+<!-- Performance: async load non-critical CSS via preload + onload pattern -->
+<link rel="preload" href="{{ get_url(path='css/main.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/main.css') }}"></noscript>
+
+<link rel="preload" href="{{ get_url(path='css/responsive.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/responsive.css') }}"></noscript>
+
+<link rel="preload" href="{{ get_url(path='css/syntax.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/syntax.css') }}"></noscript>
+
+<!-- Performance: resource hint for scripts -->
+<link rel="preload" href="{{ get_url(path='js/nav.js') }}" as="script">
+<link rel="preload" href="{{ get_url(path='js/theme.js') }}" as="script">
+<link rel="preload" href="{{ get_url(path='js/clipboard.js') }}" as="script">
 
 <!-- Structured Data: JSON-LD - SoftwareApplication -->
 <script type="application/ld+json">
