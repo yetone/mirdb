@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <!--
+  Head partial for SEO and meta tags.
+  Owner: Scenario 12 - SEO & Meta Tags
+
+  Contains:
+  - <title> with project name and tagline
+  - <meta name="description">
+  - <meta charset="UTF-8">
+  - <meta name="viewport">
+  - Open Graph meta tags (og:title, og:description, og:image, og:type, og:url)
+  - Twitter Card meta tags (twitter:card, twitter:title, etc.)
+  - Canonical link tag
+  - Structured data JSON-LD (schema.org SoftwareApplication)
+  - Favicon links
+  - Preconnect hints for external resources
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+<meta name="description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="MirDB Team">
+<meta name="keywords" content="MirDB, key-value store, memcached, persistent, Rust, database, cache">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+<meta property="og:description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mirdb.dev/">
+<meta property="og:image" content="https://mirdb.dev/images/og-image.png">
+<meta property="og:site_name" content="MirDB">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+<meta name="twitter:description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta name="twitter:image" content="https://mirdb.dev/images/og-image.png">
+<meta name="twitter:site" content="@mirdb">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://mirdb.dev/">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+<link rel="apple-touch-icon" href="/images/logo.svg">
+
+<!-- Preconnect hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Structured Data: JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MirDB",
+  "description": "A persistent key-value store with memcached protocol compatibility, built in Rust.",
+  "url": "https://mirdb.dev/",
+  "applicationCategory": "DatabaseApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "softwareVersion": "0.1.0",
+  "license": "https://opensource.org/licenses/MIT",
+  "codeRepository": "https://github.com/mirdb/mirdb",
+  "programmingLanguage": "Rust",
+  "author": {
+    "@type": "Organization",
+    "name": "MirDB Team"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!--
+  Navigation header partial.
+  Owner: Scenario 7 - Navigation & Smooth Scrolling
+
+  Expected content:
+  - Sticky header with backdrop blur
+  - Logo/link to home
+  - Section anchor links (Features, Quick Start, Architecture, Performance, Docs)
+  - Theme toggle button
+  - Mobile hamburger menu (hidden on desktop)
+  - Skip navigation link for accessibility
+-->
+<header class="site-header">
+  <nav class="main-nav" aria-label="Main navigation">
+    <a href="/" class="nav-logo" aria-label="MirDB Home">
+      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <rect x="2" y="2" width="28" height="28" rx="4" fill="currentColor"/>
+        <text x="16" y="22" text-anchor="middle" fill="var(--color-bg)" font-size="14" font-weight="bold" font-family="monospace">M</text>
+      </svg>
+      <span class="logo-text">MirDB</span>
+    </a>
+
+    <button
+      class="mobile-menu-toggle"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="primary-menu"
+      type="button"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+        <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
+
+    <ul id="primary-menu" class="nav-links" role="menubar">
+      <li role="none"><a href="#features" role="menuitem">Features</a></li>
+      <li role="none"><a href="#quickstart" role="menuitem">Quick Start</a></li>
+      <li role="none"><a href="#architecture" role="menuitem">Architecture</a></li>
+      <li role="none"><a href="#performance" role="menuitem">Performance</a></li>
+      <li role="none"><a href="#docs" role="menuitem">Docs</a></li>
+    </ul>
+
+    <button
+      class="theme-toggle"
+      aria-label="Toggle dark and light theme"
+      type="button"
+    >
+      <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+        <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
+  </nav>
+</header>
+
+
+  <main id="main-content">
+    
+  </main>
+
+  <!--
+  Footer partial.
+  Owner: Scenario 6 - Documentation Links & Footer
+
+  Expected content:
+  - 3-column layout:
+    - Column 1: Project links (GitHub, License, Contact)
+    - Column 2: Resources (API docs, Contributing, Issues)
+    - Column 3: Legal (MIT License, Privacy)
+  - Copyright notice
+  - Responsive: stacked on mobile
+-->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-column">
+        <h3>Project</h3>
+        <ul>
+          <li><a href="https://github.com/mirdb/mirdb" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="/license" rel="noopener noreferrer">License</a></li>
+          <li><a href="mailto:contact@mirdb.dev">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="/docs/api" rel="noopener noreferrer">API Docs</a></li>
+          <li><a href="/docs/contributing" rel="noopener noreferrer">Contributing</a></li>
+          <li><a href="https://github.com/mirdb/mirdb/issues" rel="noopener noreferrer">Issues</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/license" rel="noopener noreferrer">MIT License</a></li>
+          <li><a href="/privacy" rel="noopener noreferrer">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MirDB Contributors. Released under the MIT License.</p>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/js/theme.js"></script>
+  <script src="/js/nav.js"></script>
+  <script src="/js/clipboard.js"></script>
+</body>
+</html>
