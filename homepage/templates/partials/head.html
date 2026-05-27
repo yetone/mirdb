@@ -1,0 +1,85 @@
+<!--
+  Head partial for SEO and meta tags.
+  Owner: Scenario 12 - SEO & Meta Tags
+
+  Contains:
+  - <title> with project name and tagline
+  - <meta name="description">
+  - Open Graph meta tags (og:title, og:description, og:image, og:type, og:url)
+  - Twitter Card meta tags (twitter:card, twitter:title, etc.)
+  - Canonical link tag
+  - Structured data JSON-LD (schema.org SoftwareApplication)
+  - Favicon links
+  - Preconnect hints for external resources
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<meta name="author" content="MirDB Contributors">
+
+<title>MirDB - Persistent Key-Value Store</title>
+<meta name="description" content="A persistent key-value store with memcached protocol compatibility, built in Rust. MirDB combines the speed of memcached with durable LSM-tree persistence.">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://mirdb.dev/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:title" content="MirDB - Persistent Key-Value Store">
+<meta property="og:description" content="A persistent key-value store with memcached protocol compatibility, built in Rust. MirDB combines the speed of memcached with durable LSM-tree persistence.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mirdb.dev/">
+<meta property="og:image" content="https://mirdb.dev/images/logo.svg">
+<meta property="og:site_name" content="MirDB">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MirDB - Persistent Key-Value Store">
+<meta name="twitter:description" content="A persistent key-value store with memcached protocol compatibility, built in Rust. MirDB combines the speed of memcached with durable LSM-tree persistence.">
+<meta name="twitter:image" content="https://mirdb.dev/images/logo.svg">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+<link rel="shortcut icon" href="/images/logo.svg">
+
+<!-- Preconnect hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+<!-- Structured Data: JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MirDB",
+  "description": "A persistent key-value store with memcached protocol compatibility, built in Rust. MirDB combines the speed of memcached with durable LSM-tree persistence.",
+  "url": "https://mirdb.dev/",
+  "applicationCategory": "DatabaseApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "programmingLanguage": "Rust",
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "softwareVersion": "0.1.0",
+  "codeRepository": "https://github.com/mirdb/mirdb"
+}
+</script>
+
+<!-- Structured Data: WebSite -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MirDB",
+  "description": "A persistent key-value store with memcached protocol compatibility, built in Rust.",
+  "url": "https://mirdb.dev/"
+}
+</script>
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/responsive.css">
+<link rel="stylesheet" href="/css/syntax.css">
