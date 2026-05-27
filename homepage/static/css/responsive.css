@@ -108,38 +108,73 @@ body {
   min-width: 500px;
 }
 
-/* Ensure all interactive elements meet minimum tap target on touch devices */
-@media (pointer: coarse) {
-  a, button, .btn, .copy-btn, .nav-links a, .mobile-menu-toggle, .theme-toggle {
+/* Architecture, Performance, Quick Start: single column on mobile */
+.architecture-layout {
+  grid-template-columns: 1fr;
+}
+
+.performance-content {
+  grid-template-columns: 1fr;
+}
+
+.quickstart-content {
+  grid-template-columns: 1fr;
+}
+
+/* ============================================
+   MOBILE: enforce tap targets and overrides
+   ============================================ */
+@media (max-width: 767px) {
+  /* Tap targets minimum size - ensure all interactive elements are accessible */
+  button, .btn, .mobile-menu-toggle, .theme-toggle, .nav-logo {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  .copy-btn {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 8px 12px;
+  }
+
+  .nav-links a {
+    display: block;
     min-height: 44px;
     min-width: 44px;
   }
-}
 
-/* On mobile (max-width: 767px), enforce 44px min tap targets for all interactive elements */
-@media (max-width: 767px) {
-  .copy-btn {
+  .footer-grid a,
+  .footer-column a {
+    display: inline-flex;
+    align-items: center;
     min-height: 44px;
     min-width: 44px;
-    padding: var(--spacing-xs);
+  }
+
+  .docs-grid a,
+  .doc-card a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
 /* ============================================
    TABLET (768px - 1023px)
    ============================================ */
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   /* Navigation: show text links, hide hamburger */
   .mobile-menu-toggle {
     display: none;
   }
 
   .nav-links {
-    display: flex !important;
+    display: flex;
     position: static;
     flex-direction: row;
-    background-color: transparent;
-    border-bottom: none;
+    background: none;
+    border: none;
     padding: 0;
     gap: var(--spacing-md);
   }
@@ -202,6 +237,10 @@ body {
   }
 
   /* Architecture: diagram + text side by side */
+  .architecture-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .architecture .container {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -212,6 +251,30 @@ body {
   .architecture h2,
   .architecture .section-intro {
     grid-column: 1 / -1;
+  }
+
+  /* Performance: side by side */
+  .performance-content {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Quick Start: side by side */
+  .quickstart-content {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Navigation */
+  .mobile-menu-toggle {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    background: none;
+    border: none;
+    padding: 0;
   }
 
   /* Hero: maximum font sizes */
@@ -238,12 +301,27 @@ body {
     max-width: 1200px;
   }
 
+  /* Constrain hero content for readability */
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
   /* Ensure text doesn't stretch too wide */
   p,
+  .hero-tagline,
   .feature-card p,
   .architecture-details p,
   .doc-card p {
     max-width: 75ch;
+  }
+
+  /* Limit text line length */
+  .hero-tagline,
+  .feature-card p,
+  .architecture-details p,
+  .doc-card p {
+    max-width: 65ch;
   }
 
   /* Scale up the hero for large screens */
@@ -260,6 +338,14 @@ body {
    ORIENTATION: LANDSCAPE ON MOBILE
    ============================================ */
 @media (max-width: 767px) and (orientation: landscape) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   .hero {
     min-height: auto;
     padding: var(--spacing-lg) var(--spacing-md);
@@ -276,5 +362,15 @@ body {
 
   .hero-tagline {
     font-size: 1rem;
+  }
+}
+
+/* ============================================
+   Ensure tap targets are at least 44x44px
+   ============================================ */
+@media (pointer: coarse) {
+  a, button, .btn, .copy-btn, .nav-links a, .mobile-menu-toggle, .theme-toggle {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
