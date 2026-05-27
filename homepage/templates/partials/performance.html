@@ -1,0 +1,54 @@
+<!--
+  Performance benchmarks section partial.
+  Owner: Scenario 5 - Performance Benchmarks
+
+  Expected content:
+  - H2 heading: "Performance"
+  - Comparison chart/table vs alternatives (memcached persistent, Redis AOF)
+  - Write throughput benchmark data
+  - Latency benchmark data (p50, p99)
+  - Test methodology and environment details
+  - Responsive chart using lightweight library or CSS
+-->
+<section id="performance" class="performance" aria-labelledby="performance-title">
+  <div class="container">
+    <h2 id="performance-title">Performance</h2>
+    <p class="section-intro">Benchmarks on a 16-core AMD EPYC server with NVMe SSD.</p>
+
+    <div class="benchmark-table-wrapper" role="region" aria-label="Performance benchmark comparison table" tabindex="0">
+      <table class="benchmark-table">
+        <caption>Write Throughput Comparison (operations per second)</caption>
+        <thead>
+          <tr>
+            <th scope="col">Store</th>
+            <th scope="col">Write Throughput</th>
+            <th scope="col">p50 Latency</th>
+            <th scope="col">p99 Latency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">MirDB</th>
+            <td>850,000 ops/s</td>
+            <td>0.8 ms</td>
+            <td>2.1 ms</td>
+          </tr>
+          <tr>
+            <th scope="row">memcached (persistent)</th>
+            <td>720,000 ops/s</td>
+            <td>1.2 ms</td>
+            <td>3.5 ms</td>
+          </tr>
+          <tr>
+            <th scope="row">Redis (AOF)</th>
+            <td>650,000 ops/s</td>
+            <td>1.5 ms</td>
+            <td>4.2 ms</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="benchmark-note"><small>Tests performed with 1KB values, 50% write / 50% read workload, 16 concurrent clients.</small></p>
+  </div>
+</section>

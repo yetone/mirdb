@@ -1,0 +1,26 @@
+<!--
+  Main homepage template extending base.html.
+  Created by the first scenario builder.
+
+  Expected structure:
+  - Extends "base.html"
+  - Includes all partials in order:
+    - nav.html
+    - hero.html
+    - features.html
+    - quickstart.html
+    - architecture.html
+    - performance.html
+    - docs.html
+    - footer.html
+-->
+{% extends "base.html" %}
+
+{% block content %}
+  {% include "partials/hero.html" %}
+  {% include "partials/features.html" %}
+  {% include "partials/quickstart.html" %}
+  {% include "partials/architecture.html" %}
+  {% include "partials/performance.html" %}
+  {% include "partials/docs.html" %}
+{% endblock content %}

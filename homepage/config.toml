@@ -1,0 +1,17 @@
+# Zola configuration for MirDB Homepage
+# Created by the first scenario builder
+#
+# Expected settings:
+# - base_url = "https://mirdb.dev" (or appropriate domain)
+# - title = "MirDB - Persistent Key-Value Store"
+# - description = "A persistent key-value store with memcached protocol"
+# - compile_sass = true
+# - build_search_index = false
+# - minify_html = true
+
+base_url = "https://mirdb.dev"
+title = "MirDB - Persistent Key-Value Store"
+description = "A persistent key-value store with memcached protocol"
+compile_sass = true
+build_search_index = false
+minify_html = true

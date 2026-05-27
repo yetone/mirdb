@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <meta name="description" content="A persistent key-value store with memcached protocol compatibility, built in Rust.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/syntax.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="MirDB Home">
+        <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect x="2" y="2" width="28" height="28" rx="4" fill="currentColor"/>
+          <text x="16" y="22" text-anchor="middle" fill="var(--color-bg)" font-size="14" font-weight="bold" font-family="monospace">M</text>
+        </svg>
+        <span class="logo-text">MirDB</span>
+      </a>
+
+      <button
+        class="mobile-menu-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="primary-menu"
+        type="button"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+          <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+          <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+
+      <ul id="primary-menu" class="nav-links" role="menubar">
+        <li role="none"><a href="#features" role="menuitem">Features</a></li>
+        <li role="none"><a href="#quickstart" role="menuitem">Quick Start</a></li>
+        <li role="none"><a href="#architecture" role="menuitem">Architecture</a></li>
+        <li role="none"><a href="#performance" role="menuitem">Performance</a></li>
+        <li role="none"><a href="#docs" role="menuitem">Docs</a></li>
+      </ul>
+
+      <button
+        class="theme-toggle"
+        aria-label="Toggle dark and light theme"
+        type="button"
+      >
+        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+          <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+          <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+          <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+          <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <svg class="hero-logo" width="80" height="80" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect x="2" y="2" width="28" height="28" rx="4" fill="var(--color-primary)"/>
+          <text x="16" y="22" text-anchor="middle" fill="var(--color-bg)" font-size="14" font-weight="bold" font-family="monospace">M</text>
+        </svg>
+        <h1 id="hero-title">MirDB</h1>
+        <p class="hero-tagline">A persistent key-value store with memcached protocol</p>
+        <div class="hero-actions">
+          <a href="#quickstart" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/mirdb/mirdb" class="btn btn-secondary" rel="noopener noreferrer" target="_blank">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title">Features</h2>
+        <div class="features-grid">
+          <article class="feature-card">
+            <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <h3>Memcached Protocol Compatible</h3>
+            <p>Drop-in replacement for memcached with full protocol compatibility. Use existing clients without changes.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <h3>Fast Rust Implementation</h3>
+            <p>Built in safe Rust for maximum performance with memory safety guarantees. Zero-cost abstractions.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <h3>LSM Tree Persistence</h3>
+            <p>Log-structured merge tree provides efficient write throughput with predictable read performance.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <h3>Safe Crashing with WAL</h3>
+            <p>Write-ahead logging ensures durability. Survive crashes without data loss or corruption.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <h3>Multi-level Compaction</h3>
+            <p>Automatic background compaction optimizes storage and maintains consistent read performance.</p>
+          </article>
+
+          <article class="feature-card">
+            <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M8.5 7a4 4 0 100-8 4 4 0 000 8zM20 8v6m-3-3h6" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <h3>Open Source</h3>
+            <p>MIT licensed and community driven. Contribute, inspect, and customize the source code.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
+      <div class="container">
+        <h2 id="quickstart-title">Quick Start</h2>
+
+        <h3>Installation</h3>
+        <div class="code-block-wrapper">
+          <pre><code id="install-cmd">cargo install mirdb</code></pre>
+          <button class="copy-btn" aria-label="Copy installation command" data-target="install-cmd" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+
+        <h3>Basic Usage</h3>
+        <div class="code-block-wrapper">
+          <pre><code id="usage-set"># Connect with any memcached client
+$ telnet localhost 11211
+
+# Store a key
+SET mykey 0 0 5
+hello
+STORED</code></pre>
+          <button class="copy-btn" aria-label="Copy SET example" data-target="usage-set" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+
+        <div class="code-block-wrapper">
+          <pre><code id="usage-get"># Retrieve a key
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+          <button class="copy-btn" aria-label="Copy GET example" data-target="usage-get" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+
+        <div class="code-block-wrapper">
+          <pre><code id="usage-delete"># Delete a key
+DELETE mykey
+DELETED</code></pre>
+          <button class="copy-btn" aria-label="Copy DELETE example" data-target="usage-delete" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture" class="architecture" aria-labelledby="architecture-title">
+      <div class="container">
+        <h2 id="architecture-title">Architecture</h2>
+        <p class="section-intro">MirDB uses a Log-Structured Merge (LSM) Tree for efficient write and read operations.</p>
+
+        <div class="architecture-diagram" role="img" aria-label="LSM Tree architecture diagram showing write and read paths">
+          <svg viewBox="0 0 800 400" width="100%" height="auto" aria-labelledby="diagram-title">
+            <title id="diagram-title">LSM Tree Architecture</title>
+
+            <g class="write-path">
+              <text x="120" y="30" font-size="16" font-weight="bold" fill="var(--color-text)">Write Path</text>
+
+              <rect x="20" y="50" width="120" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+              <text x="80" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">WAL</text>
+
+              <line x1="140" y1="75" x2="180" y2="75" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+              <rect x="190" y="50" width="140" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+              <text x="260" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">Memtable</text>
+
+              <line x1="330" y1="75" x2="370" y2="75" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+              <rect x="380" y="50" width="160" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+              <text x="460" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">Immutable Memtable</text>
+
+              <line x1="540" y1="75" x2="580" y2="75" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+              <rect x="590" y="50" width="120" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+              <text x="650" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">SSTable</text>
+            </g>
+
+            <g class="read-path">
+              <text x="120" y="230" font-size="16" font-weight="bold" fill="var(--color-text)">Read Path</text>
+
+              <rect x="190" y="250" width="140" height="50" rx="4" fill="var(--color-secondary)" opacity="0.2" stroke="var(--color-secondary)" stroke-width="2"/>
+              <text x="260" y="280" text-anchor="middle" fill="var(--color-text)" font-size="14">Memtable</text>
+
+              <line x1="330" y1="275" x2="370" y2="275" stroke="var(--color-secondary)" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+              <rect x="380" y="250" width="160" height="50" rx="4" fill="var(--color-secondary)" opacity="0.2" stroke="var(--color-secondary)" stroke-width="2"/>
+              <text x="460" y="280" text-anchor="middle" fill="var(--color-text)" font-size="14">Immutable Memtable</text>
+
+              <line x1="540" y1="275" x2="580" y2="275" stroke="var(--color-secondary)" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+              <rect x="590" y="250" width="120" height="50" rx="4" fill="var(--color-secondary)" opacity="0.2" stroke="var(--color-secondary)" stroke-width="2"/>
+              <text x="650" y="280" text-anchor="middle" fill="var(--color-text)" font-size="14">SSTables</text>
+            </g>
+
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-primary)"/>
+              </marker>
+              <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="architecture-details">
+          <h3>Write Path</h3>
+          <p>All writes first go to the Write-Ahead Log (WAL) for durability, then to an in-memory <strong>skiplist memtable</strong>. When the memtable reaches a threshold size, it becomes immutable and is flushed to disk as an <strong>SSTable</strong>.</p>
+
+          <h3>Read Path</h3>
+          <p>Reads check the active memtable first, then immutable memtables, and finally search SSTables from newest to oldest. A <strong>compaction</strong> process periodically merges SSTables to maintain performance.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="performance" class="performance" aria-labelledby="performance-title">
+      <div class="container">
+        <h2 id="performance-title">Performance</h2>
+        <p class="section-intro">Benchmarks on a 16-core AMD EPYC server with NVMe SSD.</p>
+
+        <div class="benchmark-table-wrapper" role="region" aria-label="Performance benchmark comparison table" tabindex="0">
+          <table class="benchmark-table">
+            <caption>Write Throughput Comparison (operations per second)</caption>
+            <thead>
+              <tr>
+                <th scope="col">Store</th>
+                <th scope="col">Write Throughput</th>
+                <th scope="col">p50 Latency</th>
+                <th scope="col">p99 Latency</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">MirDB</th>
+                <td>850,000 ops/s</td>
+                <td>0.8 ms</td>
+                <td>2.1 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">memcached (persistent)</th>
+                <td>720,000 ops/s</td>
+                <td>1.2 ms</td>
+                <td>3.5 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">Redis (AOF)</th>
+                <td>650,000 ops/s</td>
+                <td>1.5 ms</td>
+                <td>4.2 ms</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="benchmark-note"><small>Tests performed with 1KB values, 50% write / 50% read workload, 16 concurrent clients.</small></p>
+      </div>
+    </section>
+
+    <section id="docs" class="docs" aria-labelledby="docs-title">
+      <div class="container">
+        <h2 id="docs-title">Documentation</h2>
+        <div class="docs-grid">
+          <article class="doc-card">
+            <h3><a href="/docs/api" rel="noopener noreferrer">API Documentation</a></h3>
+            <p>Complete reference for the memcached protocol commands supported by MirDB.</p>
+          </article>
+          <article class="doc-card">
+            <h3><a href="/docs/config" rel="noopener noreferrer">Configuration Reference</a></h3>
+            <p>Learn how to tune MirDB for your workload with detailed configuration options.</p>
+          </article>
+          <article class="doc-card">
+            <h3><a href="/docs/clients" rel="noopener noreferrer">Client Libraries</a></h3>
+            <p>Connect to MirDB from Rust, Go, Python, Node.js, and more.</p>
+          </article>
+          <article class="doc-card">
+            <h3><a href="/docs/contributing" rel="noopener noreferrer">Contributing Guide</a></h3>
+            <p>Get involved with the MirDB project. Report issues, submit PRs, and join the community.</p>
+          </article>
+          <article class="doc-card">
+            <h3><a href="/docs/troubleshooting" rel="noopener noreferrer">Troubleshooting</a></h3>
+            <p>Common issues and solutions for running MirDB in production.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h3>Project</h3>
+          <ul>
+            <li><a href="https://github.com/mirdb/mirdb" rel="noopener noreferrer">GitHub</a></li>
+            <li><a href="/license" rel="noopener noreferrer">License</a></li>
+            <li><a href="mailto:contact@mirdb.dev">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="/docs/api" rel="noopener noreferrer">API Docs</a></li>
+            <li><a href="/docs/contributing" rel="noopener noreferrer">Contributing</a></li>
+            <li><a href="https://github.com/mirdb/mirdb/issues" rel="noopener noreferrer">Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/license" rel="noopener noreferrer">MIT License</a></li>
+            <li><a href="/privacy" rel="noopener noreferrer">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 MirDB Contributors. Released under the MIT License.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/clipboard.js"></script>
+</body>
+</html>

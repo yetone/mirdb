@@ -1,0 +1,37 @@
+/**
+ * Code syntax highlighting overrides.
+ * Owner: Cross-cutting - used by Quick Start section
+ */
+
+.code-block-wrapper pre {
+  background-color: var(--color-code-bg);
+}
+
+.code-block-wrapper code {
+  color: var(--color-text);
+}
+
+/* Shell prompt */
+.code-block-wrapper code .prompt {
+  color: var(--color-primary);
+  user-select: none;
+}
+
+/* Comments */
+.code-block-wrapper code .comment {
+  color: var(--color-text-muted);
+}
+
+/* Keywords */
+.code-block-wrapper code .keyword {
+  color: var(--color-secondary);
+}
+
+/* Strings */
+.code-block-wrapper code .string {
+  color: #7ee787;
+}
+
+[data-theme="light"] .code-block-wrapper code .string {
+  color: #0a7b3e;
+}

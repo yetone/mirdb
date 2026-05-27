@@ -1,0 +1,78 @@
+<!--
+  Quick Start section partial.
+  Owner: Scenario 3 - Quick Start & Code Examples
+
+  Expected content:
+  - H2 heading: "Quick Start"
+  - Installation code block: `cargo install mirdb`
+  - Binary download link/button
+  - Usage example code blocks with memcached protocol:
+    - SET example
+    - GET example
+    - DELETE example
+  - Copy-to-clipboard buttons on each code block
+  - Syntax highlighting for shell and protocol examples
+-->
+<section id="quickstart" class="quickstart" aria-labelledby="quickstart-title">
+  <div class="container">
+    <h2 id="quickstart-title">Quick Start</h2>
+
+    <h3>Installation</h3>
+    <div class="code-block-wrapper">
+      <pre><code id="install-cmd">cargo install mirdb</code></pre>
+      <button class="copy-btn" aria-label="Copy installation command" data-target="install-cmd" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span class="copy-label">Copy</span>
+      </button>
+    </div>
+
+    <h3>Basic Usage</h3>
+    <div class="code-block-wrapper">
+      <pre><code id="usage-set"># Connect with any memcached client
+$ telnet localhost 11211
+
+# Store a key
+SET mykey 0 0 5
+hello
+STORED</code></pre>
+      <button class="copy-btn" aria-label="Copy SET example" data-target="usage-set" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span class="copy-label">Copy</span>
+      </button>
+    </div>
+
+    <div class="code-block-wrapper">
+      <pre><code id="usage-get"># Retrieve a key
+GET mykey
+VALUE mykey 0 5
+hello
+END</code></pre>
+      <button class="copy-btn" aria-label="Copy GET example" data-target="usage-get" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span class="copy-label">Copy</span>
+      </button>
+    </div>
+
+    <div class="code-block-wrapper">
+      <pre><code id="usage-delete"># Delete a key
+DELETE mykey
+DELETED</code></pre>
+      <button class="copy-btn" aria-label="Copy DELETE example" data-target="usage-delete" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span class="copy-label">Copy</span>
+      </button>
+    </div>
+  </div>
+</section>
