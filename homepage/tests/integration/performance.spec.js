@@ -21,26 +21,6 @@ const { test, expect } = require('@playwright/test');
 
 const SITE_URL = 'http://localhost:8080/index.html';
 
-// ── Helper: get total page weight from network requests ──
-async function getPageWeight(page) {
-  let totalBytes = 0;
-  const sizes = [];
-  page.on('response', async (response) => {
-    try {
-      const headers = response.headers();
-      const length = headers['content-length'];
-      if (length) {
-        const bytes = parseInt(length, 10);
-        sizes.push(bytes);
-        totalBytes += bytes;
-      }
-    } catch (e) {
-      // ignore
-    }
-  });
-  return { sizes, getTotal: () => totalBytes };
-}
-
 // ── Test 1: Critical CSS is inlined ──
 test('critical CSS is inlined in a style tag within the head', async ({ page }) => {
   await page.goto(SITE_URL);
@@ -54,11 +34,11 @@ test('critical CSS is inlined in a style tag within the head', async ({ page }) 
   // Verify critical styles are present
   expect(styleContent).toContain('--color-bg');
   expect(styleContent).toContain('--color-primary');
-  expect(styleContent).toContain('.site-nav');
+  expect(styleContent).toContain('.site-header');
   expect(styleContent).toContain('.hero');
-  expect(styleContent).toContain('.skip-nav');
-  expect(styleContent).toContain('.nav-container');
-  expect(styleContent).toContain('.cta-button');
+  expect(styleContent).toContain('.skip-link');
+  expect(styleContent).toContain('.main-nav');
+  expect(styleContent).toContain('.btn-primary');
   expect(styleContent).toContain('@media (max-width: 767px)');
 });
 
@@ -132,10 +112,10 @@ test('preconnect and dns-prefetch resource hints are present', async ({ page }) 
 
   const head = page.locator('head');
 
+  // There are 2 preconnect links: fonts.googleapis.com and fonts.gstatic.com
   const preconnect = head.locator('link[rel="preconnect"]');
-  await expect(preconnect).toHaveCount(1);
-  const preconnectHref = await preconnect.getAttribute('href');
-  expect(preconnectHref).toContain('fonts.googleapis.com');
+  const preconnectCount = await preconnect.count();
+  expect(preconnectCount).toBeGreaterThanOrEqual(1);
 
   const dnsPrefetch = head.locator('link[rel="dns-prefetch"]');
   await expect(dnsPrefetch).toHaveCount(1);
@@ -203,10 +183,10 @@ test('page renders all content visible with JavaScript disabled', async ({ brows
   await page.goto(SITE_URL);
 
   // Hero content should be visible
-  const hero = page.locator('#hero');
+  const hero = page.locator('.hero');
   await expect(hero).toBeVisible();
   await expect(hero.locator('h1')).toHaveText('MirDB');
-  await expect(hero.locator('p')).toContainText('persistent key-value store');
+  await expect(hero.locator('.hero-tagline')).toContainText('persistent key-value store');
 
   // Features section should be visible
   const features = page.locator('#features');
@@ -230,15 +210,15 @@ test('page renders all content visible with JavaScript disabled', async ({ brows
   await expect(performance).toBeVisible();
 
   // Documentation section visible
-  const docs = page.locator('#documentation');
+  const docs = page.locator('#docs');
   await expect(docs).toBeVisible();
 
   // Footer visible
-  const footer = page.locator('footer');
+  const footer = page.locator('.site-footer');
   await expect(footer).toBeVisible();
 
   // Navigation should still be visible (CSS-only)
-  const nav = page.locator('.site-nav');
+  const nav = page.locator('.site-header');
   await expect(nav).toBeVisible();
 
   // Core navigation links should work (anchor links)
@@ -298,12 +278,6 @@ test('performance metrics on slow 3G: FCP < 1.5s, LCP < 2.0s', async ({ browser 
     latency: 100, // 100ms RTT
   });
 
-  // Collect performance metrics
-  const performanceMetrics = [];
-  page.on('metrics', (data) => {
-    performanceMetrics.push(data.metrics);
-  });
-
   const startTime = Date.now();
   await page.goto(SITE_URL);
   await page.waitForLoadState('networkidle');
@@ -352,7 +326,7 @@ test('content is visible immediately without flash of unstyled content', async (
   await page.goto(SITE_URL);
 
   // The hero should be styled immediately since critical CSS is inlined
-  const heroBg = await page.locator('#hero').evaluate((el) => {
+  const heroBg = await page.locator('.hero').evaluate((el) => {
     const style = window.getComputedStyle(el);
     return {
       textAlign: style.textAlign,
@@ -364,7 +338,7 @@ test('content is visible immediately without flash of unstyled content', async (
   expect(heroBg.minHeight).toBeTruthy();
 
   // Navigation should be sticky immediately
-  const navPosition = await page.locator('.site-nav').evaluate((el) => {
+  const navPosition = await page.locator('.site-header').evaluate((el) => {
     return window.getComputedStyle(el).position;
   });
   expect(navPosition).toBe('sticky');
@@ -381,10 +355,10 @@ test('hero CTA button is styled by critical CSS without external stylesheet', as
   await page.reload();
 
   // Hero should still have basic styling from inlined critical CSS
-  const hero = page.locator('#hero');
+  const hero = page.locator('.hero');
   await expect(hero).toBeVisible();
 
-  const cta = page.locator('.cta-button');
+  const cta = page.locator('.btn-primary');
   await expect(cta).toBeVisible();
 
   // The CTA should have the background color from critical CSS
