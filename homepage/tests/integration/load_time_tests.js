@@ -48,7 +48,16 @@ function startServer() {
 
 // Helper: Run Lighthouse audit using chrome-launcher
 async function runLighthouse(url, formFactor) {
-  const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless', '--no-sandbox', '--disable-gpu'] });
+  const chromeFlags = ['--headless', '--no-sandbox', '--disable-gpu'];
+  const launchOpts = { chromeFlags };
+  // Auto-detect Playwright Chromium if CHROME_PATH is not set
+  if (!process.env.CHROME_PATH) {
+    try {
+      const { chromium } = require('playwright');
+      process.env.CHROME_PATH = chromium.executablePath();
+    } catch (_) { /* ignore */ }
+  }
+  const chrome = await chromeLauncher.launch(launchOpts);
   const result = await lighthouse.default(url, {
     port: chrome.port,
     output: 'json',
@@ -210,7 +219,7 @@ async function runTests() {
 
     // Check for inlined critical CSS in <style> tag
     const inlineStyle = head.find('style').first();
-    const hasInlineCritical = inlineStyle.length > 0 && inlineStyle.text().includes('nav') && inlineStyle.text().includes('#hero');
+    const hasInlineCritical = inlineStyle.length > 0 && inlineStyle.text().includes('nav') && inlineStyle.text().includes('.hero');
 
     // Check for non-critical CSS loaded via link rel="preload"
     const preloadLinks = head.find('link[rel="preload"][as="style"]');
@@ -228,7 +237,7 @@ async function runTests() {
 
     // Check if ALL CSS is inlined (even better than preload)
     const styleContent = inlineStyle.text() || '';
-    const hasAllCssInlined = styleContent.includes('nav') && styleContent.includes('#hero') &&
+    const hasAllCssInlined = styleContent.includes('nav') && styleContent.includes('.hero') &&
       styleContent.includes('.features-grid') && styleContent.includes('@media');
 
     console.log(`  Inline critical CSS: ${hasInlineCritical ? 'YES' : 'NO'}`);
@@ -338,7 +347,7 @@ async function runTests() {
 
     // Check that all content is visible
     const contentChecks = await page.evaluate(() => {
-      const hero = document.getElementById('hero');
+      const hero = document.querySelector('.hero');
       const features = document.getElementById('features');
       const quickstart = document.getElementById('quickstart');
       const architecture = document.getElementById('architecture');
