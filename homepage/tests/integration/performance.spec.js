@@ -39,7 +39,9 @@ test('critical CSS is inlined in a style tag within the head', async ({ page }) 
   expect(styleContent).toContain('.skip-link');
   expect(styleContent).toContain('.main-nav');
   expect(styleContent).toContain('.btn-primary');
-  expect(styleContent).toContain('@media (max-width: 767px)');
+  // Zola minifier may convert max-width to width<= syntax
+  const hasMediaQuery = styleContent.includes('@media (max-width: 767px)') || styleContent.includes('@media (width<=767px)');
+  expect(hasMediaQuery).toBe(true);
 });
 
 // ── Test 2: Non-critical CSS loaded asynchronously ──

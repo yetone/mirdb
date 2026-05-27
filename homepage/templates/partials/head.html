@@ -5,7 +5,7 @@
   Content:
   - Performance meta tags and resource hints
   - Inline critical CSS (above-the-fold styles)
-  - Inline all CSS to eliminate render-blocking and prevent CLS (Zola minifier strips noscript)
+  - Non-critical CSS loaded asynchronously via preload + onload
   - DNS prefetch and preconnect hints
   - Open Graph meta tags
   - Twitter Card meta tags
@@ -54,17 +54,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 
-<!-- Performance: inline ALL CSS to eliminate render-blocking resources and prevent CLS -->
+<!-- Performance: inline critical CSS to avoid render-blocking -->
 {% set critical_css = load_data(path="static/css/critical.css") %}
-{% set main_css = load_data(path="static/css/main.css") %}
-{% set responsive_css = load_data(path="static/css/responsive.css") %}
-{% set syntax_css = load_data(path="static/css/syntax.css") %}
 <style>
 {{ critical_css | safe }}
-{{ main_css | safe }}
-{{ responsive_css | safe }}
-{{ syntax_css | safe }}
 </style>
+
+<!-- Performance: preload non-critical CSS asynchronously -->
+<link rel="preload" href="{{ get_url(path='css/main.css') }}" as="style" onload="this.rel='stylesheet'">
+<link rel="preload" href="{{ get_url(path='css/responsive.css') }}" as="style" onload="this.rel='stylesheet'">
+<link rel="preload" href="{{ get_url(path='css/syntax.css') }}" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/main.css') }}"></noscript>
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/responsive.css') }}"></noscript>
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/syntax.css') }}"></noscript>
 
 <!-- Performance: resource hint for scripts -->
 <link rel="preload" href="{{ get_url(path='js/nav.js') }}" as="script">
