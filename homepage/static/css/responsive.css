@@ -1,0 +1,67 @@
+/**
+ * Responsive design media queries.
+ * Handles navigation collapse, section layouts, and touch targets.
+ */
+
+/* Mobile: up to 767px */
+@media (max-width: 767px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    flex-direction: column;
+    padding: calc(var(--spacing-unit) * 2);
+    gap: calc(var(--spacing-unit) * 2);
+    border-bottom: 1px solid var(--color-border);
+    display: none;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  }
+
+  .theme-toggle {
+    display: none;
+  }
+
+  section {
+    padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 2);
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+}
+
+/* Tablet: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-links {
+    gap: calc(var(--spacing-unit) * 2);
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+
+  section {
+    padding: calc(var(--spacing-unit) * 7) calc(var(--spacing-unit) * 2);
+  }
+}
+
+/* Desktop: 1024px+ */
+@media (min-width: 1024px) {
+  .nav-container {
+    padding: 0 calc(var(--spacing-unit) * 4);
+  }
+}

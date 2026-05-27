@@ -1,0 +1,10 @@
+# Zola configuration for MirDB Homepage
+base_url = "https://mirdb.dev"
+title = "MirDB - Persistent Key-Value Store"
+description = "A persistent key-value store with memcached protocol"
+compile_sass = true
+build_search_index = false
+minify_html = true
+
+[extra]
+tagline = "A persistent key-value store with memcached protocol"

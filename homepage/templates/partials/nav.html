@@ -1,0 +1,46 @@
+<!--
+  Navigation header partial.
+  Owner: Scenario 7 - Navigation & Smooth Scrolling
+
+  Content:
+  - Skip navigation link for keyboard users (first focusable element)
+  - Sticky header with backdrop blur
+  - Logo linking to home
+  - Section anchor links (Features, Quick Start, Architecture, Performance, Documentation)
+  - Theme toggle button placeholder (functionality in theme.js)
+  - Mobile hamburger menu (hidden on desktop)
+-->
+<a href="#main-content" class="skip-nav">Skip to main content</a>
+
+<header class="site-nav" role="banner">
+  <div class="nav-container">
+    <a href="/" class="nav-logo" aria-label="MirDB Home">MirDB</a>
+
+    <nav aria-label="Main navigation">
+      <button
+        class="hamburger"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        type="button"
+      >
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+
+      <ul id="nav-menu" class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#performance">Performance</a></li>
+        <li><a href="#documentation">Documentation</a></li>
+        <li>
+          <button class="theme-toggle" aria-label="Toggle dark/light theme" type="button">
+            <span aria-hidden="true">&#9788;</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

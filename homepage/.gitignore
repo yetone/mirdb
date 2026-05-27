@@ -1,0 +1,6 @@
+node_modules/
+public/
+test-results/
+package.json
+package-lock.json
+playwright.config.js

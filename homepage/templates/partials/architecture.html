@@ -1,0 +1,13 @@
+<!--
+  Architecture section partial.
+  Owner: Scenario 4 - Architecture Overview
+  Stub created by first scenario builder.
+-->
+<section id="architecture">
+  <h2>Architecture</h2>
+  <p>MirDB uses an LSM Tree architecture for high write throughput and efficient persistence.</p>
+  <div class="architecture-diagram">
+    <p>Write Path: WAL &rarr; Memtable &rarr; Immutable Memtable &rarr; SSTable</p>
+    <p>Read Path: Memtable &rarr; Immutable Memtable &rarr; SSTables (newest to oldest)</p>
+  </div>
+</section>

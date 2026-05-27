@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ config.title }}</title>
+  <meta name="description" content="{{ config.description }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/main.css') }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/responsive.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% include "partials/nav.html" %}
+
+  <main id="main-content" tabindex="-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block scripts %}{% endblock %}
+  <script src="{{ get_url(path='js/nav.js') }}"></script>
+  <script src="{{ get_url(path='js/theme.js') }}"></script>
+</body>
+</html>
