@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  {% include "partials/head.html" %}
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  {% include "partials/nav.html" %}
+
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "partials/footer.html" %}
+
+  {% block scripts %}{% endblock %}
+  <script src="{{ get_url(path='js/nav.js') }}" defer></script>
+  <script src="{{ get_url(path='js/theme.js') }}" defer></script>
+  <script src="{{ get_url(path='js/clipboard.js') }}" defer></script>
+</body>
+</html>

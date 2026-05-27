@@ -1,0 +1,66 @@
+<!--
+  Navigation header partial.
+  Owner: Scenario 7 - Navigation & Smooth Scrolling
+
+  Expected content:
+  - Sticky header with backdrop blur
+  - Logo/link to home
+  - Section anchor links (Features, Quick Start, Architecture, Performance, Docs)
+  - Theme toggle button
+  - Mobile hamburger menu (hidden on desktop)
+  - Skip navigation link for accessibility
+-->
+<header class="site-header">
+  <nav class="main-nav" aria-label="Main navigation">
+    <a href="/" class="nav-logo" aria-label="MirDB Home">
+      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <rect x="2" y="2" width="28" height="28" rx="4" fill="currentColor"/>
+        <text x="16" y="22" text-anchor="middle" fill="var(--color-bg)" font-size="14" font-weight="bold" font-family="monospace">M</text>
+      </svg>
+      <span class="logo-text">MirDB</span>
+    </a>
+
+    <button
+      class="mobile-menu-toggle"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="primary-menu"
+      type="button"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+        <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
+
+    <ul id="primary-menu" class="nav-links" role="menubar">
+      <li role="none"><a href="#features" role="menuitem">Features</a></li>
+      <li role="none"><a href="#quickstart" role="menuitem">Quick Start</a></li>
+      <li role="none"><a href="#architecture" role="menuitem">Architecture</a></li>
+      <li role="none"><a href="#performance" role="menuitem">Performance</a></li>
+      <li role="none"><a href="#docs" role="menuitem">Docs</a></li>
+    </ul>
+
+    <button
+      class="theme-toggle"
+      aria-label="Toggle dark and light theme"
+      type="button"
+    >
+      <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+        <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
+  </nav>
+</header>

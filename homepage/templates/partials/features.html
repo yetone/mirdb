@@ -1,0 +1,70 @@
+<!--
+  Features section partial.
+  Owner: Scenario 2 - Features Section
+
+  Expected content:
+  - H2 heading: "Features"
+  - 6 feature cards in a responsive grid:
+    1. Memcached Protocol Compatible
+    2. Fast Rust Implementation
+    3. LSM Tree Persistence
+    4. Safe Crashing with WAL
+    5. Multi-level Compaction
+    6. Open Source
+  - Each card has an SVG icon, title, and description
+  - Grid: 4-col desktop, 2-col tablet, 1-col mobile
+-->
+<section id="features" class="features" aria-labelledby="features-title">
+  <div class="container">
+    <h2 id="features-title">Features</h2>
+    <div class="features-grid">
+      <article class="feature-card">
+        <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <h3>Memcached Protocol Compatible</h3>
+        <p>Drop-in replacement for memcached with full protocol compatibility. Use existing clients without changes.</p>
+      </article>
+
+      <article class="feature-card">
+        <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <h3>Fast Rust Implementation</h3>
+        <p>Built in safe Rust for maximum performance with memory safety guarantees. Zero-cost abstractions.</p>
+      </article>
+
+      <article class="feature-card">
+        <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <h3>LSM Tree Persistence</h3>
+        <p>Log-structured merge tree provides efficient write throughput with predictable read performance.</p>
+      </article>
+
+      <article class="feature-card">
+        <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <h3>Safe Crashing with WAL</h3>
+        <p>Write-ahead logging ensures durability. Survive crashes without data loss or corruption.</p>
+      </article>
+
+      <article class="feature-card">
+        <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <h3>Multi-level Compaction</h3>
+        <p>Automatic background compaction optimizes storage and maintains consistent read performance.</p>
+      </article>
+
+      <article class="feature-card">
+        <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M8.5 7a4 4 0 100-8 4 4 0 000 8zM20 8v6m-3-3h6" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <h3>Open Source</h3>
+        <p>MIT licensed and community driven. Contribute, inspect, and customize the source code.</p>
+      </article>
+    </div>
+  </div>
+</section>

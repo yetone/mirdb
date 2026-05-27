@@ -1,0 +1,82 @@
+<!--
+  Architecture section partial.
+  Owner: Scenario 4 - Architecture Overview
+
+  Expected content:
+  - H2 heading: "Architecture"
+  - SVG diagram showing:
+    - Write Path: WAL -> Memtable -> Immutable Memtable -> SSTable
+    - Read Path: Memtable -> Immutable Memtable -> SSTables (newest to oldest)
+  - Text explanation of LSM Tree components
+  - Labels for: skiplist memtable, SSTable, compaction
+-->
+<section id="architecture" class="architecture" aria-labelledby="architecture-title">
+  <div class="container">
+    <h2 id="architecture-title">Architecture</h2>
+    <p class="section-intro">MirDB uses a Log-Structured Merge (LSM) Tree for efficient write and read operations.</p>
+
+    <div class="architecture-diagram" role="img" aria-label="LSM Tree architecture diagram showing write and read paths">
+      <svg viewBox="0 0 800 400" width="100%" height="auto" aria-labelledby="diagram-title">
+        <title id="diagram-title">LSM Tree Architecture</title>
+
+        <!-- Write Path -->
+        <g class="write-path">
+          <text x="120" y="30" font-size="16" font-weight="bold" fill="var(--color-text)">Write Path</text>
+
+          <rect x="20" y="50" width="120" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+          <text x="80" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">WAL</text>
+
+          <line x1="140" y1="75" x2="180" y2="75" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <rect x="190" y="50" width="140" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+          <text x="260" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">Memtable</text>
+
+          <line x1="330" y1="75" x2="370" y2="75" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <rect x="380" y="50" width="160" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+          <text x="460" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">Immutable Memtable</text>
+
+          <line x1="540" y1="75" x2="580" y2="75" stroke="var(--color-primary)" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+          <rect x="590" y="50" width="120" height="50" rx="4" fill="var(--color-primary)" opacity="0.2" stroke="var(--color-primary)" stroke-width="2"/>
+          <text x="650" y="80" text-anchor="middle" fill="var(--color-text)" font-size="14">SSTable</text>
+        </g>
+
+        <!-- Read Path -->
+        <g class="read-path">
+          <text x="120" y="230" font-size="16" font-weight="bold" fill="var(--color-text)">Read Path</text>
+
+          <rect x="190" y="250" width="140" height="50" rx="4" fill="var(--color-secondary)" opacity="0.2" stroke="var(--color-secondary)" stroke-width="2"/>
+          <text x="260" y="280" text-anchor="middle" fill="var(--color-text)" font-size="14">Memtable</text>
+
+          <line x1="330" y1="275" x2="370" y2="275" stroke="var(--color-secondary)" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+          <rect x="380" y="250" width="160" height="50" rx="4" fill="var(--color-secondary)" opacity="0.2" stroke="var(--color-secondary)" stroke-width="2"/>
+          <text x="460" y="280" text-anchor="middle" fill="var(--color-text)" font-size="14">Immutable Memtable</text>
+
+          <line x1="540" y1="275" x2="580" y2="275" stroke="var(--color-secondary)" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+          <rect x="590" y="250" width="120" height="50" rx="4" fill="var(--color-secondary)" opacity="0.2" stroke="var(--color-secondary)" stroke-width="2"/>
+          <text x="650" y="280" text-anchor="middle" fill="var(--color-text)" font-size="14">SSTables</text>
+        </g>
+
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-primary)"/>
+          </marker>
+          <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-secondary)"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="architecture-details">
+      <h3>Write Path</h3>
+      <p>All writes first go to the Write-Ahead Log (WAL) for durability, then to an in-memory <strong>skiplist memtable</strong>. When the memtable reaches a threshold size, it becomes immutable and is flushed to disk as an <strong>SSTable</strong>.</p>
+
+      <h3>Read Path</h3>
+      <p>Reads check the active memtable first, then immutable memtables, and finally search SSTables from newest to oldest. A <strong>compaction</strong> process periodically merges SSTables to maintain performance.</p>
+    </div>
+  </div>
+</section>

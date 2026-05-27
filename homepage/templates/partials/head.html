@@ -1,0 +1,111 @@
+<!--
+  Head partial for Performance, SEO, and Meta Tags.
+  Owners: Scenario 11 (Performance) + Scenario 12 (SEO & Meta Tags)
+
+  Content:
+  - Performance meta tags and resource hints
+  - Inline critical CSS (above-the-fold styles)
+  - Non-critical CSS loaded asynchronously via preload + onload
+  - DNS prefetch and preconnect hints
+  - Open Graph meta tags
+  - Twitter Card meta tags
+  - Canonical link tag
+  - Favicon links
+  - Structured data JSON-LD
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+<meta name="description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="MirDB Team">
+<meta name="keywords" content="MirDB, key-value store, memcached, persistent, Rust, database, cache">
+
+<!-- Performance: prevent text-size-adjust on mobile -->
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+<meta property="og:description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mirdb.dev/">
+<meta property="og:image" content="https://mirdb.dev/images/og-image.png">
+<meta property="og:site_name" content="MirDB">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+<meta name="twitter:description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta name="twitter:image" content="https://mirdb.dev/images/og-image.png">
+<meta name="twitter:site" content="@mirdb">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://mirdb.dev/">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="{{ get_url(path='images/logo.svg') }}">
+<link rel="apple-touch-icon" href="{{ get_url(path='images/logo.svg') }}">
+
+<!-- Performance: preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+<!-- Performance: inline critical CSS to avoid render-blocking -->
+{% set critical_css = load_data(path="static/css/critical.css") %}
+<style>
+{{ critical_css | safe }}
+</style>
+
+<!-- Performance: preload non-critical CSS asynchronously -->
+<link rel="preload" href="{{ get_url(path='css/main.css') }}" as="style" onload="this.rel='stylesheet'">
+<link rel="preload" href="{{ get_url(path='css/responsive.css') }}" as="style" onload="this.rel='stylesheet'">
+<link rel="preload" href="{{ get_url(path='css/syntax.css') }}" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/main.css') }}"></noscript>
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/responsive.css') }}"></noscript>
+<noscript><link rel="stylesheet" href="{{ get_url(path='css/syntax.css') }}"></noscript>
+
+<!-- Performance: resource hint for scripts -->
+<link rel="preload" href="{{ get_url(path='js/nav.js') }}" as="script">
+<link rel="preload" href="{{ get_url(path='js/theme.js') }}" as="script">
+<link rel="preload" href="{{ get_url(path='js/clipboard.js') }}" as="script">
+
+<!-- Structured Data: JSON-LD - SoftwareApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MirDB",
+  "description": "A persistent key-value store with memcached protocol compatibility, built in Rust.",
+  "url": "https://mirdb.dev/",
+  "applicationCategory": "DatabaseApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "softwareVersion": "0.1.0",
+  "license": "https://opensource.org/licenses/MIT",
+  "codeRepository": "https://github.com/mirdb/mirdb",
+  "programmingLanguage": "Rust",
+  "author": {
+    "@type": "Organization",
+    "name": "MirDB Team"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<!-- Structured Data: JSON-LD - WebSite -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MirDB",
+  "description": "A persistent key-value store with memcached protocol compatibility, built in Rust.",
+  "url": "https://mirdb.dev/"
+}
+</script>

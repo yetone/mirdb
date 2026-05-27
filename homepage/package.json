@@ -1,0 +1,21 @@
+{
+  "name": "mirdb-homepage-tests",
+  "version": "1.0.0",
+  "description": "Tests for MirDB Homepage",
+  "scripts": {
+    "build": "/tmp/zola build",
+    "serve": "npx http-server public -p 8080 -s",
+    "test": "jest --verbose",
+    "test:e2e": "jest --config=jest.e2e.config.js --verbose",
+    "test:performance": "npm run build && npx playwright test tests/integration/performance.spec.js"
+  },
+  "devDependencies": {
+    "@axe-core/cli": "^4.10.0",
+    "@playwright/test": "^1.60.0",
+    "axe-core": "^4.10.0",
+    "http-server": "^14.1.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "playwright": "^1.50.0"
+  }
+}
