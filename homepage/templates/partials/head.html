@@ -1,0 +1,77 @@
+<!--
+  Head partial for SEO and meta tags.
+  Owner: Scenario 12 - SEO & Meta Tags
+
+  Contains:
+  - <title> with project name and tagline
+  - <meta name="description">
+  - <meta charset="UTF-8">
+  - <meta name="viewport">
+  - Open Graph meta tags (og:title, og:description, og:image, og:type, og:url)
+  - Twitter Card meta tags (twitter:card, twitter:title, etc.)
+  - Canonical link tag
+  - Structured data JSON-LD (schema.org SoftwareApplication)
+  - Favicon links
+  - Preconnect hints for external resources
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MirDB - A Persistent Key-Value Store with Memcached Protocol</title>
+<meta name="description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="MirDB Team">
+<meta name="keywords" content="MirDB, key-value store, memcached, persistent, Rust, database, cache">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+<meta property="og:description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mirdb.dev/">
+<meta property="og:image" content="https://mirdb.dev/images/og-image.png">
+<meta property="og:site_name" content="MirDB">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MirDB - A Persistent Key-Value Store with Memcached Protocol">
+<meta name="twitter:description" content="MirDB is a persistent key-value store with memcached protocol compatibility, built in Rust. Fast, reliable, and open source.">
+<meta name="twitter:image" content="https://mirdb.dev/images/og-image.png">
+<meta name="twitter:site" content="@mirdb">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://mirdb.dev/">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="{{ get_url(path='images/logo.svg') }}">
+<link rel="apple-touch-icon" href="{{ get_url(path='images/logo.svg') }}">
+
+<!-- Preconnect hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Structured Data: JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MirDB",
+  "description": "A persistent key-value store with memcached protocol compatibility, built in Rust.",
+  "url": "https://mirdb.dev/",
+  "applicationCategory": "DatabaseApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "softwareVersion": "0.1.0",
+  "license": "https://opensource.org/licenses/MIT",
+  "codeRepository": "https://github.com/mirdb/mirdb",
+  "programmingLanguage": "Rust",
+  "author": {
+    "@type": "Organization",
+    "name": "MirDB Team"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>

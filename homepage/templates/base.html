@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MirDB - Persistent Key-Value Store</title>
-  <meta name="description" content="A persistent key-value store with memcached protocol compatibility, built in Rust.">
+  {% include "partials/head.html" %}
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/responsive.css">
   <link rel="stylesheet" href="/css/syntax.css">
+  {% block head %}{% endblock %}
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
