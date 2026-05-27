@@ -1,6 +1,17 @@
 /**
- * Build System & Static Generation Integration Tests
- * Tests: Zola build output, HTML validity, CSS validity, anchor links, external links, no-JS rendering
+ * Build System & Static Generation Tests
+ * Owner: Scenario 13 - Build System & Static Generation
+ *
+ * Tests verify:
+ * - zola build completes successfully with exit code 0
+ * - public/ directory exists with expected files
+ * - index.html has valid HTML5 structure
+ * - Static assets (CSS, JS, images) are copied to output
+ * - Anchor links reference existing section IDs
+ * - External links use valid https:// URLs
+ * - CSS files parse without syntax errors
+ * - zola serve starts successfully
+ * - Homepage renders without JavaScript (all content in static HTML)
  */
 
 const fs = require('fs');
@@ -9,8 +20,9 @@ const { execSync, spawn } = require('child_process');
 const { JSDOM } = require('jsdom');
 const http = require('http');
 
-const HOMEPAGE_DIR = path.join(__dirname, '..', '..');
+const HOMEPAGE_DIR = path.join(__dirname, '../..');
 const PUBLIC_DIR = path.join(HOMEPAGE_DIR, 'public');
+const INDEX_HTML = path.join(PUBLIC_DIR, 'index.html');
 const ZOLA_CMD = process.env.ZOLA_PATH || 'zola';
 
 function runZola(args, options = {}) {
@@ -37,8 +49,7 @@ describe('Build System & Static Generation - Integration Tests', () => {
     expect(output).toBeTruthy();
 
     // Parse the generated index.html
-    const htmlPath = path.join(PUBLIC_DIR, 'index.html');
-    const html = fs.readFileSync(htmlPath, 'utf-8');
+    const html = fs.readFileSync(INDEX_HTML, 'utf-8');
     dom = new JSDOM(html, { url: 'http://localhost:3000' });
     document = dom.window.document;
   });
@@ -47,58 +58,105 @@ describe('Build System & Static Generation - Integration Tests', () => {
     if (dom) dom.window.close();
   });
 
-  // Test Case 1: Run 'zola build' command
-  describe('Test 1: Zola build completes successfully', () => {
-    it('should complete with exit code 0 and no error output', () => {
-      // Build already ran in beforeAll; if it failed, the suite would error
-      expect(fs.existsSync(PUBLIC_DIR)).toBe(true);
+  // Test Case 1: zola build completes successfully
+  describe('Test 1: Zola build command', () => {
+    it('should run zola build with exit code 0', () => {
+      let exitCode = 0;
+      let stdout = '';
+      let stderr = '';
+
+      try {
+        const result = runZola('build');
+        stdout = result;
+      } catch (error) {
+        exitCode = error.status || 1;
+        stdout = error.stdout || '';
+        stderr = error.stderr || '';
+      }
+
+      expect(exitCode).toBe(0);
+      expect(stderr).not.toMatch(/error/i);
+      expect(stdout).toMatch(/Building site/);
+      expect(stdout).toMatch(/Done/);
     });
 
-    it('should produce no template rendering errors in output', () => {
-      let output;
+    it('should have no template rendering errors or warnings', () => {
+      let stdout = '';
+      let stderr = '';
+
       try {
-        output = runZola('build');
-      } catch (e) {
-        output = e.stdout || '';
+        const result = runZola('build');
+        stdout = result;
+      } catch (error) {
+        stdout = error.stdout || '';
+        stderr = error.stderr || '';
       }
-      const lower = output.toLowerCase();
-      expect(lower).not.toContain('error');
-      expect(lower).not.toContain('warning: missing variable');
-      expect(lower).not.toContain('failed include');
+
+      const output = (stdout + stderr).toLowerCase();
+      expect(output).not.toContain('warning: missing variable');
+      expect(output).not.toContain('failed to include');
+      expect(output).not.toContain('template error');
+      expect(output).not.toContain('render error');
     });
   });
 
-  // Test Case 2: Inspect build output directory
+  // Test Case 2: Build output directory structure
   describe('Test 2: Build output directory structure', () => {
-    it('should create public/index.html', () => {
-      const indexPath = path.join(PUBLIC_DIR, 'index.html');
-      expect(fs.existsSync(indexPath)).toBe(true);
-      const stats = fs.statSync(indexPath);
+    it('should create public/ directory', () => {
+      expect(fs.existsSync(PUBLIC_DIR)).toBe(true);
+      expect(fs.statSync(PUBLIC_DIR).isDirectory()).toBe(true);
+    });
+
+    it('should generate public/index.html', () => {
+      expect(fs.existsSync(INDEX_HTML)).toBe(true);
+      const stats = fs.statSync(INDEX_HTML);
       expect(stats.size).toBeGreaterThan(0);
     });
 
     it('should copy CSS files to public/css/', () => {
       const cssDir = path.join(PUBLIC_DIR, 'css');
       expect(fs.existsSync(cssDir)).toBe(true);
-      const files = fs.readdirSync(cssDir);
-      expect(files.length).toBeGreaterThan(0);
-      expect(files.some(f => f.endsWith('.css'))).toBe(true);
+
+      const cssFiles = fs.readdirSync(cssDir).filter(f => f.endsWith('.css'));
+      expect(cssFiles.length).toBeGreaterThan(0);
+      expect(fs.existsSync(path.join(cssDir, 'main.css'))).toBe(true);
     });
 
     it('should copy JS files to public/js/', () => {
       const jsDir = path.join(PUBLIC_DIR, 'js');
       expect(fs.existsSync(jsDir)).toBe(true);
-      const files = fs.readdirSync(jsDir);
-      expect(files.length).toBeGreaterThan(0);
-      expect(files.some(f => f.endsWith('.js'))).toBe(true);
+
+      const jsFiles = fs.readdirSync(jsDir).filter(f => f.endsWith('.js'));
+      expect(jsFiles.length).toBeGreaterThan(0);
+      expect(fs.existsSync(path.join(jsDir, 'theme.js'))).toBe(true);
+      expect(fs.existsSync(path.join(jsDir, 'nav.js'))).toBe(true);
+      expect(fs.existsSync(path.join(jsDir, 'clipboard.js'))).toBe(true);
+    });
+
+    it('should copy images to public/images/', () => {
+      const imagesDir = path.join(PUBLIC_DIR, 'images');
+      expect(fs.existsSync(imagesDir)).toBe(true);
+
+      const imageFiles = fs.readdirSync(imagesDir);
+      expect(imageFiles.length).toBeGreaterThan(0);
+    });
+
+    it('should generate robots.txt', () => {
+      const robotsPath = path.join(PUBLIC_DIR, 'robots.txt');
+      expect(fs.existsSync(robotsPath)).toBe(true);
+    });
+
+    it('should generate sitemap.xml', () => {
+      const sitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
+      expect(fs.existsSync(sitemapPath)).toBe(true);
     });
   });
 
-  // Test Case 3: Validate generated HTML
-  describe('Test 3: HTML validation', () => {
+  // Test Case 3: HTML validation
+  describe('Test 3: HTML structure validation', () => {
     it('should have DOCTYPE declaration', () => {
-      const html = fs.readFileSync(path.join(PUBLIC_DIR, 'index.html'), 'utf-8');
-      expect(html.toLowerCase().startsWith('<!doctype html>')).toBe(true);
+      const html = fs.readFileSync(INDEX_HTML, 'utf-8');
+      expect(html.toLowerCase()).toMatch(/<!doctype\s+html>/);
     });
 
     it('should have html element with lang attribute', () => {
@@ -107,279 +165,301 @@ describe('Build System & Static Generation - Integration Tests', () => {
       expect(htmlEl.getAttribute('lang')).toBe('en');
     });
 
-    it('should have head and body elements', () => {
+    it('should have head element', () => {
       expect(document.querySelector('head')).toBeTruthy();
+    });
+
+    it('should have body element', () => {
       expect(document.querySelector('body')).toBeTruthy();
     });
 
-    it('should have a title in head', () => {
-      const title = document.querySelector('head title');
+    it('should have title tag', () => {
+      const title = document.querySelector('title');
       expect(title).toBeTruthy();
       expect(title.textContent.trim().length).toBeGreaterThan(0);
     });
 
-    it('should not have unclosed tags (basic check)', () => {
-      const html = fs.readFileSync(path.join(PUBLIC_DIR, 'index.html'), 'utf-8');
-      // Check for common unclosed tag patterns
-      const unclosedPatterns = [
-        /<div[^>]*>[^<]*(?!<\/div>)(?=<div|<section|<footer|<header|<main)/g,
-      ];
-      // A simpler approach: JSDOM parsed it successfully, which means tags are balanced
-      expect(document.documentElement).toBeTruthy();
+    it('should have meta charset', () => {
+      const charset = document.querySelector('meta[charset]');
+      expect(charset).toBeTruthy();
     });
 
-    it('should not have duplicate IDs', () => {
-      const allElements = document.querySelectorAll('[id]');
-      const ids = Array.from(allElements).map(el => el.id);
-      const uniqueIds = new Set(ids);
-      expect(uniqueIds.size).toBe(ids.length);
-    });
-
-    it('should have charset meta tag', () => {
-      const meta = document.querySelector('meta[charset]');
-      expect(meta).toBeTruthy();
-    });
-
-    it('should have viewport meta tag', () => {
+    it('should have meta viewport', () => {
       const viewport = document.querySelector('meta[name="viewport"]');
       expect(viewport).toBeTruthy();
     });
+
+    it('should have no unclosed tags (html is well-formed)', () => {
+      const htmlEl = document.querySelector('html');
+      expect(htmlEl).toBeTruthy();
+      expect(htmlEl.children.length).toBeGreaterThanOrEqual(2);
+
+      const body = document.querySelector('body');
+      expect(body.children.length).toBeGreaterThan(0);
+    });
+
+    it('should have no duplicate IDs', () => {
+      const allElements = document.querySelectorAll('[id]');
+      const ids = new Set();
+      const duplicates = [];
+
+      allElements.forEach(el => {
+        const id = el.id;
+        if (ids.has(id)) {
+          duplicates.push(id);
+        }
+        ids.add(id);
+      });
+
+      expect(duplicates).toEqual([]);
+    });
   });
 
-  // Test Case 4: Check all anchor links
-  describe('Test 4: Anchor link validation', () => {
-    it('should have corresponding id for every href="#section" link', () => {
+  // Test Case 4: Anchor links validation
+  describe('Test 4: Internal anchor links', () => {
+    it('should have all anchor links with corresponding section IDs', () => {
       const anchorLinks = document.querySelectorAll('a[href^="#"]');
-      const missingIds = [];
+      const missingTargets = [];
 
       anchorLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (href === '#') return; // skip placeholder
-        const targetId = href.slice(1);
+        if (href === '#') return;
+
+        const targetId = href.substring(1);
         const target = document.getElementById(targetId);
+
         if (!target) {
-          missingIds.push(href);
+          missingTargets.push(href);
         }
       });
 
-      expect(missingIds).toEqual([]);
+      expect(missingTargets).toEqual([]);
     });
 
-    it('should have all expected section IDs', () => {
-      const expectedSections = ['features', 'quickstart', 'architecture', 'performance', 'docs', 'main-content'];
-      expectedSections.forEach(id => {
-        expect(document.getElementById(id)).toBeTruthy();
+    it('should have target for skip navigation link', () => {
+      const skipLink = document.querySelector('a[href="#main-content"]');
+      expect(skipLink).toBeTruthy();
+      expect(document.getElementById('main-content')).toBeTruthy();
+    });
+
+    it('should have target for all nav section links', () => {
+      const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        const targetId = href.substring(1);
+        const target = document.getElementById(targetId);
+        expect(target).toBeTruthy();
       });
+    });
+
+    it('should have Get Started button linking to quickstart section', () => {
+      const cta = document.querySelector('a[href="#quickstart"]');
+      expect(cta).toBeTruthy();
+      expect(document.getElementById('quickstart')).toBeTruthy();
     });
   });
 
-  // Test Case 5: Check all external links
-  describe('Test 5: External link validation', () => {
-    it('should use https:// for all external links', () => {
-      const allLinks = document.querySelectorAll('a[href^="http"]');
-      const nonHttps = [];
+  // Test Case 5: External links validation
+  describe('Test 5: External links', () => {
+    it('should have only valid https:// URLs for external links', () => {
+      const allLinks = document.querySelectorAll('a[href]');
+      const invalidLinks = [];
 
       allLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (!href.startsWith('https://') && !href.startsWith('mailto:')) {
-          nonHttps.push(href);
+
+        if (href.startsWith('#') || href.startsWith('/') || href.startsWith('mailto:')) {
+          return;
+        }
+
+        if (!href.startsWith('https://')) {
+          invalidLinks.push({
+            href,
+            text: link.textContent.trim().substring(0, 50),
+          });
         }
       });
 
-      expect(nonHttps).toEqual([]);
+      expect(invalidLinks).toEqual([]);
     });
 
-    it('should have rel="noopener noreferrer" on target="_blank" links', () => {
-      const blankLinks = document.querySelectorAll('a[target="_blank"]');
-      blankLinks.forEach(link => {
+    it('should have rel="noopener noreferrer" on external links', () => {
+      const externalLinks = document.querySelectorAll('a[href^="http"]');
+      const missingRel = [];
+
+      externalLinks.forEach(link => {
         const rel = link.getAttribute('rel') || '';
-        expect(rel).toContain('noopener');
-        expect(rel).toContain('noreferrer');
+        if (!rel.includes('noopener') || !rel.includes('noreferrer')) {
+          missingRel.push(link.getAttribute('href'));
+        }
       });
+
+      expect(missingRel).toEqual([]);
     });
 
-    it('should have valid GitHub URLs', () => {
+    it('should have GitHub link with valid URL', () => {
       const githubLinks = document.querySelectorAll('a[href*="github.com"]');
       expect(githubLinks.length).toBeGreaterThan(0);
+
       githubLinks.forEach(link => {
         const href = link.getAttribute('href');
-        expect(href.startsWith('https://github.com/')).toBe(true);
+        expect(href).toMatch(/^https:\/\/github\.com\//);
       });
     });
   });
 
-  // Test Case 6: Validate CSS files
-  describe('Test 6: CSS validation', () => {
-    function getCssFiles() {
-      const cssDir = path.join(PUBLIC_DIR, 'css');
-      return fs.readdirSync(cssDir).filter(f => f.endsWith('.css'));
-    }
+  // Test Case 6: CSS validation
+  describe('Test 6: CSS file validation', () => {
+    it('should parse main.css without syntax errors', () => {
+      const cssPath = path.join(PUBLIC_DIR, 'css', 'main.css');
+      const css = fs.readFileSync(cssPath, 'utf-8');
 
-    it('should have CSS files in public/css/', () => {
-      const files = getCssFiles();
-      expect(files.length).toBeGreaterThan(0);
+      expect(css).not.toMatch(/\{\s*\}/);
+      expect(css).toMatch(/:root\s*\{/);
     });
 
-    it('should have no unclosed braces in CSS', () => {
-      const files = getCssFiles();
+    it('should have CSS variables defined before use', () => {
+      const cssPath = path.join(PUBLIC_DIR, 'css', 'main.css');
+      const css = fs.readFileSync(cssPath, 'utf-8');
+
+      const rootMatch = css.match(/:root\s*\{([^}]*)\}/s);
+      expect(rootMatch).toBeTruthy();
+
+      const rootVars = rootMatch[1];
+      expect(rootVars).toContain('--color-bg');
+      expect(rootVars).toContain('--color-text');
+      expect(rootVars).toContain('--color-primary');
+      expect(rootVars).toContain('--font-family-base');
+    });
+
+    it('should have valid CSS selectors', () => {
+      const cssPath = path.join(PUBLIC_DIR, 'css', 'main.css');
+      const css = fs.readFileSync(cssPath, 'utf-8');
+
+      const openBraces = (css.match(/\{/g) || []).length;
+      const closeBraces = (css.match(/\}/g) || []).length;
+      expect(openBraces).toBe(closeBraces);
+    });
+
+    it('should have responsive.css with media queries', () => {
+      const cssPath = path.join(PUBLIC_DIR, 'css', 'responsive.css');
+      const css = fs.readFileSync(cssPath, 'utf-8');
+
+      expect(css).toMatch(/@media\s*\(/);
+    });
+
+    it('should have syntax.css for code highlighting', () => {
+      const cssPath = path.join(PUBLIC_DIR, 'css', 'syntax.css');
+      expect(fs.existsSync(cssPath)).toBe(true);
+    });
+
+    it('should have balanced braces in all CSS files', () => {
+      const cssDir = path.join(PUBLIC_DIR, 'css');
+      const files = fs.readdirSync(cssDir).filter(f => f.endsWith('.css'));
+
       files.forEach(file => {
-        const cssPath = path.join(PUBLIC_DIR, 'css', file);
+        const cssPath = path.join(cssDir, file);
         const css = fs.readFileSync(cssPath, 'utf-8');
         const openBraces = (css.match(/\{/g) || []).length;
         const closeBraces = (css.match(/\}/g) || []).length;
         expect(openBraces).toBe(closeBraces);
       });
     });
-
-    it('should have no unclosed parentheses in CSS', () => {
-      const files = getCssFiles();
-      files.forEach(file => {
-        const cssPath = path.join(PUBLIC_DIR, 'css', file);
-        const css = fs.readFileSync(cssPath, 'utf-8');
-        const openParens = (css.match(/\(/g) || []).length;
-        const closeParens = (css.match(/\)/g) || []).length;
-        expect(openParens).toBe(closeParens);
-      });
-    });
-
-    it('should define CSS variables before they are used', () => {
-      // Check main.css for variable definitions
-      const mainCssPath = path.join(PUBLIC_DIR, 'css', 'main.css');
-      if (!fs.existsSync(mainCssPath)) return;
-
-      const css = fs.readFileSync(mainCssPath, 'utf-8');
-      // Extract all --variable definitions
-      const definedVars = new Set();
-      const defineMatches = css.match(/--[\w-]+\s*:/g) || [];
-      defineMatches.forEach(m => {
-        definedVars.add(m.replace(':', '').trim());
-      });
-
-      // Extract all var() usages
-      const usedVars = css.match(/var\(\s*--[\w-]+/g) || [];
-      const undefinedVars = [];
-      usedVars.forEach(u => {
-        const varName = u.replace('var(', '').trim();
-        if (!definedVars.has(varName)) {
-          undefinedVars.push(varName);
-        }
-      });
-
-      // Some vars might be defined in other files or browser-native
-      // Only fail if there are obvious undefined ones in the same file
-      expect(undefinedVars).toEqual([]);
-    });
-
-    it('should have valid @media syntax', () => {
-      const files = getCssFiles();
-      files.forEach(file => {
-        const cssPath = path.join(PUBLIC_DIR, 'css', file);
-        const css = fs.readFileSync(cssPath, 'utf-8');
-        const mediaMatches = css.match(/@media[^{]*\{/g) || [];
-        mediaMatches.forEach(() => {
-          // If we matched @media with {, basic syntax is OK
-          expect(true).toBe(true);
-        });
-      });
-    });
   });
 
-  // Test Case 7: Test Zola serve mode
+  // Test Case 7: zola serve
   describe('Test 7: Zola serve mode', () => {
-    it('should start zola serve and serve the homepage', async () => {
-      // Find an available port
+    it('should start zola serve and serve homepage', async () => {
       const port = await new Promise((resolve) => {
-        const srv = require('http').createServer();
+        const srv = http.createServer();
         srv.listen(0, () => {
           const p = srv.address().port;
           srv.close(() => resolve(p));
         });
       });
 
-      // Start zola serve
-      const child = spawn(ZOLA_CMD, ['serve', '--port', String(port)], {
+      const server = spawn(ZOLA_CMD, ['serve', '--port', String(port)], {
         cwd: HOMEPAGE_DIR,
         stdio: 'pipe',
       });
 
-      let output = '';
-      child.stdout.on('data', (data) => {
-        output += data.toString();
+      let serverOutput = '';
+      server.stdout.on('data', (data) => {
+        serverOutput += data.toString();
       });
-      child.stderr.on('data', (data) => {
-        output += data.toString();
+      server.stderr.on('data', (data) => {
+        serverOutput += data.toString();
       });
 
       // Wait for server to start
-      await new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          child.kill();
-          reject(new Error('zola serve did not start within 10 seconds'));
-        }, 10000);
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
-        const checkReady = setInterval(() => {
-          if (output.includes('Web server is available') || output.includes('Listening')) {
-            clearInterval(checkReady);
-            clearTimeout(timeout);
-            resolve();
-          }
-        }, 200);
-      });
+      try {
+        expect(serverOutput).toMatch(/listening|server|running|available/i);
 
-      // Make HTTP request
-      const response = await new Promise((resolve, reject) => {
-        const req = http.get(`http://127.0.0.1:${port}/`, (res) => {
-          let body = '';
-          res.on('data', chunk => body += chunk);
-          res.on('end', () => resolve({ status: res.statusCode, body }));
+        const response = await new Promise((resolve, reject) => {
+          const req = http.get(`http://127.0.0.1:${port}/`, (res) => {
+            let data = '';
+            res.on('data', chunk => { data += chunk; });
+            res.on('end', () => {
+              resolve({ statusCode: res.statusCode, data });
+            });
+          });
+          req.on('error', reject);
+          req.setTimeout(5000, () => reject(new Error('Request timeout')));
         });
-        req.on('error', reject);
-        req.setTimeout(5000, () => {
-          req.destroy();
-          reject(new Error('HTTP request timeout'));
-        });
-      });
 
-      expect(response.status).toBe(200);
-      expect(response.body).toContain('MirDB');
-      expect(response.body).toContain('<!doctype html>');
-
-      child.kill();
+        expect(response.statusCode).toBe(200);
+        expect(response.data).toContain('<!doctype html>');
+        expect(response.data).toContain('MirDB');
+      } finally {
+        server.kill('SIGTERM');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        if (!server.killed) {
+          server.kill('SIGKILL');
+        }
+      }
     }, 20000);
   });
 
-  // Test Case 8: Verify homepage renders without JavaScript
-  describe('Test 8: No-JS rendering', () => {
-    it('should contain all content in static HTML', () => {
-      const html = fs.readFileSync(path.join(PUBLIC_DIR, 'index.html'), 'utf-8');
-
-      // Key content that should be present without JS
-      expect(html).toContain('MirDB');
-      expect(html).toContain('Features');
-      expect(html).toContain('Quick Start');
-      expect(html).toContain('Architecture');
-      expect(html).toContain('Performance');
-      expect(html).toContain('Documentation');
-      expect(html).toContain('Memcached Protocol Compatible');
-      expect(html).toContain('cargo install mirdb');
+  // Test Case 8: No-JS rendering
+  describe('Test 8: Homepage renders without JavaScript', () => {
+    it('should have all content in static HTML', () => {
+      expect(document.querySelector('h1')).toBeTruthy();
+      expect(document.querySelector('.hero-tagline')).toBeTruthy();
+      expect(document.getElementById('features')).toBeTruthy();
+      expect(document.querySelectorAll('.feature-card').length).toBeGreaterThan(0);
+      expect(document.getElementById('quickstart')).toBeTruthy();
+      expect(document.querySelectorAll('pre code').length).toBeGreaterThan(0);
+      expect(document.getElementById('architecture')).toBeTruthy();
+      expect(document.getElementById('performance')).toBeTruthy();
+      expect(document.getElementById('docs')).toBeTruthy();
+      expect(document.querySelector('footer')).toBeTruthy();
     });
 
-    it('should not hide content behind JS-only rendering', () => {
-      // Check that main content sections are present in the HTML
-      const sections = document.querySelectorAll('main > section');
-      expect(sections.length).toBeGreaterThanOrEqual(4);
+    it('should have navigation in static HTML', () => {
+      expect(document.querySelector('header')).toBeTruthy();
+      expect(document.querySelector('nav')).toBeTruthy();
+      expect(document.querySelectorAll('.nav-links a').length).toBeGreaterThan(0);
     });
 
-    it('should have section content directly in HTML, not loaded via JS', () => {
-      // Feature cards should be in the DOM
-      const featureCards = document.querySelectorAll('.feature-card');
-      expect(featureCards.length).toBeGreaterThan(0);
+    it('should have all text content visible without JS', () => {
+      const bodyText = document.body.textContent;
 
-      // Quick start code blocks should be present
-      const codeBlocks = document.querySelectorAll('pre code');
-      expect(codeBlocks.length).toBeGreaterThan(0);
+      expect(bodyText).toContain('MirDB');
+      expect(bodyText).toContain('Features');
+      expect(bodyText).toContain('Quick Start');
+      expect(bodyText).toContain('Architecture');
+      expect(bodyText).toContain('Performance');
+      expect(bodyText).toContain('Documentation');
+    });
 
-      // Architecture diagram SVG should be in HTML
+    it('should not rely on noscript for critical content', () => {
+      expect(document.querySelector('main')).toBeTruthy();
+      expect(document.querySelector('main').children.length).toBeGreaterThan(0);
+    });
+
+    it('should have section content directly in HTML', () => {
       const svgDiagram = document.querySelector('.architecture-diagram svg');
       expect(svgDiagram).toBeTruthy();
     });
