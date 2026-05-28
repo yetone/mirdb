@@ -195,7 +195,160 @@ max_level = 7">
 
     <!-- Configuration Section (Scenario 7) -->
     <section id="configuration" class="configuration-section">
-      <!-- Content will be added by Scenario 7 -->
+      <div class="container">
+        <h2>Configuration</h2>
+        <p class="section-intro">MirDB is highly configurable. Tune these parameters to match your workload and deployment environment.</p>
+
+        <div class="config-categories">
+          <!-- Network -->
+          <div class="config-category">
+            <h3>Network</h3>
+            <table class="config-table" aria-describedby="config-network-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>addr</code></td>
+                  <td>Listen address and port for client connections</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-network-desc" class="sr-only">Network configuration parameters</p>
+          </div>
+
+          <!-- Storage -->
+          <div class="config-category">
+            <h3>Storage</h3>
+            <table class="config-table" aria-describedby="config-storage-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>work_dir</code></td>
+                  <td>Directory path where data files are stored</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr>
+                  <td><code>max_level</code></td>
+                  <td>Maximum number of LSM tree levels</td>
+                  <td><code>7</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-storage-desc" class="sr-only">Storage configuration parameters</p>
+          </div>
+
+          <!-- Memory Tables -->
+          <div class="config-category">
+            <h3>Memory Tables</h3>
+            <table class="config-table" aria-describedby="config-memtable-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Maximum memtable size before flushing to disk</td>
+                  <td><code>4M</code></td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_height</code></td>
+                  <td>Maximum skip list height for in-memory index</td>
+                  <td><code>32</code></td>
+                </tr>
+                <tr>
+                  <td><code>imm_mem_table_max_count</code></td>
+                  <td>Maximum number of queued immutable memtables</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-memtable-desc" class="sr-only">Memory table configuration parameters</p>
+          </div>
+
+          <!-- SSTables -->
+          <div class="config-category">
+            <h3>SSTables</h3>
+            <table class="config-table" aria-describedby="config-sstable-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>sst_max_size</code></td>
+                  <td>Maximum size of a single SSTable file</td>
+                  <td><code>100M</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_size</code></td>
+                  <td>Size of each data block within an SSTable</td>
+                  <td><code>4K</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_restart_interval</code></td>
+                  <td>Interval at which full keys are stored in blocks for prefix compression</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-sstable-desc" class="sr-only">SSTable configuration parameters</p>
+          </div>
+
+          <!-- Compaction -->
+          <div class="config-category">
+            <h3>Compaction</h3>
+            <table class="config-table" aria-describedby="config-compaction-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>l0_compaction_trigger</code></td>
+                  <td>Number of Level 0 files that trigger background compaction</td>
+                  <td><code>4</code></td>
+                </tr>
+                <tr>
+                  <td><code>thread_sleep_ms</code></td>
+                  <td>Background compaction thread sleep interval in milliseconds</td>
+                  <td><code>500</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-compaction-desc" class="sr-only">Compaction configuration parameters</p>
+          </div>
+        </div>
+
+        <div class="config-docs-link">
+          <p>For a complete list of all configuration options, including advanced tuning parameters, see the <a href="https://github.com/mirdb/mirdb/blob/main/docs/configuration.md" target="_blank" rel="noopener noreferrer">full configuration documentation <span aria-hidden="true">&rarr;</span></a></p>
+        </div>
+
+        <div class="config-note-box">
+          <p><strong>Note:</strong> Size values support suffix notation: <code>K</code> (kilobytes), <code>M</code> (megabytes), <code>G</code> (gigabytes), and <code>T</code> (terabytes). For example, <code>mem_table_max_size = "4M"</code> is equivalent to <code>4194304</code> bytes.</p>
+        </div>
+      </div>
     </section>
   </main>
 
