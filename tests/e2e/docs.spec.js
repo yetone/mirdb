@@ -153,8 +153,8 @@ test.describe('Documentation Links and Contributors', () => {
 
     await docsLink.click();
 
-    // Wait for scroll to complete
-    await page.waitForTimeout(300);
+    // Wait for smooth scroll to complete
+    await page.waitForTimeout(800);
 
     // Verify docs section is in viewport
     const docsSection = page.locator('section#docs');
