@@ -37,4 +37,18 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+
+  // Scenario 12: Sticky header scroll handling
+  var header = document.querySelector('.site-header');
+  if (header) {
+    function updateHeaderScroll() {
+      if (window.scrollY > 10) {
+        header.classList.add('is-scrolled');
+      } else {
+        header.classList.remove('is-scrolled');
+      }
+    }
+    window.addEventListener('scroll', updateHeaderScroll, { passive: true });
+    updateHeaderScroll();
+  }
 });
