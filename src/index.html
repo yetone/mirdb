@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="styles/dark-theme.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- Navigation -->
   <header class="site-header">
     <nav class="main-nav" aria-label="Main navigation">
@@ -29,10 +31,14 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <!-- Hero Section (Scenario 1) -->
     <section id="hero" class="hero-section">
-      <!-- Content will be added by Scenario 1 -->
+      <div class="container">
+        <h1>MirDB - Persistent Key-Value Store</h1>
+        <p class="hero-tagline">A high-performance persistent key-value store with Memcached protocol compatibility, built in Rust.</p>
+        <a href="#quickstart" class="cta-button">Get Started</a>
+      </div>
     </section>
 
     <!-- Features Section (Scenario 2) -->

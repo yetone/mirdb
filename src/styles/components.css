@@ -262,3 +262,105 @@
   font-family: var(--font-mono);
   font-size: 0.8125rem;
 }
+
+/* ========== Scenario 10: Accessibility Compliance ========== */
+
+/* Skip link - visually hidden until focused */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 1000;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-accent);
+  color: #0d1117;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Focus-visible styles for all interactive elements */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Navigation link focus styles */
+.nav-links a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Nav logo focus styles */
+.nav-logo:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Nav toggle (hamburger) focus styles */
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Platform tab focus styles */
+.platform-tab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px 4px 0 0;
+}
+
+/* CTA button styles */
+.cta-button {
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background-color: var(--color-accent);
+  color: #0d1117;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.cta-button:hover {
+  background-color: var(--color-accent-hover);
+  text-decoration: none;
+}
+
+.cta-button:focus-visible {
+  outline: 3px solid var(--color-accent-hover);
+  outline-offset: 3px;
+}
+
+/* Hero section styles */
+.hero-section {
+  padding: var(--section-padding) 0;
+  text-align: center;
+  background-color: var(--color-bg);
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #f0f6fc;
+}
+
+.hero-tagline {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
