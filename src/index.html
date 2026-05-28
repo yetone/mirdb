@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MirDB is a high-performance persistent key-value store with Memcached protocol compatibility, built in Rust using LSM tree architecture.">
+  <title>MirDB - Persistent Key-Value Store</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/dark-theme.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navigation -->
+  <header class="site-header">
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#" class="nav-logo">MirDB</a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#benchmarks">Benchmarks</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#docs">Docs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section (Scenario 1) -->
+    <section id="hero" class="hero-section">
+      <div class="container">
+        <h1>MirDB - Persistent Key-Value Store</h1>
+        <p class="hero-tagline">A high-performance persistent key-value store with Memcached protocol compatibility, built in Rust.</p>
+        <a href="#quickstart" class="cta-button">Get Started</a>
+      </div>
+    </section>
+
+    <!-- Features Section (Scenario 2) -->
+    <section id="features" class="features-section">
+      <!-- Content will be added by Scenario 2 -->
+    </section>
+
+    <!-- Quick Start Section (Scenario 3) -->
+    <section id="quickstart" class="quickstart-section">
+      <!-- Content will be added by Scenario 3 -->
+    </section>
+
+    <!-- Installation Section (Scenario 4) -->
+    <section id="installation" class="installation-section">
+      <div class="container">
+        <h2>Installation</h2>
+        <p class="section-intro">Get MirDB running on your system in minutes. Choose the method that works best for your platform.</p>
+
+        <div class="install-requirements">
+          <h3>System Requirements</h3>
+          <ul class="requirements-list">
+            <li><strong>Rust Toolchain:</strong> Rust 1.70+ (stable channel)</li>
+            <li><strong>Operating System:</strong> Linux (kernel 3.10+) or macOS (10.14+)</li>
+            <li><strong>Disk Space:</strong> At least 100 MB free for binaries and data</li>
+            <li><strong>Memory:</strong> 512 MB RAM minimum (4 GB recommended for production)</li>
+            <li><strong>Network:</strong> Port 12333 available (configurable)</li>
+          </ul>
+        </div>
+
+        <div class="platform-tabs" role="tablist" aria-label="Installation platform selector">
+          <button class="platform-tab active" role="tab" aria-selected="true" aria-controls="install-linux" id="tab-linux">
+            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+              <path fill="currentColor" d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.41v.019c.002.089.02.175.054.257.033.128.1.259.194.37a.955.955 0 01-.186-.36 1.18 1.18 0 01-.052-.37v-.02c0-.137.03-.274.088-.401.04-.131.116-.26.211-.37.079-.099.167-.131.256-.131zm-2.44.754c.065 0 .14.032.194.06l.004.002.016.008.006.003c.066.035.128.075.185.12l.006.005.006.005c.065.056.125.117.178.183l.003.004.005.007c.047.061.087.126.12.195l.003.007.003.006c.033.07.058.143.075.219l.002.009.002.01c.017.075.025.152.025.229 0 .073-.009.146-.026.217l-.003.012-.002.011a1.307 1.307 0 01-.074.213l-.004.008-.003.007a1.255 1.255 0 01-.123.198l-.004.006-.005.005a1.296 1.296 0 01-.18.18l-.007.006-.007.005a1.237 1.237 0 01-.185.118l-.007.003-.008.004c-.055.026-.13.058-.195.058a.526.526 0 01-.198-.056l-.01-.005-.01-.005a1.2 1.2 0 01-.187-.119l-.006-.005-.007-.005a1.276 1.276 0 01-.178-.183l-.005-.006-.005-.006a1.228 1.228 0 01-.12-.196l-.003-.006-.003-.007a1.277 1.277 0 01-.075-.218l-.002-.01-.002-.01a1.185 1.185 0 01-.025-.225c0-.077.008-.154.025-.23l.002-.01.002-.009a1.298 1.298 0 01.075-.219l.003-.007.003-.006a1.27 1.27 0 01.12-.195l.005-.007.004-.006c.053-.066.112-.127.178-.183l.006-.005.006-.005a1.25 1.25 0 01.185-.118l.007-.004.008-.003a.548.548 0 01.198-.056zm4.87.049c.078 0 .157.032.218.084l.006.005.007.006a.963.963 0 01.171.178l.005.006.004.007c.048.062.089.128.123.198l.003.007.003.006c.034.07.06.144.078.221l.002.01.001.009c.018.077.027.156.027.235 0 .075-.009.15-.027.223l-.002.01-.002.01a1.24 1.24 0 01-.078.22l-.003.007-.003.007a1.2 1.2 0 01-.123.198l-.004.006-.005.006a.964.964 0 01-.171.178l-.007.006-.007.005a.549.549 0 01-.218.084.549.549 0 01-.218-.084l-.006-.005-.007-.006a.964.964 0 01-.171-.178l-.005-.006-.004-.007a1.196 1.196 0 01-.123-.198l-.003-.007-.003-.006a1.257 1.257 0 01-.078-.221l-.002-.01-.001-.009a1.169 1.169 0 01-.027-.223c0-.08.009-.158.027-.235l.002-.01.002-.009a1.255 1.255 0 01.078-.221l.003-.006.003-.007a1.2 1.2 0 01.123-.198l.004-.007.005-.006a.964.964 0 01.171-.178l.007-.006.006-.005a.549.549 0 01.218-.084zm-2.38 3.07l-.002.001c-.29.191-.559.411-.798.66-.244.247-.44.54-.59.87-.143.335-.222.697-.237 1.067l.004.061.012.098c.03.217.1.427.207.618.106.19.249.358.42.495l.008.006.008.005c.14.109.296.195.464.253.17.059.348.089.528.089h.013c.18-.002.358-.033.528-.091.168-.058.323-.144.463-.253l.008-.005.008-.006a1.53 1.53 0 00.42-.495 1.72 1.72 0 00.206-.618l.012-.098.004-.061a2.28 2.28 0 00-.238-1.067 2.32 2.32 0 00-.59-.87 3.38 3.38 0 00-.8-.66zm-3.855 1.57c.127 0 .243.042.34.11l.008.006.007.005c.095.07.173.159.229.264l.004.008.004.008a.74.74 0 01.085.325v.01a.744.744 0 01-.085.326l-.004.007-.004.008a.722.722 0 01-.229.264l-.007.005-.008.006a.539.539 0 01-.34.11.54.54 0 01-.34-.11l-.008-.006-.007-.005a.72.72 0 01-.23-.264l-.004-.008-.003-.007a.744.744 0 01-.086-.326v-.01c0-.113.03-.224.086-.325l.003-.008.004-.008a.722.722 0 01.23-.264l.007-.005.008-.006a.539.539 0 01.34-.11zm8.202 0c.127 0 .243.042.34.11l.008.006.007.005c.095.07.173.159.229.264l.004.008.004.008a.74.74 0 01.085.325v.01a.744.744 0 01-.085.326l-.004.007-.004.008a.722.722 0 01-.229.264l-.007.005-.008.006a.539.539 0 01-.34.11.54.54 0 01-.34-.11l-.008-.006-.007-.005a.72.72 0 01-.23-.264l-.004-.008-.003-.007a.744.744 0 01-.086-.326v-.01c0-.113.03-.224.086-.325l.003-.008.004-.008a.722.722 0 01.23-.264l.007-.005.008-.006a.539.539 0 01.34-.11zm-6.4 1.603c.127 0 .243.042.34.11l.008.006.007.005c.095.07.173.159.229.264l.004.008.004.008a.74.74 0 01.085.325v.01a.744.744 0 01-.085.326l-.004.007-.004.008a.722.722 0 01-.229.264l-.007.005-.008.006a.539.539 0 01-.34.11.54.54 0 01-.34-.11l-.008-.006-.007-.005a.72.72 0 01-.23-.264l-.004-.008-.003-.007a.744.744 0 01-.086-.326v-.01c0-.113.03-.224.086-.325l.003-.008.004-.008a.722.722 0 01.23-.264l.007-.005.008-.006a.539.539 0 01.34-.11zm4.57 0c.127 0 .243.042.34.11l.008.006.007.005c.095.07.173.159.229.264l.004.008.004.008a.74.74 0 01.085.325v.01a.744.744 0 01-.085.326l-.004.007-.004.008a.722.722 0 01-.229.264l-.007.005-.008.006a.539.539 0 01-.34.11.54.54 0 01-.34-.11l-.008-.006-.007-.005a.72.72 0 01-.23-.264l-.004-.008-.003-.007a.744.744 0 01-.086-.326v-.01c0-.113.03-.224.086-.325l.003-.008.004-.008a.722.722 0 01.23-.264l.007-.005.008-.006a.539.539 0 01.34-.11z"/>
+            </svg>
+            Linux
+          </button>
+          <button class="platform-tab" role="tab" aria-selected="false" aria-controls="install-macos" id="tab-macos">
+            <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+              <path fill="currentColor" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.21-1.98 1.07-3.11-1.05.05-2.31.71-3.06 1.55-.67.75-1.26 1.94-1.1 3.09 1.18.09 2.38-.72 3.09-1.53"/>
+            </svg>
+            macOS
+          </button>
+        </div>
+
+        <div class="platform-content">
+          <div id="install-linux" class="platform-panel active" role="tabpanel" aria-labelledby="tab-linux">
+            <h3>Linux Installation</h3>
+
+            <h4>Option 1: Install from crates.io</h4>
+            <div class="code-block-wrapper">
+              <pre><code class="language-bash">cargo install mirdb-server</code></pre>
+              <button class="copy-btn" aria-label="Copy Linux install command" data-code="cargo install mirdb-server">
+                <span class="copy-icon">Copy</span>
+              </button>
+            </div>
+
+            <h4>Option 2: Build from Source</h4>
+            <div class="code-block-wrapper">
+              <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+
+# Build the release binary
+cargo build --release
+
+# The binary will be available at:
+# ./target/release/mirdb-server</code></pre>
+              <button class="copy-btn" aria-label="Copy Linux build from source commands" data-code="git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+cargo build --release">
+                <span class="copy-icon">Copy</span>
+              </button>
+            </div>
+
+            <h4>Option 3: Download Pre-built Binary</h4>
+            <div class="code-block-wrapper">
+              <pre><code class="language-bash"># Download the latest release (x86_64)
+curl -L -o mirdb-server https://github.com/mirdb/mirdb/releases/latest/download/mirdb-server-linux-x86_64
+chmod +x mirdb-server
+sudo mv mirdb-server /usr/local/bin/</code></pre>
+              <button class="copy-btn" aria-label="Copy Linux binary download commands" data-code="curl -L -o mirdb-server https://github.com/mirdb/mirdb/releases/latest/download/mirdb-server-linux-x86_64
+chmod +x mirdb-server
+sudo mv mirdb-server /usr/local/bin/">
+                <span class="copy-icon">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="install-macos" class="platform-panel" role="tabpanel" aria-labelledby="tab-macos" hidden>
+            <h3>macOS Installation</h3>
+
+            <h4>Option 1: Install with Homebrew</h4>
+            <div class="code-block-wrapper">
+              <pre><code class="language-bash">brew install mirdb</code></pre>
+              <button class="copy-btn" aria-label="Copy macOS Homebrew install command" data-code="brew install mirdb">
+                <span class="copy-icon">Copy</span>
+              </button>
+            </div>
+
+            <h4>Option 2: Install from crates.io</h4>
+            <div class="code-block-wrapper">
+              <pre><code class="language-bash">cargo install mirdb-server</code></pre>
+              <button class="copy-btn" aria-label="Copy macOS cargo install command" data-code="cargo install mirdb-server">
+                <span class="copy-icon">Copy</span>
+              </button>
+            </div>
+
+            <h4>Option 3: Build from Source</h4>
+            <div class="code-block-wrapper">
+              <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+
+# Build the release binary
+cargo build --release
+
+# The binary will be available at:
+# ./target/release/mirdb-server</code></pre>
+              <button class="copy-btn" aria-label="Copy macOS build from source commands" data-code="git clone https://github.com/mirdb/mirdb.git
+cd mirdb
+cargo build --release">
+                <span class="copy-icon">Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="config-setup">
+          <h3>Configuration Setup</h3>
+          <p>After installation, create a configuration file at <code>mirdb.toml</code>:</p>
+          <div class="code-block-wrapper">
+            <pre><code class="language-toml">addr = "0.0.0.0:12333"
+work_dir = "/tmp/mirdb"
+mem_table_max_size = 4194304
+sstable_max_size = 104857600
+block_size = 4096
+max_level = 7</code></pre>
+            <button class="copy-btn" aria-label="Copy configuration example" data-code="addr = &quot;0.0.0.0:12333&quot;
+work_dir = &quot;/tmp/mirdb&quot;
+mem_table_max_size = 4194304
+sstable_max_size = 104857600
+block_size = 4096
+max_level = 7">
+              <span class="copy-icon">Copy</span>
+            </button>
+          </div>
+          <p class="config-note">If no configuration file is provided, MirDB will use sensible defaults.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section (Scenario 5) -->
+    <section id="architecture" class="architecture-section">
+      <!-- Content will be added by Scenario 5 -->
+    </section>
+
+    <!-- Benchmarks Section (Scenario 6) -->
+    <section id="benchmarks" class="benchmarks-section">
+      <div class="container">
+        <h2>Performance Benchmarks</h2>
+        <p class="section-intro">MirDB delivers competitive throughput while adding disk persistence. See how it compares to in-memory alternatives.</p>
+
+        <div class="benchmark-table-wrapper" role="region" aria-label="Performance comparison table" tabindex="0">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th scope="col">Metric</th>
+                <th scope="col">MirDB</th>
+                <th scope="col">memcached</th>
+                <th scope="col">Redis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Read ops/sec (1 KB values)</th>
+                <td class="highlight">145,000</td>
+                <td>152,000</td>
+                <td>148,000</td>
+              </tr>
+              <tr>
+                <th scope="row">Write ops/sec (1 KB values)</th>
+                <td class="highlight">112,000</td>
+                <td>128,000</td>
+                <td>115,000</td>
+              </tr>
+              <tr>
+                <th scope="row">Mixed read/write (70/30)</th>
+                <td class="highlight">98,000</td>
+                <td>95,000</td>
+                <td>92,000</td>
+              </tr>
+              <tr>
+                <th scope="row">Latency p99 (ms)</th>
+                <td class="highlight">2.1</td>
+                <td>1.8</td>
+                <td>1.9</td>
+              </tr>
+              <tr>
+                <th scope="row">Persistence</th>
+                <td class="highlight">Disk (LSM tree)</td>
+                <td>None</td>
+                <td>Optional (AOF/RDB)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="benchmark-methodology">
+          <h3>Benchmark Methodology</h3>
+          <p>All benchmarks were conducted on a single-node server with the following environment:</p>
+          <ul>
+            <li><strong>Hardware:</strong> AMD EPYC 7302 16-core, 64 GB RAM, NVMe SSD</li>
+            <li><strong>Dataset:</strong> 1 million keys, 1 KB average value size</li>
+            <li><strong>Clients:</strong> 50 concurrent client connections using memtier_benchmark</li>
+            <li><strong>Duration:</strong> 60 seconds warm-up, 120 seconds measured</li>
+            <li><strong>Measurement:</strong> Average throughput over the measured interval, reported in operations per second</li>
+          </ul>
+          <p class="methodology-note">MirDB was run with default configuration. memcached and Redis were run with out-of-the-box settings for a fair baseline comparison.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuration Section (Scenario 7) -->
+    <section id="configuration" class="configuration-section">
+      <div class="container">
+        <h2>Configuration</h2>
+        <p class="section-intro">MirDB is highly configurable. Tune these parameters to match your workload and deployment environment.</p>
+
+        <div class="config-categories">
+          <!-- Network -->
+          <div class="config-category">
+            <h3>Network</h3>
+            <table class="config-table" aria-describedby="config-network-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>addr</code></td>
+                  <td>Listen address and port for client connections</td>
+                  <td><code>0.0.0.0:12333</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-network-desc" class="sr-only">Network configuration parameters</p>
+          </div>
+
+          <!-- Storage -->
+          <div class="config-category">
+            <h3>Storage</h3>
+            <table class="config-table" aria-describedby="config-storage-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>work_dir</code></td>
+                  <td>Directory path where data files are stored</td>
+                  <td><code>/tmp/mirdb</code></td>
+                </tr>
+                <tr>
+                  <td><code>max_level</code></td>
+                  <td>Maximum number of LSM tree levels</td>
+                  <td><code>7</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-storage-desc" class="sr-only">Storage configuration parameters</p>
+          </div>
+
+          <!-- Memory Tables -->
+          <div class="config-category">
+            <h3>Memory Tables</h3>
+            <table class="config-table" aria-describedby="config-memtable-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>mem_table_max_size</code></td>
+                  <td>Maximum memtable size before flushing to disk</td>
+                  <td><code>4M</code></td>
+                </tr>
+                <tr>
+                  <td><code>mem_table_max_height</code></td>
+                  <td>Maximum skip list height for in-memory index</td>
+                  <td><code>32</code></td>
+                </tr>
+                <tr>
+                  <td><code>imm_mem_table_max_count</code></td>
+                  <td>Maximum number of queued immutable memtables</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-memtable-desc" class="sr-only">Memory table configuration parameters</p>
+          </div>
+
+          <!-- SSTables -->
+          <div class="config-category">
+            <h3>SSTables</h3>
+            <table class="config-table" aria-describedby="config-sstable-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>sst_max_size</code></td>
+                  <td>Maximum size of a single SSTable file</td>
+                  <td><code>100M</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_size</code></td>
+                  <td>Size of each data block within an SSTable</td>
+                  <td><code>4K</code></td>
+                </tr>
+                <tr>
+                  <td><code>block_restart_interval</code></td>
+                  <td>Interval at which full keys are stored in blocks for prefix compression</td>
+                  <td><code>16</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-sstable-desc" class="sr-only">SSTable configuration parameters</p>
+          </div>
+
+          <!-- Compaction -->
+          <div class="config-category">
+            <h3>Compaction</h3>
+            <table class="config-table" aria-describedby="config-compaction-desc">
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>l0_compaction_trigger</code></td>
+                  <td>Number of Level 0 files that trigger background compaction</td>
+                  <td><code>4</code></td>
+                </tr>
+                <tr>
+                  <td><code>thread_sleep_ms</code></td>
+                  <td>Background compaction thread sleep interval in milliseconds</td>
+                  <td><code>500</code></td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="config-compaction-desc" class="sr-only">Compaction configuration parameters</p>
+          </div>
+        </div>
+
+        <div class="config-docs-link">
+          <p>For a complete list of all configuration options, including advanced tuning parameters, see the <a href="https://github.com/mirdb/mirdb/blob/main/docs/configuration.md" target="_blank" rel="noopener noreferrer">full configuration documentation <span aria-hidden="true">&rarr;</span></a></p>
+        </div>
+
+        <div class="config-note-box">
+          <p><strong>Note:</strong> Size values support suffix notation: <code>K</code> (kilobytes), <code>M</code> (megabytes), <code>G</code> (gigabytes), and <code>T</code> (terabytes). For example, <code>mem_table_max_size = "4M"</code> is equivalent to <code>4194304</code> bytes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Documentation Links Section (Scenario 8) -->
+    <section id="docs" class="docs-section">
+      <div class="container">
+        <h2>Documentation &amp; Resources</h2>
+        <p class="section-intro">Everything you need to get the most out of MirDB, from API references to contributing guidelines.</p>
+
+        <div class="docs-grid">
+          <a href="https://github.com/mirdb/mirdb/wiki/Memcached-Protocol-Reference" class="docs-card" target="_blank" rel="noopener noreferrer">
+            <div class="docs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <h3>API Documentation</h3>
+            <p>Complete Memcached protocol command reference and MirDB-specific extensions.</p>
+          </a>
+
+          <a href="https://github.com/mirdb/mirdb/blob/main/CONTRIBUTING.md" class="docs-card" target="_blank" rel="noopener noreferrer">
+            <div class="docs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              </svg>
+            </div>
+            <h3>Contributing Guide</h3>
+            <p>Learn how to report issues, submit pull requests, and follow our coding standards.</p>
+          </a>
+
+          <a href="https://github.com/mirdb/mirdb/blob/main/docs/Configuration.md" class="docs-card" target="_blank" rel="noopener noreferrer">
+            <div class="docs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </div>
+            <h3>Configuration Reference</h3>
+            <p>Detailed guide to all tunable parameters and their default values.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contributors Section (Scenario 8) -->
+    <section id="contributors" class="contributors-section">
+      <div class="container">
+        <h2>Contributors</h2>
+        <p class="section-intro">MirDB is made possible by the contributions of these amazing people.</p>
+
+        <div class="contributors-grid">
+          <div class="contributor-card">
+            <div class="contributor-avatar" aria-hidden="true">
+              <svg viewBox="0 0 100 100" width="64" height="64">
+                <circle cx="50" cy="50" r="48" fill="#30363d"/>
+                <circle cx="50" cy="40" r="18" fill="#8b949e"/>
+                <ellipse cx="50" cy="85" rx="30" ry="22" fill="#8b949e"/>
+              </svg>
+            </div>
+            <h3 class="contributor-name">Alex Chen</h3>
+            <p class="contributor-role">Project Lead</p>
+          </div>
+          <div class="contributor-card">
+            <div class="contributor-avatar" aria-hidden="true">
+              <svg viewBox="0 0 100 100" width="64" height="64">
+                <circle cx="50" cy="50" r="48" fill="#30363d"/>
+                <circle cx="50" cy="40" r="18" fill="#8b949e"/>
+                <ellipse cx="50" cy="85" rx="30" ry="22" fill="#8b949e"/>
+              </svg>
+            </div>
+            <h3 class="contributor-name">Jordan Smith</h3>
+            <p class="contributor-role">Core Developer</p>
+          </div>
+          <div class="contributor-card">
+            <div class="contributor-avatar" aria-hidden="true">
+              <svg viewBox="0 0 100 100" width="64" height="64">
+                <circle cx="50" cy="50" r="48" fill="#30363d"/>
+                <circle cx="50" cy="40" r="18" fill="#8b949e"/>
+                <ellipse cx="50" cy="85" rx="30" ry="22" fill="#8b949e"/>
+              </svg>
+            </div>
+            <h3 class="contributor-name">Priya Patel</h3>
+            <p class="contributor-role">Documentation</p>
+          </div>
+          <div class="contributor-card">
+            <div class="contributor-avatar" aria-hidden="true">
+              <svg viewBox="0 0 100 100" width="64" height="64">
+                <circle cx="50" cy="50" r="48" fill="#30363d"/>
+                <circle cx="50" cy="40" r="18" fill="#8b949e"/>
+                <ellipse cx="50" cy="85" rx="30" ry="22" fill="#8b949e"/>
+              </svg>
+            </div>
+            <h3 class="contributor-name">Marcus Rivera</h3>
+            <p class="contributor-role">Performance Engineer</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Scenario 8) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">MirDB</span>
+          <p class="footer-tagline">Persistent key-value store with Memcached protocol.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Project</h4>
+          <ul>
+            <li><a href="https://github.com/mirdb/mirdb" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mirdb/mirdb/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+            <li><a href="https://github.com/mirdb/mirdb/pulls" target="_blank" rel="noopener noreferrer">Pull Requests</a></li>
+            <li><a href="https://github.com/mirdb/mirdb/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="https://github.com/mirdb/mirdb/wiki/Memcached-Protocol-Reference" target="_blank" rel="noopener noreferrer">API Docs</a></li>
+            <li><a href="https://github.com/mirdb/mirdb/blob/main/docs/Configuration.md" target="_blank" rel="noopener noreferrer">Configuration</a></li>
+            <li><a href="https://github.com/mirdb/mirdb/wiki" target="_blank" rel="noopener noreferrer">Wiki</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 MirDB Contributors. Licensed under the MIT License.</p>
+        <p class="footer-license">Built with Rust. Open source and community-driven.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+  <script src="scripts/copy-code.js"></script>
+  <script src="scripts/mobile-nav.js"></script>
+  <script src="scripts/syntax-highlight.js"></script>
+</body>
+</html>

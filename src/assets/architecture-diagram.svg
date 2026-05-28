@@ -1,0 +1,11 @@
+<!--
+  LSM Tree Architecture Diagram
+  Owner: Scenario 5 - Architecture Diagram and Data Flow
+
+  Expected contents:
+  - SVG showing write path: WAL -> Memtable -> Imm Memtables -> Level 0 SSTs -> Level 1+ SSTs
+  - SVG showing read path: Memtable -> Imm Memtables -> Level 0 (linear) -> Level 1+ (binary)
+  - Labels for each component
+  - Arrows indicating data flow direction
+  - aria-labelledby or title for accessibility
+-->

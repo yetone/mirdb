@@ -1,0 +1,222 @@
+/**
+ * Dark Theme Color Overrides
+ * Owner: Scenario 12 - Visual Design and Theming
+ *
+ * Expected contents:
+ * - Dark background colors (#0d1117 or similar)
+ * - Light text colors
+ * - Code block dark backgrounds
+ * - Syntax highlighting color tokens for dark mode
+ */
+
+/* =============================================
+   DARK THEME (Default)
+   ============================================= */
+
+/* Syntax highlighting tokens for dark mode */
+.syntax-keyword { color: #ff7b72; }
+.syntax-string { color: #a5d6ff; }
+.syntax-comment { color: #8b949e; font-style: italic; }
+.syntax-function { color: #d2a8ff; }
+.syntax-number { color: #79c0ff; }
+.syntax-operator { color: #ff7b72; }
+.syntax-variable { color: #ffa657; }
+.syntax-class { color: #e3b341; }
+
+/* Sticky header with backdrop blur when scrolled */
+.site-header.is-scrolled {
+  background-color: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.theme-toggle:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle .toggle-icon-moon,
+.theme-toggle .toggle-icon-sun {
+  width: 18px;
+  height: 18px;
+}
+
+/* Hide sun icon in dark mode (default) */
+[data-theme="dark"] .theme-toggle .toggle-icon-sun,
+.theme-toggle .toggle-icon-sun {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle .toggle-icon-moon,
+.theme-toggle .toggle-icon-moon {
+  display: block;
+}
+
+/* =============================================
+   LIGHT THEME OVERRIDES
+   ============================================= */
+
+[data-theme="light"] {
+  --color-bg: #ffffff;
+  --color-surface: #f6f8fa;
+  --color-border: #d0d7de;
+  --color-text: #24292f;
+  --color-text-muted: #57606a;
+  --color-accent: #cf4b2d;
+  --color-accent-hover: #a53b22;
+  --color-code-bg: #f6f8fa;
+}
+
+[data-theme="light"] body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4 {
+  color: #1f2328;
+}
+
+[data-theme="light"] .site-header {
+  background-color: var(--color-bg);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="light"] .site-header.is-scrolled {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+[data-theme="light"] .nav-links a {
+  color: var(--color-text);
+}
+
+[data-theme="light"] .nav-links a:hover {
+  color: var(--color-accent);
+}
+
+/* Light theme syntax highlighting */
+[data-theme="light"] .syntax-keyword { color: #d1242f; }
+[data-theme="light"] .syntax-string { color: #0a3069; }
+[data-theme="light"] .syntax-comment { color: #6e7781; font-style: italic; }
+[data-theme="light"] .syntax-function { color: #8250df; }
+[data-theme="light"] .syntax-number { color: #0550ae; }
+[data-theme="light"] .syntax-operator { color: #cf222e; }
+[data-theme="light"] .syntax-variable { color: #953800; }
+[data-theme="light"] .syntax-class { color: #7d4e00; }
+
+/* Light theme code blocks */
+[data-theme="light"] .code-block-wrapper pre {
+  background-color: var(--color-code-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] .code-block-wrapper code {
+  color: var(--color-text);
+}
+
+/* Light theme copy button */
+[data-theme="light"] .copy-btn {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+[data-theme="light"] .copy-btn:hover {
+  background-color: var(--color-border);
+  color: var(--color-text);
+}
+
+/* Light theme cards and panels */
+[data-theme="light"] .docs-card {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] .contributor-card {
+  background-color: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] .benchmark-methodology,
+[data-theme="light"] .config-docs-link,
+[data-theme="light"] .config-note-box {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] .requirements-list li {
+  background-color: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+/* Light theme mobile nav */
+[data-theme="light"] .nav-links {
+  background-color: var(--color-bg);
+  border-bottom-color: var(--color-border);
+}
+
+/* Light theme footer */
+[data-theme="light"] .site-footer {
+  background-color: var(--color-bg);
+  border-top-color: var(--color-border);
+}
+
+[data-theme="light"] .footer-bottom {
+  border-top-color: var(--color-border);
+}
+
+/* Light theme benchmark table */
+[data-theme="light"] .benchmark-table thead th {
+  background-color: var(--color-surface);
+}
+
+[data-theme="light"] .benchmark-table tbody tr:hover {
+  background-color: var(--color-surface);
+}
+
+[data-theme="light"] .benchmark-table td {
+  color: var(--color-text-muted);
+}
+
+/* Light theme config table */
+[data-theme="light"] .config-table thead th {
+  background-color: var(--color-surface);
+}
+
+[data-theme="light"] .config-table tbody tr:hover {
+  background-color: var(--color-surface);
+}
+
+/* Show sun icon, hide moon in light mode */
+[data-theme="light"] .theme-toggle .toggle-icon-moon {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .toggle-icon-sun {
+  display: block;
+}

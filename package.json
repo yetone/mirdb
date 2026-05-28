@@ -1,0 +1,20 @@
+{
+  "name": "mirdb-homepage",
+  "version": "1.0.0",
+  "description": "MirDB product homepage - persistent key-value store with Memcached protocol",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:unit": "vitest run",
+    "test": "npm run test:unit && npm run test:e2e",
+    "serve": "npx serve src"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "axe-core": "^4.8.0",
+    "@axe-core/playwright": "^4.8.0",
+    "lighthouse": "^11.4.0",
+    "vitest": "^1.0.0",
+    "jsdom": "^23.0.0",
+    "serve": "^14.2.0"
+  }
+}

@@ -1,0 +1,321 @@
+/**
+ * Base Styles & CSS Custom Properties
+ * Owner: Scenario 12 - Visual Design and Theming
+ *
+ * Expected contents:
+ * - CSS reset (modern-normalize or custom)
+ * - Color tokens (Rust orange, grays, code block backgrounds)
+ * - Typography scale (font-family, sizes, line-height)
+ * - Spacing scale (margin/padding tokens)
+ * - Dark mode as default via :root variables
+ */
+
+:root {
+  --color-bg: #0d1117;
+  --color-surface: #161b22;
+  --color-border: #30363d;
+  --color-text: #c9d1d9;
+  --color-text-muted: #8b949e;
+  --color-accent: #e36b09;
+  --color-accent-hover: #f0883e;
+  --color-code-bg: #1e2530;
+  --color-success: #3fb950;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --container-max-width: 1200px;
+  --section-padding: 4rem;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 60px;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+  color: #f0f6fc;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.125rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Scenario 12: Theme toggle button base styles */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.theme-toggle:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Scenario 12: Sticky header transition */
+.site-header {
+  transition: background-color 0.2s ease, backdrop-filter 0.2s ease;
+}
+
+/* Scenario 4: Installation section base styles */
+.installation-section {
+  padding: var(--section-padding) 0;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.installation-section h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.section-intro {
+  text-align: center;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+/* Scenario 8: Documentation Links and Contributors section styles */
+.docs-section {
+  padding: var(--section-padding) 0;
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+}
+
+.docs-section h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.docs-card {
+  display: block;
+  padding: 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.docs-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.docs-card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.docs-card h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-accent);
+}
+
+.docs-card p {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.docs-icon {
+  color: var(--color-accent);
+  margin-bottom: 0.75rem;
+}
+
+.contributors-section {
+  padding: var(--section-padding) 0;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.contributors-section h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.contributors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.5rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.contributor-card {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.contributor-avatar {
+  margin-bottom: 0.75rem;
+}
+
+.contributor-name {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--color-text);
+}
+
+.contributor-role {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.site-footer {
+  padding: 3rem 0 1.5rem;
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.footer-tagline {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.footer-links h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer-links ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-links a {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.footer-links a:hover {
+  color: var(--color-accent);
+}
+
+.footer-bottom {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.footer-license {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .docs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contributors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
