@@ -11,6 +11,26 @@
  */
 
 const { defineConfig, devices } = require('@playwright/test');
+const path = require('path');
+
+// Use full Chromium if available; falls back to system Chrome or headless shell
+function findChromiumPath() {
+  const candidates = [
+    process.env.PW_CHROMIUM_PATH,
+    process.env.CHROME_PATH,
+    path.join(require('os').homedir(), '.cache/ms-playwright/chromium-1223/chrome-linux64/chrome'),
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+  ];
+  const fs = require('fs');
+  for (const p of candidates) {
+    if (p && fs.existsSync(p)) return p;
+  }
+  return undefined;
+}
+
+const chromiumPath = findChromiumPath();
 
 module.exports = defineConfig({
   testDir: './tests/e2e',
@@ -22,6 +42,7 @@ module.exports = defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    launchOptions: chromiumPath ? { executablePath: chromiumPath } : {},
   },
   projects: [
     {
