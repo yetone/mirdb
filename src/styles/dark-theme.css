@@ -1,0 +1,20 @@
+/**
+ * Dark Theme Color Overrides
+ * Owner: Scenario 12 - Visual Design and Theming
+ *
+ * Expected contents:
+ * - Dark background colors (#0d1117 or similar)
+ * - Light text colors
+ * - Code block dark backgrounds
+ * - Syntax highlighting color tokens for dark mode
+ */
+
+/* Dark theme is default in base.css */
+/* Additional syntax highlighting tokens */
+
+.syntax-keyword { color: #ff7b72; }
+.syntax-string { color: #a5d6ff; }
+.syntax-comment { color: #8b949e; }
+.syntax-function { color: #d2a8ff; }
+.syntax-number { color: #79c0ff; }
+.syntax-operator { color: #ff7b72; }

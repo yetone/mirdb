@@ -1,28 +1,16 @@
-## MirDB: A Persistent Key-Value Store with Memcached protocol
+# MirDB Homepage
 
-![logo](https://github.com/yetone/mirdb/raw/master/assets/logo.gif)
+Static product homepage for MirDB, a persistent key-value store written in Rust.
 
-### STATUS BADGES
+## Development
 
-[![CircleCI][cc-badge]][cc-url]
+```bash
+npm install
+npm run serve
+```
 
- [cc-url]: https://circleci.com/gh/yetone/mirdb
- [cc-badge]: https://atompunk.yetone.fun/github/yetone/mirdb?v=2
+## Testing
 
-### USAGE
-
-It is painless as using [memcached](https://github.com/memcached/memcached/blob/master/doc/protocol.txt).
-
-![usage](https://github.com/yetone/mirdb/raw/master/assets/usage.gif)
-
-### TODO
-
-* [x] tokio with memcached protocol
-
-* [x] memtable with skiplist
-
-* [x] minor compaction
-
-* [x] major compaction
-
-* [ ] raft
+```bash
+npm test
+```

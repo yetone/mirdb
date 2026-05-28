@@ -1,0 +1,185 @@
+/**
+ * Layout & Responsive Grid Styles
+ * Owner: Scenario 9 - Responsive Design and Mobile Navigation
+ *
+ * Expected contents:
+ * - Container max-width and centering
+ * - Section padding and vertical rhythm
+ * - Feature grid (3-col desktop, 1-col mobile)
+ * - Mobile navigation overlay layout
+ * - Media queries at 768px and 1024px breakpoints
+ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.main-nav {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Scenario 4: Installation section layout */
+.install-requirements {
+  margin-bottom: 2.5rem;
+}
+
+.install-requirements h3 {
+  margin-bottom: 1rem;
+}
+
+.requirements-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  padding-left: 0;
+}
+
+.requirements-list li {
+  padding: 0.75rem 1rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.platform-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.platform-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.platform-tab:hover {
+  color: var(--color-text);
+}
+
+.platform-tab.active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+.platform-panel {
+  display: none;
+}
+
+.platform-panel.active {
+  display: block;
+}
+
+.platform-panel h3 {
+  margin-bottom: 1rem;
+}
+
+.platform-panel h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.config-setup {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.config-setup h3 {
+  margin-bottom: 1rem;
+}
+
+.config-note {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+@media (min-width: 768px) {
+  .requirements-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .platform-tabs {
+    flex-direction: column;
+    border-bottom: none;
+  }
+
+  .platform-tab {
+    border-bottom: none;
+    border-left: 2px solid transparent;
+    justify-content: flex-start;
+  }
+
+  .platform-tab.active {
+    border-left-color: var(--color-accent);
+    border-bottom-color: transparent;
+  }
+}
