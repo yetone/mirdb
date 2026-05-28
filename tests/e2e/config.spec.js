@@ -182,4 +182,14 @@ test.describe('Configuration Section', () => {
       await expect(headerCells.nth(0)).toHaveAttribute('scope', 'col');
     }
   });
+
+  test('configuration section is visible on mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    const section = page.locator('section#configuration');
+    await expect(section).toBeVisible();
+    const heading = section.locator('h2');
+    await expect(heading).toBeVisible();
+    const tables = section.locator('.config-table');
+    await expect(tables.first()).toBeVisible();
+  });
 });

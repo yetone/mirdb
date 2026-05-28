@@ -173,3 +173,92 @@
   font-size: 0.875rem;
   margin-bottom: 0;
 }
+
+/* Scenario 7: Configuration section table styles */
+.config-category {
+  margin-bottom: 2.5rem;
+}
+
+.config-category h3 {
+  color: var(--color-accent);
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.config-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  min-width: 500px;
+}
+
+.config-table thead th {
+  background-color: var(--color-surface);
+  color: var(--color-accent);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.config-table tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.config-table tbody tr:hover {
+  background-color: var(--color-surface);
+}
+
+.config-table code {
+  background-color: var(--color-code-bg);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.config-docs-link {
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.config-docs-link a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.config-docs-link a:hover {
+  text-decoration: underline;
+}
+
+.config-note-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background-color: var(--color-surface);
+  border-left: 4px solid var(--color-accent);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.875rem;
+}
+
+.config-note-box code {
+  background-color: var(--color-code-bg);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
