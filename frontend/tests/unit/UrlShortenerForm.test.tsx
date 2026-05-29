@@ -7,9 +7,10 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UrlShortenerForm, { validateUrl } from '../../src/components/Home/UrlShortenerForm';
+import { ThemeProvider } from '../../src/contexts/ThemeContext';
 
 describe('UrlShortenerForm component', () => {
   let fetchSpy: ReturnType<typeof vi.spyOn>;
@@ -226,3 +227,345 @@ describe('validateUrl', () => {
   });
 });
 
+describe('UrlShortenerForm - Result Display (Scenario 13)', () => {
+  let fetchSpy: ReturnType<typeof vi.spyOn>;
+  let clipboardWriteText: ReturnType<typeof vi.fn>;
+  let originalIsSecureContext: boolean | undefined;
+
+  beforeEach(() => {
+    fetchSpy = vi.spyOn(globalThis, 'fetch');
+    clipboardWriteText = vi.fn();
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: clipboardWriteText },
+      writable: true,
+      configurable: true,
+    });
+    originalIsSecureContext = window.isSecureContext;
+  });
+
+  afterEach(() => {
+    fetchSpy.mockRestore();
+    Object.defineProperty(window, 'isSecureContext', {
+      value: originalIsSecureContext,
+      writable: true,
+      configurable: true,
+    });
+  });
+
+  it('TC-1: displays shortened URL prominently after successful submission', async () => {
+    const user = userEvent.setup();
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'https://example.com/long-url');
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result')).toBeInTheDocument();
+    });
+
+    const result = screen.getByTestId('result');
+    expect(result).toHaveTextContent('Your shortened URL');
+    expect(result).toHaveTextContent('https://example.com/r/abc123');
+
+    const urlLink = screen.getByTestId('result-url');
+    expect(urlLink).toHaveAttribute('href', 'https://example.com/r/abc123');
+    expect(urlLink).toHaveClass('font-semibold');
+    expect(urlLink).toHaveClass('text-base');
+  });
+
+  it('TC-2: clicking copy button writes URL to clipboard and shows success feedback', async () => {
+    const user = userEvent.setup();
+
+    // @ts-expect-error - jsdom doesn't implement isSecureContext
+    window.isSecureContext = true;
+
+    const writeTextMock = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextMock },
+      writable: true,
+      configurable: true,
+    });
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'https://example.com/long-url');
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result')).toBeInTheDocument();
+    });
+
+    const copyButton = screen.getByTestId('copy-button');
+    expect(copyButton).toHaveTextContent('Copy');
+    expect(screen.getByTestId('copy-icon')).toBeInTheDocument();
+
+    fireEvent.click(copyButton);
+
+    await waitFor(() => {
+      expect(copyButton).toHaveTextContent('Copied!');
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('copy-check-icon')).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(writeTextMock).toHaveBeenCalledWith('https://example.com/r/abc123');
+    });
+    expect(copyButton).toHaveAttribute('aria-label', 'Copied to clipboard');
+  });
+
+  it('TC-3: shows fallback message when clipboard is unavailable (insecure context)', async () => {
+    const user = userEvent.setup();
+
+    Object.defineProperty(window, 'isSecureContext', {
+      value: false,
+      writable: true,
+      configurable: true,
+    });
+
+    Object.defineProperty(navigator, 'clipboard', {
+      value: undefined,
+      writable: true,
+      configurable: true,
+    });
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'https://example.com/long-url');
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result')).toBeInTheDocument();
+    });
+
+    const copyButton = screen.getByTestId('copy-button');
+    await user.click(copyButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('copy-fallback-message')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('copy-fallback-message')).toHaveTextContent(
+      'URL selected for manual copying. Press Ctrl+C to copy.'
+    );
+    expect(screen.getByTestId('copy-fallback-message')).toHaveAttribute('role', 'status');
+  });
+
+  it('TC-4: submitting another URL replaces previous result', async () => {
+    const user = userEvent.setup();
+
+    fetchSpy
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ short_url: 'https://example.com/r/xyz789' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'https://example.com/first-url');
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result-url')).toHaveTextContent('https://example.com/r/abc123');
+    });
+
+    await user.clear(input);
+    await user.type(input, 'https://example.com/second-url');
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result-url')).toHaveTextContent('https://example.com/r/xyz789');
+    });
+
+    expect(screen.queryByText('https://example.com/r/abc123')).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId('result')).toHaveLength(1);
+  });
+
+  it('TC-5: result area adapts styling to light theme', async () => {
+    const user = userEvent.setup();
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'https://example.com/long-url');
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result')).toBeInTheDocument();
+    });
+
+    const result = screen.getByTestId('result');
+    expect(result).toHaveClass('bg-green-50');
+    expect(result).toHaveClass('border-green-200');
+
+    const label = screen.getByTestId('result-label');
+    expect(label).toHaveClass('text-green-800');
+  });
+
+  it('TC-5: result area adapts styling to dark theme', async () => {
+    const user = userEvent.setup();
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    await user.type(screen.getByTestId('url-input'), 'https://example.com/long-url');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result')).toBeInTheDocument();
+    });
+
+    const result = screen.getByTestId('result');
+    expect(result).toHaveAttribute('data-theme');
+  });
+
+  it('TC-5: copy button adapts styling to cyberpunk theme', async () => {
+    const user = userEvent.setup();
+    clipboardWriteText.mockResolvedValueOnce(undefined);
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    await user.type(screen.getByTestId('url-input'), 'https://example.com/long-url');
+    await user.click(screen.getByTestId('shorten-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('copy-button')).toBeInTheDocument();
+    });
+
+    const copyButton = screen.getByTestId('copy-button');
+    expect(copyButton).toHaveTextContent('Copy');
+  });
+
+  it('copy feedback reverts after timeout', async () => {
+    clipboardWriteText.mockResolvedValueOnce(undefined);
+
+    // @ts-expect-error - jsdom doesn't implement isSecureContext
+    window.isSecureContext = true;
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://example.com/r/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(
+      <ThemeProvider>
+        <UrlShortenerForm />
+      </ThemeProvider>
+    );
+
+    const input = screen.getByTestId('url-input');
+    const submitButton = screen.getByTestId('shorten-button');
+
+    await userEvent.type(input, 'https://example.com/long-url');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('copy-button')).toBeInTheDocument();
+    });
+
+    const copyButton = screen.getByTestId('copy-button');
+
+    fireEvent.click(copyButton);
+
+    await waitFor(() => {
+      expect(copyButton).toHaveTextContent('Copied!');
+    });
+
+    // Wait for the 2000ms timeout to expire
+    await new Promise((resolve) => setTimeout(resolve, 2200));
+
+    await waitFor(() => {
+      expect(copyButton).toHaveTextContent('Copy');
+    });
+  });
+});
