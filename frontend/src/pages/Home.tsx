@@ -11,11 +11,13 @@
  */
 import HeroSection from '../components/Home/HeroSection';
 import UrlShortenerForm from '../components/Home/UrlShortenerForm';
+import FeaturesSection from '../components/Home/FeaturesSection';
 
 export default function Home() {
   return (
     <main data-testid="home-page">
       <HeroSection urlShortenerForm={<UrlShortenerForm />} />
+      <FeaturesSection />
     </main>
   );
 }
