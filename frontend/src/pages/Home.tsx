@@ -9,13 +9,13 @@
  * Expected exports:
  * - Home: React.FC component
  */
+import HeroSection from '../components/Home/HeroSection';
 import UrlShortenerForm from '../components/Home/UrlShortenerForm';
 
 export default function Home() {
   return (
-    <main>
-      <h1>URL Shortener</h1>
-      <UrlShortenerForm />
+    <main data-testid="home-page">
+      <HeroSection urlShortenerForm={<UrlShortenerForm />} />
     </main>
   );
 }
