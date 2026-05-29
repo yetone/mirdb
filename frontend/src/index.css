@@ -77,7 +77,12 @@ textarea:focus-visible,
   border: 0;
 }
 
-/* Reduced motion: disable animations for users who prefer reduced motion */
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respect prefers-reduced-motion: disable animations and transitions */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -93,6 +98,12 @@ textarea:focus-visible,
   [class*="transition"] {
     animation: none !important;
     transition: none !important;
+  }
+
+  .animate-pulse,
+  .animate-bounce,
+  .animate-spin {
+    animation: none !important;
   }
 }
 
@@ -156,4 +167,18 @@ button:disabled,
 .cta-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Performance-optimized hover effects */
+.feature-card,
+.glass-card {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card,
+  .glass-card {
+    will-change: auto;
+  }
 }

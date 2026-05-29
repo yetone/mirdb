@@ -17,7 +17,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { shortenUrl, isApiError, ApiError } from '../../api/index';
+import { shortenUrl, isApiError } from '../../api/index';
 
 export interface UrlShortenerFormProps {
   onSuccess?: (shortUrl: string) => void;
