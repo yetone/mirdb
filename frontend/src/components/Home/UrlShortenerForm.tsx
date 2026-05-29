@@ -150,7 +150,7 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
           type="submit"
           disabled={isSubmitting}
           data-testid="shorten-button"
-          className="px-6 py-3 min-h-[44px] min-w-[44px] rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+          className="futuristic-button futuristic-btn-primary px-6 py-3 min-h-[44px] min-w-[44px] rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           {isSubmitting ? 'Shortening...' : 'Shorten URL'}
         </button>

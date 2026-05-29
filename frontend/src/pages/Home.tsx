@@ -15,9 +15,10 @@
  * - Home: React.FC component
  */
 import { lazy, Suspense } from 'react';
+import BackgroundEffect from '../components/BackgroundEffect';
+import { ThemeProvider } from '../contexts/ThemeContext';
 import HeroSection from '../components/Home/HeroSection';
 import UrlShortenerForm from '../components/Home/UrlShortenerForm';
-import BackgroundEffect from '../components/BackgroundEffect';
 
 const FeaturesSection = lazy(() => import('../components/Home/FeaturesSection'));
 const Footer = lazy(() => import('../components/Home/Footer'));
@@ -43,11 +44,11 @@ function FeaturesFallback() {
 
 export default function Home() {
   return (
-    <>
+    <ThemeProvider>
+      <BackgroundEffect />
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      <BackgroundEffect />
       <main data-testid="home-page" id="main-content" className="home-page min-h-screen flex flex-col relative">
         <HeroSection urlShortenerForm={<UrlShortenerForm />} />
         <Suspense fallback={<FeaturesFallback />}>
@@ -55,6 +56,6 @@ export default function Home() {
           <Footer />
         </Suspense>
       </main>
-    </>
+    </ThemeProvider>
   );
 }

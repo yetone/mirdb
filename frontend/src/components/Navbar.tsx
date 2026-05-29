@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
@@ -74,6 +75,10 @@ export default function Navbar() {
           </>
         )}
       </ul>
+
+      <div className="navbar-actions">
+        <ThemeToggle />
+      </div>
     </nav>
   );
 }
