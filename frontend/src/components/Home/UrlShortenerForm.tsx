@@ -86,11 +86,19 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
   const [copied, setCopied] = useState(false);
   const [copyFallback, setCopyFallback] = useState(false);
   const resultUrlRef = useRef<HTMLAnchorElement>(null);
+  const submittingRef = useRef(false);
   const { theme } = useTheme();
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+
+      // Synchronous guard to prevent double submission before React state update
+      if (submittingRef.current) {
+        return;
+      }
+      submittingRef.current = true;
+
       setError(null);
       setResult(null);
       setCopied(false);
@@ -99,6 +107,7 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
       const validation = validateUrl(url);
       if (!validation.isValid) {
         setError(validation.error || 'Invalid URL');
+        submittingRef.current = false;
         return;
       }
 
@@ -116,6 +125,7 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
         }
       } finally {
         setIsSubmitting(false);
+        submittingRef.current = false;
       }
     },
     [url, onSuccess]
@@ -234,6 +244,7 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
             aria-invalid={error ? 'true' : 'false'}
             aria-describedby={error ? 'url-error' : undefined}
             disabled={isSubmitting}
+            autoFocus
             data-testid="url-input"
             className="w-full px-4 py-3 min-h-[44px] rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
