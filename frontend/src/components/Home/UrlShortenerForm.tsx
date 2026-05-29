@@ -2,9 +2,11 @@
  * UrlShortenerForm Component
  * Owner: Scenario 2 - Anonymous URL Shortening Flow
  *        Extended by Scenario 3 - URL Form Validation
+ *        Extended by Scenario 9 - Error Handling and API Failure Resilience
  *
  * Form for anonymous URL shortening with validation,
  * API submission, result display, and copy functionality.
+ * Handles API errors gracefully with user-friendly messages.
  *
  * Expected props:
  * - onSuccess?: (shortUrl: string) => void
@@ -15,6 +17,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
+import { shortenUrl, isApiError, ApiError } from '../../api/index';
 
 export interface UrlShortenerFormProps {
   onSuccess?: (shortUrl: string) => void;
@@ -94,13 +97,16 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
 
       setIsSubmitting(true);
       try {
-        // Simulate API call for URL shortening
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const shortUrl = `https://short.link/${Math.random().toString(36).substring(2, 8)}`;
+        const normalizedUrl = validation.normalizedUrl || url;
+        const { shortUrl } = await shortenUrl(normalizedUrl);
         setResult(shortUrl);
         onSuccess?.(shortUrl);
-      } catch {
-        setError('Failed to shorten URL. Please try again.');
+      } catch (err) {
+        if (isApiError(err)) {
+          setError(err.message);
+        } else {
+          setError('Something went wrong. Please try again.');
+        }
       } finally {
         setIsSubmitting(false);
       }

@@ -6,10 +6,142 @@
  * Tests for form submission, validation, and result display.
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UrlShortenerForm, { validateUrl } from '../../src/components/Home/UrlShortenerForm';
+
+describe('UrlShortenerForm component', () => {
+  let fetchSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    fetchSpy = vi.spyOn(globalThis, 'fetch');
+  });
+
+  afterEach(() => {
+    fetchSpy.mockRestore();
+  });
+
+  it('renders input field and submit button', () => {
+    render(<UrlShortenerForm />);
+    expect(screen.getByTestId('url-input')).toBeInTheDocument();
+    expect(screen.getByTestId('shorten-button')).toBeInTheDocument();
+  });
+
+  it('shows "Please enter a URL" when submitting empty form (TC-1)', async () => {
+    const user = userEvent.setup();
+    render(<UrlShortenerForm />);
+    const button = screen.getByTestId('shorten-button');
+
+    await user.click(button);
+
+    const error = await screen.findByTestId('url-error');
+    expect(error).toHaveTextContent('Please enter a URL');
+  });
+
+  it('shows validation error for invalid URL format (TC-2)', async () => {
+    const user = userEvent.setup();
+    render(<UrlShortenerForm />);
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'not-a-url-at-all');
+    await user.click(button);
+
+    const error = await screen.findByTestId('url-error');
+    expect(error).toHaveTextContent('Please enter a valid URL');
+    expect(screen.queryByTestId('result')).not.toBeInTheDocument();
+  });
+
+  it('clears error when user starts typing after an error', async () => {
+    const user = userEvent.setup();
+    render(<UrlShortenerForm />);
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'not-a-url');
+    await user.click(button);
+
+    await screen.findByTestId('url-error');
+
+    await user.clear(input);
+    await user.type(input, 'example.com');
+
+    expect(screen.queryByTestId('url-error')).not.toBeInTheDocument();
+  });
+
+  it('accepts URL without protocol and auto-prefixes with https:// (TC-3)', async () => {
+    const user = userEvent.setup();
+    const onSuccess = vi.fn();
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ short_url: 'https://short.link/abc123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    render(<UrlShortenerForm onSuccess={onSuccess} />);
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'example.com/path');
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('url-error')).not.toBeInTheDocument();
+  });
+
+  it('rejects javascript: URL and shows security error (TC-4)', async () => {
+    const user = userEvent.setup();
+    render(<UrlShortenerForm />);
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.type(input, 'javascript:alert(1)');
+    await user.click(button);
+
+    const error = await screen.findByTestId('url-error');
+    expect(error).toHaveTextContent('Invalid URL: unsafe protocol');
+    expect(screen.queryByTestId('result')).not.toBeInTheDocument();
+  });
+
+  it('rejects URL longer than 2048 characters (TC-5)', async () => {
+    const user = userEvent.setup();
+    render(<UrlShortenerForm />);
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    const longUrl = 'https://example.com/' + 'a'.repeat(2040);
+    await user.type(input, longUrl);
+    await user.click(button);
+
+    const error = await screen.findByTestId('url-error');
+    expect(error).toHaveTextContent('URL is too long (max 2048 characters)');
+    expect(screen.queryByTestId('result')).not.toBeInTheDocument();
+  });
+
+  it('has correct ARIA attributes for accessibility', () => {
+    render(<UrlShortenerForm />);
+    const input = screen.getByTestId('url-input');
+    expect(input).toHaveAttribute('type', 'url');
+    expect(input).toHaveAttribute('aria-invalid', 'false');
+  });
+
+  it('sets aria-invalid to true when there is an error', async () => {
+    const user = userEvent.setup();
+    render(<UrlShortenerForm />);
+    const input = screen.getByTestId('url-input');
+    const button = screen.getByTestId('shorten-button');
+
+    await user.click(button);
+
+    await screen.findByTestId('url-error');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+  });
+});
 
 describe('validateUrl', () => {
   it('rejects empty string with "Please enter a URL" error (TC-1)', () => {
@@ -94,116 +226,3 @@ describe('validateUrl', () => {
   });
 });
 
-describe('UrlShortenerForm component', () => {
-  it('renders input field and submit button', () => {
-    render(<UrlShortenerForm />);
-    expect(screen.getByTestId('url-input')).toBeInTheDocument();
-    expect(screen.getByTestId('shorten-button')).toBeInTheDocument();
-  });
-
-  it('shows "Please enter a URL" when submitting empty form (TC-1)', async () => {
-    const user = userEvent.setup();
-    render(<UrlShortenerForm />);
-    const button = screen.getByTestId('shorten-button');
-
-    await user.click(button);
-
-    const error = await screen.findByTestId('url-error');
-    expect(error).toHaveTextContent('Please enter a URL');
-  });
-
-  it('shows validation error for invalid URL format (TC-2)', async () => {
-    const user = userEvent.setup();
-    render(<UrlShortenerForm />);
-    const input = screen.getByTestId('url-input');
-    const button = screen.getByTestId('shorten-button');
-
-    await user.type(input, 'not-a-url-at-all');
-    await user.click(button);
-
-    const error = await screen.findByTestId('url-error');
-    expect(error).toHaveTextContent('Please enter a valid URL');
-    expect(screen.queryByTestId('result')).not.toBeInTheDocument();
-  });
-
-  it('clears error when user starts typing after an error', async () => {
-    const user = userEvent.setup();
-    render(<UrlShortenerForm />);
-    const input = screen.getByTestId('url-input');
-    const button = screen.getByTestId('shorten-button');
-
-    await user.type(input, 'not-a-url');
-    await user.click(button);
-
-    await screen.findByTestId('url-error');
-
-    await user.clear(input);
-    await user.type(input, 'example.com');
-
-    expect(screen.queryByTestId('url-error')).not.toBeInTheDocument();
-  });
-
-  it('accepts URL without protocol and auto-prefixes with https:// (TC-3)', async () => {
-    const user = userEvent.setup();
-    const onSuccess = vi.fn();
-    render(<UrlShortenerForm onSuccess={onSuccess} />);
-    const input = screen.getByTestId('url-input');
-    const button = screen.getByTestId('shorten-button');
-
-    await user.type(input, 'example.com/path');
-    await user.click(button);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('result')).toBeInTheDocument();
-    });
-    expect(screen.queryByTestId('url-error')).not.toBeInTheDocument();
-  });
-
-  it('rejects javascript: URL and shows security error (TC-4)', async () => {
-    const user = userEvent.setup();
-    render(<UrlShortenerForm />);
-    const input = screen.getByTestId('url-input');
-    const button = screen.getByTestId('shorten-button');
-
-    await user.type(input, 'javascript:alert(1)');
-    await user.click(button);
-
-    const error = await screen.findByTestId('url-error');
-    expect(error).toHaveTextContent('Invalid URL: unsafe protocol');
-    expect(screen.queryByTestId('result')).not.toBeInTheDocument();
-  });
-
-  it('rejects URL longer than 2048 characters (TC-5)', async () => {
-    const user = userEvent.setup();
-    render(<UrlShortenerForm />);
-    const input = screen.getByTestId('url-input');
-    const button = screen.getByTestId('shorten-button');
-
-    const longUrl = 'https://example.com/' + 'a'.repeat(2040);
-    await user.type(input, longUrl);
-    await user.click(button);
-
-    const error = await screen.findByTestId('url-error');
-    expect(error).toHaveTextContent('URL is too long (max 2048 characters)');
-    expect(screen.queryByTestId('result')).not.toBeInTheDocument();
-  });
-
-  it('has correct ARIA attributes for accessibility', () => {
-    render(<UrlShortenerForm />);
-    const input = screen.getByTestId('url-input');
-    expect(input).toHaveAttribute('type', 'url');
-    expect(input).toHaveAttribute('aria-invalid', 'false');
-  });
-
-  it('sets aria-invalid to true when there is an error', async () => {
-    const user = userEvent.setup();
-    render(<UrlShortenerForm />);
-    const input = screen.getByTestId('url-input');
-    const button = screen.getByTestId('shorten-button');
-
-    await user.click(button);
-
-    await screen.findByTestId('url-error');
-    expect(input).toHaveAttribute('aria-invalid', 'true');
-  });
-});
