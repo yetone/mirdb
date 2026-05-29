@@ -42,7 +42,7 @@ export class ApiError extends Error {
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 const REQUEST_TIMEOUT_MS = 30000;
 
-function getUserFriendlyMessage(type: ApiErrorType, statusCode?: number, details?: string): string {
+function getUserFriendlyMessage(type: ApiErrorType, _statusCode?: number, details?: string): string {
   switch (type) {
     case 'network':
       return 'Unable to connect. Please try again later.';
