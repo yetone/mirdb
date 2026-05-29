@@ -16,10 +16,15 @@ import Footer from '../components/Home/Footer';
 
 export default function Home() {
   return (
-    <main data-testid="home-page" className="home-page min-h-screen flex flex-col">
-      <HeroSection urlShortenerForm={<UrlShortenerForm />} />
-      <FeaturesSection />
-      <Footer />
-    </main>
+    <>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <main data-testid="home-page" id="main-content" className="home-page min-h-screen flex flex-col">
+        <HeroSection urlShortenerForm={<UrlShortenerForm />} />
+        <FeaturesSection />
+        <Footer />
+      </main>
+    </>
   );
 }

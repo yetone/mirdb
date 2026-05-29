@@ -23,22 +23,16 @@ export default function Footer() {
         </p>
         <nav aria-label="Footer navigation" className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
           <a
-            href="#"
+            href="#terms"
             className="text-sm opacity-70 hover:opacity-100 transition-opacity min-h-[44px] flex items-center px-2"
           >
-            Terms
+            Terms of Service
           </a>
           <a
-            href="#"
+            href="#privacy"
             className="text-sm opacity-70 hover:opacity-100 transition-opacity min-h-[44px] flex items-center px-2"
           >
-            Privacy
-          </a>
-          <a
-            href="#"
-            className="text-sm opacity-70 hover:opacity-100 transition-opacity min-h-[44px] flex items-center px-2"
-          >
-            Contact
+            Privacy Policy
           </a>
         </nav>
       </div>

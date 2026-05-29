@@ -48,7 +48,6 @@ export default function HeroSection({ urlShortenerForm }: HeroSectionProps) {
                 to="/register"
                 data-testid="hero-cta-button"
                 className="cta-button inline-flex items-center justify-center px-6 py-3 min-h-[44px] text-base font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                role="button"
               >
                 Get Started Free
               </Link>
