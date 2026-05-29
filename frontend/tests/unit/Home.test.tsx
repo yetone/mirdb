@@ -161,9 +161,9 @@ describe('Home', () => {
   });
 
   describe('TC3: GlassMorphismCard in Features', () => {
-    it('feature cards use GlassMorphismCard styling', () => {
+    it('feature cards use GlassMorphismCard styling', async () => {
       renderWithRouter(<Home />);
-      const featureCards = screen.getAllByTestId('feature-card');
+      const featureCards = await screen.findAllByTestId('feature-card');
       expect(featureCards.length).toBeGreaterThan(0);
 
       featureCards.forEach((card) => {
@@ -172,15 +172,15 @@ describe('Home', () => {
       });
     });
 
-    it('renders all feature cards with icons, titles, and descriptions', () => {
+    it('renders all feature cards with icons, titles, and descriptions', async () => {
       renderWithRouter(<Home />);
-      const cards = screen.getAllByTestId('feature-card');
+      const cards = await screen.findAllByTestId('feature-card');
       expect(cards.length).toBe(4);
 
-      const titles = screen.getAllByTestId('feature-title');
+      const titles = await screen.findAllByTestId('feature-title');
       expect(titles.length).toBe(4);
 
-      const descriptions = screen.getAllByTestId('feature-description');
+      const descriptions = await screen.findAllByTestId('feature-description');
       expect(descriptions.length).toBe(4);
     });
   });
