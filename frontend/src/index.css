@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Responsive touch target improvements for navbar */
+.navbar-links a,
+.navbar-links button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+}
+
+/* Ensure no horizontal overflow on any viewport */
+body {
+  overflow-x: hidden;
+}

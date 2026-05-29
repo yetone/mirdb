@@ -122,9 +122,9 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
   }, [error]);
 
   return (
-    <div className="url-shortener-form">
-      <form onSubmit={handleSubmit} noValidate>
-        <div className="form-group">
+    <div className="url-shortener-form bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg p-4 sm:p-6 md:p-8">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col sm:flex-row gap-3">
+        <div className="form-group flex-1">
           <label htmlFor="url-input" className="sr-only">
             Enter URL to shorten
           </label>
@@ -138,9 +138,10 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
             aria-describedby={error ? 'url-error' : undefined}
             disabled={isSubmitting}
             data-testid="url-input"
+            className="w-full px-4 py-3 min-h-[44px] rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {error && (
-            <span id="url-error" className="error-message" role="alert" data-testid="url-error">
+            <span id="url-error" className="error-message block mt-2 text-sm text-red-600" role="alert" data-testid="url-error">
               {error}
             </span>
           )}
@@ -149,13 +150,15 @@ const UrlShortenerForm: React.FC<UrlShortenerFormProps> = ({ onSuccess }) => {
           type="submit"
           disabled={isSubmitting}
           data-testid="shorten-button"
+          className="px-6 py-3 min-h-[44px] min-w-[44px] rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
         >
           {isSubmitting ? 'Shortening...' : 'Shorten URL'}
         </button>
       </form>
       {result && (
-        <div className="result" data-testid="result">
-          Shortened URL: <a href={result}>{result}</a>
+        <div className="result mt-4 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800" data-testid="result">
+          <p className="text-sm text-green-800 dark:text-green-200">Shortened URL:</p>
+          <a href={result} className="text-blue-600 dark:text-blue-400 font-medium break-all">{result}</a>
         </div>
       )}
     </div>

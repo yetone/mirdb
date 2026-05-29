@@ -12,12 +12,14 @@
 import HeroSection from '../components/Home/HeroSection';
 import UrlShortenerForm from '../components/Home/UrlShortenerForm';
 import FeaturesSection from '../components/Home/FeaturesSection';
+import Footer from '../components/Home/Footer';
 
 export default function Home() {
   return (
-    <main data-testid="home-page">
+    <main data-testid="home-page" className="home-page min-h-screen flex flex-col">
       <HeroSection urlShortenerForm={<UrlShortenerForm />} />
       <FeaturesSection />
+      <Footer />
     </main>
   );
 }
